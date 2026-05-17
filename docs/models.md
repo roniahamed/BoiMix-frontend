@@ -1,9 +1,10 @@
-# User Model:
+# User Management Models
+## User Model:
     id = NanoID
 
-    email
-    phone_number
-    username
+    email unique
+    phone_number unique
+    username unique
     password_hash
 
     first_name
@@ -21,6 +22,12 @@
     updated_at
     deleted_at
 
+    --> Role enum 
+        member
+        vendor
+        moderator
+        admin
+
     --> Relationship: 
         User → Profile (OneToOne)
         User → Address (OneToOne)
@@ -28,7 +35,7 @@
         User → NotificationSettings (OneToOne)
 
 
-# Profiles: 
+## Profiles: 
     id = NanoID
     user_id
 
@@ -46,7 +53,7 @@
         profile.user_id → User.id (OneToOne)
 
 
-# Address
+## Address
     id = NanoID
     user_id
 
@@ -67,7 +74,7 @@
         address.user_id → User.id (OneToOne)
 
 
-# UserReputation
+## UserReputation
     id = NanoID
     user_id
 
@@ -92,17 +99,88 @@
         user_reputation.user_id → User.id (OneToOne)
 
 
-# NotificationSettings
+## NotificationSettings
     id = NanoID
     user_id
 
     email_enabled
     sms_enabled
     in_app_enabled
-    
+
     created_at
     updated_at
 
     --> Relationship
         notification_settings.user_id → User.id (OneToOne)
+
+
+# Book Management Models
+
+## Book Model:
+
+    required:
+        id = NanoID 
+        owner_id
+
+        title
+        author
+        cover_image
+
+        category
+        language
+
+        condition
+
+        availability_status
+        availability_count
+
+        created_at
+        updated_at
+    options:
+        description
+        publication_year
+        isbn
+        edition
+        publisher
+        page_count
+        tags
+
+    -- condition enum:
+        new
+        like_new
+        good
+        acceptable
+        poor
+    
+    -- availability_status enum:
+        available
+        borrowed
+        reserved
+        unavailable
+
+    --> Relationship:
+        book.owner_id → User.id (ManyToOne)
+
+
+## BookImages
+    id = NanoID
+    book_id
+    image
+    thumbnail
+    created_at
+
+    --> Relationship:
+        book_images.book_id → Book.id (OneToMany)
+
+
+## BookCategory
+    id = NanoID
+    name unique
+    slug
+    created_at
+
+    --> Relationship:
+        book_category.id → Book.category (ManyToMany)
+
+    
 
