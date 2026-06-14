@@ -618,6 +618,7 @@ BookConditionBadge
 AvailabilityBadge
 SwapBadge
 BorrowStatusBadge
+OfficialBoiMixTag
 TrustScoreMeter
 UserAvatar
 UserMiniCard
@@ -741,6 +742,7 @@ Everything depends on this workflow being reliable.
 
 | Feature | Psychological Effect |
 |---|---|
+| Official BoiMix Tag | Guarantees book is sold/managed by platform |
 | Verified badges | Reduces fear |
 | Return rate | Reliability signal |
 | Response speed | Trustworthiness |
