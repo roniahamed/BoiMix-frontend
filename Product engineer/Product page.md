@@ -1,3 +1,28 @@
+
+My inspirations is rokomari landing page. 
+
+
+
+
+# name "BoiMix" 
+
+purpose: 
+
+1. Central Library for book borrow and sell. only for owner of this platform. 
+
+2. book sell for everyone and buy everyone
+
+3. peer to peer book swap. 
+
+4. Build a community for engaged book review and your own thought. and engaged for comment and loved it
+
+
+main goal create a central library for bd people, 
+
+earning money, enance user insight. 
+
+sponsor engaged. 
+
 # Full Project Product Plan and Pages. 
 
 # BoiMix — Complete Product Architecture, UX System & Platform Blueprint
@@ -167,6 +192,7 @@
 # Message
 /messages/list-of-conversation
 /messages/[username]/details
+
 
 
 
