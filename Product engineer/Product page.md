@@ -188,6 +188,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 
 # Swap Flow
+
 /swap/discover
 /swap/offer/[book-slug]
 /swap/proposal/[id]
@@ -199,6 +200,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 
 # Sell flow 
+
 /cart/
 /cart/checkout
 /orders/payment
@@ -206,6 +208,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 
 # Borrow
+
 /Application-Membership/join
 /Application-Membership/payment
 /Application-Membership/success
@@ -222,16 +225,220 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 
 # Notification 
+
 /notifications/all
 
 
 # Message
+
 /messages/list-of-conversation
 /messages/[username]/details
 
 
 
 
+# USER FLOW DIAGRAMS
+
+Signup Flow
+Homepage
+→ Register
+→ OTP Verification
+→ Complete Profile
+→ Select Location
+→ Upload Avatar
+→ Welcome Dashboard
+
+
+## Borrow Workflow
+
+Browse Books
+→ Open Book
+→ Send Borrow Request
+→ Owner Accepts
+→ Notification Sent
+→ Handover Confirmed
+→ Borrow Timeline Active
+→ Due Reminder
+→ Return Confirmation
+→ Review Unlock
+→ Reputation Updated
+
+## Swap Workflow
+
+Browse Swap Books
+→ Select Offer Book
+→ Send Swap Proposal
+→ Accept / Counter / Decline
+→ Agreement Created
+→ Handover
+→ Both Confirm
+→ Reviews Unlock
+
+
+## Marketplace Buying Flow
+Browse Marketplace
+→ Open Listing
+→ Buy Now
+→ Checkout
+→ bKash/Nagad
+→ Escrow Hold
+→ Seller Ships
+→ Buyer Confirms
+→ Funds Released
+
+
+## Reporting Flow
+Open Report
+→ Select Reason
+→ Upload Evidence
+→ Moderator Queue
+→ Investigation
+→ Resolution
+→ Notification Sent
+
+## COMPONENT LIBRARY
+BookCard
+BookGallery
+BookConditionBadge
+AvailabilityBadge
+SwapBadge
+BorrowStatusBadge
+OfficialBoiMixTag
+TrustScoreMeter
+UserAvatar
+UserMiniCard
+ReviewCard
+RatingStars
+BadgePill
+BadgeGrid
+TimelineTracker
+DueCountdown
+NotificationBell
+NotificationItem
+SearchBar
+FilterSidebar
+LocationPicker
+ISBNScanner
+ImageUploader
+ChatWindow
+MessageBubble
+BorrowRequestCard
+SwapOfferCard
+DisputeCard
+AdminTable
+VerificationCard
+AnalyticsCard
+StatsWidget
+LoadingSkeleton
+EmptyState
+ConfirmationModal
+ToastAlert
+BottomActionBar
+StickyMobileActions
 
 
 
+# MOBILE NAVIGATION ARCHITECTURE
+Bottom Navigation
+Home
+Search
+Add Book
+Notifications
+Profile
+
+
+## Notification Hierarchy
+### Critical
+├── Borrow approved
+├── Return overdue
+├── Swap accepted
+
+### Important
+├── New message
+├── Due reminder
+├── Review received
+
+### Passive
+├── Badge earned
+├── Trending books
+├── Community updates
+
+
+Notification UX Rules
+### Rule	Purpose
+### Real-time unread count	Urgency
+### Group duplicate notifications	Reduce spam
+### Actionable notifications	Faster conversion
+### Deep linking	Lower friction
+### Smart reminders	Retention
+
+
+# BORROW WORKFLOW STATE MACHINE
+Available
+→ Requested
+→ Approved
+→ Handover Pending
+→ Borrowed
+→ Due Soon
+→ Overdue
+→ Return Pending
+→ Completed
+→ Reviewed
+
+
+
+# NEXT.JS APP ROUTER STRUCTURE
+
+example: 
+app/
+│
+├── (marketing)/
+│   ├── page.tsx
+│   ├── about/
+│   ├── faq/
+│   └── trust-safety/
+│
+├── (auth)/
+│   ├── login/
+│   ├── register/
+│   ├── verify-otp/
+│   └── forgot-password/
+│
+├── books/
+│   ├── page.tsx
+│   ├── [slug]/
+│   ├── category/
+│   ├── search/
+│   ├── near-me/
+│   └── trending/
+│
+├── u/
+│   └── [username]/
+│
+├── (dashboard)/
+│   ├── dashboard/
+│   ├── library/
+│   ├── borrowed/
+│   ├── lent/
+│   ├── notifications/
+│   ├── reviews/
+│   ├── settings/
+│   └── verification/
+│
+├── borrow/
+├── swap/
+├── marketplace/
+├── notifications/
+├── messages/
+│
+├── (moderator)/
+│   └── mod/
+│
+├── (admin)/
+│   └── admin/
+│
+├── api/
+│
+├── not-found.tsx
+├── error.tsx
+└── layout.tsx
