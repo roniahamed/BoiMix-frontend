@@ -4,24 +4,60 @@ My inspirations is rokomari landing page.
 
 
 
-# name "BoiMix" 
+# BoiMix Vision
 
-purpose: 
+BoiMix is a community-driven book platform for Bangladesh that combines a central library, book marketplace, book swapping, and reader engagement in one place.
 
-1. Central Library for book borrow and sell. only for owner of this platform. 
+Core Purposes
+1. Central Library
+* BoiMix-owned library
+* Users can borrow books from the library
+* Users can buy books from the library
+2. Book Marketplace
+* Anyone can list books for sale
+* Anyone can buy books from other users
+3. Peer-to-Peer Book Swap
+* Users can exchange books directly with each other
+* Safe and structured swapping system
+4. Reading Community
+* Book reviews and ratings
+* Personal thoughts and reading notes
+* Comments, reactions, and discussions
+* Follow readers with similar interests
 
-2. book sell for everyone and buy everyone
-
-3. peer to peer book swap. 
-
-4. Build a community for engaged book review and your own thought. and engaged for comment and loved it
 
 
-main goal create a central library for bd people, 
+## Main Goal
 
-earning money, enance user insight. 
+Create the largest digital book ecosystem in Bangladesh where people can:
 
-sponsor engaged. 
+* Borrow books
+* Buy and sell books
+* Swap books
+* Share knowledge and reading experiences
+* Build meaningful connections through books
+
+## Revenue Sources
+
+* Library book sales
+* Library borrowing fees
+* Featured listings
+* Sponsored content
+* Publisher partnerships
+* Premium memberships
+* Advertisements
+
+
+
+
+## Long-Term Impact
+
+* Increase reading habits in Bangladesh
+* Make books more affordable and accessible
+* Build a strong community of readers
+* Provide valuable insights for publishers and sponsors
+
+
 
 # Full Project Product Plan and Pages. 
 
