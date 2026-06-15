@@ -28,38 +28,47 @@ BoiMix combines:
 
 The overall design should feel like a combination of a modern digital library, book marketplace, and reader community platform.
 
-Design Style Reference: Rokomari
+## Design System & Style Reference: Rokomari-Inspired
 
-Create a professional and modern book platform inspired by the overall design language of Rokomari.
+Create a professional and modern book platform heavily inspired by the clean, minimal, and reader-friendly UX of Rokomari, but powered by a modern tech stack.
 
-Focus on:
-- Clean white backgrounds
-- Green primary brand color
-- Minimal and professional appearance
-- Excellent typography hierarchy
-- Spacious layout with generous whitespace
-- Card-based book listings
-- Large, high-quality book cover images
-- Rounded corners (8px-12px)
-- Soft shadows
-- Well-organized sections
-- Reader-focused browsing experience
+### Color Palette (Exact Rokomari Colors)
+- **Primary Brand Color:** Blue (`#0397d3`) - Used for main buttons, links, and branding.
+- **Accent / Action Color:** Orange (`#ff9900` or `#f90`) - Used for "Add to Cart", ratings, and highlighting.
+- **Success / In-Stock:** Green (`#33c24d`).
+- **Backgrounds:** Clean White (`#ffffff`) for main areas and Light Gray (`#f5f5f5`) for section separations.
+- **Text Colors:** Dark Gray (`#333333`) for primary readability, and lighter grays (`#666666`, `#737373`, `#9c9c9c`) for secondary text like author names.
+- **Borders & Dividers:** Soft grays (`#cdcdcd`, `#a2a2a2`).
+
+###  Typography (Exact Rokomari Fonts)
+- **Primary Font (English):** `Roboto`, `Lato`, and `Poppins`.
+- **Secondary Font (Bengali):** `SiyamRupali`.
+- **Hierarchy:** Excellent typography hierarchy matching Rokomari's exact structure.
+
+### UI/UX Elements
+- **Layout:** Spacious layout matching Rokomari's structure.
+- **Cards:** Card-based book listings matching Rokomari's style (white background, gray text, soft shadows).
+- **Buttons & Actions (Exact Rokomari Style):**
+  - **"Buy Now" Button:** Orange (`#ff9900`) with white text.
+  - **"Add to Cart" Button:** Blue (`#0397d3`) with white text and IonIcons cart icon.
+  - **"Add to List" Button:** Outline button with light gray border and heart icon.
+  - **"View Details":** Light gray (`#f5f5f5`) footer on cards with bold Blue (`#0397d3`) text.
+- **Status Tags:** Green (`#33c24d`) text with a solid checkmark for "In Stock".
+- **Shapes:** Rounded corners exactly like Rokomari.
+- **Shadows:** Soft shadows exactly like Rokomari.
+- **Icons:** `IonIcons` and `FontAwesome` (Exactly as used in Rokomari).
+
+### Technology Stack & Architecture
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS (Customized to match Rokomari's Bootstrap breakpoints: `sm: 576px`, `md: 768px`, `lg: 992px`, `xl: 1200px`, `2xl: 1400px`)
+- **UI Components:** Shadcn UI (Themed strictly with Rokomari colors and styles)
 
 The design should feel:
-- Professional
-- Trustworthy
-- Modern
+- Professional & Trustworthy
+- Modern & Fast
 - Community-driven
 - Library-focused
-
-Do not copy Rokomari directly.
-Create a unique visual identity for BoiMix while maintaining the same level of cleanliness and usability.
-
-Use:
-- Next.js
-- TypeScript
-- Tailwind CSS
-- Shadcn UI
 
 Visual quality should be comparable to leading platforms such as Rokomari, Goodreads, and modern e-commerce marketplaces.
 
@@ -688,9 +697,9 @@ Show a semi-transparent dark overlay.
 
 Display action buttons centered on the image:
 
-* Add to Cart
-* Swap Request
-* Borrow Request
+* **Add to Cart** (Solid Blue `#0397d3` button with white text and cart icon)
+* **Borrow Request** (Solid Green `#33c24d` button with white text and library/book icon)
+* **Swap Request** (Outline button: White background, Blue `#0397d3` border & text, swap icon)
 
 If the book is already in cart:
 
@@ -707,11 +716,9 @@ If the book is already in wishlist:
 * Smooth transition (200ms–300ms)
 * Subtle background color change
 
-### Bottom Hover Actions
+### Bottom Footer Section
 
-Show:
-
-* View Details Button
+* **View Details Bar:** Light gray (`#f5f5f5`) full-width footer at the bottom of the card with centered Blue (`#0397d3`) "View Details" text.
 
 For books owned by verified libraries only:
 
