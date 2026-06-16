@@ -7,6 +7,7 @@ I like Rokomari's clean and modern layout, warm color palette, book-focused desi
 link: https://www.rokomari.com/
 Please take inspiration from the following aspects of Rokomari:
 
+* Layout system of rokomari
 * Clean and professional book marketplace appearance
 * reader-friendly color scheme
 * Large hero/banner section
@@ -17,7 +18,7 @@ Please take inspiration from the following aspects of Rokomari:
 * Easy navigation and search experience
 * Trustworthy and community-focused feel
 
-However, do not copy Rokomari's design directly. Create a unique and modern identity for BoiMix while following a similar design philosophy.
+However,  copy Rokomari's design directly. Create a modern identity for BoiMix while following a similar design philosophy.
 
 BoiMix combines:
 
@@ -136,7 +137,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 
 
-# MARKETING & PUBLIC
+# MARKETING & PUBLIC pages
 /
 /explore/central-library
 /explore/swaps
@@ -154,7 +155,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /donate
 
 
-# AUTH
+# AUTH pages
 /auth/login
 /auth/register
 /auth/verify-otp
@@ -165,7 +166,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /auth/verify-student-id
 
 
-# public profile
+# public profile pages
 /u/[username]
 /u/[username]/reviews
 /u/[username]/library
@@ -175,7 +176,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /u/[username]/following
 /u/[username]/location
 
-# /DASHBOARD
+# /DASHBOARD pages
 /dashboard/overview
 /dashboard/library
 /dashboard/books/add
@@ -199,7 +200,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /dashboard/analytics
 
 
-# / MODERATOR
+# / MODERATOR pages
 /mod/reports
 /mod/disputes
 /mod/flagged-users
@@ -218,7 +219,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 
 
-# / ADMIN
+# / ADMIN pages
 /admin/overview
 /admin/users
 /admin/books/user-inventory
@@ -242,7 +243,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /admin/system-health
 /admin/slider
 
-## BOOK DISCOVERY
+## BOOK DISCOVERY pages
 
 /books
 /books/[slug]
@@ -258,7 +259,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /books/borrow
 
 
-# Swap Flow
+# Swap Flow pages
 
 /swap/discover
 /swap/offer/[book-slug]
@@ -270,7 +271,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /swap/dispute/[id]
 
 
-# Sell flow 
+# Sell flow  pages
 
 /cart/
 /cart/checkout
@@ -278,7 +279,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /orders/tracking
 
 
-# Borrow
+# Borrow pages
 
 /Application-Membership/join
 /Application-Membership/payment
