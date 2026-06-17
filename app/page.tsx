@@ -1,16 +1,20 @@
+import { MainLayout } from "@/components/layout/main-layout";
+
 export default function Home() {
   return (
-    <main className="bg-background flex min-h-svh items-center justify-center text-center">
-      <div className="boimix-container max-w-xl space-y-3">
-        <p className="type-caption text-primary">BoiMix Frontend</p>
-        <h1 className="type-subheading text-foreground">
-          Phase 1 design system is ready.
-        </h1>
-        <p className="type-paragraph text-muted-foreground">
-          Brand colors, typography, spacing, containers, radius, shadows, and
-          responsive tokens are in place.
-        </p>
-      </div>
-    </main>
+    <MainLayout>
+      <section className="boimix-section flex min-h-[60svh] items-center text-center">
+        <div className="boimix-container max-w-xl space-y-3">
+          <p className="type-caption text-primary">BoiMix Frontend</p>
+          <h1 className="type-subheading text-foreground">
+            Phase 3 layout system is ready.
+          </h1>
+          <p className="type-paragraph text-muted-foreground">
+            Main, marketing, dashboard, admin, moderator, header, footer,
+            sidebar, and mobile navigation shells are in place.
+          </p>
+        </div>
+      </section>
+    </MainLayout>
   );
 }
