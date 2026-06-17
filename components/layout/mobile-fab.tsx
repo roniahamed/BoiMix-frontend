@@ -55,12 +55,12 @@ export function MobileFAB() {
   return (
     <div
       ref={containerRef}
-      className="fixed right-4 bottom-20 z-50 flex flex-col items-end gap-3 md:hidden"
+      className="fixed right-4 bottom-20 z-50 flex flex-col items-end gap-3 md:right-6 md:bottom-6"
     >
       {/* Background Overlay when open */}
       {isOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px] md:hidden"
+          className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[1px]"
           onClick={() => setIsOpen(false)}
         />
       )}

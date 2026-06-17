@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 
 import { MobileBottomNavigation } from "@/components/layout/mobile-bottom-navigation";
 import { SidebarNavigation } from "@/components/layout/sidebar-navigation";
+import { MobileFAB } from "@/components/layout/mobile-fab";
 import { dashboardNavItems } from "@/lib/navigation";
 
 type DashboardLayoutProps = {
@@ -14,6 +15,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       <SidebarNavigation title="Dashboard" items={dashboardNavItems} />
       <main className="min-w-0 flex-1 pb-20 lg:pb-0">{children}</main>
       <MobileBottomNavigation />
+      <MobileFAB />
     </div>
   );
 }
