@@ -12,4 +12,17 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+
+  button,
+  a,
+  select,
+  [role="button"] {
+    @apply cursor-pointer;
+  }
+
+  button:disabled,
+  a:disabled,
+  [role="button"]:disabled {
+    @apply cursor-not-allowed;
+  }
 }

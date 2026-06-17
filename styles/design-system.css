@@ -106,7 +106,7 @@
   --gray-800: #333333;
   --gray-900: #1f2933;
 
-  --background: #ffffff;
+  --background: #f1f2f4;
   --foreground: var(--gray-800);
   --card: #ffffff;
   --card-foreground: var(--gray-800);

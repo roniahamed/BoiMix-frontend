@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 export function SiteHeader() {
   return (
-    <header className="bg-background/95 supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 border-b backdrop-blur">
+    <header className="bg-card/95 supports-[backdrop-filter]:bg-card/85 sticky top-0 z-40 border-b shadow-xs backdrop-blur">
       <div className="boimix-container-wide flex h-16 items-center gap-3">
         <MobileNavbar />
         <BrandLink className="shrink-0" />

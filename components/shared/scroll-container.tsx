@@ -1,0 +1,102 @@
+"use client";
+
+import { useRef, useState, useEffect, ReactNode } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+type ScrollContainerProps = {
+  children: ReactNode;
+  className?: string;
+};
+
+export function ScrollContainer({ children, className }: ScrollContainerProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(true);
+
+  const checkScrollLimits = () => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    // Check if we can scroll left (scrollLeft > 5px)
+    setShowLeft(el.scrollLeft > 5);
+
+    // Check if we can scroll right (scrollLeft < maxScroll - 5px)
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    setShowRight(el.scrollLeft < maxScroll - 5);
+  };
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    // Run check initially
+    checkScrollLimits();
+
+    el.addEventListener("scroll", checkScrollLimits);
+    window.addEventListener("resize", checkScrollLimits);
+
+    // Re-check after images/content might have loaded
+    const timer = setTimeout(checkScrollLimits, 500);
+
+    return () => {
+      el.removeEventListener("scroll", checkScrollLimits);
+      window.removeEventListener("resize", checkScrollLimits);
+      clearTimeout(timer);
+    };
+  }, [children]);
+
+  const scroll = (direction: "left" | "right") => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    // Scroll by 75% of visible width
+    const scrollAmount = el.clientWidth * 0.75;
+    el.scrollBy({
+      left: direction === "left" ? -scrollAmount : scrollAmount,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <div className="group/scroll relative w-full">
+      {showLeft && (
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          className="border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -left-3 z-20 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-200 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-left-6 md:h-12 md:w-12"
+          onClick={() => scroll("left")}
+          aria-label="Scroll left"
+        >
+          <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" />
+        </Button>
+      )}
+
+      <div
+        ref={containerRef}
+        className={cn(
+          "-mx-4 flex scrollbar-none gap-3 overflow-x-auto scroll-smooth px-4 py-1 pb-3 md:gap-4",
+          className,
+        )}
+        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+      >
+        {children}
+      </div>
+
+      {showRight && (
+        <Button
+          type="button"
+          variant="secondary"
+          size="icon"
+          className="border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -right-3 z-20 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-200 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-right-6 md:h-12 md:w-12"
+          onClick={() => scroll("right")}
+          aria-label="Scroll right"
+        >
+          <ChevronRight className="h-5 w-5 md:h-6 md:w-6" />
+        </Button>
+      )}
+    </div>
+  );
+}

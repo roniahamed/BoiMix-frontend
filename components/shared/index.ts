@@ -43,5 +43,6 @@ export { UserBadge } from "@/components/shared/user-badge";
 export { UserCard } from "@/components/shared/user-card";
 export { UserMiniCard } from "@/components/shared/user-mini-card";
 export { VerificationCard } from "@/components/shared/verification-card";
+export { ScrollContainer } from "@/components/shared/scroll-container";
 export type { BadgeTone } from "@/components/shared/badge-pill";
 export type { BorrowStatus } from "@/components/shared/borrow-status-badge";

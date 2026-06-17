@@ -5,7 +5,7 @@ import { footerSections } from "@/lib/navigation";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-muted/40 border-t pb-20 md:pb-0">
+    <footer className="bg-card border-t pb-20 md:pb-0">
       <div className="boimix-container-wide grid gap-8 py-10 md:grid-cols-[1.2fr_2fr]">
         <div className="max-w-sm space-y-3">
           <BrandLink />

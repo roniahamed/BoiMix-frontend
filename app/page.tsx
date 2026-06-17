@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRightIcon,
@@ -17,20 +18,192 @@ import type { LucideIcon } from "lucide-react";
 import { HeroCarousel } from "@/components/home/hero-carousel";
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
+import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
 
 const categories = [
-  { title: "Fiction", href: "/books/category/fiction", icon: BookOpenIcon },
+  {
+    title: "Fiction",
+    href: "/books/category/fiction",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
   {
     title: "Academic",
     href: "/books/category/academic",
     icon: GraduationCapIcon,
+    image: "/categories/academic.png",
   },
-  { title: "Self Help", href: "/books/category/self-help", icon: SparklesIcon },
-  { title: "Business", href: "/books/category/business", icon: Building2Icon },
-  { title: "Community", href: "/community", icon: UsersRoundIcon },
+  {
+    title: "Self Help",
+    href: "/books/category/self-help",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Business",
+    href: "/books/category/business",
+    icon: Building2Icon,
+    image: "/categories/business.png",
+  },
+  {
+    title: "Community",
+    href: "/community",
+    icon: UsersRoundIcon,
+    image: "/categories/community.png",
+  },
+  {
+    title: "Biography",
+    href: "/books/category/biography",
+    icon: UsersRoundIcon,
+    image: "/categories/community.png",
+  },
+  {
+    title: "History",
+    href: "/books/category/history",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Science",
+    href: "/books/category/science",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Technology",
+    href: "/books/category/technology",
+    icon: Building2Icon,
+    image: "/categories/business.png",
+  },
+  {
+    title: "Poetry",
+    href: "/books/category/poetry",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Drama",
+    href: "/books/category/drama",
+    icon: UsersRoundIcon,
+    image: "/categories/community.png",
+  },
+  {
+    title: "Thriller",
+    href: "/books/category/thriller",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Mystery",
+    href: "/books/category/mystery",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Romance",
+    href: "/books/category/romance",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Sci-Fi",
+    href: "/books/category/sci-fi",
+    icon: Building2Icon,
+    image: "/categories/business.png",
+  },
+  {
+    title: "Comics",
+    href: "/books/category/comics",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Children",
+    href: "/books/category/children",
+    icon: GraduationCapIcon,
+    image: "/categories/academic.png",
+  },
+  {
+    title: "Religion",
+    href: "/books/category/religion",
+    icon: UsersRoundIcon,
+    image: "/categories/community.png",
+  },
+  {
+    title: "Philosophy",
+    href: "/books/category/philosophy",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Travel",
+    href: "/books/category/travel",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Cookbooks",
+    href: "/books/category/cookbooks",
+    icon: Building2Icon,
+    image: "/categories/business.png",
+  },
+  {
+    title: "Art & Music",
+    href: "/books/category/art-music",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Health",
+    href: "/books/category/health",
+    icon: GraduationCapIcon,
+    image: "/categories/academic.png",
+  },
+  {
+    title: "Sports",
+    href: "/books/category/sports",
+    icon: UsersRoundIcon,
+    image: "/categories/community.png",
+  },
+  {
+    title: "Politics",
+    href: "/books/category/politics",
+    icon: Building2Icon,
+    image: "/categories/business.png",
+  },
+  {
+    title: "Novels",
+    href: "/books/category/novels",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Literature",
+    href: "/books/category/literature",
+    icon: BookOpenIcon,
+    image: "/categories/fiction.png",
+  },
+  {
+    title: "Manga",
+    href: "/books/category/manga",
+    icon: SparklesIcon,
+    image: "/categories/self-help.png",
+  },
+  {
+    title: "Dictionary",
+    href: "/books/category/dictionary",
+    icon: GraduationCapIcon,
+    image: "/categories/academic.png",
+  },
+  {
+    title: "Magazines",
+    href: "/books/category/magazines",
+    icon: Building2Icon,
+    image: "/categories/business.png",
+  },
 ];
 
 const featuredBooks: BookCardBook[] = [
@@ -124,16 +297,354 @@ const featuredBooks: BookCardBook[] = [
     availability: "in-stock",
     isInCart: true,
   },
+  {
+    id: "song-of-padma",
+    slug: "song-of-padma",
+    title: "The Song of the Padma",
+    author: "Tasnim Ara",
+    coverUrl: "/book-covers/rivers-of-dhaka.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.5,
+    reviewCount: 23,
+    price: 350,
+    distance: "1.5 km",
+    location: "Savar",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "chhaya-bithi",
+    slug: "chhaya-bithi",
+    title: "Chhaya Bithi",
+    author: "Humayun Ahmed",
+    coverUrl: "/book-covers/borrowed-light.svg",
+    tags: ["borrow"],
+    rating: 4.9,
+    reviewCount: 120,
+    distance: "3.5 km",
+    location: "Sylhet",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "programming-basics",
+    slug: "programming-basics",
+    title: "Programming Basics",
+    author: "Tamim Shahriar Subeen",
+    coverUrl: "/book-covers/swap-stories.svg",
+    tags: ["sell"],
+    rating: 4.8,
+    reviewCount: 85,
+    price: 250,
+    location: "Chittagong",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "struggles-of-life",
+    slug: "struggles-of-life",
+    title: "Struggles of Life",
+    author: "Kazi Nazrul Islam",
+    coverUrl: "/book-covers/the-reader-map.svg",
+    tags: ["swap", "sell"],
+    rating: 4.7,
+    reviewCount: 45,
+    price: 180,
+    distance: "4.2 km",
+    location: "Mymensingh",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "lost-sonnet",
+    slug: "lost-sonnet",
+    title: "The Lost Sonnet",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/market-lanes.svg",
+    tags: ["borrow", "swap"],
+    rating: 4.6,
+    reviewCount: 60,
+    distance: "2.8 km",
+    location: "Khulna",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "boi-er-pata",
+    slug: "boi-er-pata",
+    title: "Boi-er Pata",
+    author: "Shamsur Rahman",
+    coverUrl: "/book-covers/quiet-reviews.svg",
+    tags: ["swap"],
+    rating: 4.3,
+    reviewCount: 14,
+    distance: "5.0 km",
+    location: "Barisal",
+    condition: "fair",
+    availability: "in-stock",
+  },
+  {
+    id: "dhaka-metro",
+    slug: "dhaka-metro",
+    title: "Dhaka Metro Diary",
+    author: "Nayeem Islam",
+    coverUrl: "/book-covers/rivers-of-dhaka.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.2,
+    reviewCount: 18,
+    price: 150,
+    distance: "0.5 km",
+    location: "Mirpur",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "sundarbans-adventure",
+    slug: "sundarbans-adventure",
+    title: "Sundarbans Adventure",
+    author: "Muhammed Zafar Iqbal",
+    coverUrl: "/book-covers/borrowed-light.svg",
+    tags: ["borrow"],
+    rating: 4.8,
+    reviewCount: 77,
+    distance: "6.2 km",
+    location: "Bagerhat",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "smart-entrepreneur",
+    slug: "smart-entrepreneur",
+    title: "Smart Entrepreneur",
+    author: "Ayman Sadiq",
+    coverUrl: "/book-covers/swap-stories.svg",
+    tags: ["sell"],
+    rating: 4.7,
+    reviewCount: 110,
+    price: 320,
+    location: "Banani",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "history-of-bengal",
+    slug: "history-of-bengal",
+    title: "History of Bengal",
+    author: "Akbar Ali Khan",
+    coverUrl: "/book-covers/the-reader-map.svg",
+    tags: ["swap", "sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 65,
+    price: 480,
+    distance: "1.9 km",
+    location: "Dhanmondi",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "silent-whispers",
+    slug: "silent-whispers",
+    title: "Silent Whispers",
+    author: "Tahmima Anam",
+    coverUrl: "/book-covers/market-lanes.svg",
+    tags: ["sell"],
+    rating: 4.4,
+    reviewCount: 21,
+    price: 290,
+    location: "Uttara",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "golden-age",
+    slug: "golden-age",
+    title: "A Golden Age",
+    author: "Tahmima Anam",
+    coverUrl: "/book-covers/quiet-reviews.svg",
+    tags: ["borrow"],
+    rating: 4.6,
+    reviewCount: 39,
+    distance: "2.1 km",
+    location: "Gulshan",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "lalshalu",
+    slug: "lalshalu",
+    title: "Lalshalu",
+    author: "Syed Waliullah",
+    coverUrl: "/book-covers/rivers-of-dhaka.svg",
+    tags: ["swap"],
+    rating: 4.8,
+    reviewCount: 94,
+    distance: "3.7 km",
+    location: "Comilla",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "pather-panchali",
+    slug: "pather-panchali",
+    title: "Pather Panchali",
+    author: "Bibhutibhushan Bandyopadhyay",
+    coverUrl: "/book-covers/borrowed-light.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 142,
+    price: 190,
+    distance: "4.5 km",
+    location: "Jessore",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "chokher-bali",
+    slug: "chokher-bali",
+    title: "Chokher Bali",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/swap-stories.svg",
+    tags: ["swap", "sell"],
+    rating: 4.7,
+    reviewCount: 53,
+    price: 220,
+    distance: "2.9 km",
+    location: "Pabna",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "gora-book",
+    slug: "gora-book",
+    title: "Gora",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/the-reader-map.svg",
+    tags: ["borrow"],
+    rating: 4.8,
+    reviewCount: 88,
+    distance: "3.2 km",
+    location: "Rajshahi",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "shesher-kobita",
+    slug: "shesher-kobita",
+    title: "Shesher Kobita",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/market-lanes.svg",
+    tags: ["sell"],
+    rating: 4.9,
+    reviewCount: 115,
+    price: 160,
+    location: "Bogra",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "devdas-novel",
+    slug: "devdas-novel",
+    title: "Devdas",
+    author: "Sarat Chandra Chattopadhyay",
+    coverUrl: "/book-covers/quiet-reviews.svg",
+    tags: ["swap", "borrow"],
+    rating: 4.5,
+    reviewCount: 67,
+    distance: "5.1 km",
+    location: "Rangpur",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "srikanta-novel",
+    slug: "srikanta-novel",
+    title: "Srikanta",
+    author: "Sarat Chandra Chattopadhyay",
+    coverUrl: "/book-covers/rivers-of-dhaka.svg",
+    tags: ["sell", "swap"],
+    rating: 4.6,
+    reviewCount: 41,
+    price: 240,
+    distance: "4.8 km",
+    location: "Dinajpur",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "kopalkundala",
+    slug: "kopalkundala",
+    title: "Kopalkundala",
+    author: "Bankim Chandra Chattopadhyay",
+    coverUrl: "/book-covers/borrowed-light.svg",
+    tags: ["borrow"],
+    rating: 4.4,
+    reviewCount: 33,
+    distance: "2.7 km",
+    location: "Kushtia",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "anandamath",
+    slug: "anandamath",
+    title: "Anandamath",
+    author: "Bankim Chandra Chattopadhyay",
+    coverUrl: "/book-covers/swap-stories.svg",
+    tags: ["sell"],
+    rating: 4.7,
+    reviewCount: 59,
+    price: 300,
+    location: "Faridpur",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "byomkesh-samagra",
+    slug: "byomkesh-samagra",
+    title: "Byomkesh Samagra",
+    author: "Sharadindu Bandyopadhyay",
+    coverUrl: "/book-covers/the-reader-map.svg",
+    tags: ["swap", "sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 156,
+    price: 650,
+    distance: "3.4 km",
+    location: "Tangail",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "feluda-somogro",
+    slug: "feluda-somogro",
+    title: "Feluda Somogro",
+    author: "Satyajit Ray",
+    coverUrl: "/book-covers/market-lanes.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 203,
+    price: 750,
+    distance: "1.8 km",
+    location: "Gazipur",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "professor-shonku",
+    slug: "professor-shonku",
+    title: "Professor Shonku",
+    author: "Satyajit Ray",
+    coverUrl: "/book-covers/quiet-reviews.svg",
+    tags: ["borrow", "swap"],
+    rating: 4.8,
+    reviewCount: 119,
+    distance: "2.3 km",
+    location: "Narayanganj",
+    condition: "good",
+    availability: "in-stock",
+  },
 ];
 
-const newBooks: BookCardBook[] = [
-  featuredBooks[4],
-  featuredBooks[5],
-  featuredBooks[0],
-  featuredBooks[2],
-  featuredBooks[3],
-  featuredBooks[1],
-];
+const newBooks: BookCardBook[] = [...featuredBooks].reverse();
 
 const communityPosts = [
   {
@@ -170,7 +681,7 @@ export default function Home() {
         href="/books/trending"
         books={featuredBooks}
       />
-      <BookSection title="New Books" href="/books/new" books={newBooks} muted />
+      <BookSection title="New Books" href="/books/new" books={newBooks} />
       <CentralLibrarySection />
       <MarketplaceSection />
       <SwapBooksSection />
@@ -183,29 +694,33 @@ export default function Home() {
 
 function CategorySection() {
   return (
-    <section className="boimix-section-sm">
-      <div className="boimix-container-wide">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title="Categories" href="/books" />
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <ScrollContainer>
           {categories.map((category) => {
-            const Icon = category.icon;
-
             return (
               <Link
                 key={category.href}
                 href={category.href}
-                className="bg-card shadow-soft hover:shadow-card flex items-center gap-3 rounded-lg border p-4 transition-all hover:-translate-y-0.5"
+                className="group flex w-[76px] shrink-0 flex-col items-center gap-1.5 text-center sm:w-[90px] md:w-[100px]"
               >
-                <span className="bg-info-soft text-info inline-flex size-10 items-center justify-center rounded-lg">
-                  <Icon className="size-5" aria-hidden="true" />
-                </span>
-                <span className="text-foreground font-semibold">
+                <div className="group-hover:border-primary border-border bg-card relative h-12 w-12 overflow-hidden rounded-full border transition-all duration-300 group-hover:shadow-sm sm:h-16 sm:w-16 md:h-20 md:w-20">
+                  <Image
+                    src={category.image}
+                    alt={category.title}
+                    fill
+                    sizes="(min-width: 768px) 80px, 48px"
+                    className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
+                <span className="text-foreground group-hover:text-primary text-[0.7rem] leading-tight font-semibold transition-colors sm:text-[0.75rem] md:text-xs">
                   {category.title}
                 </span>
               </Link>
             );
           })}
-        </div>
+        </ScrollContainer>
       </div>
     </section>
   );
@@ -215,24 +730,24 @@ function BookSection({
   title,
   href,
   books,
-  muted = false,
 }: {
   title: string;
   href: string;
   books: BookCardBook[];
-  muted?: boolean;
 }) {
   return (
-    <section
-      className={muted ? "boimix-section-sm bg-muted/45" : "boimix-section-sm"}
-    >
-      <div className="boimix-container-wide">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title={title} href={href} />
-        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
+        <ScrollContainer>
           {books.map((book) => (
-            <BookCard key={`${title}-${book.id}`} book={book} />
+            <BookCard
+              key={`${title}-${book.id}`}
+              book={book}
+              className="w-[150px] shrink-0 sm:w-[165px] lg:w-[180px]"
+            />
           ))}
-        </div>
+        </ScrollContainer>
       </div>
     </section>
   );
@@ -242,8 +757,8 @@ function CentralLibrarySection() {
   const books = featuredBooks.slice(0, 4);
 
   return (
-    <section className="boimix-section">
-      <div className="boimix-container-wide grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Central Library"
           href="/explore/central-library"
@@ -266,8 +781,8 @@ function MarketplaceSection() {
   const books = [newBooks[0], featuredBooks[0], featuredBooks[2], newBooks[1]];
 
   return (
-    <section className="boimix-section bg-muted/45">
-      <div className="boimix-container-wide grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <HorizontalBookRow books={books} rowKey="market" />
         <FeaturePanel
           title="Marketplace"
@@ -295,8 +810,8 @@ function SwapBooksSection() {
   ];
 
   return (
-    <section className="boimix-section">
-      <div className="boimix-container-wide grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Swap Books"
           href="/explore/swaps"
@@ -323,17 +838,15 @@ function HorizontalBookRow({
   rowKey: string;
 }) {
   return (
-    <div className="-mx-4 [scrollbar-width:thin] overflow-x-auto px-4 pb-3">
-      <div className="flex min-w-max gap-3">
-        {books.map((book) => (
-          <BookCard
-            key={`${rowKey}-${book.id}`}
-            book={book}
-            className="w-[142px] shrink-0 sm:w-[156px] lg:w-[164px]"
-          />
-        ))}
-      </div>
-    </div>
+    <ScrollContainer>
+      {books.map((book) => (
+        <BookCard
+          key={`${rowKey}-${book.id}`}
+          book={book}
+          className="w-[150px] shrink-0 sm:w-[165px] lg:w-[180px]"
+        />
+      ))}
+    </ScrollContainer>
   );
 }
 
@@ -389,8 +902,8 @@ function FeaturePanel({
 
 function CommunitySection() {
   return (
-    <section className="boimix-section-sm bg-muted/45">
-      <div className="boimix-container-wide">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title="Community Posts" href="/community" />
         <div className="grid gap-4 md:grid-cols-3">
           {communityPosts.map((post) => (
@@ -418,14 +931,14 @@ function CommunitySection() {
 
 function SponsorsSection() {
   return (
-    <section className="boimix-section-sm">
-      <div className="boimix-container-wide">
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title="Sponsors" href="/featured-libraries" />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {sponsors.map((sponsor) => (
             <div
               key={sponsor}
-              className="bg-card text-muted-foreground shadow-soft flex min-h-24 items-center justify-center rounded-lg border p-4 text-center font-semibold"
+              className="bg-muted text-muted-foreground shadow-soft flex min-h-24 items-center justify-center rounded-lg border p-4 text-center font-semibold"
             >
               {sponsor}
             </div>
