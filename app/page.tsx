@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRightIcon,
+  BookMarkedIcon,
   BookOpenIcon,
   Building2Icon,
   GraduationCapIcon,
@@ -11,6 +12,7 @@ import {
   ShoppingCartIcon,
   SparklesIcon,
   StarIcon,
+  UserIcon,
   UsersRoundIcon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
@@ -697,6 +699,7 @@ export default function Home() {
       <CentralLibrarySection />
       <MarketplaceSection />
       <SwapBooksSection />
+      <CommunityReaderSection />
       <CommunitySection />
       <SponsorsSection />
       <NewsletterSection />
@@ -916,6 +919,156 @@ function FeaturePanel({
         </Link>
       </Button>
     </div>
+  );
+}
+
+function CommunityReaderSection() {
+  const readers = [
+    {
+      name: "Sadia Noor",
+      books: 42,
+      swaps: 18,
+      reviews: 9,
+      badge: "Top Swapper",
+    },
+    {
+      name: "Imran Kabir",
+      books: 87,
+      swaps: 31,
+      reviews: 24,
+      badge: "Book Lover",
+    },
+    {
+      name: "Nusrat Jahan",
+      books: 55,
+      swaps: 12,
+      reviews: 16,
+      badge: "Reviewer",
+    },
+    {
+      name: "Tanvir Ahmed",
+      books: 33,
+      swaps: 27,
+      reviews: 5,
+      badge: "Active Reader",
+    },
+  ];
+
+  return (
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide">
+        <div className="from-primary/10 via-card to-info/5 border-primary/10 overflow-hidden rounded-2xl border bg-gradient-to-br p-6 shadow-sm md:p-8">
+          {/* Header */}
+          <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div className="bg-primary/10 mb-3 inline-flex items-center gap-2 rounded-full px-3 py-1">
+                <UsersRoundIcon className="text-primary size-4" />
+                <span className="text-primary text-xs font-semibold tracking-wide">
+                  Community Readers
+                </span>
+              </div>
+              <h2 className="text-foreground text-2xl font-bold md:text-3xl">
+                পড়ার আনন্দ ভাগ করো
+              </h2>
+              <p className="text-muted-foreground mt-2 max-w-md text-sm leading-6">
+                হাজারো পাঠকের সাথে যুক্ত হও। বই ধার করো, পর্যালোচনা করো, বিনিময়
+                করো — একটি সক্রিয় পাঠক সম্প্রদায়ে।
+              </p>
+            </div>
+            <Button asChild variant="outline" size="sm">
+              <Link href="/community">
+                সব দেখুন <ArrowRightIcon className="size-4" />
+              </Link>
+            </Button>
+          </div>
+
+          {/* Stats row */}
+          <div className="mb-6 grid grid-cols-3 gap-3 sm:grid-cols-3">
+            {[
+              {
+                icon: UsersRoundIcon,
+                label: "Active Readers",
+                value: "12,400+",
+              },
+              { icon: BookMarkedIcon, label: "Books Shared", value: "38,200+" },
+              {
+                icon: MessageCircleIcon,
+                label: "Reviews Posted",
+                value: "5,800+",
+              },
+            ].map(({ icon: Icon, label, value }) => (
+              <div
+                key={label}
+                className="bg-card/70 flex flex-col items-center gap-1 rounded-xl p-4 text-center shadow-sm backdrop-blur-sm"
+              >
+                <Icon className="text-primary size-5" aria-hidden="true" />
+                <p className="text-foreground text-lg font-bold">{value}</p>
+                <p className="text-muted-foreground text-xs">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Reader cards */}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {readers.map((reader) => (
+              <Link
+                key={reader.name}
+                href={`/community/readers/${reader.name.toLowerCase().replace(" ", "-")}`}
+                className="bg-card/80 hover:border-primary group flex flex-col gap-3 rounded-xl border p-4 shadow-sm backdrop-blur-sm transition-all hover:shadow-md"
+              >
+                {/* Avatar placeholder */}
+                <div className="flex items-center gap-3">
+                  <div className="bg-primary/10 flex size-10 items-center justify-center rounded-full">
+                    <UserIcon className="text-primary size-5" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-foreground truncate text-sm font-semibold">
+                      {reader.name}
+                    </p>
+                    <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[0.6rem] font-medium">
+                      {reader.badge}
+                    </span>
+                  </div>
+                </div>
+                {/* Stats */}
+                <div className="grid grid-cols-3 gap-1 text-center text-[0.65rem]">
+                  <div>
+                    <p className="text-foreground font-bold">{reader.books}</p>
+                    <p className="text-muted-foreground">Books</p>
+                  </div>
+                  <div>
+                    <p className="text-foreground font-bold">{reader.swaps}</p>
+                    <p className="text-muted-foreground">Swaps</p>
+                  </div>
+                  <div>
+                    <p className="text-foreground font-bold">
+                      {reader.reviews}
+                    </p>
+                    <p className="text-muted-foreground">Reviews</p>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <Button asChild>
+              <Link href="/auth/register">
+                <UserIcon className="size-4" />
+                Join the Community
+              </Link>
+            </Button>
+            <Button asChild variant="ghost">
+              <Link href="/community/leaderboard">
+                <StarIcon className="size-4" />
+                Leaderboard দেখুন
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 

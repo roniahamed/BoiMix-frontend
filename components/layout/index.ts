@@ -8,6 +8,7 @@ export { MegaMenu } from "@/components/layout/mega-menu";
 export { MobileBottomNavigation } from "@/components/layout/mobile-bottom-navigation";
 export { MobileNavbar } from "@/components/layout/mobile-navbar";
 export { ModeratorLayout } from "@/components/layout/moderator-layout";
+export { QuickNavBar } from "@/components/layout/quick-nav-bar";
 export { SearchBar } from "@/components/layout/search-bar";
 export { SidebarNavigation } from "@/components/layout/sidebar-navigation";
 export { SiteFooter } from "@/components/layout/site-footer";

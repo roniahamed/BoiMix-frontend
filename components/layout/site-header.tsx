@@ -4,6 +4,7 @@ import { BellIcon, HeartIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
 import { BrandLink } from "@/components/layout/brand-link";
 import { DesktopNavbar } from "@/components/layout/desktop-navbar";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
+import { QuickNavBar } from "@/components/layout/quick-nav-bar";
 import { SearchBar } from "@/components/layout/search-bar";
 import { Button } from "@/components/ui/button";
 
@@ -62,6 +63,7 @@ export function SiteHeader() {
       <div className="boimix-container-wide pb-3 md:hidden">
         <SearchBar />
       </div>
+      <QuickNavBar />
     </header>
   );
 }
