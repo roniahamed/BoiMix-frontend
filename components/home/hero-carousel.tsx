@@ -41,6 +41,8 @@ const slides = [
 
 export function HeroCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [idleHidden, setIdleHidden] = useState(false);
+  const [hovered, setHovered] = useState(false);
   const activeSlide = slides[activeIndex];
 
   useEffect(() => {
@@ -51,10 +53,29 @@ export function HeroCarousel() {
     return () => window.clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (hovered) return;
+
+    const timer = setTimeout(() => {
+      setIdleHidden(true);
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [hovered]);
+
+  const showControls = hovered || !idleHidden;
+
   return (
     <section className="bg-background py-4 md:py-6">
       <div className="boimix-container-wide grid gap-3 lg:grid-cols-[1fr_254px]">
-        <div className="bg-card shadow-soft relative overflow-hidden rounded-md border">
+        <div
+          className="bg-card shadow-soft relative overflow-hidden rounded-md border"
+          onMouseEnter={() => {
+            setHovered(true);
+            setIdleHidden(false);
+          }}
+          onMouseLeave={() => setHovered(false)}
+        >
           <div
             className={cn(
               "relative h-[280px] bg-gradient-to-r transition-all duration-500 ease-in-out sm:h-[300px] md:h-[340px]",
@@ -112,8 +133,12 @@ export function HeroCarousel() {
           <Button
             type="button"
             variant="ghost"
-            size="icon"
-            className="absolute top-1/2 left-2 hidden -translate-y-1/2 cursor-pointer bg-transparent text-white transition-all hover:scale-105 hover:bg-white/20 hover:text-white active:scale-95 md:inline-flex"
+            className={cn(
+              "absolute top-1/2 left-2 hidden h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 text-white transition-all duration-300 hover:scale-110 hover:bg-white/20 hover:text-white active:scale-95 md:inline-flex",
+              showControls
+                ? "pointer-events-auto scale-100 opacity-100"
+                : "pointer-events-none scale-90 opacity-0",
+            )}
             onClick={() =>
               setActiveIndex(
                 (current) => (current - 1 + slides.length) % slides.length,
@@ -121,19 +146,23 @@ export function HeroCarousel() {
             }
             aria-label="Previous slide"
           >
-            <ChevronLeftIcon />
+            <ChevronLeftIcon className="size-8" />
           </Button>
           <Button
             type="button"
             variant="ghost"
-            size="icon"
-            className="absolute top-1/2 right-2 hidden -translate-y-1/2 cursor-pointer bg-transparent text-white transition-all hover:scale-105 hover:bg-white/20 hover:text-white active:scale-95 md:inline-flex"
+            className={cn(
+              "absolute top-1/2 right-2 hidden h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-transparent p-0 text-white transition-all duration-300 hover:scale-110 hover:bg-white/20 hover:text-white active:scale-95 md:inline-flex",
+              showControls
+                ? "pointer-events-auto scale-100 opacity-100"
+                : "pointer-events-none scale-90 opacity-0",
+            )}
             onClick={() =>
               setActiveIndex((current) => (current + 1) % slides.length)
             }
             aria-label="Next slide"
           >
-            <ChevronRightIcon />
+            <ChevronRightIcon className="size-8" />
           </Button>
           <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
             {slides.map((slide, index) => (
