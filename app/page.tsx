@@ -723,7 +723,7 @@ function CategorySection() {
     <section className="py-4 md:py-6">
       <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title="Categories" href="/books" />
-        <ScrollContainer>
+        <ScrollContainer autoScroll>
           {categories.map((category) => {
             return (
               <Link
@@ -765,7 +765,7 @@ function BookSection({
     <section className="py-4 md:py-6">
       <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title={title} href={href} />
-        <ScrollContainer>
+        <ScrollContainer autoScroll>
           {books.map((book) => (
             <BookCard
               key={`${title}-${book.id}`}
