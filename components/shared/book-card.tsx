@@ -140,12 +140,19 @@ export function BookCard({ book, className }: BookCardProps) {
         </div>
       </div>
 
+      {/* Full-card click target (z-10) */}
+      <Link
+        href={`/books/${book.slug}`}
+        className="absolute inset-0 z-10"
+        aria-label={`View details of ${book.title}`}
+      />
+
       {/* Glassmorphism Hover Overlay over the entire card */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center rounded-md border border-white/20 bg-white/60 p-3 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100 dark:border-white/5 dark:bg-black/65">
+      <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center rounded-md border border-white/20 bg-white/60 p-3 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 dark:border-white/5 dark:bg-black/65">
         <div className="flex w-full max-w-[136px] -translate-y-4 transform flex-col items-center justify-center gap-2 transition-transform duration-300 group-hover:translate-y-0">
           <Button
             size="sm"
-            className="flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+            className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
           >
             <ShoppingCartIcon className="size-4" />
             <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
@@ -153,7 +160,7 @@ export function BookCard({ book, className }: BookCardProps) {
           <Button
             size="sm"
             variant="success"
-            className="flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+            className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
           >
             <BookOpenIcon className="size-4" />
             <span>Borrow</span>
@@ -161,7 +168,7 @@ export function BookCard({ book, className }: BookCardProps) {
           <Button
             size="sm"
             variant="outline"
-            className="bg-background text-foreground flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+            className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
           >
             <Repeat2Icon className="size-4" />
             <span>Swap</span>
@@ -169,7 +176,7 @@ export function BookCard({ book, className }: BookCardProps) {
         </div>
         <Link
           href={`/books/${book.slug}`}
-          className="border-border bg-secondary/90 text-primary hover:bg-primary hover:text-primary-foreground absolute right-0 bottom-0 left-0 flex h-12 cursor-pointer items-center justify-center gap-1 rounded-b-md border-t text-sm font-bold transition-all active:scale-95"
+          className="border-border bg-secondary/90 text-primary hover:bg-primary hover:text-primary-foreground pointer-events-auto absolute right-0 bottom-0 left-0 flex h-12 cursor-pointer items-center justify-center gap-1 rounded-b-md border-t text-sm font-bold transition-all active:scale-95"
         >
           View Details
         </Link>
