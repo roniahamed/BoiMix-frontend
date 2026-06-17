@@ -14,6 +14,7 @@ export type BookCardBook = {
   rating: number;
   reviewCount: number;
   price?: number;
+  originalPrice?: number;
   distance?: string;
   location?: string;
   condition: BookCondition;

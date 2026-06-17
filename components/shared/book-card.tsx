@@ -123,9 +123,18 @@ export function BookCard({ book, className }: BookCardProps) {
                 {book.condition}
               </span>
               {book.price !== undefined && (
-                <span className="text-accent shrink-0 text-[0.78rem] font-bold">
-                  ৳{book.price.toLocaleString("en-BD")}
-                </span>
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <span className="text-muted-foreground text-[0.68rem] line-through">
+                    ৳
+                    {(
+                      book.originalPrice ||
+                      Math.round((book.price * 1.25) / 10) * 10
+                    ).toLocaleString("en-BD")}
+                  </span>
+                  <span className="text-accent text-[0.78rem] font-bold">
+                    ৳{book.price.toLocaleString("en-BD")}
+                  </span>
+                </div>
               )}
             </div>
           </div>
