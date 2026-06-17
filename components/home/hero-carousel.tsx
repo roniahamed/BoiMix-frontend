@@ -2,40 +2,43 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon, SearchIcon } from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 const slides = [
   {
-    title: "Borrow from Central Library",
-    subtitle: "Verified BoiMix books ready for readers across Bangladesh.",
-    image: "/brand/boimix-cover.png",
+    tag: "Mega Book Festival",
+    title: "মেগা বই উৎসব",
+    subtitle: "নির্বাচিত বইগুলোতে ৫০% পর্যন্ত ছাড়! সীমিত সময়ের অফার।",
+    image: "/banners/book-festival.png",
+    href: "/explore/festival",
+    cta: "এখনই দেখুন",
+    overlayFrom: "from-amber-950/75",
+    overlayTo: "to-orange-900/40",
+  },
+  {
+    tag: "Library Membership",
+    title: "Central Library সদস্যপদ",
+    subtitle:
+      "BoiMix Central Library-তে যোগ দিন। হাজারো বই বিনামূল্যে ধার করুন।",
+    image: "/banners/library-membership.png",
     href: "/explore/central-library",
     cta: "Borrow Books",
-    accent: "bg-primary",
-    gradient: "from-sky-950 to-sky-850",
+    overlayFrom: "from-sky-950/80",
+    overlayTo: "to-teal-900/40",
   },
   {
-    title: "Buy and Sell Reader Books",
-    subtitle: "Find affordable books from local readers and trusted shelves.",
-    image: "/book-covers/market-lanes.svg",
-    href: "/explore/store",
-    cta: "Browse Store",
-    accent: "bg-warning",
-    gradient: "from-amber-950 to-orange-900",
-  },
-  {
-    title: "Swap Stories Nearby",
-    subtitle: "Exchange books peer to peer with simple swap requests.",
-    image: "/book-covers/swap-stories.svg",
+    tag: "Book Swap Community",
+    title: "পড়া শেষ? এখন Swap করুন!",
+    subtitle: "আপনার পাড়া বা ক্যাম্পাসের মানুষদের সাথে বই বিনিময় করুন সহজেই।",
+    image: "/banners/swap-community.png",
     href: "/explore/swaps",
     cta: "Start Swapping",
-    accent: "bg-success",
-    gradient: "from-emerald-950 to-teal-900",
+    overlayFrom: "from-violet-950/80",
+    overlayTo: "to-purple-800/40",
   },
 ];
 
@@ -69,46 +72,53 @@ export function HeroCarousel() {
     <section className="bg-background py-4 md:py-6">
       <div className="boimix-container-wide grid gap-3 lg:grid-cols-[1fr_254px]">
         <div
-          className="bg-card shadow-soft relative overflow-hidden rounded-md border"
+          className="shadow-soft relative overflow-hidden rounded-xl"
           onMouseEnter={() => {
             setHovered(true);
             setIdleHidden(false);
           }}
           onMouseLeave={() => setHovered(false)}
         >
-          <div
-            className={cn(
-              "relative h-[190px] bg-gradient-to-r transition-all duration-500 ease-in-out sm:h-[300px] md:h-[340px]",
-              activeSlide.gradient,
-            )}
-          >
-            <div className="bg-primary absolute inset-y-0 left-0 w-1.5" />
-            <div className="relative flex h-full max-w-xl flex-col justify-center p-5 text-white sm:p-6 md:p-8">
-              <p className="type-badge text-warning mb-2">BoiMix Highlights</p>
-              <h1 className="text-2xl leading-tight font-bold sm:text-3xl md:text-4xl">
+          {/* Full-cover background image with transition */}
+          <div className="relative h-[190px] sm:h-[300px] md:h-[360px]">
+            {slides.map((slide, index) => (
+              <div
+                key={slide.title}
+                className={cn(
+                  "absolute inset-0 transition-opacity duration-700 ease-in-out",
+                  activeIndex === index ? "opacity-100" : "opacity-0",
+                )}
+              >
+                <Image
+                  src={slide.image}
+                  alt={slide.title}
+                  fill
+                  className="object-cover object-center"
+                  priority={index === 0}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 900px"
+                />
+                {/* Dark gradient overlay for text readability */}
+                <div
+                  className={cn(
+                    "absolute inset-0 bg-gradient-to-r",
+                    slide.overlayFrom,
+                    slide.overlayTo,
+                  )}
+                />
+              </div>
+            ))}
+
+            {/* Text content on top */}
+            <div className="relative z-10 flex h-full max-w-lg flex-col justify-center p-5 text-white sm:p-7 md:p-10">
+              <span className="mb-2 w-fit rounded-full bg-white/20 px-3 py-0.5 text-[0.65rem] font-semibold tracking-wide text-white/90 backdrop-blur-sm sm:text-xs">
+                {activeSlide.tag}
+              </span>
+              <h1 className="text-xl leading-tight font-bold drop-shadow sm:text-3xl md:text-4xl">
                 {activeSlide.title}
               </h1>
-              <p className="mt-2.5 max-w-md text-xs leading-5 text-white/85 sm:text-sm sm:leading-6">
+              <p className="mt-2 max-w-md text-xs leading-5 text-white/85 drop-shadow sm:mt-3 sm:text-sm sm:leading-6">
                 {activeSlide.subtitle}
               </p>
-              <form
-                action="/books/search"
-                role="search"
-                className="mt-4 hidden max-w-md gap-2 sm:flex"
-              >
-                <div className="relative min-w-0 flex-1">
-                  <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-                  <Input
-                    name="q"
-                    type="search"
-                    placeholder="Search books..."
-                    className="h-10 border-white/50 bg-white pl-9 text-gray-800"
-                  />
-                </div>
-                <Button type="submit" size="sm" className="cursor-pointer">
-                  Search
-                </Button>
-              </form>
               <Button
                 asChild
                 className="mt-4 w-fit cursor-pointer transition-all hover:scale-105 active:scale-95"
@@ -117,19 +127,9 @@ export function HeroCarousel() {
                 <Link href={activeSlide.href}>{activeSlide.cta}</Link>
               </Button>
             </div>
-
-            {/* Premium floating rotated cover card for desktop */}
-            <div className="absolute top-1/2 right-8 hidden h-44 w-32 -translate-y-1/2 rotate-3 transform overflow-hidden rounded-lg border border-white/10 shadow-2xl transition-transform duration-300 hover:rotate-0 md:block lg:right-16 lg:h-48 lg:w-36">
-              <Image
-                src={activeSlide.image}
-                alt=""
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
           </div>
 
+          {/* Left arrow */}
           <Button
             type="button"
             variant="ghost"
@@ -148,6 +148,8 @@ export function HeroCarousel() {
           >
             <ChevronLeftIcon className="size-8" />
           </Button>
+
+          {/* Right arrow */}
           <Button
             type="button"
             variant="ghost"
@@ -164,14 +166,18 @@ export function HeroCarousel() {
           >
             <ChevronRightIcon className="size-8" />
           </Button>
+
+          {/* Dot indicators */}
           <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 gap-1.5">
             {slides.map((slide, index) => (
               <button
                 key={slide.title}
                 type="button"
                 className={cn(
-                  "size-2 cursor-pointer rounded-full border border-white/70 transition-all hover:scale-110",
-                  activeIndex === index ? "bg-white" : "bg-white/30",
+                  "cursor-pointer rounded-full border border-white/70 transition-all hover:scale-110",
+                  activeIndex === index
+                    ? "h-2 w-5 bg-white"
+                    : "size-2 bg-white/30",
                 )}
                 onClick={() => setActiveIndex(index)}
                 aria-label={`Show slide ${index + 1}`}
@@ -180,7 +186,7 @@ export function HeroCarousel() {
           </div>
         </div>
 
-        <aside className="bg-card shadow-soft hidden rounded-md border p-4 lg:block">
+        <aside className="bg-card shadow-soft hidden rounded-xl border p-4 lg:block">
           <div className="bg-info-soft rounded-md p-4 text-center">
             <p className="text-info text-sm font-semibold">Today on BoiMix</p>
             <p className="text-foreground mt-2 text-2xl font-bold">3 ways</p>
