@@ -1,0 +1,40 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a0a00"/>
+      <stop offset="100%" stop-color="#2d1500"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Adventure/treasure map feel -->
+  <circle cx="300" cy="300" r="160" stroke="#f59e0b" stroke-width="2" fill="none" opacity="0.2"/>
+  <circle cx="300" cy="300" r="120" stroke="#f59e0b" stroke-width="1" fill="none" opacity="0.2"/>
+  <!-- Silhouette of Feluda with magnifier -->
+  <ellipse cx="290" cy="210" rx="35" ry="40" fill="#78350f" opacity="0.9"/>
+  <path d="M260 248 Q268 340 275 380 Q283 400 295 396 Q305 400 315 380 Q323 340 322 248 Q307 262 290 262 Q273 262 260 248Z" fill="#78350f" opacity="0.9"/>
+  <!-- Long coat -->
+  <path d="M255 300 Q240 380 245 430 L260 430 Q262 370 268 320Z" fill="#92400e" opacity="0.7"/>
+  <path d="M325 300 Q340 380 335 430 L320 430 Q318 370 312 320Z" fill="#92400e" opacity="0.7"/>
+  <!-- Glasses / spy element -->
+  <circle cx="278" cy="208" r="12" stroke="#fbbf24" stroke-width="2" fill="none" opacity="0.8"/>
+  <circle cx="304" cy="208" r="12" stroke="#fbbf24" stroke-width="2" fill="none" opacity="0.8"/>
+  <line x1="290" y1="208" x2="292" y2="208" stroke="#fbbf24" stroke-width="2" opacity="0.8"/>
+  <!-- Pistol -->
+  <path d="M330 310 L370 305 L375 318 L370 320 L335 322 Z" fill="#4b5563" opacity="0.8"/>
+  <rect x="355" y="305" width="6" height="30" rx="2" fill="#374151" opacity="0.8"/>
+  <!-- Camera / gadget -->
+  <rect x="125" y="480" width="80" height="60" rx="8" fill="#374151" opacity="0.7"/>
+  <circle cx="165" cy="510" r="22" stroke="#6b7280" stroke-width="3" fill="#1f2937" opacity="0.8"/>
+  <circle cx="165" cy="510" r="14" fill="#111827" opacity="0.9"/>
+  <!-- Stars (Kolkata/Bengal stars) -->
+  <circle cx="80" cy="100" r="2" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="520" cy="80" r="1.5" fill="#fbbf24" opacity="0.5"/>
+  <circle cx="450" cy="180" r="2" fill="#fbbf24" opacity="0.4"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#f59e0b" stroke-opacity="0.2" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#0a0500" opacity="0.9"/>
+  <text x="300" y="710" fill="#fde68a" font-family="Georgia, serif" font-size="38" font-weight="700" text-anchor="middle">Feluda</text>
+  <text x="300" y="748" fill="#fde68a" font-family="Georgia, serif" font-size="38" font-weight="700" text-anchor="middle">Somogro</text>
+  <text x="300" y="778" fill="#f59e0b" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" opacity="0.85">Satyajit Ray</text>
+</svg>

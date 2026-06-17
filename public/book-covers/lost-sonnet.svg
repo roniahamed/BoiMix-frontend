@@ -1,0 +1,38 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a1f0a"/>
+      <stop offset="100%" stop-color="#122b12"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Feather / quill -->
+  <path d="M300 80 Q400 200 380 400 Q360 480 300 560" stroke="#a3e635" stroke-width="3" fill="none" opacity="0.7"/>
+  <path d="M300 80 Q200 200 220 400 Q240 480 300 560" stroke="#a3e635" stroke-width="3" fill="none" opacity="0.7"/>
+  <!-- Feather barbs -->
+  <line x1="350" y1="160" x2="300" y2="180" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="370" y1="210" x2="300" y2="235" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="375" y1="265" x2="300" y2="285" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="370" y1="320" x2="300" y2="335" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="250" y1="160" x2="300" y2="180" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="230" y1="210" x2="300" y2="235" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="225" y1="265" x2="300" y2="285" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <line x1="230" y1="320" x2="300" y2="335" stroke="#a3e635" stroke-width="1.5" opacity="0.4"/>
+  <!-- Scroll/parchment behind -->
+  <rect x="120" y="380" width="360" height="220" rx="10" fill="#1a3a1a" opacity="0.7" stroke="#4ade80" stroke-width="1.5"/>
+  <!-- Handwriting lines on scroll -->
+  <line x1="150" y1="420" x2="450" y2="420" stroke="#4ade80" stroke-width="1.5" opacity="0.4"/>
+  <line x1="150" y1="445" x2="430" y2="445" stroke="#4ade80" stroke-width="1.5" opacity="0.4"/>
+  <line x1="150" y1="470" x2="440" y2="470" stroke="#4ade80" stroke-width="1.5" opacity="0.4"/>
+  <line x1="150" y1="495" x2="420" y2="495" stroke="#4ade80" stroke-width="1.5" opacity="0.4"/>
+  <line x1="150" y1="520" x2="435" y2="520" stroke="#4ade80" stroke-width="1.5" opacity="0.4"/>
+  <line x1="150" y1="545" x2="410" y2="545" stroke="#4ade80" stroke-width="1.5" opacity="0.4"/>
+  <!-- Ink drop at quill tip -->
+  <ellipse cx="300" cy="562" rx="8" ry="10" fill="#4ade80" opacity="0.7"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#4ade80" stroke-opacity="0.2" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#030a03" opacity="0.9"/>
+  <text x="300" y="715" fill="#bbf7d0" font-family="Georgia, serif" font-size="40" font-weight="700" text-anchor="middle">The Lost Sonnet</text>
+  <text x="300" y="757" fill="#4ade80" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" opacity="0.85">Rabindranath Tagore</text>
+</svg>

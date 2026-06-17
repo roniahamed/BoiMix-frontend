@@ -1,9 +1,57 @@
 <svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="600" height="800" fill="#FFF4E0"/>
-  <rect x="86" y="136" width="428" height="462" rx="38" fill="#FF9900"/>
-  <path d="M146 268H454L420 554H180L146 268Z" fill="#FFFFFF"/>
-  <path d="M222 268C222 197 378 197 378 268" stroke="#0B2A5B" stroke-width="22" stroke-linecap="round"/>
-  <circle cx="221" cy="620" r="24" fill="#0397D3"/>
-  <circle cx="379" cy="620" r="24" fill="#0397D3"/>
-  <text x="82" y="720" fill="#0B2A5B" font-family="Arial, sans-serif" font-size="58" font-weight="700">Market Lanes</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a0f0a"/>
+      <stop offset="100%" stop-color="#2d1a0d"/>
+    </linearGradient>
+    <linearGradient id="stall" x1="0" y1="0" x2="0" y2="200" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#78350f"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Sky atmosphere -->
+  <rect x="0" y="0" width="600" height="450" fill="#2a1205" opacity="0.5"/>
+  <!-- Market lane/path -->
+  <path d="M220 800 L290 350 L310 350 L380 800 Z" fill="#3d1f05" opacity="0.6"/>
+  <!-- Market stalls left -->
+  <rect x="30" y="380" width="240" height="200" rx="4" fill="url(#stall)"/>
+  <rect x="30" y="360" width="240" height="30" rx="4" fill="#d97706"/>
+  <!-- Awning stripes -->
+  <rect x="30" y="360" width="30" height="30" fill="#b45309"/>
+  <rect x="90" y="360" width="30" height="30" fill="#b45309"/>
+  <rect x="150" y="360" width="30" height="30" fill="#b45309"/>
+  <rect x="210" y="360" width="30" height="30" fill="#b45309"/>
+  <!-- Books on stall left -->
+  <rect x="50" y="430" width="25" height="40" rx="2" fill="#2563eb"/>
+  <rect x="82" y="435" width="25" height="35" rx="2" fill="#dc2626"/>
+  <rect x="114" y="425" width="25" height="45" rx="2" fill="#16a34a"/>
+  <rect x="146" y="432" width="25" height="38" rx="2" fill="#7c3aed"/>
+  <rect x="178" y="428" width="25" height="42" rx="2" fill="#ea580c"/>
+  <!-- Market stalls right -->
+  <rect x="330" y="380" width="240" height="200" rx="4" fill="url(#stall)"/>
+  <rect x="330" y="360" width="240" height="30" rx="4" fill="#d97706"/>
+  <rect x="330" y="360" width="30" height="30" fill="#b45309"/>
+  <rect x="390" y="360" width="30" height="30" fill="#b45309"/>
+  <rect x="450" y="360" width="30" height="30" fill="#b45309"/>
+  <rect x="510" y="360" width="30" height="30" fill="#b45309"/>
+  <!-- Books on stall right -->
+  <rect x="350" y="430" width="25" height="40" rx="2" fill="#0891b2"/>
+  <rect x="382" y="435" width="25" height="35" rx="2" fill="#be185d"/>
+  <rect x="414" y="425" width="25" height="45" rx="2" fill="#ca8a04"/>
+  <rect x="446" y="432" width="25" height="38" rx="2" fill="#4d7c0f"/>
+  <rect x="478" y="428" width="25" height="42" rx="2" fill="#7e22ce"/>
+  <!-- Hanging lanterns -->
+  <line x1="150" y1="220" x2="150" y2="350" stroke="#92400e" stroke-width="2"/>
+  <ellipse cx="150" cy="355" rx="18" ry="25" fill="#f59e0b" opacity="0.9"/>
+  <ellipse cx="150" cy="353" rx="12" ry="18" fill="#fef3c7" opacity="0.8"/>
+  <line x1="450" y1="220" x2="450" y2="350" stroke="#92400e" stroke-width="2"/>
+  <ellipse cx="450" cy="355" rx="18" ry="25" fill="#f59e0b" opacity="0.9"/>
+  <ellipse cx="450" cy="353" rx="12" ry="18" fill="#fef3c7" opacity="0.8"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#f59e0b" stroke-opacity="0.2" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#0d0700" opacity="0.9"/>
+  <text x="300" y="715" fill="#fde68a" font-family="Georgia, serif" font-size="42" font-weight="700" text-anchor="middle">Market Lanes</text>
+  <text x="300" y="757" fill="#f59e0b" font-family="Arial, sans-serif" font-size="26" text-anchor="middle" opacity="0.85">Tahsin Ahmed</text>
 </svg>

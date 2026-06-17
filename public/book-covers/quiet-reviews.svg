@@ -1,7 +1,52 @@
 <svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="600" height="800" fill="#1F2933"/>
-  <rect x="92" y="102" width="416" height="596" rx="32" fill="#FFFFFF"/>
-  <path d="M162 212H438M162 296H398M162 380H438M162 464H352" stroke="#0397D3" stroke-width="24" stroke-linecap="round"/>
-  <path d="M167 588L204 625L279 542" stroke="#33C24D" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="88" y="760" fill="white" font-family="Arial, sans-serif" font-size="52" font-weight="700">Quiet Reviews</text>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <radialGradient id="spotlight" cx="50%" cy="38%" r="40%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect width="600" height="800" fill="url(#spotlight)"/>
+  <!-- Stars in background -->
+  <circle cx="60" cy="80" r="1.5" fill="white" opacity="0.5"/>
+  <circle cx="180" cy="50" r="1" fill="white" opacity="0.4"/>
+  <circle cx="350" cy="100" r="2" fill="white" opacity="0.6"/>
+  <circle cx="500" cy="60" r="1.5" fill="white" opacity="0.4"/>
+  <circle cx="420" cy="140" r="1" fill="white" opacity="0.5"/>
+  <circle cx="80" cy="200" r="1.5" fill="white" opacity="0.3"/>
+  <circle cx="540" cy="220" r="1" fill="white" opacity="0.4"/>
+  <!-- Open book in center -->
+  <path d="M130 280 L300 240 L300 550 L130 580 Z" fill="#312e81" opacity="0.9"/>
+  <path d="M470 280 L300 240 L300 550 L470 580 Z" fill="#1e1b4b" opacity="0.9"/>
+  <!-- Page lines left -->
+  <line x1="160" y1="310" x2="285" y2="285" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="160" y1="330" x2="285" y2="307" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="160" y1="350" x2="285" y2="329" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="160" y1="370" x2="285" y2="351" stroke="#818cf8" stroke-width="1.5" opacity="0.4"/>
+  <line x1="160" y1="390" x2="285" y2="373" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <line x1="160" y1="410" x2="285" y2="395" stroke="#818cf8" stroke-width="1" opacity="0.3"/>
+  <!-- Page lines right -->
+  <line x1="315" y1="285" x2="440" y2="310" stroke="#6366f1" stroke-width="1.5" opacity="0.4"/>
+  <line x1="315" y1="307" x2="440" y2="330" stroke="#6366f1" stroke-width="1.5" opacity="0.4"/>
+  <line x1="315" y1="329" x2="440" y2="350" stroke="#6366f1" stroke-width="1.5" opacity="0.4"/>
+  <line x1="315" y1="351" x2="440" y2="370" stroke="#6366f1" stroke-width="1.5" opacity="0.4"/>
+  <line x1="315" y1="373" x2="440" y2="390" stroke="#6366f1" stroke-width="1" opacity="0.3"/>
+  <line x1="315" y1="395" x2="440" y2="410" stroke="#6366f1" stroke-width="1" opacity="0.3"/>
+  <!-- Spine glow -->
+  <line x1="300" y1="240" x2="300" y2="550" stroke="#a5b4fc" stroke-width="3" opacity="0.6"/>
+  <!-- Review star motif above -->
+  <text x="300" y="215" font-size="28" text-anchor="middle" fill="#fbbf24" opacity="0.9">★ ★ ★ ★ ★</text>
+  <!-- Quote marks -->
+  <text x="155" y="490" font-size="72" fill="#818cf8" opacity="0.15" font-family="Georgia, serif">"</text>
+  <text x="388" y="530" font-size="72" fill="#6366f1" opacity="0.15" font-family="Georgia, serif">"</text>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#818cf8" stroke-opacity="0.2" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#06060f" opacity="0.9"/>
+  <text x="300" y="715" fill="#e0e7ff" font-family="Georgia, serif" font-size="38" font-weight="700" text-anchor="middle">Quiet Reviews</text>
+  <text x="300" y="757" fill="#818cf8" font-family="Arial, sans-serif" font-size="26" text-anchor="middle" opacity="0.85">Raisa Chowdhury</text>
 </svg>

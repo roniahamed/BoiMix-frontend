@@ -1,0 +1,40 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0a0a"/>
+      <stop offset="100%" stop-color="#1e1010"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Magnifying glass -->
+  <circle cx="280" cy="300" r="140" stroke="#e2e8f0" stroke-width="10" fill="none" opacity="0.7"/>
+  <line x1="385" y1="405" x2="480" y2="500" stroke="#e2e8f0" stroke-width="14" opacity="0.7" stroke-linecap="round"/>
+  <!-- Clues inside magnifying glass -->
+  <circle cx="250" cy="270" r="15" fill="#e2e8f0" opacity="0.15"/>
+  <line x1="200" y1="280" x2="360" y2="280" stroke="#e2e8f0" stroke-width="2" opacity="0.3"/>
+  <line x1="200" y1="300" x2="360" y2="300" stroke="#e2e8f0" stroke-width="2" opacity="0.3"/>
+  <line x1="200" y1="320" x2="330" y2="320" stroke="#e2e8f0" stroke-width="2" opacity="0.3"/>
+  <!-- Byomkesh silhouette (detective) -->
+  <ellipse cx="280" cy="240" rx="30" ry="35" fill="#1e293b" opacity="0.9"/>
+  <path d="M255 272 Q262 340 270 370 Q278 395 290 390 Q300 395 310 370 Q320 340 308 272 Q294 285 280 285 Q266 285 255 272Z" fill="#1e293b" opacity="0.9"/>
+  <!-- Hat -->
+  <rect x="252" y="215" width="58" height="12" rx="3" fill="#0f172a" opacity="0.9"/>
+  <rect x="260" y="195" width="42" height="22" rx="4" fill="#0f172a" opacity="0.9"/>
+  <!-- Pipe -->
+  <path d="M308 260 Q330 255 340 265 Q350 275 345 285" stroke="#78716c" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <circle cx="345" cy="286" r="7" fill="#78350f" opacity="0.7"/>
+  <!-- Smoke from pipe -->
+  <path d="M345 280 Q355 260 348 248 Q358 238 350 225" stroke="#94a3b8" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round"/>
+  <!-- Footprints -->
+  <ellipse cx="120" cy="580" rx="12" ry="18" fill="#475569" opacity="0.5" transform="rotate(-15 120 580)"/>
+  <ellipse cx="150" cy="620" rx="12" ry="18" fill="#475569" opacity="0.5" transform="rotate(15 150 620)"/>
+  <ellipse cx="420" cy="560" rx="12" ry="18" fill="#475569" opacity="0.4" transform="rotate(-10 420 560)"/>
+  <ellipse cx="455" cy="600" rx="12" ry="18" fill="#475569" opacity="0.4" transform="rotate(10 455 600)"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#e2e8f0" stroke-opacity="0.15" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#050202" opacity="0.9"/>
+  <text x="300" y="710" fill="#f1f5f9" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Byomkesh</text>
+  <text x="300" y="748" fill="#f1f5f9" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Samagra</text>
+  <text x="300" y="778" fill="#94a3b8" font-family="Arial, sans-serif" font-size="21" text-anchor="middle" opacity="0.85">Sharadindu Bandyopadhyay</text>
+</svg>

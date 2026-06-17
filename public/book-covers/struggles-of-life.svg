@@ -1,0 +1,36 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a0505"/>
+      <stop offset="100%" stop-color="#2d0a0a"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Storm clouds -->
+  <ellipse cx="200" cy="180" rx="150" ry="80" fill="#3d1515" opacity="0.8"/>
+  <ellipse cx="350" cy="160" rx="180" ry="90" fill="#4a1a1a" opacity="0.7"/>
+  <ellipse cx="450" cy="200" rx="130" ry="70" fill="#3d1515" opacity="0.6"/>
+  <!-- Lightning bolt -->
+  <path d="M310 150 L280 260 L305 260 L270 370 L325 250 L300 250 Z" fill="#fbbf24" opacity="0.9"/>
+  <!-- Rain streaks -->
+  <line x1="80" y1="280" x2="65" y2="360" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <line x1="140" y1="300" x2="125" y2="380" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <line x1="200" y1="270" x2="185" y2="350" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <line x1="420" y1="280" x2="405" y2="360" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <line x1="480" y1="300" x2="465" y2="380" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <line x1="540" y1="260" x2="525" y2="340" stroke="#60a5fa" stroke-width="1.5" opacity="0.3"/>
+  <!-- Broken road / struggle path -->
+  <path d="M0 550 Q100 530 150 560 Q200 590 250 555 Q300 520 350 550 Q400 580 450 548 Q500 515 600 545" stroke="#7f1d1d" stroke-width="6" fill="none" opacity="0.7"/>
+  <path d="M0 580 Q100 560 150 590 Q200 620 250 585 Q300 550 350 580 Q400 610 450 578 Q500 545 600 575" stroke="#991b1b" stroke-width="4" fill="none" opacity="0.5"/>
+  <!-- Ground -->
+  <path d="M0 620 L600 620 L600 800 L0 800Z" fill="#1a0505" opacity="0.85"/>
+  <!-- Lone figure silhouette -->
+  <ellipse cx="300" cy="520" rx="15" ry="20" fill="#7f1d1d" opacity="0.8"/>
+  <path d="M285 540 Q290 600 295 620 L305 620 Q310 600 315 540 Q302 550 300 550 Q298 550 285 540Z" fill="#7f1d1d" opacity="0.8"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#ef4444" stroke-opacity="0.15" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#0a0202" opacity="0.9"/>
+  <text x="300" y="715" fill="#fca5a5" font-family="Georgia, serif" font-size="38" font-weight="700" text-anchor="middle">Struggles of Life</text>
+  <text x="300" y="757" fill="#ef4444" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" opacity="0.85">Kazi Nazrul Islam</text>
+</svg>

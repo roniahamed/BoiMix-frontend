@@ -1,0 +1,43 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0f0a1e"/>
+      <stop offset="100%" stop-color="#1e1040"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Upward arrow / rocket path -->
+  <path d="M300 600 L300 150" stroke="#7c3aed" stroke-width="4" stroke-dasharray="12,8" opacity="0.5"/>
+  <!-- Rocket -->
+  <path d="M300 130 L270 230 L330 230 Z" fill="#7c3aed" opacity="0.9"/>
+  <rect x="270" y="225" width="60" height="90" rx="8" fill="#6d28d9" opacity="0.9"/>
+  <rect x="255" y="285" width="20" height="40" rx="4" fill="#5b21b6" opacity="0.8"/>
+  <rect x="325" y="285" width="20" height="40" rx="4" fill="#5b21b6" opacity="0.8"/>
+  <!-- Rocket window -->
+  <circle cx="300" cy="250" r="18" fill="#1e1040" stroke="#a78bfa" stroke-width="2"/>
+  <circle cx="300" cy="250" r="12" fill="#312e81" opacity="0.8"/>
+  <!-- Rocket flame -->
+  <path d="M275 315 Q290 380 300 400 Q310 380 325 315" fill="#f59e0b" opacity="0.8"/>
+  <path d="M283 315 Q295 370 300 385 Q305 370 317 315" fill="#fbbf24" opacity="0.7"/>
+  <!-- Stars / sparks around -->
+  <circle cx="150" cy="200" r="3" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="450" cy="180" r="2" fill="#f59e0b" opacity="0.6"/>
+  <circle cx="120" cy="380" r="2.5" fill="#a78bfa" opacity="0.6"/>
+  <circle cx="480" cy="350" r="3" fill="#a78bfa" opacity="0.7"/>
+  <circle cx="80" cy="500" r="2" fill="#fbbf24" opacity="0.5"/>
+  <circle cx="520" cy="490" r="2" fill="#fbbf24" opacity="0.5"/>
+  <!-- Growth chart line -->
+  <path d="M60 580 L120 540 L200 560 L280 500 L360 480 L440 440 L520 400" stroke="#10b981" stroke-width="3" fill="none" opacity="0.7"/>
+  <!-- Chart dots -->
+  <circle cx="120" cy="540" r="5" fill="#10b981" opacity="0.8"/>
+  <circle cx="280" cy="500" r="5" fill="#10b981" opacity="0.8"/>
+  <circle cx="440" cy="440" r="5" fill="#10b981" opacity="0.8"/>
+  <circle cx="520" cy="400" r="7" fill="#10b981" opacity="0.9"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#7c3aed" stroke-opacity="0.25" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#05030f" opacity="0.9"/>
+  <text x="300" y="710" fill="#ddd6fe" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Smart</text>
+  <text x="300" y="748" fill="#ddd6fe" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Entrepreneur</text>
+  <text x="300" y="778" fill="#a78bfa" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" opacity="0.85">Ayman Sadiq</text>
+</svg>

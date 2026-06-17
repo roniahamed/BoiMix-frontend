@@ -1,0 +1,34 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a0a2e"/>
+      <stop offset="100%" stop-color="#2d1045"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Shadow / chhaya motif: overlapping shadows -->
+  <ellipse cx="250" cy="350" rx="120" ry="200" fill="#6b21a8" opacity="0.3"/>
+  <ellipse cx="350" cy="350" rx="120" ry="200" fill="#7e22ce" opacity="0.2"/>
+  <!-- Silhouette of woman with shadow -->
+  <ellipse cx="300" cy="280" rx="45" ry="55" fill="#4c1d95" opacity="0.85"/>
+  <path d="M255 330 Q260 480 300 520 Q340 480 345 330 Q320 355 300 355 Q280 355 255 330Z" fill="#4c1d95" opacity="0.85"/>
+  <!-- Shadow (elongated) -->
+  <ellipse cx="360" cy="400" rx="30" ry="80" fill="#2e1065" opacity="0.5" transform="rotate(-20 360 400)"/>
+  <path d="M300 520 Q420 600 480 720" stroke="#2e1065" stroke-width="40" opacity="0.4" stroke-linecap="round"/>
+  <!-- Flowers/nature motif -->
+  <circle cx="120" cy="580" r="20" fill="#9333ea" opacity="0.4"/>
+  <circle cx="90" cy="555" r="12" fill="#a855f7" opacity="0.3"/>
+  <circle cx="480" cy="560" r="18" fill="#7e22ce" opacity="0.4"/>
+  <circle cx="510" cy="540" r="10" fill="#9333ea" opacity="0.3"/>
+  <path d="M0 640 C100 610 200 660 300 635 C400 610 500 650 600 625 L600 800 L0 800Z" fill="#1a0a2e" opacity="0.8"/>
+  <!-- Stars -->
+  <circle cx="100" cy="80" r="2" fill="white" opacity="0.5"/>
+  <circle cx="500" cy="100" r="1.5" fill="white" opacity="0.4"/>
+  <circle cx="400" cy="50" r="2" fill="white" opacity="0.6"/>
+  <circle cx="150" cy="140" r="1" fill="white" opacity="0.4"/>
+  <!-- Bengali: Chhaya (shade/shadow) feel -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#a855f7" stroke-opacity="0.2" stroke-width="5"/>
+  <rect x="0" y="670" width="600" height="130" fill="#0d0520" opacity="0.9"/>
+  <text x="300" y="715" fill="#e9d5ff" font-family="Georgia, serif" font-size="44" font-weight="700" text-anchor="middle">Chhaya Bithi</text>
+  <text x="300" y="757" fill="#a855f7" font-family="Arial, sans-serif" font-size="26" text-anchor="middle" opacity="0.85">Humayun Ahmed</text>
+</svg>

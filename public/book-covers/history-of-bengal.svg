@@ -1,0 +1,40 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a1200"/>
+      <stop offset="100%" stop-color="#2d1f00"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Ancient scroll/map background -->
+  <ellipse cx="300" cy="400" rx="240" ry="300" fill="#2d1f00" opacity="0.5" stroke="#b45309" stroke-width="2"/>
+  <!-- Map of Bengal outlines (simplified) -->
+  <path d="M200 200 Q250 180 300 200 Q350 215 380 260 Q400 300 390 360 Q380 420 350 460 Q320 500 290 520 Q260 500 240 460 Q210 420 200 360 Q190 300 200 260 Q205 230 200 200Z" stroke="#d97706" stroke-width="2" fill="#1a1200" opacity="0.7"/>
+  <!-- Rivers of Bengal -->
+  <path d="M240 250 Q280 300 270 380 Q265 420 250 460" stroke="#3b82f6" stroke-width="2.5" fill="none" opacity="0.6"/>
+  <path d="M320 220 Q340 270 330 350 Q325 400 310 450" stroke="#3b82f6" stroke-width="2" fill="none" opacity="0.5"/>
+  <!-- Location markers -->
+  <circle cx="285" cy="280" r="6" fill="#ef4444" opacity="0.8"/>
+  <circle cx="310" cy="350" r="5" fill="#f59e0b" opacity="0.7"/>
+  <circle cx="265" cy="420" r="5" fill="#ef4444" opacity="0.7"/>
+  <!-- Text "History" scroll decoration -->
+  <rect x="100" y="560" width="400" height="50" rx="4" fill="#78350f" opacity="0.5"/>
+  <rect x="110" y="570" width="380" height="30" rx="3" fill="#92400e" opacity="0.4"/>
+  <!-- Scroll ends -->
+  <ellipse cx="100" cy="585" rx="20" ry="35" fill="#92400e" opacity="0.7"/>
+  <ellipse cx="500" cy="585" rx="20" ry="35" fill="#92400e" opacity="0.7"/>
+  <!-- Sunburst at top -->
+  <circle cx="300" cy="130" r="40" fill="#f59e0b" opacity="0.7"/>
+  <line x1="300" y1="75" x2="300" y2="60" stroke="#f59e0b" stroke-width="3" opacity="0.5"/>
+  <line x1="350" y1="90" x2="360" y2="78" stroke="#f59e0b" stroke-width="3" opacity="0.5"/>
+  <line x1="372" y1="130" x2="388" y2="130" stroke="#f59e0b" stroke-width="3" opacity="0.5"/>
+  <line x1="250" y1="90" x2="240" y2="78" stroke="#f59e0b" stroke-width="3" opacity="0.5"/>
+  <line x1="228" y1="130" x2="212" y2="130" stroke="#f59e0b" stroke-width="3" opacity="0.5"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#d97706" stroke-opacity="0.2" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#0a0800" opacity="0.9"/>
+  <text x="300" y="710" fill="#fde68a" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">History of</text>
+  <text x="300" y="748" fill="#fde68a" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Bengal</text>
+  <text x="300" y="778" fill="#f59e0b" font-family="Arial, sans-serif" font-size="22" text-anchor="middle" opacity="0.85">Akbar Ali Khan</text>
+</svg>

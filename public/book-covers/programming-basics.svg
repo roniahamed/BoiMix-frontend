@@ -1,0 +1,45 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="600" y2="800" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#0f2340"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <!-- Circuit / code / tech motif -->
+  <line x1="100" y1="150" x2="200" y2="150" stroke="#22d3ee" stroke-width="2" opacity="0.5"/>
+  <line x1="200" y1="150" x2="200" y2="250" stroke="#22d3ee" stroke-width="2" opacity="0.5"/>
+  <line x1="200" y1="250" x2="400" y2="250" stroke="#22d3ee" stroke-width="2" opacity="0.5"/>
+  <line x1="400" y1="250" x2="400" y2="150" stroke="#22d3ee" stroke-width="2" opacity="0.5"/>
+  <line x1="400" y1="150" x2="500" y2="150" stroke="#22d3ee" stroke-width="2" opacity="0.5"/>
+  <line x1="150" y1="350" x2="450" y2="350" stroke="#0ea5e9" stroke-width="2" opacity="0.4"/>
+  <line x1="150" y1="350" x2="150" y2="450" stroke="#0ea5e9" stroke-width="2" opacity="0.4"/>
+  <line x1="450" y1="350" x2="450" y2="450" stroke="#0ea5e9" stroke-width="2" opacity="0.4"/>
+  <line x1="150" y1="450" x2="450" y2="450" stroke="#0ea5e9" stroke-width="2" opacity="0.4"/>
+  <!-- Terminal window -->
+  <rect x="100" y="260" width="400" height="240" rx="8" fill="#0d1f36" stroke="#22d3ee" stroke-width="2" opacity="0.9"/>
+  <rect x="100" y="260" width="400" height="28" rx="8" fill="#22d3ee" opacity="0.15"/>
+  <circle cx="125" cy="274" r="6" fill="#ef4444" opacity="0.9"/>
+  <circle cx="148" cy="274" r="6" fill="#f59e0b" opacity="0.9"/>
+  <circle cx="171" cy="274" r="6" fill="#22c55e" opacity="0.9"/>
+  <!-- Code lines -->
+  <text x="120" y="315" fill="#22d3ee" font-family="'Courier New', monospace" font-size="16" opacity="0.8">$ python basics.py</text>
+  <text x="120" y="340" fill="#4ade80" font-family="'Courier New', monospace" font-size="15" opacity="0.7">Hello, World!</text>
+  <text x="120" y="365" fill="#22d3ee" font-family="'Courier New', monospace" font-size="16" opacity="0.8">for i in range(10):</text>
+  <text x="140" y="388" fill="#93c5fd" font-family="'Courier New', monospace" font-size="15" opacity="0.7">  print(i)</text>
+  <text x="120" y="415" fill="#f472b6" font-family="'Courier New', monospace" font-size="14" opacity="0.6">def learn(): ▌</text>
+  <!-- Node circles -->
+  <circle cx="150" cy="150" r="8" fill="#22d3ee" opacity="0.7"/>
+  <circle cx="200" cy="150" r="6" fill="#0ea5e9" opacity="0.6"/>
+  <circle cx="400" cy="150" r="6" fill="#0ea5e9" opacity="0.6"/>
+  <circle cx="500" cy="150" r="8" fill="#22d3ee" opacity="0.7"/>
+  <circle cx="200" cy="250" r="6" fill="#22d3ee" opacity="0.5"/>
+  <circle cx="400" cy="250" r="6" fill="#22d3ee" opacity="0.5"/>
+  <!-- Border frame -->
+  <rect x="30" y="30" width="540" height="740" rx="12" stroke="#22d3ee" stroke-opacity="0.2" stroke-width="5"/>
+  <!-- Title area -->
+  <rect x="0" y="670" width="600" height="130" fill="#040d1a" opacity="0.9"/>
+  <text x="300" y="710" fill="#bae6fd" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Programming</text>
+  <text x="300" y="748" fill="#bae6fd" font-family="Georgia, serif" font-size="34" font-weight="700" text-anchor="middle">Basics</text>
+  <text x="300" y="778" fill="#22d3ee" font-family="Arial, sans-serif" font-size="21" text-anchor="middle" opacity="0.85">Tamim Shahriar Subeen</text>
+</svg>
