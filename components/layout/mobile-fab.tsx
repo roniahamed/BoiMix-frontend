@@ -41,6 +41,8 @@ export function MobileFAB() {
   const containerRef = useRef<HTMLDivElement>(null);
   const constraintsRef = useRef<HTMLDivElement>(null);
 
+  const isDraggingRef = useRef(false);
+
   // Close when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -65,6 +67,7 @@ export function MobileFAB() {
   }, []);
 
   function handleNavigate(href: string) {
+    if (isDraggingRef.current) return;
     setIsOpen(false);
     // small delay so close animation plays before navigation
     setTimeout(() => router.push(href), 120);
@@ -97,6 +100,14 @@ export function MobileFAB() {
         dragConstraints={constraintsRef}
         dragElastic={0.1}
         dragMomentum={false}
+        onDragStart={() => {
+          isDraggingRef.current = true;
+        }}
+        onDragEnd={() => {
+          setTimeout(() => {
+            isDraggingRef.current = false;
+          }, 150);
+        }}
         className="fixed right-4 bottom-20 z-50 flex flex-col items-end gap-3 md:right-6 md:bottom-6"
         style={{ touchAction: "none" }} // Prevents scrolling while dragging on touch devices
       >
@@ -143,7 +154,14 @@ export function MobileFAB() {
         {/* Main FAB Button */}
         <button
           type="button"
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={(e) => {
+            if (isDraggingRef.current) {
+              e.preventDefault();
+              e.stopPropagation();
+              return;
+            }
+            setIsOpen((prev) => !prev);
+          }}
           aria-label={isOpen ? "Close quick actions" : "Open quick actions"}
           aria-expanded={isOpen}
           className={cn(
