@@ -1,5 +1,14 @@
 # BoiMix Frontend Development Roadmap
+# Development Rules
 
+- Complete one phase before starting the next.
+- Do not skip dependencies.
+- Reuse existing components whenever possible.
+- Never duplicate components.
+- Keep the architecture scalable.
+- Maintain design consistency across all pages.
+- Use Server Components by default.
+- Use Client Components only when interactivity is required.
 ---
 
 # Phase 0 — Project Setup
@@ -123,6 +132,34 @@
 - [ ] Bottom Navigation
 
 ---
+
+# Phase 3.5 — State Management
+
+TanStack Query
+
+Axios Instance
+
+API Client
+
+Authentication Context
+
+Global UI State
+
+Search State
+
+Filter State
+
+Cart State
+
+Wishlist State
+
+Theme State
+
+Form Validation
+
+Error Handling
+
+--- 
 
 # Phase 4 — Reusable Components
 
@@ -359,3 +396,6 @@
 - [ ] Animations
 - [ ] Lighthouse Optimization
 - [ ] Final QA
+
+
+

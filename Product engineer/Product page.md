@@ -18,7 +18,7 @@ Please take inspiration from the following aspects of Rokomari:
 * Easy navigation and search experience
 * Trustworthy and community-focused feel
 
-However,  copy Rokomari's design directly. Create a modern identity for BoiMix while following a similar design philosophy.
+Use Rokomari only as a UX and layout inspiration. Recreate the same design quality, spacing, information hierarchy, and usability, but establish a unique visual identity for BoiMix. Do not duplicate copyrighted assets, graphics, or branding.
 
 BoiMix combines:
 
@@ -762,3 +762,28 @@ Create:
 * Verified Library State
 
 Design should feel similar to modern marketplace platforms such as Facebook Marketplace, Amazon Books, Goodreads, and Airbnb cards while remaining clean, compact, and book-focused.
+
+
+For every implementation:
+
+- Build production-ready code.
+- Use reusable components.
+- Use TypeScript.
+- Use Tailwind CSS.
+- Use Shadcn UI.
+- Follow the established Design System.
+- Maintain responsiveness.
+- Maintain accessibility.
+- Optimize performance.
+- Avoid placeholder implementations.
+- don't write unnessery comment and text. 
+
+
+Follow this workflow:
+
+1. Read the Product Specification completely.
+2. Read the Frontend Development Roadmap.
+3. Build only the requested phase.
+4. Never implement future phases unless explicitly instructed.
+5. Reuse previously created components.
+6. Keep the codebase production-ready and scalable.
