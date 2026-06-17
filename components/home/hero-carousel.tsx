@@ -78,12 +78,12 @@ export function HeroCarousel() {
         >
           <div
             className={cn(
-              "relative h-[280px] bg-gradient-to-r transition-all duration-500 ease-in-out sm:h-[300px] md:h-[340px]",
+              "relative h-[190px] bg-gradient-to-r transition-all duration-500 ease-in-out sm:h-[300px] md:h-[340px]",
               activeSlide.gradient,
             )}
           >
             <div className="bg-primary absolute inset-y-0 left-0 w-1.5" />
-            <div className="relative flex h-full max-w-xl flex-col justify-center p-6 text-white md:p-8">
+            <div className="relative flex h-full max-w-xl flex-col justify-center p-5 text-white sm:p-6 md:p-8">
               <p className="type-badge text-warning mb-2">BoiMix Highlights</p>
               <h1 className="text-2xl leading-tight font-bold sm:text-3xl md:text-4xl">
                 {activeSlide.title}

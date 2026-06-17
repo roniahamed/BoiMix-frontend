@@ -78,9 +78,15 @@ export function BookCard({ book, className }: BookCardProps) {
             >
               {book.title}
             </Link>
-            <p className="text-muted-foreground mt-0.5 truncate text-[0.7rem]">
-              {book.author}
-            </p>
+            <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[0.7rem]">
+              <span className="truncate">{book.author}</span>
+              {book.isVerifiedLibrary && (
+                <BadgeCheckIcon
+                  className="text-primary size-3.5 shrink-0"
+                  aria-label="Verified library"
+                />
+              )}
+            </div>
           </div>
           <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
             <div className="flex items-center justify-between gap-2">
@@ -158,9 +164,6 @@ export function BookCard({ book, className }: BookCardProps) {
           className="border-border bg-secondary/90 text-primary hover:bg-primary hover:text-primary-foreground absolute right-0 bottom-0 left-0 flex h-12 cursor-pointer items-center justify-center gap-1 rounded-b-md border-t text-sm font-bold transition-all active:scale-95"
         >
           View Details
-          {book.isVerifiedLibrary && (
-            <BadgeCheckIcon className="size-4" aria-label="Verified library" />
-          )}
         </Link>
       </div>
     </article>

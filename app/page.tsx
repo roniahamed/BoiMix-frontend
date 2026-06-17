@@ -645,6 +645,8 @@ const featuredBooks: BookCardBook[] = [
 ];
 
 const newBooks: BookCardBook[] = [...featuredBooks].reverse();
+const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
+const forYouBooks: BookCardBook[] = [...featuredBooks].slice(5, 17);
 
 const communityPosts = [
   {
@@ -682,6 +684,16 @@ export default function Home() {
         books={featuredBooks}
       />
       <BookSection title="New Books" href="/books/new" books={newBooks} />
+      <BookSection
+        title="Nearby You"
+        href="/books/near-me"
+        books={nearbyBooks}
+      />
+      <BookSection
+        title="Only For You"
+        href="/books/for-you"
+        books={forYouBooks}
+      />
       <CentralLibrarySection />
       <MarketplaceSection />
       <SwapBooksSection />
