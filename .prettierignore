@@ -1,0 +1,12 @@
+.next/
+node_modules/
+out/
+build/
+dist/
+coverage/
+next-env.d.ts
+
+Product engineer/
+test docs/
+boimix images/
+boiswap_complete_product_architecture_master_document.md
