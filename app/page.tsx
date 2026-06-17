@@ -760,7 +760,7 @@ function CentralLibrarySection() {
 
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <div className="boimix-container-wide bg-card grid gap-6 rounded-xl p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Central Library"
           href="/explore/central-library"
@@ -788,7 +788,7 @@ function MarketplaceSection() {
 
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <div className="boimix-container-wide bg-card grid gap-6 rounded-xl p-4 shadow-sm md:p-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div className="w-full min-w-0">
           <HorizontalBookRow books={books} rowKey="market" />
         </div>
@@ -816,7 +816,7 @@ function SwapBooksSection() {
 
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <div className="boimix-container-wide bg-card grid gap-6 rounded-xl p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Swap Books"
           href="/explore/swaps"
@@ -879,7 +879,7 @@ function FeaturePanel({
   }[tone];
 
   return (
-    <div className="bg-card shadow-soft rounded-lg border p-6">
+    <div className="bg-card shadow-soft rounded-lg p-6">
       <span
         className={`inline-flex size-12 items-center justify-center rounded-lg ${toneClass}`}
       >

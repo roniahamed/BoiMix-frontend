@@ -66,7 +66,7 @@ export function ScrollContainer({ children, className }: ScrollContainerProps) {
           type="button"
           variant="secondary"
           size="icon"
-          className="border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -left-3 z-20 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-200 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-left-6 md:h-12 md:w-12"
+          className="border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -left-3 z-20 hidden h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-200 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-left-6 md:inline-flex md:h-12 md:w-12"
           onClick={() => scroll("left")}
           aria-label="Scroll left"
         >
@@ -90,7 +90,7 @@ export function ScrollContainer({ children, className }: ScrollContainerProps) {
           type="button"
           variant="secondary"
           size="icon"
-          className="border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -right-3 z-20 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-200 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-right-6 md:h-12 md:w-12"
+          className="border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -right-3 z-20 hidden h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-200 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-right-6 md:inline-flex md:h-12 md:w-12"
           onClick={() => scroll("right")}
           aria-label="Scroll right"
         >
