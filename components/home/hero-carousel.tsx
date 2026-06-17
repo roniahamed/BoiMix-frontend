@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  Repeat2Icon,
+  BookOpenIcon,
+  ShoppingCartIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -90,9 +96,9 @@ export function HeroCarousel() {
   return (
     <section className="bg-background py-4 md:py-6">
       <div className="boimix-container-wide grid gap-3 lg:grid-cols-[1fr_254px]">
-        {/* Carousel wrapper — needs overflow-hidden + relative */}
+        {/* Carousel wrapper — Left Column */}
         <div
-          className="shadow-soft relative overflow-hidden rounded-xl"
+          className="shadow-soft relative overflow-hidden rounded-2xl"
           onMouseEnter={() => {
             setHovered(true);
             setIdleHidden(false);
@@ -115,7 +121,7 @@ export function HeroCarousel() {
                   fill
                   className="object-cover object-center"
                   priority={index === 0}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 75vw, 900px"
+                  sizes="(max-width: 1024px) 100vw, 75vw"
                 />
                 <div
                   className={cn(
@@ -159,12 +165,12 @@ export function HeroCarousel() {
               </Button>
             </div>
 
-            {/* ── Arrow buttons (z-20 — above slides AND text) ── */}
+            {/* ── Arrow buttons (z-20) ── */}
             <Button
               type="button"
               variant="ghost"
               className={cn(
-                "absolute top-1/2 left-2 z-20 hidden h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/25 p-0 text-white transition-all duration-300 hover:scale-110 hover:bg-white/25 active:scale-95 md:inline-flex",
+                "absolute top-[40%] left-4 z-20 hidden h-14 w-14 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/25 p-0 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/25 active:scale-95 md:inline-flex lg:top-1/2",
                 showControls
                   ? "pointer-events-auto scale-100 opacity-100"
                   : "pointer-events-none scale-90 opacity-0",
@@ -183,7 +189,7 @@ export function HeroCarousel() {
               type="button"
               variant="ghost"
               className={cn(
-                "absolute top-1/2 right-2 z-20 hidden h-12 w-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/25 p-0 text-white transition-all duration-300 hover:scale-110 hover:bg-white/25 active:scale-95 md:inline-flex",
+                "absolute top-[40%] right-4 z-20 hidden h-14 w-14 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/25 p-0 text-white backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-white/25 active:scale-95 md:inline-flex lg:top-1/2",
                 showControls
                   ? "pointer-events-auto scale-100 opacity-100"
                   : "pointer-events-none scale-90 opacity-0",
@@ -197,7 +203,7 @@ export function HeroCarousel() {
             </Button>
 
             {/* ── Dot indicators (z-20) ── */}
-            <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-1.5">
+            <div className="absolute top-4 right-6 z-20 hidden gap-2 lg:flex">
               {slides.map((s, index) => (
                 <button
                   key={s.image}
@@ -205,8 +211,8 @@ export function HeroCarousel() {
                   className={cn(
                     "cursor-pointer rounded-full border border-white/70 transition-all hover:scale-110",
                     activeIndex === index
-                      ? "h-2 w-5 bg-white"
-                      : "size-2 bg-white/30",
+                      ? "h-2.5 w-8 bg-white"
+                      : "size-2.5 bg-white/30 backdrop-blur-sm",
                   )}
                   onClick={() => setActiveIndex(index)}
                   aria-label={`Show slide ${index + 1}`}
@@ -216,24 +222,52 @@ export function HeroCarousel() {
           </div>
         </div>
 
-        <aside className="bg-card shadow-soft hidden rounded-xl border p-4 lg:block">
-          <div className="bg-info-soft rounded-md p-4 text-center">
-            <p className="text-info text-sm font-semibold">Today on BoiMix</p>
-            <p className="text-foreground mt-2 text-2xl font-bold">3 ways</p>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Borrow, buy, or swap from one reader-friendly shelf.
+        {/* ── Right Column: 3 Features (Desktop Only) ── */}
+        <aside className="hidden h-[190px] flex-col gap-2 sm:h-[300px] md:h-[360px] lg:flex">
+          <Link
+            href="/explore/central-library"
+            className="group border-primary/20 from-primary/10 hover:border-primary/40 hover:from-primary/20 hover:to-primary/5 dark:border-primary/30 dark:from-primary/20 relative flex flex-1 flex-col justify-center rounded-xl border bg-gradient-to-br to-transparent p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md dark:to-transparent"
+          >
+            <div className="bg-background/60 text-primary mb-1 w-fit rounded-lg p-2 shadow-sm backdrop-blur-md transition-transform group-hover:scale-105">
+              <BookOpenIcon className="size-4" />
+            </div>
+            <h3 className="text-foreground text-xs font-bold xl:text-sm">
+              Central Library
+            </h3>
+            <p className="text-muted-foreground text-[10px] leading-snug font-medium xl:text-xs">
+              Borrow from 10k+ books for free
             </p>
-          </div>
-          <div className="mt-4 grid gap-2 text-sm">
-            {["Central Library", "Marketplace", "Peer Swap"].map((item) => (
-              <div
-                key={item}
-                className="bg-background text-foreground rounded-md border px-3 py-2 font-medium"
-              >
-                {item}
-              </div>
-            ))}
-          </div>
+          </Link>
+
+          <Link
+            href="/explore/offers"
+            className="group border-primary/20 from-primary/10 hover:border-primary/40 hover:from-primary/20 hover:to-primary/5 dark:border-primary/30 dark:from-primary/20 relative flex flex-1 flex-col justify-center rounded-xl border bg-gradient-to-br to-transparent p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md dark:to-transparent"
+          >
+            <div className="bg-background/60 mb-1 w-fit rounded-lg p-2 text-orange-600 shadow-sm backdrop-blur-md transition-transform group-hover:scale-105 dark:text-orange-400">
+              <ShoppingCartIcon className="size-4" />
+            </div>
+            <h3 className="text-foreground text-xs font-bold xl:text-sm">
+              Marketplace
+            </h3>
+            <p className="text-muted-foreground text-[10px] leading-snug font-medium xl:text-xs">
+              Buy books at huge discounts
+            </p>
+          </Link>
+
+          <Link
+            href="/explore/swaps"
+            className="group border-primary/20 from-primary/10 hover:border-primary/40 hover:from-primary/20 hover:to-primary/5 dark:border-primary/30 dark:from-primary/20 relative flex flex-1 flex-col justify-center rounded-xl border bg-gradient-to-br to-transparent p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md dark:to-transparent"
+          >
+            <div className="bg-background/60 mb-1 w-fit rounded-lg p-2 text-green-600 shadow-sm backdrop-blur-md transition-transform group-hover:scale-105 dark:text-green-400">
+              <Repeat2Icon className="size-4" />
+            </div>
+            <h3 className="text-foreground text-xs font-bold xl:text-sm">
+              Peer Swap
+            </h3>
+            <p className="text-muted-foreground text-[10px] leading-snug font-medium xl:text-xs">
+              Exchange books with readers
+            </p>
+          </Link>
         </aside>
       </div>
     </section>
