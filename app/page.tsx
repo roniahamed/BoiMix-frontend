@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRightIcon,
@@ -8,7 +7,6 @@ import {
   LibraryIcon,
   MessageCircleIcon,
   Repeat2Icon,
-  SearchIcon,
   ShoppingCartIcon,
   SparklesIcon,
   StarIcon,
@@ -16,8 +14,8 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
+import { HeroCarousel } from "@/components/home/hero-carousel";
 import { MainLayout } from "@/components/layout/main-layout";
-import { BadgePill } from "@/components/shared/badge-pill";
 import { BookCard } from "@/components/shared/book-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -97,9 +95,6 @@ const featuredBooks: BookCardBook[] = [
     condition: "excellent",
     availability: "in-stock",
   },
-];
-
-const newBooks: BookCardBook[] = [
   {
     id: "market-lanes",
     slug: "market-lanes",
@@ -129,8 +124,15 @@ const newBooks: BookCardBook[] = [
     availability: "in-stock",
     isInCart: true,
   },
+];
+
+const newBooks: BookCardBook[] = [
+  featuredBooks[4],
+  featuredBooks[5],
   featuredBooks[0],
   featuredBooks[2],
+  featuredBooks[3],
+  featuredBooks[1],
 ];
 
 const communityPosts = [
@@ -161,7 +163,7 @@ const sponsors = [
 export default function Home() {
   return (
     <MainLayout>
-      <HeroSection />
+      <HeroCarousel />
       <CategorySection />
       <BookSection
         title="Trending Books"
@@ -176,91 +178,6 @@ export default function Home() {
       <SponsorsSection />
       <NewsletterSection />
     </MainLayout>
-  );
-}
-
-function HeroSection() {
-  return (
-    <section className="relative min-h-[72svh] overflow-hidden">
-      <Image
-        src="/brand/boimix-cover.png"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
-      <div className="absolute inset-0 bg-gray-900/45" />
-      <div className="from-background absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t to-transparent" />
-      <div className="boimix-container-wide relative flex min-h-[72svh] items-center py-16">
-        <div className="max-w-2xl text-white">
-          <BadgePill
-            tone="warning"
-            className="bg-warning text-warning-foreground mb-4"
-          >
-            One platform. Endless stories.
-          </BadgePill>
-          <h1 className="type-heading">BoiMix</h1>
-          <p className="mt-4 max-w-xl text-lg leading-8 text-white/90">
-            Read, share, swap, and grow with books from nearby readers and the
-            central BoiMix library.
-          </p>
-          <form
-            action="/books/search"
-            role="search"
-            className="mt-8 flex max-w-xl flex-col gap-3 sm:flex-row"
-          >
-            <div className="relative flex-1">
-              <SearchIcon className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-              <Input
-                name="q"
-                type="search"
-                placeholder="Search books, authors, ISBN..."
-                className="shadow-card h-12 border-white/40 bg-white pl-9 text-gray-800"
-              />
-            </div>
-            <Button type="submit" size="lg">
-              Search
-            </Button>
-          </form>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <Button asChild size="lg" variant="primary">
-              <Link href="/explore/central-library">
-                <LibraryIcon />
-                Borrow Books
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="bg-white">
-              <Link href="/explore/store">
-                <ShoppingCartIcon />
-                Buy Books
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="success">
-              <Link href="/explore/swaps">
-                <Repeat2Icon />
-                Swap Books
-              </Link>
-            </Button>
-          </div>
-          <dl className="mt-8 grid max-w-xl grid-cols-3 gap-3 text-left">
-            {[
-              ["12k+", "Books"],
-              ["4.8", "Avg rating"],
-              ["64", "Areas"],
-            ].map(([value, label]) => (
-              <div
-                key={label}
-                className="rounded-lg border border-white/20 bg-white/12 p-3 backdrop-blur"
-              >
-                <dt className="text-xs text-white/70">{label}</dt>
-                <dd className="mt-1 text-xl font-bold text-white">{value}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -311,7 +228,7 @@ function BookSection({
     >
       <div className="boimix-container-wide">
         <SectionHeader title={title} href={href} />
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
           {books.map((book) => (
             <BookCard key={`${title}-${book.id}`} book={book} />
           ))}
@@ -322,6 +239,8 @@ function BookSection({
 }
 
 function CentralLibrarySection() {
+  const books = featuredBooks.slice(0, 4);
+
   return (
     <section className="boimix-section">
       <div className="boimix-container-wide grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
@@ -337,25 +256,19 @@ function CentralLibrarySection() {
             ["Verified", "Inventory"],
           ]}
         />
-        <div className="grid gap-4 sm:grid-cols-3">
-          {featuredBooks.slice(0, 3).map((book) => (
-            <BookCard key={`library-${book.id}`} book={book} />
-          ))}
-        </div>
+        <HorizontalBookRow books={books} rowKey="library" />
       </div>
     </section>
   );
 }
 
 function MarketplaceSection() {
+  const books = [newBooks[0], featuredBooks[0], featuredBooks[2], newBooks[1]];
+
   return (
     <section className="boimix-section bg-muted/45">
       <div className="boimix-container-wide grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {[newBooks[0], featuredBooks[0], featuredBooks[2]].map((book) => (
-            <BookCard key={`market-${book.id}`} book={book} />
-          ))}
-        </div>
+        <HorizontalBookRow books={books} rowKey="market" />
         <FeaturePanel
           title="Marketplace"
           href="/explore/store"
@@ -374,6 +287,13 @@ function MarketplaceSection() {
 }
 
 function SwapBooksSection() {
+  const books = [
+    featuredBooks[2],
+    featuredBooks[3],
+    newBooks[1],
+    featuredBooks[1],
+  ];
+
   return (
     <section className="boimix-section">
       <div className="boimix-container-wide grid gap-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
@@ -389,13 +309,31 @@ function SwapBooksSection() {
             ["Safe", "Handover"],
           ]}
         />
-        <div className="grid gap-4 sm:grid-cols-3">
-          {[featuredBooks[2], featuredBooks[3], newBooks[1]].map((book) => (
-            <BookCard key={`swap-${book.id}`} book={book} />
-          ))}
-        </div>
+        <HorizontalBookRow books={books} rowKey="swap" />
       </div>
     </section>
+  );
+}
+
+function HorizontalBookRow({
+  books,
+  rowKey,
+}: {
+  books: BookCardBook[];
+  rowKey: string;
+}) {
+  return (
+    <div className="-mx-4 [scrollbar-width:thin] overflow-x-auto px-4 pb-3">
+      <div className="flex min-w-max gap-3">
+        {books.map((book) => (
+          <BookCard
+            key={`${rowKey}-${book.id}`}
+            book={book}
+            className="w-[142px] shrink-0 sm:w-[156px] lg:w-[164px]"
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
