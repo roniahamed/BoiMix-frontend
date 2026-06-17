@@ -6,7 +6,8 @@ import { primaryNavItems } from "@/lib/navigation";
 
 export function DesktopNavbar() {
   const directLinks = primaryNavItems.filter(
-    (item) => item.href === "/" || item.href === "/books",
+    (item) =>
+      item.href === "/" || item.href === "/books" || item.href === "/community",
   );
 
   return (

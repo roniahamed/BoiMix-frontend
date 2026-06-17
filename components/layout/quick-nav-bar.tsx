@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import {
   BookIcon,
   BookOpenIcon,
@@ -12,6 +15,7 @@ import {
   TagIcon,
   UsersRoundIcon,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const quickLinks = [
   { label: "Trending", href: "/books/trending", icon: FlameIcon },
@@ -36,18 +40,40 @@ const quickLinks = [
 ];
 
 export function QuickNavBar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    // Initial check
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="bg-card border-b">
-      <div className="boimix-container-wide">
+    <div
+      className={cn(
+        "bg-card border-b transition-all duration-300 ease-in-out",
+        scrolled
+          ? "h-0 overflow-hidden border-transparent opacity-0"
+          : "h-[44px] opacity-100",
+      )}
+    >
+      <div className="boimix-container-wide h-full">
         <nav
           aria-label="Quick navigation"
-          className="flex scrollbar-none items-center justify-start gap-0.5 overflow-x-auto py-1.5 md:justify-center"
+          className="flex h-full scrollbar-none items-center justify-start gap-0.5 overflow-x-auto md:justify-center"
         >
           {quickLinks.map(({ label, href, icon: Icon }) => (
             <Link
               key={href}
               href={href}
               className="text-muted-foreground hover:text-primary hover:bg-primary/8 flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors"
+              tabIndex={scrolled ? -1 : 0}
             >
               <Icon className="size-3.5 shrink-0" aria-hidden="true" />
               {label}
