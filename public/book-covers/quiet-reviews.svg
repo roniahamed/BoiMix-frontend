@@ -1,0 +1,7 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="800" fill="#1F2933"/>
+  <rect x="92" y="102" width="416" height="596" rx="32" fill="#FFFFFF"/>
+  <path d="M162 212H438M162 296H398M162 380H438M162 464H352" stroke="#0397D3" stroke-width="24" stroke-linecap="round"/>
+  <path d="M167 588L204 625L279 542" stroke="#33C24D" stroke-width="26" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="88" y="760" fill="white" font-family="Arial, sans-serif" font-size="52" font-weight="700">Quiet Reviews</text>
+</svg>

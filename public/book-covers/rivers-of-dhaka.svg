@@ -1,0 +1,8 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="800" fill="#0B2A5B"/>
+  <path d="M0 555C116 495 185 641 304 582C417 526 467 407 600 458V800H0V555Z" fill="#0397D3"/>
+  <path d="M0 647C105 607 173 692 290 655C421 613 476 548 600 578V800H0V647Z" fill="#33C24D"/>
+  <circle cx="449" cy="173" r="78" fill="#FF9900"/>
+  <rect x="72" y="90" width="456" height="620" rx="28" stroke="white" stroke-opacity=".28" stroke-width="8"/>
+  <text x="72" y="665" fill="white" font-family="Arial, sans-serif" font-size="54" font-weight="700">Rivers of Dhaka</text>
+</svg>

@@ -1,0 +1,9 @@
+<svg width="600" height="800" viewBox="0 0 600 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="800" fill="#E8F7FD"/>
+  <path d="M111 148L252 104L344 146L489 104V650L346 696L253 653L111 696V148Z" fill="#FFFFFF" stroke="#0397D3" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M253 104V653M346 146V696" stroke="#0397D3" stroke-width="8"/>
+  <circle cx="303" cy="389" r="72" fill="#FF9900"/>
+  <path d="M303 304C342 304 374 336 374 375C374 433 303 496 303 496C303 496 232 433 232 375C232 336 264 304 303 304Z" fill="#33C24D"/>
+  <circle cx="303" cy="375" r="22" fill="white"/>
+  <text x="74" y="742" fill="#333333" font-family="Arial, sans-serif" font-size="54" font-weight="700">The Reader Map</text>
+</svg>
