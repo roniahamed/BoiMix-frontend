@@ -32,7 +32,8 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "latest",
     "vaul": "^1.1.2",
-    "zod": "latest"
+    "zod": "latest",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "latest",
