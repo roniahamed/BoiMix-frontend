@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
-  Repeat2Icon,
+  UsersIcon,
   BookOpenIcon,
   ShoppingCartIcon,
 } from "lucide-react";
@@ -86,7 +86,7 @@ export function HeroCarousel() {
   // Idle-hide arrows
   useEffect(() => {
     if (hovered) return;
-    const timer = setTimeout(() => setIdleHidden(true), 5000);
+    const timer = setTimeout(() => setIdleHidden(true), 2000);
     return () => clearTimeout(timer);
   }, [hovered]);
 
@@ -222,13 +222,12 @@ export function HeroCarousel() {
           </div>
         </div>
 
-        {/* ── Right Column: 3 Features (Desktop Only) ── */}
         <aside className="hidden h-[190px] flex-col gap-2 sm:h-[300px] md:h-[360px] lg:flex">
           <Link
             href="/explore/central-library"
-            className="group border-primary/20 from-primary/10 hover:border-primary/40 hover:from-primary/20 hover:to-primary/5 dark:border-primary/30 dark:from-primary/20 relative flex flex-1 flex-col justify-center rounded-xl border bg-gradient-to-br to-transparent p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md dark:to-transparent"
+            className="group border-primary/30 bg-primary/20 hover:border-primary/50 hover:bg-primary/30 dark:border-primary/40 dark:bg-primary/30 dark:hover:bg-primary/40 relative flex flex-1 flex-col justify-center rounded-xl border p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
-            <div className="bg-background/60 text-primary mb-1 w-fit rounded-lg p-2 shadow-sm backdrop-blur-md transition-transform group-hover:scale-105">
+            <div className="bg-background/90 text-primary ring-primary/20 mb-1 w-fit rounded-lg p-2 shadow-sm ring-1 backdrop-blur-md transition-transform group-hover:scale-105">
               <BookOpenIcon className="size-4" />
             </div>
             <h3 className="text-foreground text-xs font-bold xl:text-sm">
@@ -240,10 +239,25 @@ export function HeroCarousel() {
           </Link>
 
           <Link
-            href="/explore/offers"
-            className="group border-primary/20 from-primary/10 hover:border-primary/40 hover:from-primary/20 hover:to-primary/5 dark:border-primary/30 dark:from-primary/20 relative flex flex-1 flex-col justify-center rounded-xl border bg-gradient-to-br to-transparent p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md dark:to-transparent"
+            href="/community"
+            className="group border-primary/30 bg-primary/20 hover:border-primary/50 hover:bg-primary/30 dark:border-primary/40 dark:bg-primary/30 dark:hover:bg-primary/40 relative flex flex-1 flex-col justify-center rounded-xl border p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md"
           >
-            <div className="bg-background/60 mb-1 w-fit rounded-lg p-2 text-orange-600 shadow-sm backdrop-blur-md transition-transform group-hover:scale-105 dark:text-orange-400">
+            <div className="bg-background/90 text-primary ring-primary/20 mb-1 w-fit rounded-lg p-2 shadow-sm ring-1 backdrop-blur-md transition-transform group-hover:scale-105">
+              <UsersIcon className="size-4" />
+            </div>
+            <h3 className="text-foreground text-xs font-bold xl:text-sm">
+              Community
+            </h3>
+            <p className="text-muted-foreground text-[10px] leading-snug font-medium xl:text-xs">
+              Connect with fellow readers
+            </p>
+          </Link>
+
+          <Link
+            href="/explore/offers"
+            className="group border-primary/30 bg-primary/20 hover:border-primary/50 hover:bg-primary/30 dark:border-primary/40 dark:bg-primary/30 dark:hover:bg-primary/40 relative flex flex-1 flex-col justify-center rounded-xl border p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md"
+          >
+            <div className="bg-background/90 text-primary ring-primary/20 mb-1 w-fit rounded-lg p-2 shadow-sm ring-1 backdrop-blur-md transition-transform group-hover:scale-105">
               <ShoppingCartIcon className="size-4" />
             </div>
             <h3 className="text-foreground text-xs font-bold xl:text-sm">
@@ -251,21 +265,6 @@ export function HeroCarousel() {
             </h3>
             <p className="text-muted-foreground text-[10px] leading-snug font-medium xl:text-xs">
               Buy books at huge discounts
-            </p>
-          </Link>
-
-          <Link
-            href="/explore/swaps"
-            className="group border-primary/20 from-primary/10 hover:border-primary/40 hover:from-primary/20 hover:to-primary/5 dark:border-primary/30 dark:from-primary/20 relative flex flex-1 flex-col justify-center rounded-xl border bg-gradient-to-br to-transparent p-4 shadow-sm backdrop-blur-md transition-all hover:-translate-y-0.5 hover:shadow-md dark:to-transparent"
-          >
-            <div className="bg-background/60 mb-1 w-fit rounded-lg p-2 text-green-600 shadow-sm backdrop-blur-md transition-transform group-hover:scale-105 dark:text-green-400">
-              <Repeat2Icon className="size-4" />
-            </div>
-            <h3 className="text-foreground text-xs font-bold xl:text-sm">
-              Peer Swap
-            </h3>
-            <p className="text-muted-foreground text-[10px] leading-snug font-medium xl:text-xs">
-              Exchange books with readers
             </p>
           </Link>
         </aside>
