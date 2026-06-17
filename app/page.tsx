@@ -754,7 +754,9 @@ function BookSection({
 }
 
 function CentralLibrarySection() {
-  const books = featuredBooks.slice(0, 4);
+  const books = featuredBooks
+    .filter((b) => b.isVerifiedLibrary || b.tags.includes("borrow"))
+    .slice(0, 12);
 
   return (
     <section className="py-4 md:py-6">
@@ -771,19 +773,25 @@ function CentralLibrarySection() {
             ["Verified", "Inventory"],
           ]}
         />
-        <HorizontalBookRow books={books} rowKey="library" />
+        <div className="w-full min-w-0">
+          <HorizontalBookRow books={books} rowKey="library" />
+        </div>
       </div>
     </section>
   );
 }
 
 function MarketplaceSection() {
-  const books = [newBooks[0], featuredBooks[0], featuredBooks[2], newBooks[1]];
+  const books = featuredBooks
+    .filter((b) => b.tags.includes("sell"))
+    .slice(0, 12);
 
   return (
     <section className="py-4 md:py-6">
       <div className="boimix-container-wide bg-card border-border/50 grid gap-6 rounded-xl border p-4 shadow-sm md:p-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
-        <HorizontalBookRow books={books} rowKey="market" />
+        <div className="w-full min-w-0">
+          <HorizontalBookRow books={books} rowKey="market" />
+        </div>
         <FeaturePanel
           title="Marketplace"
           href="/explore/store"
@@ -802,12 +810,9 @@ function MarketplaceSection() {
 }
 
 function SwapBooksSection() {
-  const books = [
-    featuredBooks[2],
-    featuredBooks[3],
-    newBooks[1],
-    featuredBooks[1],
-  ];
+  const books = featuredBooks
+    .filter((b) => b.tags.includes("swap"))
+    .slice(0, 12);
 
   return (
     <section className="py-4 md:py-6">
@@ -824,7 +829,9 @@ function SwapBooksSection() {
             ["Safe", "Handover"],
           ]}
         />
-        <HorizontalBookRow books={books} rowKey="swap" />
+        <div className="w-full min-w-0">
+          <HorizontalBookRow books={books} rowKey="swap" />
+        </div>
       </div>
     </section>
   );
