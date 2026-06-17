@@ -1,0 +1,361 @@
+# BoiMix Frontend Development Roadmap
+
+---
+
+# Phase 0 — Project Setup
+
+- [ ] Initialize Next.js (App Router)
+- [ ] Configure TypeScript
+- [ ] Install Tailwind CSS
+- [ ] Install Shadcn UI
+- [ ] Configure ESLint + Prettier
+- [ ] Configure Husky + lint-staged
+- [ ] Install React Query (TanStack Query)
+- [ ] Install Axios
+- [ ] Install React Hook Form
+- [ ] Install Zod
+- [ ] Install Framer Motion
+- [ ] Install Lucide React
+- [ ] Configure Theme
+- [ ] Configure Fonts
+- [ ] Setup Folder Structure
+
+---
+
+# Phase 1 — Design System
+
+## Colors
+
+- [ ] Brand Colors
+- [ ] Gray Scale
+- [ ] Success
+- [ ] Warning
+- [ ] Danger
+- [ ] Info
+
+## Typography
+
+- [ ] Heading
+- [ ] Sub Heading
+- [ ] Paragraph
+- [ ] Caption
+- [ ] Price
+- [ ] Badge
+
+## Design Tokens
+
+- [ ] Border Radius
+- [ ] Shadows
+- [ ] Spacing
+- [ ] Container Width
+- [ ] Responsive Breakpoints
+
+---
+
+# Phase 2 — Base UI Components
+
+## Buttons
+
+- [ ] Primary Button
+- [ ] Secondary Button
+- [ ] Outline Button
+- [ ] Ghost Button
+- [ ] Danger Button
+- [ ] Success Button
+- [ ] Loading Button
+
+## Form Components
+
+- [ ] Input
+- [ ] Textarea
+- [ ] Select
+- [ ] Checkbox
+- [ ] Radio
+- [ ] Switch
+- [ ] Date Picker
+
+## Feedback
+
+- [ ] Alert
+- [ ] Toast
+- [ ] Modal
+- [ ] Drawer
+- [ ] Tooltip
+- [ ] Popover
+
+## Navigation
+
+- [ ] Breadcrumb
+- [ ] Pagination
+- [ ] Tabs
+- [ ] Accordion
+
+---
+
+# Phase 3 — Layout Components
+
+- [ ] Main Layout
+- [ ] Marketing Layout
+- [ ] Dashboard Layout
+- [ ] Admin Layout
+- [ ] Moderator Layout
+
+## Header
+
+- [ ] Desktop Navbar
+- [ ] Mobile Navbar
+- [ ] Search Bar
+- [ ] Mega Menu
+
+## Footer
+
+- [ ] Footer
+- [ ] Footer Links
+
+## Sidebar
+
+- [ ] Dashboard Sidebar
+- [ ] Admin Sidebar
+- [ ] Moderator Sidebar
+
+## Mobile
+
+- [ ] Bottom Navigation
+
+---
+
+# Phase 4 — Reusable Components
+
+- [ ] Book Card
+- [ ] Book Gallery
+- [ ] Rating Stars
+- [ ] Review Card
+- [ ] User Avatar
+- [ ] User Card
+- [ ] User Badge
+- [ ] Search Bar
+- [ ] Filter Sidebar
+- [ ] Location Picker
+- [ ] ISBN Scanner
+- [ ] Image Upload
+- [ ] Notification Item
+- [ ] Message Bubble
+- [ ] Analytics Card
+- [ ] Stats Widget
+- [ ] Empty State
+- [ ] Loading Skeleton
+- [ ] Timeline
+- [ ] Countdown
+- [ ] Confirmation Modal
+
+---
+
+# Phase 5 — Homepage
+
+## Hero Section
+
+- [ ] Hero Banner
+- [ ] Search
+- [ ] CTA
+
+## Sections
+
+- [ ] Categories
+- [ ] Trending Books
+- [ ] New Books
+- [ ] Central Library
+- [ ] Marketplace
+- [ ] Swap Books
+- [ ] Community Posts
+- [ ] Sponsors
+- [ ] Newsletter
+
+---
+
+# Phase 6 — Authentication
+
+- [ ] Login
+- [ ] Register
+- [ ] OTP Verification
+- [ ] Forgot Password
+- [ ] Reset Password
+- [ ] Complete Profile
+- [ ] Choose Language
+
+---
+
+# Phase 7 — Book Module
+
+## Book Listing
+
+- [ ] Book Grid
+- [ ] Book List
+- [ ] Infinite Scroll
+- [ ] Pagination
+
+## Book Details
+
+- [ ] Gallery
+- [ ] Book Information
+- [ ] Owner Information
+- [ ] Reviews
+- [ ] Similar Books
+- [ ] Related Books
+
+## Search
+
+- [ ] Search Page
+- [ ] Filter
+- [ ] Sort
+- [ ] Result Grid
+
+## Categories
+
+- [ ] Category Page
+- [ ] Trending
+- [ ] New Arrival
+
+---
+
+# Phase 8 — User Profile
+
+- [ ] Profile
+- [ ] Reviews
+- [ ] Library
+- [ ] Activity
+- [ ] Followers
+- [ ] Following
+- [ ] Badges
+
+---
+
+# Phase 9 — Dashboard
+
+- [ ] Dashboard Overview
+- [ ] My Library
+- [ ] Wishlist
+- [ ] Cart
+- [ ] Borrowed
+- [ ] Purchases
+- [ ] Sales
+- [ ] Reviews
+- [ ] Notifications
+- [ ] Messages
+- [ ] Analytics
+- [ ] Settings
+- [ ] Security
+
+---
+
+# Phase 10 — Marketplace
+
+- [ ] Product Listing
+- [ ] Product Details
+- [ ] Cart
+- [ ] Checkout
+- [ ] Payment
+- [ ] Order Tracking
+
+---
+
+# Phase 11 — Borrow System
+
+- [ ] Membership
+- [ ] Borrow Request
+- [ ] Borrow Timeline
+- [ ] Handover
+- [ ] Return
+- [ ] Review
+- [ ] Dispute
+
+---
+
+# Phase 12 — Swap System
+
+- [ ] Discover
+- [ ] Offer
+- [ ] Proposal
+- [ ] Counter Offer
+- [ ] Agreement
+- [ ] Handover
+- [ ] Complete
+- [ ] Dispute
+
+---
+
+# Phase 13 — Community
+
+- [ ] Feed
+- [ ] Create Post
+- [ ] Post Details
+- [ ] Comments
+- [ ] Reactions
+- [ ] Reviews
+
+---
+
+# Phase 14 — Messaging
+
+- [ ] Conversation List
+- [ ] Chat Window
+- [ ] Attachments
+- [ ] Typing Indicator
+- [ ] Seen Status
+
+---
+
+# Phase 15 — Notifications
+
+- [ ] Notification Center
+- [ ] Unread
+- [ ] Grouped Notifications
+- [ ] Archive
+
+---
+
+# Phase 16 — Moderator Panel
+
+- [ ] Dashboard
+- [ ] Reports
+- [ ] Disputes
+- [ ] Verification Queue
+- [ ] Review Moderation
+- [ ] Slider
+- [ ] Inventory
+
+---
+
+# Phase 17 — Admin Panel
+
+- [ ] Dashboard
+- [ ] Users
+- [ ] Books
+- [ ] Borrow
+- [ ] Sales
+- [ ] Reports
+- [ ] Reviews
+- [ ] Analytics
+- [ ] Sponsors
+- [ ] Featured Listings
+- [ ] Notifications
+- [ ] Email Templates
+- [ ] SMS
+- [ ] Queue Monitor
+- [ ] System Health
+- [ ] Settings
+
+---
+
+# Phase 18 — Final Polish
+
+- [ ] Responsive Design
+- [ ] Dark Mode (Optional)
+- [ ] Accessibility
+- [ ] SEO
+- [ ] Performance Optimization
+- [ ] Skeleton Loaders
+- [ ] Error Pages
+- [ ] Empty States
+- [ ] Animations
+- [ ] Lighthouse Optimization
+- [ ] Final QA
