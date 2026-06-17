@@ -84,6 +84,9 @@
 
 :root {
   --radius: 0.5rem;
+  --font-roboto: "Roboto";
+  --font-lato: "Lato";
+  --font-poppins: "Poppins";
 
   --brand-blue: #0397d3;
   --brand-blue-dark: #027db0;

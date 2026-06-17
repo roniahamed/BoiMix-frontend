@@ -1,14 +1,14 @@
 export default function Home() {
   return (
-    <main className="bg-background flex min-h-svh items-center justify-center px-6 text-center">
-      <div className="max-w-xl space-y-3">
-        <p className="text-primary text-sm font-medium">BoiMix Frontend</p>
-        <h1 className="text-foreground text-3xl font-semibold tracking-normal">
-          Phase 0 setup is ready.
+    <main className="bg-background flex min-h-svh items-center justify-center text-center">
+      <div className="boimix-container max-w-xl space-y-3">
+        <p className="type-caption text-primary">BoiMix Frontend</p>
+        <h1 className="type-subheading text-foreground">
+          Phase 1 design system is ready.
         </h1>
-        <p className="text-muted-foreground text-sm leading-6">
-          The App Router foundation, Tailwind, Shadcn configuration, core
-          providers, and brand assets are in place.
+        <p className="type-paragraph text-muted-foreground">
+          Brand colors, typography, spacing, containers, radius, shadows, and
+          responsive tokens are in place.
         </p>
       </div>
     </main>
