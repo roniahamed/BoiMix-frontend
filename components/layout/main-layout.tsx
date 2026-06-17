@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { MobileBottomNavigation } from "@/components/layout/mobile-bottom-navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { MobileFAB } from "@/components/layout/mobile-fab";
 
 type MainLayoutProps = {
   children: ReactNode;
@@ -15,6 +16,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       <main>{children}</main>
       <SiteFooter />
       <MobileBottomNavigation />
+      <MobileFAB />
     </div>
   );
 }

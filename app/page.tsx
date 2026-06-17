@@ -679,12 +679,14 @@ export default function Home() {
   return (
     <MainLayout>
       <HeroCarousel />
+      <PersonalizationSection />
       <CategorySection />
       <BookSection
         title="Trending Books"
         href="/books/trending"
         books={featuredBooks}
       />
+      <AuthorSpotlightSection />
       <BookSection title="New Books" href="/books/new" books={newBooks} />
       <BookSection
         title="Nearby You"
@@ -701,6 +703,7 @@ export default function Home() {
       <SwapBooksSection />
       <CommunityReaderSection />
       <CommunitySection />
+      <TestimonialsSection />
       <SponsorsSection />
       <NewsletterSection />
     </MainLayout>
@@ -1163,5 +1166,321 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
         </Link>
       </Button>
     </div>
+  );
+}
+
+function PersonalizationSection() {
+  const recentlyViewed = featuredBooks.slice(0, 3);
+  return (
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide">
+        <div className="from-primary/10 via-card to-info/5 border-primary/10 rounded-2xl border bg-gradient-to-r p-4 shadow-sm md:p-6">
+          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+            {/* User Greeting */}
+            <div className="flex items-center gap-4">
+              <div className="bg-primary/20 border-primary/30 flex size-12 shrink-0 items-center justify-center rounded-full border">
+                <UserIcon className="text-primary size-6" />
+              </div>
+              <div>
+                <h2 className="text-foreground text-xl font-bold md:text-2xl">
+                  Welcome, রনি আহমেদ!
+                </h2>
+                <p className="text-muted-foreground text-xs md:text-sm">
+                  আজকে নতুন কি বই পড়তে চান?
+                </p>
+              </div>
+            </div>
+
+            {/* Dashboard widgets */}
+            <div className="grid flex-1 gap-4 sm:grid-cols-2 md:max-w-xl">
+              {/* Recently Viewed */}
+              <div className="bg-card/75 border-border rounded-xl border p-3 shadow-xs">
+                <p className="text-muted-foreground mb-2 text-[0.7rem] font-bold tracking-wider uppercase">
+                  Recently Viewed
+                </p>
+                <div className="flex gap-2">
+                  {recentlyViewed.map((book) => (
+                    <Link
+                      key={`recent-${book.id}`}
+                      href={`/books/${book.slug}`}
+                      className="group relative flex-1 text-center"
+                    >
+                      <div className="bg-muted relative mx-auto aspect-[3/4] w-10 overflow-hidden rounded-xs shadow-xs transition-transform group-hover:scale-105">
+                        <Image
+                          src={book.coverUrl}
+                          alt={book.title}
+                          fill
+                          sizes="40px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <p className="text-foreground group-hover:text-primary mt-1 line-clamp-1 text-[0.62rem] font-semibold">
+                        {book.title}
+                      </p>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Active Swaps Card */}
+              <div className="bg-card/75 border-border flex items-center justify-between rounded-xl border p-3 shadow-xs">
+                <div className="min-w-0">
+                  <p className="text-muted-foreground text-[0.7rem] font-bold tracking-wider uppercase">
+                    Active Swaps
+                  </p>
+                  <p className="text-foreground mt-1 text-base font-bold">
+                    2 Pending Swaps
+                  </p>
+                  <p className="text-muted-foreground truncate text-[0.65rem]">
+                    1 awaiting handover • 1 check details
+                  </p>
+                </div>
+                <Button
+                  asChild
+                  size="sm"
+                  className="h-8 shrink-0 px-2.5 text-xs"
+                >
+                  <Link href="/dashboard/swaps">View</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AuthorSpotlightSection() {
+  // Mock books by Humayun Ahmed
+  const humayunBooks: BookCardBook[] = [
+    {
+      id: "chhaya-bithi",
+      slug: "chhaya-bithi",
+      title: "Chhaya Bithi",
+      author: "Humayun Ahmed",
+      coverUrl: "/book-covers/borrowed-light.svg",
+      tags: ["borrow"],
+      rating: 4.9,
+      reviewCount: 120,
+      distance: "3.5 km",
+      location: "Sylhet",
+      condition: "excellent",
+      availability: "in-stock",
+    },
+    {
+      id: "himu-somogro",
+      slug: "himu-somogro",
+      title: "Himu Somogro",
+      author: "Humayun Ahmed",
+      coverUrl: "/book-covers/rivers-of-dhaka.svg",
+      tags: ["sell", "swap"],
+      rating: 4.8,
+      reviewCount: 95,
+      price: 350,
+      distance: "1.2 km",
+      location: "Dhanmondi",
+      condition: "good",
+      availability: "in-stock",
+    },
+    {
+      id: "misir-ali-unsolved",
+      slug: "misir-ali-unsolved",
+      title: "Misir Ali Somogro",
+      author: "Humayun Ahmed",
+      coverUrl: "/book-covers/swap-stories.svg",
+      tags: ["borrow", "swap"],
+      rating: 4.7,
+      reviewCount: 82,
+      distance: "2.1 km",
+      location: "Mirpur",
+      condition: "excellent",
+      availability: "in-stock",
+    },
+    {
+      id: "deyal-novel",
+      slug: "deyal-novel",
+      title: "Deyal",
+      author: "Humayun Ahmed",
+      coverUrl: "/book-covers/the-reader-map.svg",
+      tags: ["sell"],
+      rating: 4.9,
+      reviewCount: 154,
+      price: 450,
+      location: "Uttara",
+      condition: "new",
+      availability: "in-stock",
+    },
+  ];
+
+  return (
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide">
+        <div className="bg-card border-border/50 rounded-2xl border p-4 shadow-sm md:p-6">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="type-subheading text-foreground">
+              Author Spotlight
+            </h2>
+            <Button asChild variant="ghost" size="sm">
+              <Link href="/authors/humayun-ahmed">
+                All Authors <ArrowRightIcon className="size-4" />
+              </Link>
+            </Button>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
+            {/* Left Column: Author Card */}
+            <div className="from-primary/10 via-primary/5 to-info/10 border-primary/20 flex flex-col justify-between rounded-xl border bg-gradient-to-br p-5 shadow-xs">
+              <div>
+                <div className="flex items-center gap-4">
+                  {/* Styled avatar placeholder */}
+                  <div className="bg-primary/20 border-primary/40 text-primary relative flex size-16 shrink-0 items-center justify-center rounded-full border text-xl font-bold">
+                    HA
+                  </div>
+                  <div>
+                    <h3 className="text-foreground text-lg font-bold">
+                      হুমায়ূন আহমেদ
+                    </h3>
+                    <p className="text-muted-foreground text-xs">
+                      Humayun Ahmed • (1948 - 2012)
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-muted-foreground mt-4 text-xs leading-5">
+                  বিংশ শতাব্দীর অন্যতম জনপ্রিয় বাঙালি কথাসাহিত্যিক ও নাট্যকার।
+                  তাঁর সৃষ্ট হিমু, মিসির আলি এবং রূপা চরিত্রগুলো বাঙালি পাঠক
+                  সমাজে দারুণ জনপ্রিয়। BoiMix এ তাঁর বইগুলো পাঠকদের মাঝে সবচেয়ে
+                  বেশি আদান-প্রদান করা হয়।
+                </p>
+
+                <div className="mt-5 grid grid-cols-2 gap-3 text-center">
+                  <div className="bg-card border-border rounded-lg border p-2">
+                    <p className="text-foreground text-sm font-bold">150+</p>
+                    <p className="text-muted-foreground text-[0.65rem]">
+                      Books Listed
+                    </p>
+                  </div>
+                  <div className="bg-card border-border rounded-lg border p-2">
+                    <p className="text-foreground text-sm font-bold">4.9 ★</p>
+                    <p className="text-muted-foreground text-[0.65rem]">
+                      Avg Rating
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-5 flex gap-2">
+                <Button size="sm" className="flex-1 text-xs">
+                  Follow
+                </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  size="sm"
+                  className="flex-1 text-xs"
+                >
+                  <Link href="/authors/humayun-ahmed/books">Explore Books</Link>
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Column: Author Books */}
+            <div className="flex min-w-0 flex-col justify-center">
+              <ScrollContainer>
+                {humayunBooks.map((book) => (
+                  <BookCard
+                    key={`spotlight-${book.id}`}
+                    book={book}
+                    className="w-[150px] shrink-0 sm:w-[165px] lg:w-[180px]"
+                  />
+                ))}
+              </ScrollContainer>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  const testimonials = [
+    {
+      name: "তানভীর আহমেদ",
+      role: "Verified Swapper",
+      location: "Dhanmondi, Dhaka",
+      quote:
+        "আমি ধানমন্ডিতে আমার ভার্সিটির পুরোনো টেক্সটবইগুলো ৩টি নতুন গল্পের বইয়ের সাথে বদলেছি! প্রক্রিয়াটি খুবই সহজ এবং ঝামেলাহীন ছিল।",
+      rating: 5,
+    },
+    {
+      name: "সুমাইয়া রহমান",
+      role: "Library Borrower",
+      location: "Mirpur, Dhaka",
+      quote:
+        "BoiMix-এর ভেরিফাইড সেন্ট্রাল লাইব্রেরির বইগুলো দারুণ কাজের। ডেলিভারি খুবই দ্রুত ছিল এবং বইয়ের কন্ডিশনও ছিল চমৎকার।",
+      rating: 5,
+    },
+    {
+      name: "ইমরান কবীর",
+      role: "Store Buyer",
+      location: "Uttara, Dhaka",
+      quote:
+        "দোকানের চেয়ে অনেক কম দামে এখান থেকে আমি বই কিনতে পারছি। সেই সাথে পুরোনো বইগুলো বিক্রি করে নতুন বই কেনার টাকাও উঠে যাচ্ছে।",
+      rating: 5,
+    },
+  ];
+
+  return (
+    <section className="py-4 md:py-6">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-2xl border p-4 shadow-sm md:p-6">
+        <div className="mb-6 text-center">
+          <h2 className="text-foreground text-2xl font-bold md:text-3xl">
+            পাঠকদের মতামত
+          </h2>
+          <p className="text-muted-foreground mt-1.5 text-xs md:text-sm">
+            BoiMix ব্যবহার করে আমাদের হাজারো পাঠক যেভাবে উপকৃত হচ্ছেন
+          </p>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-3">
+          {testimonials.map((t, idx) => (
+            <div
+              key={`${t.name}-${idx}`}
+              className="bg-card shadow-soft hover:border-primary/30 flex flex-col justify-between rounded-xl border p-5 transition-all hover:-translate-y-0.5"
+            >
+              <div>
+                {/* Rating stars */}
+                <div className="text-warning mb-3.5 flex gap-0.5">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <StarIcon key={i} className="fill-warning size-3.5" />
+                  ))}
+                </div>
+                {/* Review Text */}
+                <blockquote className="text-foreground text-xs leading-5 font-medium">
+                  &ldquo;{t.quote}&rdquo;
+                </blockquote>
+              </div>
+
+              {/* User Meta */}
+              <div className="mt-5 flex items-center gap-3">
+                <div className="bg-primary/10 flex size-9 shrink-0 items-center justify-center rounded-full">
+                  <UserIcon className="text-primary size-4.5" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-foreground truncate text-xs font-bold">
+                    {t.name}
+                  </p>
+                  <p className="text-muted-foreground truncate text-[0.65rem]">
+                    {t.role} • {t.location}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
