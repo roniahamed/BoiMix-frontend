@@ -124,13 +124,12 @@ export function BookCard({ book, className }: BookCardProps) {
               </span>
               {book.price !== undefined && (
                 <div className="flex shrink-0 items-center gap-1.5">
-                  <span className="text-muted-foreground text-[0.68rem] line-through">
-                    ৳
-                    {(
-                      book.originalPrice ||
-                      Math.round((book.price * 1.25) / 10) * 10
-                    ).toLocaleString("en-BD")}
-                  </span>
+                  {book.originalPrice !== undefined &&
+                    book.originalPrice > book.price && (
+                      <span className="text-muted-foreground text-[0.68rem] line-through">
+                        ৳{book.originalPrice.toLocaleString("en-BD")}
+                      </span>
+                    )}
                   <span className="text-accent text-[0.78rem] font-bold">
                     ৳{book.price.toLocaleString("en-BD")}
                   </span>
