@@ -765,9 +765,9 @@ function BookSection({
 }) {
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-2.5 shadow-sm md:p-6">
         <SectionHeader title={title} href={href} />
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mt-4 md:grid-cols-4 md:gap-3 lg:grid-cols-5 xl:grid-cols-6">
           {books.map((book, index) => (
             <BookCard
               key={`${title}-${book.id}`}
@@ -873,7 +873,7 @@ function HorizontalBookRow({
   rowKey: string;
 }) {
   return (
-    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+    <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mt-4 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
       {books.map((book, index) => (
         <BookCard
           key={`${rowKey}-${book.id}`}
@@ -1397,7 +1397,7 @@ function AuthorSpotlightSection() {
 
             {/* Right Column: Author Books */}
             <div className="flex min-w-0 flex-col justify-center">
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mt-4 md:grid-cols-4 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
                 {humayunBooks.map((book, index) => (
                   <BookCard
                     key={`spotlight-${book.id}`}

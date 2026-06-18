@@ -41,7 +41,7 @@ export function BookCard({ book, className }: BookCardProps) {
     primaryAction = (
       <Button
         size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[15px] font-bold"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[16px] font-bold md:text-[15px]"
       >
         <ShoppingCartIcon className="size-4" />
         <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
@@ -51,7 +51,7 @@ export function BookCard({ book, className }: BookCardProps) {
     primaryAction = (
       <Button
         size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[15px] font-bold"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[16px] font-bold md:text-[15px]"
       >
         <Repeat2Icon className="size-4" />
         <span>Swap Now</span>
@@ -61,7 +61,7 @@ export function BookCard({ book, className }: BookCardProps) {
     primaryAction = (
       <Button
         size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[15px] font-bold"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[16px] font-bold md:text-[15px]"
       >
         <BookOpenIcon className="size-4" />
         <span>Borrow Now</span>
@@ -79,7 +79,7 @@ export function BookCard({ book, className }: BookCardProps) {
       {/* Outer Card Content */}
       <div className="flex h-full flex-col bg-transparent">
         {/* Cover Image Area */}
-        <div className="relative px-2 pt-2 md:px-2.5 md:pt-2.5">
+        <div className="relative p-1.5 pb-0 md:px-2.5 md:pt-2.5">
           <Link
             href={`/books/${book.slug}`}
             className="bg-muted relative block aspect-[3/4] overflow-hidden rounded-md shadow-xs"
@@ -108,16 +108,16 @@ export function BookCard({ book, className }: BookCardProps) {
         </div>
 
         {/* Info/Metadata Area */}
-        <div className="flex flex-1 flex-col p-2 pt-1">
+        <div className="flex flex-1 flex-col p-1.5 pt-1 md:p-2.5 md:pt-1.5">
           <div className="space-y-1">
             <div>
               <Link
                 href={`/books/${book.slug}`}
-                className="text-foreground hover:text-primary line-clamp-2 min-h-9 text-[14px] leading-tight font-semibold"
+                className="text-foreground hover:text-primary line-clamp-2 min-h-[38px] text-[15px] leading-tight font-semibold md:min-h-9 md:text-[14px]"
               >
                 {book.title}
               </Link>
-              <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[13px]">
+              <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[14px] md:text-[13px]">
                 <span className="truncate">{book.author}</span>
                 {book.providerType === "library" && (
                   <LibraryIcon
@@ -133,7 +133,7 @@ export function BookCard({ book, className }: BookCardProps) {
                 )}
               </div>
             </div>
-            <div className="text-muted-foreground grid gap-0.5 text-xs">
+            <div className="text-muted-foreground grid gap-0.5 text-[13px] md:text-xs">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 font-medium">
                   <div className="relative inline-block h-3.5 w-3.5 shrink-0">
@@ -188,11 +188,11 @@ export function BookCard({ book, className }: BookCardProps) {
                   <div className="flex shrink-0 items-center gap-1.5">
                     {book.originalPrice !== undefined &&
                       book.originalPrice > book.price && (
-                        <span className="text-muted-foreground text-[0.75rem] line-through">
+                        <span className="text-muted-foreground text-[13px] line-through md:text-[12px]">
                           ৳{book.originalPrice.toLocaleString("en-BD")}
                         </span>
                       )}
-                    <span className="text-accent text-[15px] font-bold">
+                    <span className="text-accent text-[16px] font-bold md:text-[15px]">
                       ৳{book.price.toLocaleString("en-BD")}
                     </span>
                   </div>
