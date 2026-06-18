@@ -116,7 +116,7 @@ export function BookCard({ book, className }: BookCardProps) {
               >
                 {book.title}
               </Link>
-              <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[0.7rem]">
+              <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[0.7rem]">
                 <span className="truncate">{book.author}</span>
                 {book.isVerifiedLibrary && (
                   <BadgeCheckIcon
@@ -129,9 +129,20 @@ export function BookCard({ book, className }: BookCardProps) {
             <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 font-medium">
-                  <StarIcon className="size-3.5 fill-amber-500 text-amber-500" />
-                  <span className="text-foreground">{book.rating}</span>
-                  <span className="opacity-70">({book.reviewCount})</span>
+                  <StarIcon
+                    className={cn(
+                      "size-3.5",
+                      book.rating > 0
+                        ? "fill-amber-500 text-amber-500"
+                        : "text-muted-foreground opacity-50",
+                    )}
+                  />
+                  <span className="text-foreground">
+                    {book.rating > 0 ? book.rating : "No rating"}
+                  </span>
+                  {book.rating > 0 && (
+                    <span className="opacity-70">({book.reviewCount})</span>
+                  )}
                 </div>
                 {book.distance && (
                   <span className="shrink-0">{book.distance}</span>
