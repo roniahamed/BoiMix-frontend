@@ -31,6 +31,43 @@ type BookCardProps = {
 };
 
 export function BookCard({ book, className }: BookCardProps) {
+  const hasSell = book.tags.includes("sell");
+  const hasSwap = book.tags.includes("swap");
+  const hasBorrow = book.tags.includes("borrow");
+
+  let primaryAction = null;
+  if (hasSell) {
+    primaryAction = (
+      <Button
+        size="sm"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-xs font-medium"
+      >
+        <ShoppingCartIcon className="size-3.5" />
+        <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
+      </Button>
+    );
+  } else if (hasSwap) {
+    primaryAction = (
+      <Button
+        size="sm"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-xs font-medium"
+      >
+        <Repeat2Icon className="size-3.5" />
+        <span>Swap Now</span>
+      </Button>
+    );
+  } else if (hasBorrow) {
+    primaryAction = (
+      <Button
+        size="sm"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-xs font-medium"
+      >
+        <BookOpenIcon className="size-3.5" />
+        <span>Borrow Now</span>
+      </Button>
+    );
+  }
+
   return (
     <article
       className={cn(
@@ -70,73 +107,82 @@ export function BookCard({ book, className }: BookCardProps) {
         </div>
 
         {/* Info/Metadata Area */}
-        <div className="space-y-1 p-2 pt-1">
-          <div>
-            <Link
-              href={`/books/${book.slug}`}
-              className="text-foreground hover:text-primary line-clamp-2 min-h-8 text-[0.78rem] leading-[1.1rem] font-semibold"
-            >
-              {book.title}
-            </Link>
-            <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[0.7rem]">
-              <span className="truncate">{book.author}</span>
-              {book.isVerifiedLibrary && (
-                <BadgeCheckIcon
-                  className="text-primary size-3.5 shrink-0"
-                  aria-label="Verified library"
-                />
-              )}
-            </div>
-          </div>
-          <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
-            <div className="flex items-center justify-between gap-2">
-              <RatingStars
-                rating={book.rating}
-                reviewCount={book.reviewCount}
-              />
-              {book.distance && (
-                <span className="shrink-0">{book.distance}</span>
-              )}
-            </div>
-            <div className="flex min-w-0 items-center justify-between gap-2">
-              <span
-                className={cn(
-                  "inline-flex shrink-0 items-center gap-1",
-                  book.availability === "in-stock"
-                    ? "text-success"
-                    : "text-danger",
-                )}
+        <div className="flex flex-1 flex-col p-2 pt-1">
+          <div className="space-y-1">
+            <div>
+              <Link
+                href={`/books/${book.slug}`}
+                className="text-foreground hover:text-primary line-clamp-2 min-h-8 text-[0.78rem] leading-[1.1rem] font-semibold"
               >
-                {book.availability === "in-stock" && (
-                  <CheckCircle2Icon className="size-3" aria-hidden="true" />
+                {book.title}
+              </Link>
+              <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-[0.7rem]">
+                <span className="truncate">{book.author}</span>
+                {book.isVerifiedLibrary && (
+                  <BadgeCheckIcon
+                    className="text-primary size-3.5 shrink-0"
+                    aria-label="Verified library"
+                  />
                 )}
-                {book.availability === "in-stock" ? "In Stock" : "Out of Stock"}
-              </span>
-              {book.location && (
-                <span className="min-w-0 truncate text-right">
-                  {book.location}
-                </span>
-              )}
+              </div>
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className="min-w-0 truncate capitalize">
-                {book.condition}
-              </span>
-              {book.price !== undefined && (
-                <div className="flex shrink-0 items-center gap-1.5">
-                  {book.originalPrice !== undefined &&
-                    book.originalPrice > book.price && (
-                      <span className="text-muted-foreground text-[0.68rem] line-through">
-                        ৳{book.originalPrice.toLocaleString("en-BD")}
-                      </span>
-                    )}
-                  <span className="text-accent text-[0.78rem] font-bold">
-                    ৳{book.price.toLocaleString("en-BD")}
+            <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
+              <div className="flex items-center justify-between gap-2">
+                <RatingStars
+                  rating={book.rating}
+                  reviewCount={book.reviewCount}
+                />
+                {book.distance && (
+                  <span className="shrink-0">{book.distance}</span>
+                )}
+              </div>
+              <div className="flex min-w-0 items-center justify-between gap-2">
+                <span
+                  className={cn(
+                    "inline-flex shrink-0 items-center gap-1",
+                    book.availability === "in-stock"
+                      ? "text-success"
+                      : "text-danger",
+                  )}
+                >
+                  {book.availability === "in-stock" && (
+                    <CheckCircle2Icon className="size-3" aria-hidden="true" />
+                  )}
+                  {book.availability === "in-stock"
+                    ? "In Stock"
+                    : "Out of Stock"}
+                </span>
+                {book.location && (
+                  <span className="min-w-0 truncate text-right">
+                    {book.location}
                   </span>
-                </div>
-              )}
+                )}
+              </div>
+              <div className="flex items-center justify-between gap-2">
+                <span className="min-w-0 truncate capitalize">
+                  {book.condition}
+                </span>
+                {book.price !== undefined && (
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    {book.originalPrice !== undefined &&
+                      book.originalPrice > book.price && (
+                        <span className="text-muted-foreground text-[0.68rem] line-through">
+                          ৳{book.originalPrice.toLocaleString("en-BD")}
+                        </span>
+                      )}
+                    <span className="text-accent text-[0.78rem] font-bold">
+                      ৳{book.price.toLocaleString("en-BD")}
+                    </span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
+
+          {/* Mobile Action Button */}
+          {primaryAction && (
+            <div className="mt-auto pt-2 md:hidden">{primaryAction}</div>
+          )}
         </div>
       </div>
 
@@ -148,31 +194,37 @@ export function BookCard({ book, className }: BookCardProps) {
       />
 
       {/* Glassmorphism Hover Overlay over the entire card */}
-      <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center rounded-md border border-white/20 bg-white/60 p-3 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 dark:border-white/5 dark:bg-black/65">
+      <div className="pointer-events-none absolute inset-0 z-20 hidden flex-col items-center justify-center rounded-md border border-white/20 bg-white/60 p-3 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 md:flex dark:border-white/5 dark:bg-black/65">
         <div className="flex w-full max-w-[136px] -translate-y-4 transform flex-col items-center justify-center gap-2 transition-transform duration-300 group-hover:translate-y-0">
-          <Button
-            size="sm"
-            className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
-          >
-            <ShoppingCartIcon className="size-4" />
-            <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
-          </Button>
-          <Button
-            size="sm"
-            variant="success"
-            className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
-          >
-            <BookOpenIcon className="size-4" />
-            <span>Borrow</span>
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
-          >
-            <Repeat2Icon className="size-4" />
-            <span>Swap</span>
-          </Button>
+          {hasSell && (
+            <Button
+              size="sm"
+              className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+            >
+              <ShoppingCartIcon className="size-4" />
+              <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
+            </Button>
+          )}
+          {hasBorrow && (
+            <Button
+              size="sm"
+              variant="success"
+              className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+            >
+              <BookOpenIcon className="size-4" />
+              <span>Borrow Now</span>
+            </Button>
+          )}
+          {hasSwap && (
+            <Button
+              size="sm"
+              variant="outline"
+              className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+            >
+              <Repeat2Icon className="size-4" />
+              <span>Swap Now</span>
+            </Button>
+          )}
         </div>
         <Link
           href={`/books/${book.slug}`}

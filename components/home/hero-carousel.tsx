@@ -57,6 +57,35 @@ export function HeroCarousel() {
 
   const [idleHidden, setIdleHidden] = useState(false);
   const [hovered, setHovered] = useState(false);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      setActiveIndex((current) => (current + 1) % slides.length);
+    }
+    if (isRightSwipe) {
+      setActiveIndex(
+        (current) => (current - 1 + slides.length) % slides.length,
+      );
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   // Auto-advance
   useEffect(() => {
@@ -98,12 +127,15 @@ export function HeroCarousel() {
       <div className="boimix-container-wide grid gap-3 lg:grid-cols-[1fr_254px]">
         {/* Carousel wrapper — Left Column */}
         <div
-          className="shadow-soft relative overflow-hidden rounded-2xl"
+          className="shadow-soft relative overflow-hidden rounded-2xl select-none"
           onMouseEnter={() => {
             setHovered(true);
             setIdleHidden(false);
           }}
           onMouseLeave={() => setHovered(false)}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {/* ── Images layer (z-0) ── */}
           <div className="relative h-[190px] sm:h-[300px] md:h-[360px]">
@@ -219,6 +251,24 @@ export function HeroCarousel() {
                 />
               ))}
             </div>
+          </div>
+
+          {/* ── Mobile dot indicators (z-20, visible only below lg) ── */}
+          <div className="absolute right-0 bottom-3 left-0 z-20 flex items-center justify-center gap-2 lg:hidden">
+            {slides.map((s, index) => (
+              <button
+                key={s.image}
+                type="button"
+                className={cn(
+                  "cursor-pointer rounded-full border border-white/70 transition-all",
+                  activeIndex === index
+                    ? "h-2 w-6 bg-white"
+                    : "size-2 bg-white/40 backdrop-blur-sm",
+                )}
+                onClick={() => setActiveIndex(index)}
+                aria-label={`Show slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
 

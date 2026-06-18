@@ -116,7 +116,12 @@ export function ScrollContainer({
           "-mx-4 flex scrollbar-none gap-3 overflow-x-auto scroll-smooth px-4 py-1 pb-3 md:gap-4",
           className,
         )}
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        style={{
+          scrollbarWidth: "none",
+          msOverflowStyle: "none",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-x",
+        }}
       >
         {children}
       </div>
