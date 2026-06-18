@@ -8,18 +8,20 @@ export default function AuthLayout({
   return (
     <div className="flex min-h-screen">
       {/* Left Banner Area (Hidden on small screens) */}
-      <div className="bg-primary relative hidden w-1/2 flex-col justify-between overflow-hidden p-10 text-white lg:flex">
+      <div className="bg-primary relative hidden w-1/2 flex-col overflow-hidden p-10 text-white lg:flex">
         <div className="relative z-10">
           <BrandLink className="[&_img]:brightness-0 [&_img]:invert" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-md text-center">
-          <h1 className="type-heading mb-4 text-4xl leading-tight">
-            বাংলাদেশের সবচেয়ে বড় ডিজিটাল বইয়ের প্ল্যাটফর্ম
-          </h1>
-          <p className="text-lg opacity-90">
-            বই ধার করুন, কিনুন বা সোয়াপ করুন আপনার আশেপাশের মানুষের সাথে।
-          </p>
+        <div className="relative z-10 flex flex-1 items-center justify-center">
+          <div className="mx-auto max-w-md text-center">
+            <h1 className="type-heading mb-4 text-4xl leading-tight">
+              বাংলাদেশের সবচেয়ে বড় ডিজিটাল বইয়ের প্ল্যাটফর্ম
+            </h1>
+            <p className="text-lg opacity-90">
+              বই ধার করুন, কিনুন বা সোয়াপ করুন আপনার আশেপাশের মানুষের সাথে।
+            </p>
+          </div>
         </div>
 
         {/* Abstract Background Design */}
