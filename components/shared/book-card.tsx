@@ -79,7 +79,7 @@ export function BookCard({ book, className }: BookCardProps) {
       {/* Outer Card Content */}
       <div className="flex h-full flex-col bg-transparent">
         {/* Cover Image Area */}
-        <div className="relative">
+        <div className="relative px-2 pt-2 md:px-2.5 md:pt-2.5">
           <Link
             href={`/books/${book.slug}`}
             className="bg-muted relative block aspect-[3/4] overflow-hidden rounded-md shadow-xs"
@@ -92,7 +92,7 @@ export function BookCard({ book, className }: BookCardProps) {
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </Link>
-          <div className="absolute top-2.5 left-2.5 flex flex-wrap gap-1">
+          <div className="absolute top-4 left-4 flex flex-wrap gap-1 md:top-4 md:left-4">
             {book.tags.map((tag) => (
               <span
                 key={tag}
