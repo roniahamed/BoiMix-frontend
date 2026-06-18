@@ -41,9 +41,9 @@ export function BookCard({ book, className }: BookCardProps) {
     primaryAction = (
       <Button
         size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-xs font-medium"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[15px] font-bold"
       >
-        <ShoppingCartIcon className="size-3.5" />
+        <ShoppingCartIcon className="size-4" />
         <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
       </Button>
     );
@@ -51,9 +51,9 @@ export function BookCard({ book, className }: BookCardProps) {
     primaryAction = (
       <Button
         size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-xs font-medium"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[15px] font-bold"
       >
-        <Repeat2Icon className="size-3.5" />
+        <Repeat2Icon className="size-4" />
         <span>Swap Now</span>
       </Button>
     );
@@ -61,9 +61,9 @@ export function BookCard({ book, className }: BookCardProps) {
     primaryAction = (
       <Button
         size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-xs font-medium"
+        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[15px] font-bold"
       >
-        <BookOpenIcon className="size-3.5" />
+        <BookOpenIcon className="size-4" />
         <span>Borrow Now</span>
       </Button>
     );
@@ -97,7 +97,7 @@ export function BookCard({ book, className }: BookCardProps) {
               <span
                 key={tag}
                 className={cn(
-                  "type-badge rounded-full px-2 py-0.5 text-[0.65rem] font-bold shadow-xs",
+                  "type-badge rounded-full px-2 py-0.5 text-xs font-bold shadow-xs",
                   tagClasses[tag],
                 )}
               >
@@ -113,11 +113,11 @@ export function BookCard({ book, className }: BookCardProps) {
             <div>
               <Link
                 href={`/books/${book.slug}`}
-                className="text-foreground hover:text-primary line-clamp-2 min-h-8 text-[0.78rem] leading-[1.1rem] font-semibold"
+                className="text-foreground hover:text-primary line-clamp-2 min-h-9 text-[14px] leading-tight font-semibold"
               >
                 {book.title}
               </Link>
-              <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[0.7rem]">
+              <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[13px]">
                 <span className="truncate">{book.author}</span>
                 {book.providerType === "library" && (
                   <LibraryIcon
@@ -133,7 +133,7 @@ export function BookCard({ book, className }: BookCardProps) {
                 )}
               </div>
             </div>
-            <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
+            <div className="text-muted-foreground grid gap-0.5 text-xs">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 font-medium">
                   <div className="relative inline-block h-3.5 w-3.5 shrink-0">
@@ -188,11 +188,11 @@ export function BookCard({ book, className }: BookCardProps) {
                   <div className="flex shrink-0 items-center gap-1.5">
                     {book.originalPrice !== undefined &&
                       book.originalPrice > book.price && (
-                        <span className="text-muted-foreground text-[0.68rem] line-through">
+                        <span className="text-muted-foreground text-[0.75rem] line-through">
                           ৳{book.originalPrice.toLocaleString("en-BD")}
                         </span>
                       )}
-                    <span className="text-accent text-[0.78rem] font-bold">
+                    <span className="text-accent text-[15px] font-bold">
                       ৳{book.price.toLocaleString("en-BD")}
                     </span>
                   </div>
@@ -221,7 +221,7 @@ export function BookCard({ book, className }: BookCardProps) {
             {hasSell && (
               <Button
                 size="sm"
-                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <ShoppingCartIcon className="size-4" />
                 <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
@@ -231,7 +231,7 @@ export function BookCard({ book, className }: BookCardProps) {
               <Button
                 size="sm"
                 variant="success"
-                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <BookOpenIcon className="size-4" />
                 <span>Borrow Now</span>
@@ -241,7 +241,7 @@ export function BookCard({ book, className }: BookCardProps) {
               <Button
                 size="sm"
                 variant="outline"
-                className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+                className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <Repeat2Icon className="size-4" />
                 <span>Swap Now</span>
