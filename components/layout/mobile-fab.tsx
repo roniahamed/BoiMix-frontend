@@ -112,7 +112,7 @@ export function MobileFAB() {
         style={{ touchAction: "none" }} // Prevents scrolling while dragging on touch devices
       >
         {/* Sub-actions */}
-        <div className="flex flex-col items-end gap-2.5">
+        <div className="absolute right-0 bottom-full mb-3 flex flex-col items-end gap-2.5">
           {actions.map((action, index) => {
             const Icon = action.icon;
             const delay = isOpen
