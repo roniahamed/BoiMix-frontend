@@ -108,11 +108,11 @@ export function MobileFAB() {
             isDraggingRef.current = false;
           }, 150);
         }}
-        className="fixed right-4 bottom-20 z-50 flex flex-col items-end gap-3 md:right-6 md:bottom-6"
+        className="fixed right-4 bottom-20 z-50 md:right-6 md:bottom-6"
         style={{ touchAction: "none" }} // Prevents scrolling while dragging on touch devices
       >
         {/* Sub-actions */}
-        <div className="absolute right-0 bottom-full mb-3 flex flex-col items-end gap-2.5">
+        <div className="pointer-events-none absolute right-0 bottom-full mb-3 flex flex-col items-end gap-2.5">
           {actions.map((action, index) => {
             const Icon = action.icon;
             const delay = isOpen
