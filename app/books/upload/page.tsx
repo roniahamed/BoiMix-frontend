@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useForm, useWatch, Controller } from "react-hook-form";
@@ -14,7 +14,6 @@ import {
   Send,
   FileText,
   Repeat2,
-  Tag,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -22,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
+import {} from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -57,6 +56,7 @@ const uploadSchema = z.object({
   availabilityMode: z.enum(["sell", "borrow", "swap"], {
     required_error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, সোয়াপ অথবা ধার)",
   }),
+  originalPrice: z.string().optional(),
   sellPrice: z.string().optional(),
   sellQuantity: z.string().optional(),
 
@@ -125,6 +125,24 @@ export default function BookUploadPage() {
     },
   });
 
+  interface LocationSuggestion {
+    geometry: {
+      coordinates: [number, number];
+    };
+    properties: {
+      name: string;
+      locality?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+    };
+  }
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [locationSuggestions, setLocationSuggestions] = useState<
+    LocationSuggestion[]
+  >([]);
+
   const availabilityMode = useWatch({ control, name: "availabilityMode" });
   const forSell = availabilityMode === "sell";
   const forBorrow = availabilityMode === "borrow";
@@ -144,6 +162,33 @@ export default function BookUploadPage() {
   const borrowQuantityWatch = useWatch({ control, name: "borrowQuantity" });
   const swapQuantityWatch = useWatch({ control, name: "swapQuantity" });
   const locationAddressWatch = useWatch({ control, name: "locationAddress" });
+  const locationLatWatch = useWatch({ control, name: "locationLat" });
+  const locationLngWatch = useWatch({ control, name: "locationLng" });
+
+  useEffect(() => {
+    if (
+      locationType === "custom" &&
+      locationAddressWatch &&
+      locationAddressWatch.length > 2
+    ) {
+      const timer = setTimeout(() => {
+        fetch(
+          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddressWatch)}&limit=5`,
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && data.features && data.features.length > 0) {
+              setLocationSuggestions(data.features);
+              setShowSuggestions(true);
+            } else {
+              setLocationSuggestions([]);
+            }
+          })
+          .catch((err) => console.error("Geocoding error", err));
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [locationAddressWatch, locationType]);
 
   const onSubmit = async (data: UploadFormValues) => {
     setIsLoading(true);
@@ -273,7 +318,7 @@ export default function BookUploadPage() {
                   </div>
                 </div>
 
-                <div className="grid gap-5 md:grid-cols-3">
+                <div className="grid items-start gap-6 md:grid-cols-3">
                   <div className="space-y-2">
                     <Label>Publisher</Label>
                     <Input
@@ -373,191 +418,216 @@ export default function BookUploadPage() {
                   control={control}
                   name="availabilityMode"
                   render={({ field }) => (
-                    <Select
+                    <RadioGroup
                       onValueChange={field.onChange}
                       value={field.value || undefined}
+                      className="flex w-full flex-row gap-4"
                     >
-                      <SelectTrigger className="bg-background w-full md:w-[300px]">
-                        <SelectValue placeholder="Select Availability Option" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="sell">
-                          Sell (List for sale)
-                        </SelectItem>
-                        <SelectItem value="borrow">
-                          Borrow (Allow others to borrow)
-                        </SelectItem>
-                        <SelectItem value="swap">
-                          Swap (Swap this book)
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
+                      <label
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "sell" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                      >
+                        <RadioGroupItem value="sell" className="sr-only" />
+                        <span className="font-medium">Sell</span>
+                      </label>
+                      <label
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "borrow" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                      >
+                        <RadioGroupItem value="borrow" className="sr-only" />
+                        <span className="font-medium">Borrow</span>
+                      </label>
+                      <label
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "swap" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                      >
+                        <RadioGroupItem value="swap" className="sr-only" />
+                        <span className="font-medium">Swap</span>
+                      </label>
+                    </RadioGroup>
                   )}
                 />
 
                 {forSell && (
-                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 max-w-md space-y-4 rounded-xl border p-4 duration-200">
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Selling Price (৳){" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        type="number"
-                        placeholder="e.g. 450"
-                        {...register("sellPrice")}
-                        className="bg-background"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Quantity <span className="text-destructive">*</span>
-                      </Label>
-                      <div className="bg-background flex h-10 w-[120px] items-center overflow-hidden rounded-md border">
-                        <button
-                          type="button"
-                          className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
-                          onClick={() => {
-                            const current = parseInt(
-                              getValues("sellQuantity") || "1",
-                            );
-                            if (current > 1)
+                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
+                    <div className="grid items-end gap-6 md:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Original Price (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g. 600"
+                          {...register("originalPrice")}
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Discounted Price (৳){" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g. 450"
+                          {...register("sellPrice")}
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Quantity <span className="text-destructive">*</span>
+                        </Label>
+                        <div className="bg-background flex h-10 w-full items-center overflow-hidden rounded-md border">
+                          <button
+                            type="button"
+                            className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
+                            onClick={() => {
+                              const current = parseInt(
+                                getValues("sellQuantity") || "1",
+                              );
+                              if (current > 1)
+                                setValue(
+                                  "sellQuantity",
+                                  (current - 1).toString(),
+                                );
+                            }}
+                          >
+                            -
+                          </button>
+                          <div className="bg-border h-full w-px" />
+                          <input
+                            type="number"
+                            placeholder="e.g. 1"
+                            className="w-full [appearance:textfield] bg-transparent text-center text-sm font-medium outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                            {...register("sellQuantity")}
+                          />
+                          <div className="bg-border h-full w-px" />
+                          <button
+                            type="button"
+                            className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
+                            onClick={() => {
+                              const current = parseInt(
+                                getValues("sellQuantity") || "1",
+                              );
                               setValue(
                                 "sellQuantity",
-                                (current - 1).toString(),
+                                (current + 1).toString(),
                               );
-                          }}
-                        >
-                          -
-                        </button>
-                        <div className="bg-border h-full w-px" />
-                        <input
-                          type="number"
-                          placeholder="e.g. 1"
-                          className="w-full [appearance:textfield] bg-transparent text-center text-sm font-medium outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                          {...register("sellQuantity")}
-                        />
-                        <div className="bg-border h-full w-px" />
-                        <button
-                          type="button"
-                          className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
-                          onClick={() => {
-                            const current = parseInt(
-                              getValues("sellQuantity") || "1",
-                            );
-                            setValue("sellQuantity", (current + 1).toString());
-                          }}
-                        >
-                          +
-                        </button>
+                            }}
+                          >
+                            +
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {forBorrow && (
-                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 max-w-md space-y-4 rounded-xl border p-4 duration-200">
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Borrow Quantity{" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        type="number"
-                        placeholder="e.g. 3"
-                        {...register("borrowQuantity")}
-                        className="bg-background"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Borrow Duration{" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Controller
-                        control={control}
-                        name="borrowDuration"
-                        render={({ field }) => (
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value || undefined}
-                          >
-                            <SelectTrigger className="bg-background">
-                              <SelectValue placeholder="7 days" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="7">7 days</SelectItem>
-                              <SelectItem value="14">14 days</SelectItem>
-                              <SelectItem value="30">30 days</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        )}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Deposit{" "}
-                        <span className="text-muted-foreground font-normal">
-                          (Optional)
-                        </span>
-                      </Label>
-                      <div className="relative">
-                        <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm font-semibold">
-                          ৳
-                        </span>
+                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
+                    <div className="grid items-end gap-6 md:grid-cols-3">
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Borrow Quantity{" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
                         <Input
                           type="number"
-                          placeholder="e.g. 300"
-                          className="bg-background pl-7"
-                          {...register("deposit")}
+                          placeholder="e.g. 3"
+                          {...register("borrowQuantity")}
+                          className="bg-background"
                         />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Borrow Duration{" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
+                        <Controller
+                          control={control}
+                          name="borrowDuration"
+                          render={({ field }) => (
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value || undefined}
+                            >
+                              <SelectTrigger className="bg-background">
+                                <SelectValue placeholder="7 days" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="7">7 days</SelectItem>
+                                <SelectItem value="14">14 days</SelectItem>
+                                <SelectItem value="30">30 days</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Deposit{" "}
+                          <span className="text-muted-foreground font-normal">
+                            (Optional)
+                          </span>
+                        </Label>
+                        <div className="relative">
+                          <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm font-semibold">
+                            ৳
+                          </span>
+                          <Input
+                            type="number"
+                            placeholder="e.g. 300"
+                            className="bg-background pl-7"
+                            {...register("deposit")}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {forSwap && (
-                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 max-w-md space-y-4 rounded-xl border p-4 duration-200">
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Swap Quantity{" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Input
-                        type="number"
-                        placeholder="e.g. 1"
-                        {...register("swapQuantity")}
-                        className="bg-background"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label className="text-xs font-semibold">
-                        Swap Preference{" "}
-                        <span className="text-destructive">*</span>
-                      </Label>
-                      <Controller
-                        control={control}
-                        name="swapPreference"
-                        render={({ field }) => (
-                          <Select
-                            onValueChange={field.onChange}
-                            value={field.value || undefined}
-                          >
-                            <SelectTrigger className="bg-background">
-                              <SelectValue placeholder="Any Book" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Any">Any Book</SelectItem>
-                              <SelectItem value="Fiction">
-                                Fiction only
-                              </SelectItem>
-                              <SelectItem value="Same Value">
-                                Same Value
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        )}
-                      />
+                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
+                    <div className="grid items-end gap-6 md:grid-cols-2">
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Swap Quantity{" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g. 1"
+                          {...register("swapQuantity")}
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Swap Preference{" "}
+                          <span className="text-destructive">*</span>
+                        </Label>
+                        <Controller
+                          control={control}
+                          name="swapPreference"
+                          render={({ field }) => (
+                            <Select
+                              onValueChange={field.onChange}
+                              value={field.value || undefined}
+                            >
+                              <SelectTrigger className="bg-background">
+                                <SelectValue placeholder="Any Book" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Any">Any Book</SelectItem>
+                                <SelectItem value="Fiction">
+                                  Fiction only
+                                </SelectItem>
+                                <SelectItem value="Same Value">
+                                  Same Value
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                 )}
@@ -663,11 +733,75 @@ export default function BookUploadPage() {
                               </span>
                             </Label>
                             {field.value === "custom" && (
-                              <Input
-                                placeholder="Enter new address..."
-                                {...register("locationAddress")}
-                                className="bg-background mt-2"
-                              />
+                              <div className="relative">
+                                <Input
+                                  placeholder="Enter new address..."
+                                  {...register("locationAddress")}
+                                  className="bg-background mt-2"
+                                  onFocus={() => {
+                                    if (locationSuggestions.length > 0)
+                                      setShowSuggestions(true);
+                                  }}
+                                  onBlur={() => {
+                                    setTimeout(
+                                      () => setShowSuggestions(false),
+                                      200,
+                                    );
+                                  }}
+                                />
+                                {showSuggestions &&
+                                  locationSuggestions.length > 0 && (
+                                    <div className="bg-popover absolute z-[1000] mt-1 max-h-[200px] w-full overflow-y-auto rounded-md border shadow-md">
+                                      {locationSuggestions.map((sug, i) => (
+                                        <div
+                                          key={i}
+                                          className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
+                                          onMouseDown={(e) => {
+                                            e.preventDefault();
+                                            const props = sug.properties;
+                                            const address = [
+                                              props.name,
+                                              props.locality,
+                                              props.city,
+                                              props.state,
+                                              props.country,
+                                            ]
+                                              .filter(Boolean)
+                                              .join(", ");
+                                            setValue(
+                                              "locationAddress",
+                                              address,
+                                              { shouldValidate: true },
+                                            );
+                                            setValue(
+                                              "locationLat",
+                                              sug.geometry.coordinates[1],
+                                            );
+                                            setValue(
+                                              "locationLng",
+                                              sug.geometry.coordinates[0],
+                                            );
+                                            setShowSuggestions(false);
+                                          }}
+                                        >
+                                          <div className="font-medium">
+                                            {sug.properties.name}
+                                          </div>
+                                          <div className="text-muted-foreground text-xs">
+                                            {[
+                                              sug.properties.locality,
+                                              sug.properties.city,
+                                              sug.properties.state,
+                                              sug.properties.country,
+                                            ]
+                                              .filter(Boolean)
+                                              .join(", ")}
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                              </div>
                             )}
                           </div>
                         </div>
@@ -678,12 +812,35 @@ export default function BookUploadPage() {
 
                 <div className="bg-muted/20 relative h-[200px] w-full overflow-hidden rounded-xl border md:h-auto">
                   <LocationMap
-                    lat={getValues("locationLat")}
-                    lng={getValues("locationLng")}
+                    lat={locationLatWatch}
+                    lng={locationLngWatch}
                     onChange={(lat, lng) => {
                       if (locationType === "custom") {
                         setValue("locationLat", lat);
                         setValue("locationLng", lng);
+                        fetch(
+                          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
+                        )
+                          .then((res) => res.json())
+                          .then((data) => {
+                            if (data) {
+                              const parts = [
+                                data.locality,
+                                data.city,
+                                data.principalSubdivision,
+                                data.countryName,
+                              ].filter(Boolean);
+                              const address = parts.join(", ");
+                              if (address) {
+                                setValue("locationAddress", address, {
+                                  shouldValidate: true,
+                                });
+                              }
+                            }
+                          })
+                          .catch((err) =>
+                            console.error("Reverse geocoding error", err),
+                          );
                       }
                     }}
                   />

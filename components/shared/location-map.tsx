@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  useMap,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapPin } from "lucide-react";
@@ -29,13 +35,16 @@ const customMarkerIcon = L.divIcon({
 function LocationMarker({
   position,
   setPosition,
+  onChange,
 }: {
   position: L.LatLng | null;
   setPosition: (p: L.LatLng) => void;
+  onChange?: (lat: number, lng: number) => void;
 }) {
   useMapEvents({
     click(e) {
       setPosition(e.latlng);
+      if (onChange) onChange(e.latlng.lat, e.latlng.lng);
     },
   });
 
@@ -44,30 +53,63 @@ function LocationMarker({
   );
 }
 
+function MapUpdater({ position }: { position: L.LatLng | null }) {
+  const map = useMap();
+  useEffect(() => {
+    if (position) {
+      map.flyTo(position, 14);
+    }
+  }, [position, map]);
+  return null;
+}
+
 export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
-  const [position, setPosition] = useState<L.LatLng | null>(
-    lat && lng ? new L.LatLng(lat, lng) : null,
+  const [isMounted, setIsMounted] = useState(false);
+  const [position, setPosition] = useState<L.LatLng>(
+    lat !== undefined && lng !== undefined
+      ? new L.LatLng(lat, lng)
+      : new L.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
   );
 
   useEffect(() => {
-    if (position) {
-      onChange(position.lat, position.lng);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (
+      lat !== undefined &&
+      lng !== undefined &&
+      (position.lat !== lat || position.lng !== lng)
+    ) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPosition(new L.LatLng(lat, lng));
     }
-  }, [position, onChange]);
+  }, [lat, lng]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!isMounted)
+    return (
+      <div className="bg-muted/20 h-full min-h-[300px] w-full animate-pulse overflow-hidden rounded-xl" />
+    );
 
   return (
-    <div className="h-[300px] w-full overflow-hidden rounded-xl border">
+    <div className="h-full min-h-[300px] w-full overflow-hidden">
       <MapContainer
         center={position || DEFAULT_CENTER}
         zoom={13}
         scrollWheelZoom={true}
-        className="h-full w-full"
+        className="z-0 h-full w-full"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <LocationMarker position={position} setPosition={setPosition} />
+        <LocationMarker
+          position={position}
+          setPosition={setPosition}
+          onChange={onChange}
+        />
+        <MapUpdater position={position} />
       </MapContainer>
     </div>
   );
