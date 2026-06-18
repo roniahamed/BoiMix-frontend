@@ -120,7 +120,6 @@ export function ScrollContainer({
           scrollbarWidth: "none",
           msOverflowStyle: "none",
           WebkitOverflowScrolling: "touch",
-          touchAction: "pan-x",
         }}
       >
         {children}

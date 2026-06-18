@@ -78,7 +78,7 @@ export function BookCard({ book, className }: BookCardProps) {
       {/* Outer Card Content */}
       <div className="flex h-full flex-col bg-transparent">
         {/* Cover Image Area */}
-        <div className="relative bg-white p-2">
+        <div className="relative">
           <Link
             href={`/books/${book.slug}`}
             className="bg-muted relative block aspect-[3/4] overflow-hidden rounded-md shadow-xs"
