@@ -54,7 +54,7 @@ const uploadSchema = z.object({
 
   // Availability
   availabilityMode: z.enum(["sell", "borrow", "swap"], {
-    required_error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, সোয়াপ অথবা ধার)",
+    error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, সোয়াপ অথবা ধার)",
   }),
   originalPrice: z.string().optional(),
   sellPrice: z.string().optional(),
