@@ -6,9 +6,9 @@ import {
   CheckCircle2Icon,
   Repeat2Icon,
   ShoppingCartIcon,
+  StarIcon,
 } from "lucide-react";
 
-import { RatingStars } from "@/components/shared/rating-stars";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BookCardBook } from "@/types/book";
@@ -128,10 +128,11 @@ export function BookCard({ book, className }: BookCardProps) {
             </div>
             <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
               <div className="flex items-center justify-between gap-2">
-                <RatingStars
-                  rating={book.rating}
-                  reviewCount={book.reviewCount}
-                />
+                <div className="flex items-center gap-1 font-medium">
+                  <StarIcon className="size-3.5 fill-amber-500 text-amber-500" />
+                  <span className="text-foreground">{book.rating}</span>
+                  <span className="opacity-70">({book.reviewCount})</span>
+                </div>
                 {book.distance && (
                   <span className="shrink-0">{book.distance}</span>
                 )}
