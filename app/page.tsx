@@ -767,15 +767,15 @@ function BookSection({
     <section className="py-4 md:py-6">
       <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title={title} href={href} />
-        <ScrollContainer autoScroll>
-          {books.map((book) => (
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          {books.map((book, index) => (
             <BookCard
               key={`${title}-${book.id}`}
               book={book}
-              className="w-[150px] shrink-0 sm:w-[165px] lg:w-[180px]"
+              className={`w-full ${index >= 10 ? "hidden md:block" : ""}`}
             />
           ))}
-        </ScrollContainer>
+        </div>
       </div>
     </section>
   );
@@ -873,15 +873,15 @@ function HorizontalBookRow({
   rowKey: string;
 }) {
   return (
-    <ScrollContainer>
-      {books.map((book) => (
+    <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4">
+      {books.map((book, index) => (
         <BookCard
           key={`${rowKey}-${book.id}`}
           book={book}
-          className="w-[150px] shrink-0 sm:w-[165px] lg:w-[180px]"
+          className={`w-full ${index >= 10 ? "hidden md:block" : ""}`}
         />
       ))}
-    </ScrollContainer>
+    </div>
   );
 }
 
@@ -1397,15 +1397,15 @@ function AuthorSpotlightSection() {
 
             {/* Right Column: Author Books */}
             <div className="flex min-w-0 flex-col justify-center">
-              <ScrollContainer>
-                {humayunBooks.map((book) => (
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+                {humayunBooks.map((book, index) => (
                   <BookCard
                     key={`spotlight-${book.id}`}
                     book={book}
-                    className="w-[150px] shrink-0 sm:w-[165px] lg:w-[180px]"
+                    className={`w-full ${index >= 10 ? "hidden md:block" : ""}`}
                   />
                 ))}
-              </ScrollContainer>
+              </div>
             </div>
           </div>
         </div>
