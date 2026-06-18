@@ -10,7 +10,7 @@ export default function AuthLayout({
       {/* Left Banner Area (Hidden on small screens) */}
       <div className="bg-primary relative hidden w-1/2 flex-col overflow-hidden p-10 text-white lg:flex">
         <div className="relative z-10">
-          <BrandLink className="[&_img]:brightness-0 [&_img]:invert" />
+          <BrandLink />
         </div>
 
         <div className="relative z-10 flex flex-1 items-center justify-center">
