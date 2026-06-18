@@ -228,32 +228,32 @@ book upload
 
 ## Book Listing
 
-- [ ] Book Grid
-- [ ] Book List
-- [ ] Infinite Scroll
-- [ ] Pagination
+- [x] Book Grid
+- [x] Book List
+- [x] Infinite Scroll
+- [x] Pagination
 
 ## Book Details
 
-- [ ] Gallery
-- [ ] Book Information
-- [ ] Owner Information
-- [ ] Reviews
-- [ ] Similar Books
-- [ ] Related Books
+- [x] Gallery
+- [x] Book Information
+- [x] Owner Information
+- [x] Reviews
+- [x] Similar Books
+- [x] Related Books
 
 ## Search
 
-- [ ] Search Page
-- [ ] Filter
-- [ ] Sort
-- [ ] Result Grid
+- [x] Search Page
+- [x] Filter
+- [x] Sort
+- [x] Result Grid
 
 ## Categories
 
-- [ ] Category Page
-- [ ] Trending
-- [ ] New Arrival
+- [x] Category Page
+- [x] Trending
+- [x] New Arrival
 
 ---
 
