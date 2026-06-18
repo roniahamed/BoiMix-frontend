@@ -1,15 +1,15 @@
 "use client";
 
-import { ImagePlusIcon, XIcon } from "lucide-react";
+import { ImagePlusIcon, RefreshCcw, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useId, useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 
 type ImageUploadProps = {
-  label?: string;
+  title?: string;
+  required?: boolean;
   file?: File | null;
   previewUrl?: string;
   className?: string;
@@ -17,7 +17,8 @@ type ImageUploadProps = {
 };
 
 export function ImageUpload({
-  label = "Upload image",
+  title,
+  required,
   file,
   previewUrl,
   className,
@@ -42,9 +43,21 @@ export function ImageUpload({
   }, [objectUrl]);
 
   return (
-    <div className={cn("space-y-2", className)}>
-      <Label htmlFor={inputId}>{label}</Label>
-      <div className="bg-muted/40 relative flex min-h-40 items-center justify-center overflow-hidden rounded-lg border border-dashed">
+    <div
+      className={cn(
+        "bg-card flex flex-col gap-3 rounded-xl border p-3 shadow-sm",
+        className,
+      )}
+    >
+      {title && (
+        <div className="flex items-center justify-between text-sm font-semibold">
+          <span>
+            {title} {required && <span className="text-destructive">*</span>}
+          </span>
+        </div>
+      )}
+
+      <div className="bg-muted/20 relative flex min-h-[160px] flex-1 items-center justify-center overflow-hidden rounded-lg">
         {imageUrl ? (
           <>
             <Image
@@ -54,34 +67,39 @@ export function ImageUpload({
               sizes="320px"
               className="object-cover"
             />
-            <Button
-              type="button"
-              variant="danger"
-              size="icon-sm"
-              className="absolute top-2 right-2"
-              onClick={() => onChange?.(null)}
-              aria-label="Remove image"
-            >
-              <XIcon />
-            </Button>
+            <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white">
+              <CheckCircle2 className="text-success fill-success h-6 w-6 text-white" />
+            </div>
           </>
         ) : (
-          <Label
-            htmlFor={inputId}
-            className="text-muted-foreground flex cursor-pointer flex-col items-center gap-2 p-6 text-center text-sm"
-          >
-            <ImagePlusIcon className="text-primary size-8" />
-            Choose an image
-          </Label>
+          <div className="text-muted-foreground flex flex-col items-center gap-2 p-4 text-center">
+            <ImagePlusIcon className="h-8 w-8 opacity-20" />
+          </div>
         )}
-        <input
-          id={inputId}
-          type="file"
-          accept="image/*"
-          className="sr-only"
-          onChange={(event) => onChange?.(event.target.files?.[0] ?? null)}
-        />
       </div>
+
+      <Button
+        type="button"
+        variant="outline"
+        className="text-primary border-primary/20 hover:bg-primary/5 w-full"
+        onClick={() => document.getElementById(inputId)?.click()}
+      >
+        {imageUrl ? (
+          <>
+            <RefreshCcw className="mr-2 h-4 w-4" /> Change Photo
+          </>
+        ) : (
+          "Upload Photo"
+        )}
+      </Button>
+
+      <input
+        id={inputId}
+        type="file"
+        accept="image/*"
+        className="sr-only"
+        onChange={(event) => onChange?.(event.target.files?.[0] ?? null)}
+      />
     </div>
   );
 }

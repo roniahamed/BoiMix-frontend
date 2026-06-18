@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -32,48 +33,54 @@ import {
 import { ImageUploader } from "@/components/shared/image-uploader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-const uploadSchema = z
-  .object({
-    isbn: z.string().optional(),
-    title: z.string().min(2, "বইয়ের নাম দিন (ন্যূনতম ২ অক্ষর)"),
-    author: z.string().min(2, "লেখকের নাম দিন"),
-    publisher: z.string().optional(),
-    genre: z.string().optional(),
-    language: z.string().optional(),
-    edition: z.string().optional(),
-    pageCount: z.string().optional(),
-    description: z.string().optional(),
+const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
+  ssr: false,
+  loading: () => (
+    <div className="bg-muted flex h-[300px] w-full animate-pulse items-center justify-center rounded-xl">
+      <MapPin className="text-muted-foreground h-8 w-8 opacity-50" />
+    </div>
+  ),
+});
 
-    // Availability
-    forSell: z.boolean().optional(),
-    sellPrice: z.string().optional(),
-    sellQuantity: z.string().optional(),
+const uploadSchema = z.object({
+  isbn: z.string().optional(),
+  title: z.string().min(2, "বইয়ের নাম দিন (ন্যূনতম ২ অক্ষর)"),
+  author: z.string().min(2, "লেখকের নাম দিন"),
+  publisher: z.string().optional(),
+  genre: z.string().optional(),
+  language: z.string().optional(),
+  edition: z.string().optional(),
+  pageCount: z.string().optional(),
+  description: z.string().optional(),
 
-    forBorrow: z.boolean().optional(),
-    borrowQuantity: z.string().optional(),
-    borrowDuration: z.string().optional(),
-    deposit: z.string().optional(),
+  // Availability
+  availabilityMode: z.enum(["sell", "borrow", "swap"], {
+    required_error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, সোয়াপ অথবা ধার)",
+  }),
+  sellPrice: z.string().optional(),
+  sellQuantity: z.string().optional(),
 
-    forSwap: z.boolean().optional(),
-    swapQuantity: z.string().optional(),
-    swapPreference: z.string().optional(),
+  borrowQuantity: z.string().optional(),
+  borrowDuration: z.string().optional(),
+  deposit: z.string().optional(),
 
-    // Condition
-    condition: z.string().min(1, "বইয়ের অবস্থা নির্বাচন করুন"),
+  swapQuantity: z.string().optional(),
+  swapPreference: z.string().optional(),
 
-    // Location
-    locationType: z.enum(["default", "custom"]),
-    locationAddress: z.string().optional(),
+  // Condition
+  condition: z.string().min(1, "বইয়ের অবস্থা নির্বাচন করুন"),
 
-    // Additional info
-    tags: z.string().optional(),
-    editionDetails: z.string().optional(),
-    conditionNote: z.string().optional(),
-  })
-  .refine((data) => data.forSell || data.forSwap || data.forBorrow, {
-    message: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, সোয়াপ অথবা ধার)",
-    path: ["forSell"],
-  });
+  // Location
+  locationType: z.enum(["default", "custom"]),
+  locationAddress: z.string().optional(),
+  locationLat: z.number().optional(),
+  locationLng: z.number().optional(),
+
+  // Additional info
+  tags: z.string().optional(),
+  editionDetails: z.string().optional(),
+  conditionNote: z.string().optional(),
+});
 
 type UploadFormValues = z.infer<typeof uploadSchema>;
 
@@ -113,17 +120,15 @@ export default function BookUploadPage() {
   } = useForm<UploadFormValues>({
     resolver: zodResolver(uploadSchema),
     defaultValues: {
-      forSell: false,
-      forSwap: false,
-      forBorrow: false,
       locationType: "default",
       condition: "Excellent",
     },
   });
 
-  const forSell = useWatch({ control, name: "forSell" });
-  const forBorrow = useWatch({ control, name: "forBorrow" });
-  const forSwap = useWatch({ control, name: "forSwap" });
+  const availabilityMode = useWatch({ control, name: "availabilityMode" });
+  const forSell = availabilityMode === "sell";
+  const forBorrow = availabilityMode === "borrow";
+  const forSwap = availabilityMode === "swap";
   const condition = useWatch({ control, name: "condition" });
   const locationType = useWatch({ control, name: "locationType" });
   const descriptionValue = useWatch({
@@ -175,61 +180,43 @@ export default function BookUploadPage() {
             {/* Upload Photos */}
             <div>
               <SectionTitle
-                title="Upload Photos"
+                title="Book Images"
                 desc="Upload clear photos of your book"
               />
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-                <div className="relative z-0 space-y-2">
-                  <Label className="text-xs font-semibold">Front Cover *</Label>
-                  <ImageUploader
-                    file={frontCover}
-                    onChange={setFrontCover}
-                    className="aspect-[3/4] w-full"
-                    label="Upload Photo"
-                  />
-                </div>
-                <div className="relative z-0 space-y-2">
-                  <Label className="text-xs font-semibold">Back Cover</Label>
-                  <ImageUploader
-                    file={backCover}
-                    onChange={setBackCover}
-                    className="aspect-[3/4] w-full"
-                    label="Upload Photo"
-                  />
-                </div>
-                <div className="relative z-0 space-y-2">
-                  <Label className="text-xs font-semibold">Inside Pages</Label>
-                  <ImageUploader
-                    file={insidePages}
-                    onChange={setInsidePages}
-                    className="aspect-[3/4] w-full"
-                    label="Upload Photo"
-                  />
-                </div>
-                <div className="relative z-0 space-y-2">
-                  <Label className="text-xs font-semibold">
-                    Table of Contents
-                  </Label>
-                  <ImageUploader
-                    file={tocImage}
-                    onChange={setTocImage}
-                    className="aspect-[3/4] w-full"
-                    label="Upload Photo"
-                  />
-                </div>
-                <div className="relative z-0 space-y-2">
-                  <Label className="text-xs font-semibold">
-                    Index (if any)
-                  </Label>
-                  <ImageUploader
-                    file={indexImage}
-                    onChange={setIndexImage}
-                    className="aspect-[3/4] w-full"
-                    label="Upload Photo"
-                  />
-                </div>
+              <div className="mb-3 grid grid-cols-2 gap-4 md:grid-cols-5">
+                <ImageUploader
+                  file={frontCover}
+                  onChange={setFrontCover}
+                  title="Front Cover"
+                  required
+                  className="aspect-[3/4] md:aspect-auto"
+                />
+                <ImageUploader
+                  file={backCover}
+                  onChange={setBackCover}
+                  title="Back Cover"
+                  className="aspect-[3/4] md:aspect-auto"
+                />
+                <ImageUploader
+                  file={insidePages}
+                  onChange={setInsidePages}
+                  title="Inside Pages"
+                  className="aspect-[3/4] md:aspect-auto"
+                />
+                <ImageUploader
+                  file={tocImage}
+                  onChange={setTocImage}
+                  title="Table of Contents"
+                  className="aspect-[3/4] md:aspect-auto"
+                />
+                <ImageUploader
+                  file={indexImage}
+                  onChange={setIndexImage}
+                  title="Index (if any)"
+                  className="aspect-[3/4] md:aspect-auto"
+                />
               </div>
-              <p className="text-muted-foreground mt-4 text-xs">
+              <p className="text-muted-foreground mt-4 text-xs font-medium">
                 You can upload up to 10 images (JPG, PNG • Max 5MB each)
               </p>
             </div>
@@ -384,7 +371,12 @@ export default function BookUploadPage() {
               <div className="grid gap-4 md:grid-cols-3">
                 {/* Sell Card */}
                 <div
-                  className={`rounded-xl border p-4 transition-colors ${forSell ? "border-success bg-success/5" : ""}`}
+                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${forSell ? "border-success bg-success/5" : "hover:bg-muted/50"}`}
+                  onClick={() =>
+                    setValue("availabilityMode", "sell", {
+                      shouldValidate: true,
+                    })
+                  }
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex gap-3">
@@ -402,21 +394,18 @@ export default function BookUploadPage() {
                         </p>
                       </div>
                     </div>
-                    <Controller
-                      control={control}
-                      name="forSell"
-                      render={({ field }) => (
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          className="data-[state=checked]:bg-success data-[state=checked]:border-success h-5 w-5 rounded-full border-2 data-[state=checked]:text-white"
-                        />
-                      )}
-                    />
+                    <div
+                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${forSell ? "border-success bg-success text-white" : "border-muted-foreground/30"}`}
+                    >
+                      {forSell && <CheckCircle2 className="h-4 w-4" />}
+                    </div>
                   </div>
 
                   {forSell && (
-                    <div className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200">
+                    <div
+                      className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Selling Price (৳){" "}
@@ -480,7 +469,12 @@ export default function BookUploadPage() {
 
                 {/* Borrow Card */}
                 <div
-                  className={`rounded-xl border p-4 transition-colors ${forBorrow ? "border-primary bg-primary/5" : ""}`}
+                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${forBorrow ? "border-primary bg-primary/5" : "hover:bg-muted/50"}`}
+                  onClick={() =>
+                    setValue("availabilityMode", "borrow", {
+                      shouldValidate: true,
+                    })
+                  }
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex gap-3">
@@ -498,21 +492,18 @@ export default function BookUploadPage() {
                         </p>
                       </div>
                     </div>
-                    <Controller
-                      control={control}
-                      name="forBorrow"
-                      render={({ field }) => (
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          className="data-[state=checked]:bg-primary data-[state=checked]:border-primary h-5 w-5 rounded-full border-2 data-[state=checked]:text-white"
-                        />
-                      )}
-                    />
+                    <div
+                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${forBorrow ? "border-primary bg-primary text-white" : "border-muted-foreground/30"}`}
+                    >
+                      {forBorrow && <CheckCircle2 className="h-4 w-4" />}
+                    </div>
                   </div>
 
                   {forBorrow && (
-                    <div className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200">
+                    <div
+                      className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Borrow Quantity{" "}
@@ -575,7 +566,12 @@ export default function BookUploadPage() {
 
                 {/* Swap Card */}
                 <div
-                  className={`rounded-xl border p-4 transition-colors ${forSwap ? "border-warning bg-warning/5" : ""}`}
+                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${forSwap ? "border-warning bg-warning/5" : "hover:bg-muted/50"}`}
+                  onClick={() =>
+                    setValue("availabilityMode", "swap", {
+                      shouldValidate: true,
+                    })
+                  }
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex gap-3">
@@ -593,17 +589,11 @@ export default function BookUploadPage() {
                         </p>
                       </div>
                     </div>
-                    <Controller
-                      control={control}
-                      name="forSwap"
-                      render={({ field }) => (
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                          className="data-[state=checked]:bg-warning data-[state=checked]:border-warning h-5 w-5 rounded-full border-2 data-[state=checked]:text-white"
-                        />
-                      )}
-                    />
+                    <div
+                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${forSwap ? "border-warning bg-warning text-white" : "border-muted-foreground/30"}`}
+                    >
+                      {forSwap && <CheckCircle2 className="h-4 w-4" />}
+                    </div>
                   </div>
 
                   {forSwap && (
@@ -652,9 +642,9 @@ export default function BookUploadPage() {
                   )}
                 </div>
               </div>
-              {errors.forSell && !forSell && !forBorrow && !forSwap && (
+              {errors.availabilityMode && (
                 <p className="text-destructive mt-3 text-sm">
-                  {errors.forSell.message}
+                  {errors.availabilityMode.message}
                 </p>
               )}
             </div>
@@ -756,11 +746,26 @@ export default function BookUploadPage() {
                               </span>
                             </Label>
                             {field.value === "custom" && (
-                              <Input
-                                placeholder="Enter new address..."
-                                {...register("locationAddress")}
-                                className="bg-background mt-2"
-                              />
+                              <div className="mt-4 space-y-4">
+                                <Input
+                                  placeholder="Enter new address..."
+                                  {...register("locationAddress")}
+                                  className="bg-background"
+                                />
+                                <div className="space-y-2">
+                                  <Label className="text-muted-foreground block text-xs font-semibold">
+                                    Pin on Map (Optional)
+                                  </Label>
+                                  <LocationMap
+                                    lat={getValues("locationLat")}
+                                    lng={getValues("locationLng")}
+                                    onChange={(lat, lng) => {
+                                      setValue("locationLat", lat);
+                                      setValue("locationLng", lng);
+                                    }}
+                                  />
+                                </div>
+                              </div>
                             )}
                           </div>
                         </div>
