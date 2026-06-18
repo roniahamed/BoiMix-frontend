@@ -72,6 +72,7 @@ const MOCK_BOOK = {
     "চতুর্থ অধ্যায়: জীবন সংগ্রাম",
     "পঞ্চম অধ্যায়: অপরূপ প্রকৃতি ও অন্তর্দৃষ্টি",
   ],
+  index: ["ক - কলকাতা, কাশীবাজার", "খ - খুকু", "গ - গঙ্গা"],
 };
 
 const MOCK_OWNER = {
@@ -326,6 +327,18 @@ export default function BookDetailsPage() {
                 </ul>
               </div>
             )}
+
+          {/* Index */}
+          {MOCK_BOOK.index && MOCK_BOOK.index.length > 0 && (
+            <div className="mb-10">
+              <h3 className="type-heading mb-4 text-xl">ইনডেক্স (Index)</h3>
+              <ul className="text-muted-foreground list-disc space-y-2 pl-5">
+                {MOCK_BOOK.index.map((item, idx) => (
+                  <li key={idx}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <hr className="mb-10 border-t" />
 

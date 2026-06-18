@@ -17,162 +17,530 @@ import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook } from "@/types/book";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
-const MOCK_BOOKS: BookCardBook[] = [
+const BASE_MOCK_BOOKS: BookCardBook[] = [
   {
-    id: "1",
-    slug: "oparazito",
-    title: "অপরাজিত",
-    author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600",
-    tags: ["sell", "swap", "borrow"],
+    id: "rivers-of-dhaka",
+    slug: "rivers-of-dhaka",
+    title: "Rivers of Dhaka",
+    author: "Nadia Rahman",
+    coverUrl: "/book-covers/rivers-of-dhaka.svg",
+    tags: ["sell", "borrow"],
     rating: 4.8,
-    reviewCount: 24,
-    price: 250,
-    originalPrice: 350,
-    distance: "১.২ কি.মি.",
-    location: "মিরপুর, ঢাকা",
+    reviewCount: 42,
+    price: 420,
+    originalPrice: 550,
+    distance: "1.2 km",
+    location: "Dhanmondi",
     condition: "excellent",
-    availability: "in-stock",
-    providerType: "user",
-    isVerifiedUser: true,
-  },
-  {
-    id: "2",
-    slug: "pother-pachali",
-    title: "পথের পাঁচালী",
-    author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600",
-    tags: ["borrow"],
-    rating: 4.9,
-    reviewCount: 156,
-    distance: "০ কি.মি.",
-    location: "সেন্ট্রাল লাইব্রেরি",
-    condition: "good",
     availability: "in-stock",
     providerType: "library",
   },
   {
-    id: "3",
-    slug: "paradoxical-sajid",
-    title: "প্যারাডক্সিক্যাল সাজিদ",
-    author: "আরিফ আজাদ",
-    coverUrl:
-      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=600",
-    tags: ["sell"],
-    rating: 4.5,
-    reviewCount: 89,
-    price: 300,
-    distance: "৩.৫ কি.মি.",
-    location: "ধানমন্ডি, ঢাকা",
+    id: "borrowed-light",
+    slug: "borrowed-light",
+    title: "Borrowed Light",
+    author: "Arif Hossain",
+    coverUrl: "/book-covers/borrowed-light.svg",
+    tags: ["borrow"],
+    rating: 4.6,
+    reviewCount: 31,
+    distance: "0.8 km",
+    location: "Mirpur",
+    condition: "good",
+    availability: "in-stock",
+    isWishlisted: true,
+    providerType: "library",
+  },
+  {
+    id: "swap-stories",
+    slug: "swap-stories",
+    title: "Swap Stories",
+    author: "Maliha Karim",
+    coverUrl: "/book-covers/swap-stories.svg",
+    tags: ["swap", "sell"],
+    rating: 4.7,
+    reviewCount: 28,
+    price: 360,
+    originalPrice: 450,
+    distance: "2.4 km",
+    location: "Uttara",
     condition: "new",
     availability: "in-stock",
-    providerType: "user",
   },
   {
-    id: "4",
-    slug: "himu",
-    title: "হিমু",
-    author: "হুমায়ূন আহমেদ",
-    coverUrl:
-      "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600",
-    tags: ["swap"],
-    rating: 4.7,
-    reviewCount: 210,
-    distance: "৫.০ কি.মি.",
-    location: "উত্তরা, ঢাকা",
-    condition: "fair",
-    availability: "out-of-stock",
-    providerType: "user",
-  },
-  {
-    id: "5",
-    slug: "misir-ali",
-    title: "মিসির আলি",
-    author: "হুমায়ূন আহমেদ",
-    coverUrl:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600",
-    tags: ["borrow", "swap"],
-    rating: 4.8,
-    reviewCount: 320,
-    distance: "১.০ কি.মি.",
-    location: "মিরপুর ২, ঢাকা",
+    id: "the-reader-map",
+    slug: "the-reader-map",
+    title: "The Reader Map",
+    author: "Samiul Islam",
+    coverUrl: "/book-covers/the-reader-map.svg",
+    tags: ["swap", "borrow"],
+    rating: 4.5,
+    reviewCount: 19,
+    distance: "3.1 km",
+    location: "Banani",
     condition: "excellent",
     availability: "in-stock",
+  },
+  {
+    id: "market-lanes",
+    slug: "market-lanes",
+    title: "Market Lanes",
+    author: "Tahsin Ahmed",
+    coverUrl: "/book-covers/market-lanes.svg",
+    tags: ["sell"],
+    rating: 4.4,
+    reviewCount: 16,
+    price: 280,
+    originalPrice: 350,
+    location: "Bashundhara",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "quiet-reviews",
+    slug: "quiet-reviews",
+    title: "Quiet Reviews",
+    author: "Raisa Chowdhury",
+    coverUrl: "/book-covers/quiet-reviews.svg",
+    tags: ["borrow", "swap"],
+    rating: 4.9,
+    reviewCount: 52,
+    distance: "1.7 km",
+    location: "Mohammadpur",
+    condition: "excellent",
+    availability: "in-stock",
+    isInCart: true,
+  },
+  {
+    id: "song-of-padma",
+    slug: "song-of-padma",
+    title: "The Song of the Padma",
+    author: "Tasnim Ara",
+    coverUrl: "/book-covers/song-of-padma.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.5,
+    reviewCount: 23,
+    price: 350,
+    distance: "1.5 km",
+    location: "Savar",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "chhaya-bithi",
+    slug: "chhaya-bithi",
+    title: "Chhaya Bithi",
+    author: "Humayun Ahmed",
+    coverUrl: "/book-covers/chhaya-bithi.svg",
+    tags: ["borrow"],
+    rating: 4.9,
+    reviewCount: 120,
+    distance: "3.5 km",
+    location: "Sylhet",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "programming-basics",
+    slug: "programming-basics",
+    title: "Programming Basics",
+    author: "Tamim Shahriar Subeen",
+    coverUrl: "/book-covers/programming-basics.svg",
+    tags: ["sell"],
+    rating: 4.8,
+    reviewCount: 85,
+    price: 250,
+    originalPrice: 320,
+    location: "Chittagong",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "struggles-of-life",
+    slug: "struggles-of-life",
+    title: "Struggles of Life",
+    author: "Kazi Nazrul Islam",
+    coverUrl: "/book-covers/struggles-of-life.svg",
+    tags: ["swap", "sell"],
+    rating: 4.7,
+    reviewCount: 45,
+    price: 180,
+    distance: "4.2 km",
+    location: "Mymensingh",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "lost-sonnet",
+    slug: "lost-sonnet",
+    title: "The Lost Sonnet",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/lost-sonnet.svg",
+    tags: ["borrow", "swap"],
+    rating: 4.6,
+    reviewCount: 60,
+    distance: "2.8 km",
+    location: "Khulna",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "boi-er-pata",
+    slug: "boi-er-pata",
+    title: "Boi-er Pata",
+    author: "Shamsur Rahman",
+    coverUrl: "/book-covers/quiet-reviews.svg",
+    tags: ["swap"],
+    rating: 4.3,
+    reviewCount: 14,
+    distance: "5.0 km",
+    location: "Barisal",
+    condition: "fair",
+    availability: "in-stock",
+  },
+  {
+    id: "dhaka-metro",
+    slug: "dhaka-metro",
+    title: "Dhaka Metro Diary",
+    author: "Nayeem Islam",
+    coverUrl: "/book-covers/dhaka-metro.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.2,
+    reviewCount: 18,
+    price: 150,
+    distance: "0.5 km",
+    location: "Mirpur",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "sundarbans-adventure",
+    slug: "sundarbans-adventure",
+    title: "Sundarbans Adventure",
+    author: "Muhammed Zafar Iqbal",
+    coverUrl: "/book-covers/sundarbans-adventure.svg",
+    tags: ["borrow"],
+    rating: 4.8,
+    reviewCount: 77,
+    distance: "6.2 km",
+    location: "Bagerhat",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "smart-entrepreneur",
+    slug: "smart-entrepreneur",
+    title: "Smart Entrepreneur",
+    author: "Ayman Sadiq",
+    coverUrl: "/book-covers/smart-entrepreneur.svg",
+    tags: ["sell"],
+    rating: 4.7,
+    reviewCount: 110,
+    price: 320,
+    originalPrice: 400,
     providerType: "user",
+    isVerifiedUser: true,
+    location: "Banani",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "history-of-bengal",
+    slug: "history-of-bengal",
+    title: "History of Bengal",
+    author: "Akbar Ali Khan",
+    coverUrl: "/book-covers/history-of-bengal.svg",
+    tags: ["swap", "sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 65,
+    price: 480,
+    originalPrice: 600,
+    distance: "1.9 km",
+    location: "Dhanmondi",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "silent-whispers",
+    slug: "silent-whispers",
+    title: "Silent Whispers",
+    author: "Tahmima Anam",
+    coverUrl: "/book-covers/lost-sonnet.svg",
+    tags: ["sell"],
+    rating: 4.4,
+    reviewCount: 21,
+    price: 290,
+    location: "Uttara",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "golden-age",
+    slug: "golden-age",
+    title: "A Golden Age",
+    author: "Tahmima Anam",
+    coverUrl: "/book-covers/struggles-of-life.svg",
+    tags: ["borrow"],
+    rating: 4.6,
+    reviewCount: 39,
+    distance: "2.1 km",
+    location: "Gulshan",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "lalshalu",
+    slug: "lalshalu",
+    title: "Lalshalu",
+    author: "Syed Waliullah",
+    coverUrl: "/book-covers/chhaya-bithi.svg",
+    tags: ["swap"],
+    rating: 4.8,
+    reviewCount: 94,
+    distance: "3.7 km",
+    location: "Comilla",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "pather-panchali",
+    slug: "pather-panchali",
+    title: "Pather Panchali",
+    author: "Bibhutibhushan Bandyopadhyay",
+    coverUrl: "/book-covers/song-of-padma.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 142,
+    price: 190,
+    distance: "4.5 km",
+    location: "Jessore",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "chokher-bali",
+    slug: "chokher-bali",
+    title: "Chokher Bali",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/programming-basics.svg",
+    tags: ["swap", "sell"],
+    rating: 4.7,
+    reviewCount: 53,
+    price: 220,
+    distance: "2.9 km",
+    location: "Pabna",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "gora-book",
+    slug: "gora-book",
+    title: "Gora",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/history-of-bengal.svg",
+    tags: ["borrow"],
+    rating: 4.8,
+    reviewCount: 88,
+    distance: "3.2 km",
+    location: "Rajshahi",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "shesher-kobita",
+    slug: "shesher-kobita",
+    title: "Shesher Kobita",
+    author: "Rabindranath Tagore",
+    coverUrl: "/book-covers/smart-entrepreneur.svg",
+    tags: ["sell"],
+    rating: 4.9,
+    reviewCount: 115,
+    price: 160,
+    location: "Bogra",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "devdas-novel",
+    slug: "devdas-novel",
+    title: "Devdas",
+    author: "Sarat Chandra Chattopadhyay",
+    coverUrl: "/book-covers/dhaka-metro.svg",
+    tags: ["swap", "borrow"],
+    rating: 4.5,
+    reviewCount: 67,
+    distance: "5.1 km",
+    location: "Rangpur",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "srikanta-novel",
+    slug: "srikanta-novel",
+    title: "Srikanta",
+    author: "Sarat Chandra Chattopadhyay",
+    coverUrl: "/book-covers/sundarbans-adventure.svg",
+    tags: ["sell", "swap"],
+    rating: 4.6,
+    reviewCount: 41,
+    price: 240,
+    distance: "4.8 km",
+    location: "Dinajpur",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "kopalkundala",
+    slug: "kopalkundala",
+    title: "Kopalkundala",
+    author: "Bankim Chandra Chattopadhyay",
+    coverUrl: "/book-covers/borrowed-light.svg",
+    tags: ["borrow"],
+    rating: 4.4,
+    reviewCount: 33,
+    distance: "2.7 km",
+    location: "Kushtia",
+    condition: "good",
+    availability: "in-stock",
+  },
+  {
+    id: "anandamath",
+    slug: "anandamath",
+    title: "Anandamath",
+    author: "Bankim Chandra Chattopadhyay",
+    coverUrl: "/book-covers/swap-stories.svg",
+    tags: ["sell"],
+    rating: 4.7,
+    reviewCount: 59,
+    price: 300,
+    location: "Faridpur",
+    condition: "new",
+    availability: "in-stock",
+  },
+  {
+    id: "byomkesh-samagra",
+    slug: "byomkesh-samagra",
+    title: "Byomkesh Samagra",
+    author: "Sharadindu Bandyopadhyay",
+    coverUrl: "/book-covers/byomkesh-samagra.svg",
+    tags: ["swap", "sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 156,
+    price: 650,
+    originalPrice: 800,
+    distance: "3.4 km",
+    location: "Tangail",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "feluda-somogro",
+    slug: "feluda-somogro",
+    title: "Feluda Somogro",
+    author: "Satyajit Ray",
+    coverUrl: "/book-covers/feluda-somogro.svg",
+    tags: ["sell", "borrow"],
+    rating: 4.9,
+    reviewCount: 203,
+    price: 750,
+    originalPrice: 950,
+    distance: "1.8 km",
+    location: "Gazipur",
+    condition: "excellent",
+    availability: "in-stock",
+  },
+  {
+    id: "professor-shonku",
+    slug: "professor-shonku",
+    title: "Professor Shonku",
+    author: "Satyajit Ray",
+    coverUrl: "/book-covers/professor-shonku.svg",
+    tags: ["borrow", "swap"],
+    rating: 4.8,
+    reviewCount: 119,
+    distance: "2.3 km",
+    location: "Narayanganj",
+    condition: "good",
+    availability: "in-stock",
   },
 ];
+
+type ExtendedBook = BookCardBook & {
+  category: string;
+  publisher: string;
+  language: string;
+};
+
+const MOCK_BOOKS = BASE_MOCK_BOOKS.map((b, i) => ({
+  ...b,
+  category: ["Fiction", "Academic", "Business", "Literature", "History"][i % 5],
+  publisher: ["Prothoma", "Batighor", "Oitijjho", "Adarsha", "Anyaprokash"][
+    i % 5
+  ],
+  language: ["Bengali", "English"][i % 2],
+})) as ExtendedBook[];
+
+// Build options from mock data
+const uniqueAuthors = Array.from(
+  new Set(MOCK_BOOKS.map((b) => b.author)),
+).sort();
+const uniquePublishers = Array.from(
+  new Set(MOCK_BOOKS.map((b) => b.publisher)),
+).sort();
+const uniqueCategories = Array.from(
+  new Set(MOCK_BOOKS.map((b) => b.category)),
+).sort();
+const uniqueLanguages = Array.from(
+  new Set(MOCK_BOOKS.map((b) => b.language)),
+).sort();
 
 const FILTER_GROUPS = [
   {
     id: "category",
-    title: "ক্যাটাগরি",
+    title: "Categories",
     type: "checkbox" as const,
     searchable: true,
-    options: [
-      { label: "ফিকশন (Fiction)", value: "fiction", count: 120 },
-      { label: "নন-ফিকশন (Non-Fiction)", value: "non-fiction", count: 85 },
-      { label: "একাডেমিক (Academic)", value: "academic", count: 45 },
-      { label: "ইসলামিক বই (Islamic)", value: "islamic", count: 210 },
-      { label: "কবিতা (Poetry)", value: "poetry", count: 32 },
-    ],
+    options: uniqueCategories.map((c) => ({ label: c, value: c })),
   },
   {
     id: "availability",
-    title: "বইয়ের অবস্থা ও ধরণ",
+    title: "Book Type",
     type: "checkbox" as const,
     options: [
-      { label: "বিক্রি (Sell)", value: "sell", count: 320 },
-      { label: "সোয়াপ (Swap)", value: "swap", count: 110 },
-      { label: "ধার (Borrow)", value: "borrow", count: 89 },
-      { label: "স্টকে আছে (In Stock)", value: "in-stock", count: 400 },
+      { label: "Sell", value: "sell" },
+      { label: "Swap", value: "swap" },
+      { label: "Borrow", value: "borrow" },
+      { label: "In Stock", value: "in-stock" },
     ],
   },
   {
     id: "author",
-    title: "লেখক",
+    title: "Author",
     type: "checkbox" as const,
     searchable: true,
-    options: [
-      { label: "হুমায়ূন আহমেদ", value: "humayun", count: 145 },
-      { label: "রবীন্দ্রনাথ ঠাকুর", value: "rabindranath", count: 90 },
-      { label: "কাজী নজরুল ইসলাম", value: "nazrul", count: 76 },
-      { label: "শরৎচন্দ্র চট্টোপাধ্যায়", value: "sarat", count: 65 },
-      { label: "আরিফ আজাদ", value: "arif", count: 40 },
-    ],
+    options: uniqueAuthors.map((a) => ({ label: a, value: a })),
   },
   {
     id: "publisher",
-    title: "প্রকাশনী",
+    title: "Publisher",
     type: "checkbox" as const,
     searchable: true,
-    options: [
-      { label: "প্রথমা প্রকাশন", value: "prothoma", count: 85 },
-      { label: "অন্যপ্রকাশ", value: "onnoprokash", count: 70 },
-      { label: "বাতিঘর", value: "batighor", count: 65 },
-      { label: "মাওলা ব্রাদার্স", value: "mowla", count: 50 },
-      { label: "আদর্শ", value: "adorsho", count: 40 },
-    ],
+    options: uniquePublishers.map((p) => ({ label: p, value: p })),
   },
   {
     id: "price",
-    title: "দাম (Price)",
+    title: "Price",
     type: "range" as const,
   },
   {
     id: "language",
-    title: "ভাষা",
+    title: "Language",
     type: "checkbox" as const,
-    options: [
-      { label: "বাংলা", value: "bengali", count: 450 },
-      { label: "ইংরেজি", value: "english", count: 210 },
-      { label: "আরবি", value: "arabic", count: 45 },
-    ],
+    options: uniqueLanguages.map((l) => ({ label: l, value: l })),
   },
   {
     id: "rating",
-    title: "রেটিং",
+    title: "Rating",
     type: "rating" as const,
     options: [
       { label: "5", value: "5" },
@@ -188,21 +556,28 @@ type BookListingProps = {
   title: string;
   description: string;
   defaultSearchQuery?: string;
+  initialFilters?: Record<string, string[]>;
+  initialSortBy?: string;
 };
 
 export function BookListing({
   title,
   description,
   defaultSearchQuery = "",
+  initialFilters = {},
+  initialSortBy = "newest",
 }: BookListingProps) {
   const [books, setBooks] = useState<BookCardBook[]>(MOCK_BOOKS);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy, setSortBy] = useState(initialSortBy);
   const [hasMore, setHasMore] = useState(true);
-  const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string[]>
-  >({});
+  const [selectedFilters, setSelectedFilters] =
+    useState<Record<string, string[]>>(initialFilters);
+  const [priceRange, setPriceRange] = useState<{
+    min: string;
+    max: string;
+  } | null>(null);
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const pageCountRef = useRef(1);
@@ -224,8 +599,18 @@ export function BookListing({
     [],
   );
 
+  const handleRangeChange = useCallback(
+    (groupId: string, min: string, max: string) => {
+      if (groupId === "price") {
+        setPriceRange({ min, max });
+      }
+    },
+    [],
+  );
+
   const handleFilterReset = useCallback(() => {
     setSelectedFilters({});
+    setPriceRange(null);
     setSearchQuery("");
   }, []);
 
@@ -284,11 +669,11 @@ export function BookListing({
         if (!values || values.length === 0) continue;
 
         if (groupId === "category") {
-          // mock books don't have a specific genre property yet, but we'll assume they pass for now
-          // Or filter by some property if it exists
+          const hasMatch = values.some(
+            (val) => (book as ExtendedBook).category === val,
+          );
+          if (!hasMatch) return false;
         } else if (groupId === "availability") {
-          // book.tags contains "sell", "swap", "borrow"
-          // Also book.availability can be "in-stock"
           const hasMatch = values.some(
             (val) =>
               (book.tags as string[])?.includes(val) ||
@@ -296,14 +681,31 @@ export function BookListing({
           );
           if (!hasMatch) return false;
         } else if (groupId === "author") {
-          // value is author slug or something, we'll just check if author string includes label roughly
-          // or just accept all since it's mock
+          const hasMatch = values.some((val) => book.author === val);
+          if (!hasMatch) return false;
+        } else if (groupId === "publisher") {
+          const hasMatch = values.some(
+            (val) => (book as ExtendedBook).publisher === val,
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "language") {
+          const hasMatch = values.some(
+            (val) => (book as ExtendedBook).language === val,
+          );
+          if (!hasMatch) return false;
         } else if (groupId === "rating") {
           const hasMatch = values.some(
             (val) => Math.floor(book.rating || 0) === Number(val),
           );
           if (!hasMatch) return false;
         }
+      }
+
+      // 3. Price Filter
+      if (priceRange) {
+        const p = book.price || 0;
+        if (priceRange.min && p < Number(priceRange.min)) return false;
+        if (priceRange.max && p > Number(priceRange.max)) return false;
       }
 
       return true;
@@ -350,6 +752,7 @@ export function BookListing({
             selectedFilters={selectedFilters}
             onFilterChange={handleFilterChange}
             onFilterReset={handleFilterReset}
+            onRangeChange={handleRangeChange}
           />
         </aside>
 

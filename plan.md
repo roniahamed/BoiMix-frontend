@@ -73,21 +73,24 @@
   Build user overview, library, wishlist, cart, borrowed, purchases, sales, reviews, notifications, messages, analytics, settings, security.
 - Phase 10: Marketplace  
   Build product listing, product details, cart, checkout, payment, order tracking.
+
 - Phase 11: Borrow System  
   Build membership, borrow request, timeline, handover, return, review, dispute.
 - Phase 12: Swap System  
   Build discover, offer, proposal, counter offer, agreement, handover, complete, dispute.
-- Phase 13: Community  
+- Phase 13: Central Library  
+  Build Central Library landing page, BoiMix verified inventory, direct buy, library borrow integration, and featured collections.
+- Phase 14: Community  
   Build feed, create post, post details, comments, reactions, reviews.
-- Phase 14: Messaging  
+- Phase 15: Messaging  
   Build conversation list, chat window, attachments, typing indicator, seen status.
-- Phase 15: Notifications  
+- Phase 16: Notifications  
   Build notification center, unread state, grouped notifications, archive.
-- Phase 16: Moderator Panel  
+- Phase 17: Moderator Panel  
   Build reports, disputes, verification queue, review moderation, slider, inventory.
-- Phase 17: Admin Panel  
+- Phase 18: Admin Panel  
   Build users, books, borrow, sales, reports, analytics, sponsors, featured listings, notifications, email, SMS, queue, system health.
-- Phase 18: Final Polish  
+- Phase 19: Final Polish  
   Complete responsive QA, accessibility, SEO, performance, skeletons, error pages, empty states, animations, Lighthouse QA.
 
 ## Phase 0 Acceptance Criteria

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { RatingStars } from "@/components/shared/rating-stars";
+import { useState } from "react";
 
 type FilterOption = {
   label: string;
@@ -28,6 +29,7 @@ type FilterSidebarProps = {
   selectedFilters?: Record<string, string[]>;
   onFilterChange?: (groupId: string, value: string, checked: boolean) => void;
   onFilterReset?: () => void;
+  onRangeChange?: (groupId: string, min: string, max: string) => void;
 };
 
 export function FilterSidebar({
@@ -36,7 +38,12 @@ export function FilterSidebar({
   selectedFilters = {},
   onFilterChange,
   onFilterReset,
+  onRangeChange,
 }: FilterSidebarProps) {
+  const [rangeValues, setRangeValues] = useState<
+    Record<string, { min: string; max: string }>
+  >({});
+
   return (
     <aside className={cn("bg-card shadow-soft rounded-lg border", className)}>
       <div className="flex items-center justify-between gap-2 border-b p-4">
@@ -135,14 +142,38 @@ export function FilterSidebar({
                   type="number"
                   placeholder="Min"
                   className="h-8 text-xs"
+                  value={rangeValues[group.id]?.min || ""}
+                  onChange={(e) =>
+                    setRangeValues((prev) => ({
+                      ...prev,
+                      [group.id]: { ...prev[group.id], min: e.target.value },
+                    }))
+                  }
                 />
                 <span className="text-muted-foreground">-</span>
                 <Input
                   type="number"
                   placeholder="Max"
                   className="h-8 text-xs"
+                  value={rangeValues[group.id]?.max || ""}
+                  onChange={(e) =>
+                    setRangeValues((prev) => ({
+                      ...prev,
+                      [group.id]: { ...prev[group.id], max: e.target.value },
+                    }))
+                  }
                 />
-                <Button size="sm" className="h-8 px-3">
+                <Button
+                  size="sm"
+                  className="h-8 px-3"
+                  onClick={() =>
+                    onRangeChange?.(
+                      group.id,
+                      rangeValues[group.id]?.min || "",
+                      rangeValues[group.id]?.max || "",
+                    )
+                  }
+                >
                   Go
                 </Button>
               </div>

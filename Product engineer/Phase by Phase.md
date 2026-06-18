@@ -298,6 +298,10 @@ book upload
 
 ---
 
+
+
+---
+
 # Phase 11 — Borrow System
 
 - [ ] Membership
@@ -323,7 +327,19 @@ book upload
 
 ---
 
-# Phase 13 — Community
+# Phase 13 — Central Library
+
+- [ ] Central Library Landing Page
+- [ ] BoiMix Verified Inventory Listing
+- [ ] Official Library Book Details (Verified Tag)
+- [ ] Direct Buy Official Books
+- [ ] Borrow from Central Library
+- [ ] Library Memberships & Subscription Info
+- [ ] Library Search & Advanced Filters
+- [ ] Recommended & Featured Collections
+- [ ] Book Donation / Contribution Guide
+
+# Phase 14 — Community
 
 - [ ] Feed
 - [ ] Create Post
@@ -334,7 +350,7 @@ book upload
 
 ---
 
-# Phase 14 — Messaging
+# Phase 15 — Messaging
 
 - [ ] Conversation List
 - [ ] Chat Window
@@ -344,7 +360,7 @@ book upload
 
 ---
 
-# Phase 15 — Notifications
+# Phase 16 — Notifications
 
 - [ ] Notification Center
 - [ ] Unread
@@ -353,7 +369,7 @@ book upload
 
 ---
 
-# Phase 16 — Moderator Panel
+# Phase 17 — Moderator Panel
 
 - [ ] Dashboard
 - [ ] Reports
@@ -365,7 +381,7 @@ book upload
 
 ---
 
-# Phase 17 — Admin Panel
+# Phase 18 — Admin Panel
 
 - [ ] Dashboard
 - [ ] Users
@@ -386,7 +402,7 @@ book upload
 
 ---
 
-# Phase 18 — Final Polish
+# Phase 19 — Final Polish
 
 - [ ] Responsive Design
 - [ ] Dark Mode (Optional)
