@@ -198,10 +198,17 @@ export function BookListing({
   const [books, setBooks] = useState<BookCardBook[]>(MOCK_BOOKS);
   const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
+  const [sortBy, setSortBy] = useState("newest");
+  const [hasMore, setHasMore] = useState(true);
+
   const loadMoreRef = useRef<HTMLDivElement>(null);
-  const isIntersecting = useIntersectionObserver(loadMoreRef);
+  const pageCountRef = useRef(1);
+  const isIntersecting = useIntersectionObserver(loadMoreRef, {
+    rootMargin: "400px",
+  });
 
   const loadMoreBooks = useCallback(() => {
+    if (!hasMore) return;
     setIsLoading(true);
     // Simulate API delay
     setTimeout(() => {
@@ -212,16 +219,37 @@ export function BookListing({
           id: book.id + "-" + Date.now() + Math.random(),
         })),
       ]);
+      pageCountRef.current += 1;
+      if (pageCountRef.current >= 3) {
+        setHasMore(false);
+      }
       setIsLoading(false);
-    }, 1000);
-  }, []);
+    }, 300);
+  }, [hasMore]);
 
   useEffect(() => {
-    if (isIntersecting && !isLoading) {
+    if (isIntersecting && !isLoading && hasMore) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       loadMoreBooks();
     }
-  }, [isIntersecting, isLoading, loadMoreBooks]);
+  }, [isIntersecting, isLoading, loadMoreBooks, hasMore]);
+
+  // Derived state for filtering and sorting
+  const filteredBooks = books
+    .filter((book) => {
+      if (!searchQuery) return true;
+      const lowerQ = searchQuery.toLowerCase();
+      return (
+        book.title.toLowerCase().includes(lowerQ) ||
+        book.author.toLowerCase().includes(lowerQ)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
+      if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
+      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
+      return 0; // default / newest / distance mocked
+    });
 
   return (
     <div className="boimix-container py-6 md:py-8">
@@ -262,7 +290,7 @@ export function BookListing({
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-muted-foreground text-sm">
               <span className="text-foreground font-semibold">
-                {books.length}
+                {filteredBooks.length}
               </span>{" "}
               টি বই পাওয়া গেছে
             </p>
@@ -270,7 +298,7 @@ export function BookListing({
               <span className="text-muted-foreground text-sm whitespace-nowrap">
                 সর্ট করুন:
               </span>
-              <Select defaultValue="newest">
+              <Select value={sortBy} onValueChange={setSortBy}>
                 <SelectTrigger className="w-[160px] bg-transparent">
                   <SelectValue />
                 </SelectTrigger>
@@ -287,22 +315,40 @@ export function BookListing({
 
           {/* Book Grid */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {books.map((book) => (
-              <BookCard key={book.id} book={book} />
-            ))}
+            {filteredBooks.length > 0 ? (
+              filteredBooks.map((book) => (
+                <BookCard key={book.id} book={book} />
+              ))
+            ) : (
+              <div className="text-muted-foreground col-span-full py-12 text-center">
+                কোনো বই পাওয়া যায়নি। আবার চেষ্টা করুন।
+              </div>
+            )}
           </div>
 
           {/* Infinite Scroll trigger */}
-          <div ref={loadMoreRef} className="mt-12 flex justify-center pb-12">
-            {isLoading ? (
-              <div className="text-primary flex items-center gap-2">
-                <Loader2 className="size-5 animate-spin" />
-                <span className="text-sm font-medium">আরও বই লোড হচ্ছে...</span>
-              </div>
-            ) : (
-              <p className="text-muted-foreground text-sm">স্ক্রল করতে থাকুন</p>
-            )}
-          </div>
+          {hasMore ? (
+            <div ref={loadMoreRef} className="mt-12 flex justify-center pb-12">
+              {isLoading ? (
+                <div className="text-primary flex items-center gap-2">
+                  <Loader2 className="size-5 animate-spin" />
+                  <span className="text-sm font-medium">
+                    আরও বই লোড হচ্ছে...
+                  </span>
+                </div>
+              ) : (
+                <p className="text-muted-foreground text-sm">
+                  স্ক্রল করতে থাকুন
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="mt-12 flex justify-center pb-12">
+              <p className="text-muted-foreground text-sm">
+                সব বই দেখানো হয়েছে
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
