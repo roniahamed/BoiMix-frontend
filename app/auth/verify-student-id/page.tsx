@@ -92,21 +92,16 @@ export default function VerifyStudentIdPage() {
           )}
         </div>
 
-        <div className="space-y-4">
-          <Label>আইডি কার্ডের ছবি (সামনের ও পিছনের অংশ)</Label>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-muted hover:border-primary flex h-32 cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border-2 border-dashed border-gray-300 transition-colors">
-              <UploadCloud className="text-muted-foreground size-6" />
-              <span className="text-muted-foreground text-xs font-medium">
-                সামনের ছবি
-              </span>
-            </div>
-            <div className="bg-muted hover:border-primary flex h-32 cursor-pointer flex-col items-center justify-center space-y-2 rounded-lg border-2 border-dashed border-gray-300 transition-colors">
-              <UploadCloud className="text-muted-foreground size-6" />
-              <span className="text-muted-foreground text-xs font-medium">
-                পিছনের ছবি
-              </span>
-            </div>
+        <div className="space-y-2">
+          <Label>আইডি কার্ডের ছবি</Label>
+          <div className="bg-muted hover:border-primary flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-300 py-8 transition-colors">
+            <UploadCloud className="text-muted-foreground mb-3 size-10" />
+            <p className="text-muted-foreground text-sm font-medium">
+              ক্লিক করে ছবি আপলোড করুন
+            </p>
+            <p className="text-muted-foreground mt-1 text-xs">
+              (JPG, PNG. সর্বোচ্চ 5MB)
+            </p>
           </div>
         </div>
 
@@ -117,7 +112,7 @@ export default function VerifyStudentIdPage() {
               আপলোড হচ্ছে...
             </>
           ) : (
-            "ভেরিফাইয়ের জন্য পাঠান"
+            "ভেরিফিকেশনের জন্য পাঠান"
           )}
         </Button>
       </form>

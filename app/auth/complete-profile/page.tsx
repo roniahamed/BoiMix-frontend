@@ -36,7 +36,7 @@ export default function CompleteProfilePage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(data);
     setIsLoading(false);
-    router.push("/auth/verify-student-id");
+    router.push("/auth/choose-language");
   };
 
   return (
@@ -44,7 +44,7 @@ export default function CompleteProfilePage() {
       <div className="flex flex-col space-y-2 text-center">
         <h1 className="type-heading text-3xl">প্রোফাইল সম্পূর্ণ করুন</h1>
         <p className="text-muted-foreground text-sm">
-          আপনার সম্পর্কে আরও কিছু তথ্য দিন যাতে অন্যরা আপনাকে চিনতে পারে
+          আপনার সম্পর্কে আরও কিছু তথ্য দিন
         </p>
       </div>
 
@@ -60,7 +60,7 @@ export default function CompleteProfilePage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">এলাকা / জেলা</Label>
+          <Label htmlFor="location">এলাকা</Label>
           <div className="relative">
             <MapPin className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
             <Input
@@ -82,7 +82,7 @@ export default function CompleteProfilePage() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="bio">আপনার সম্পর্কে (অপশনাল)</Label>
+          <Label htmlFor="bio">আপনার সম্পর্কে (ঐচ্ছিক)</Label>
           <Input
             id="bio"
             placeholder="আপনার প্রিয় বই বা শখ সম্পর্কে লিখুন..."
@@ -105,7 +105,7 @@ export default function CompleteProfilePage() {
       <div className="text-center">
         <button
           type="button"
-          onClick={() => router.push("/auth/verify-student-id")}
+          onClick={() => router.push("/auth/choose-language")}
           className="text-muted-foreground hover:text-primary text-sm font-medium underline-offset-4 hover:underline"
         >
           এখন স্কিপ করুন

@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const otpSchema = z.object({
   otp: z.string().length(6, "সঠিক ৬ ডিজিটের ওটিপি দিন"),
@@ -54,28 +55,33 @@ export default function VerifyOtpPage() {
   return (
     <div className="flex flex-col space-y-6">
       <div className="flex flex-col space-y-2 text-center">
-        <h1 className="type-heading text-3xl">ভেরিফিকেশন কোড</h1>
+        <h1 className="type-heading text-3xl">ওটিপি ভেরিফিকেশন</h1>
         <p className="text-muted-foreground text-sm">
-          আপনার ইমেইলে পাঠানো ৬ ডিজিটের কোডটি দিন
+          আপনার ইমেইলে পাঠানো ৬-ডিজিটের কোডটি এখানে লিখুন
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="space-y-2 text-center">
-          <Input
-            id="otp"
-            type="text"
-            placeholder="• • • • • •"
-            maxLength={6}
-            {...register("otp")}
-            className={`mx-auto max-w-[250px] text-center text-2xl font-bold tracking-[1em] ${
-              errors.otp
-                ? "border-destructive focus-visible:ring-destructive"
-                : ""
-            }`}
-          />
+        <div className="space-y-2">
+          <Label htmlFor="otp">ভেরিফিকেশন কোড</Label>
+          <div className="flex justify-center">
+            <Input
+              id="otp"
+              type="text"
+              placeholder="• • • • • •"
+              maxLength={6}
+              {...register("otp")}
+              className={`mx-auto max-w-[250px] text-center text-2xl font-bold tracking-[1em] ${
+                errors.otp
+                  ? "border-destructive focus-visible:ring-destructive"
+                  : ""
+              }`}
+            />
+          </div>
           {errors.otp && (
-            <p className="text-destructive text-sm">{errors.otp.message}</p>
+            <p className="text-destructive text-center text-sm">
+              {errors.otp.message}
+            </p>
           )}
         </div>
 
@@ -91,11 +97,13 @@ export default function VerifyOtpPage() {
         </Button>
       </form>
 
-      <div className="text-muted-foreground text-center text-sm">
+      <div className="text-center text-sm">
         {timeLeft > 0 ? (
-          <p>পুনরায় কোড পাঠানো যাবে {timeLeft} সেকেন্ড পর</p>
+          <p className="text-muted-foreground">
+            পুনরায় কোড পাঠানো যাবে {timeLeft} সেকেন্ড পর
+          </p>
         ) : (
-          <p>
+          <p className="text-muted-foreground">
             কোড পাননি?{" "}
             <button
               onClick={handleResend}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm, useWatch } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
@@ -61,18 +61,12 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     setValue,
-    control,
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
       termsAccepted: false,
     },
-  });
-
-  const termsAccepted = useWatch({
-    control,
-    name: "termsAccepted",
   });
 
   const onSubmit = async (data: RegisterFormValues) => {
@@ -185,21 +179,18 @@ export default function RegisterPage() {
           )}
         </div>
 
-        <div className="flex flex-row items-start space-y-0 space-x-3 py-2">
-          <Checkbox
-            id="termsAccepted"
-            checked={termsAccepted}
-            onCheckedChange={(checked) =>
-              setValue("termsAccepted", checked as boolean, {
-                shouldValidate: true,
-              })
-            }
-            className={errors.termsAccepted ? "border-destructive" : ""}
-          />
-          <div className="space-y-1 leading-none">
+        <div className="space-y-2">
+          <div className="flex items-start space-x-3">
+            <Checkbox
+              id="termsAccepted"
+              className="mt-1"
+              onCheckedChange={(checked) =>
+                setValue("termsAccepted", checked as boolean)
+              }
+            />
             <Label
               htmlFor="termsAccepted"
-              className="text-muted-foreground text-sm font-normal"
+              className="text-muted-foreground block text-sm leading-snug font-normal"
             >
               আমি BoiMix-এর{" "}
               <Link href="/terms" className="text-primary hover:underline">
@@ -211,12 +202,12 @@ export default function RegisterPage() {
               </Link>{" "}
               মেনে নিচ্ছি।
             </Label>
-            {errors.termsAccepted && (
-              <p className="text-destructive text-xs">
-                {errors.termsAccepted.message}
-              </p>
-            )}
           </div>
+          {errors.termsAccepted && (
+            <p className="text-destructive text-sm">
+              {errors.termsAccepted.message}
+            </p>
+          )}
         </div>
 
         <Button type="submit" className="w-full" disabled={isLoading}>
