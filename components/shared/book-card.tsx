@@ -4,6 +4,7 @@ import {
   BadgeCheckIcon,
   BookOpenIcon,
   CheckCircle2Icon,
+  LibraryIcon,
   Repeat2Icon,
   ShoppingCartIcon,
   StarIcon,
@@ -118,10 +119,16 @@ export function BookCard({ book, className }: BookCardProps) {
               </Link>
               <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[0.7rem]">
                 <span className="truncate">{book.author}</span>
-                {book.isVerifiedLibrary && (
+                {book.providerType === "library" && (
+                  <LibraryIcon
+                    className="text-primary size-3.5 shrink-0"
+                    aria-label="Central Library"
+                  />
+                )}
+                {book.providerType === "user" && book.isVerifiedUser && (
                   <BadgeCheckIcon
                     className="text-primary size-3.5 shrink-0"
-                    aria-label="Verified library"
+                    aria-label="Verified User"
                   />
                 )}
               </div>
@@ -129,19 +136,22 @@ export function BookCard({ book, className }: BookCardProps) {
             <div className="text-muted-foreground grid gap-0.5 text-[0.68rem]">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 font-medium">
-                  <StarIcon
-                    className={cn(
-                      "size-3.5",
-                      book.rating > 0
-                        ? "fill-amber-500 text-amber-500"
-                        : "text-muted-foreground opacity-50",
+                  <div className="relative inline-block h-3.5 w-3.5 shrink-0">
+                    <StarIcon className="text-muted-foreground absolute inset-0 size-3.5 opacity-30" />
+                    {book.rating > 0 && (
+                      <div
+                        className="absolute inset-0 overflow-hidden"
+                        style={{ width: `${(book.rating / 5) * 100}%` }}
+                      >
+                        <StarIcon className="size-3.5 fill-amber-500 text-amber-500" />
+                      </div>
                     )}
-                  />
-                  <span className="text-foreground">
-                    {book.rating > 0 ? book.rating : "No rating"}
-                  </span>
+                  </div>
                   {book.rating > 0 && (
-                    <span className="opacity-70">({book.reviewCount})</span>
+                    <>
+                      <span className="text-foreground">{book.rating}</span>
+                      <span className="opacity-70">({book.reviewCount})</span>
+                    </>
                   )}
                 </div>
                 {book.distance && (

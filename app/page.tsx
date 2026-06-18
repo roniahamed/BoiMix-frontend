@@ -224,7 +224,7 @@ const featuredBooks: BookCardBook[] = [
     location: "Dhanmondi",
     condition: "excellent",
     availability: "in-stock",
-    isVerifiedLibrary: true,
+    providerType: "library",
   },
   {
     id: "borrowed-light",
@@ -240,7 +240,7 @@ const featuredBooks: BookCardBook[] = [
     condition: "good",
     availability: "in-stock",
     isWishlisted: true,
-    isVerifiedLibrary: true,
+    providerType: "library",
   },
   {
     id: "swap-stories",
@@ -429,6 +429,8 @@ const featuredBooks: BookCardBook[] = [
     reviewCount: 110,
     price: 320,
     originalPrice: 400,
+    providerType: "user",
+    isVerifiedUser: true,
     location: "Banani",
     condition: "new",
     availability: "in-stock",
@@ -781,7 +783,7 @@ function BookSection({
 
 function CentralLibrarySection() {
   const books = featuredBooks
-    .filter((b) => b.isVerifiedLibrary || b.tags.includes("borrow"))
+    .filter((b) => b.providerType === "library" || b.tags.includes("borrow"))
     .slice(0, 12);
 
   return (

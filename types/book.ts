@@ -21,7 +21,8 @@ export type BookCardBook = {
   availability: BookAvailabilityStatus;
   isWishlisted?: boolean;
   isInCart?: boolean;
-  isVerifiedLibrary?: boolean;
+  providerType?: "library" | "user";
+  isVerifiedUser?: boolean;
 };
 
 export type BookGalleryImage = {
