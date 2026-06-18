@@ -366,281 +366,201 @@ export default function BookUploadPage() {
             <div>
               <SectionTitle
                 title="Availability"
-                desc="(Select all that apply)"
+                desc="Choose how you want to offer this book"
               />
-              <div className="grid gap-4 md:grid-cols-3">
-                {/* Sell Card */}
-                <div
-                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${forSell ? "border-success bg-success/5" : "hover:bg-muted/50"}`}
-                  onClick={() =>
-                    setValue("availabilityMode", "sell", {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex gap-3">
-                      <div className="bg-success/10 text-success flex h-8 w-8 items-center justify-center rounded-full">
-                        <Tag className="fill-success h-4 w-4" />
-                      </div>
-                      <div>
-                        <h3
-                          className={`font-semibold ${forSell ? "text-success" : ""}`}
-                        >
-                          Sell
-                        </h3>
-                        <p className="text-muted-foreground mt-0.5 text-xs">
-                          List this book for sale
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${forSell ? "border-success bg-success text-white" : "border-muted-foreground/30"}`}
+              <div className="space-y-6">
+                <Controller
+                  control={control}
+                  name="availabilityMode"
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || undefined}
                     >
-                      {forSell && <CheckCircle2 className="h-4 w-4" />}
-                    </div>
-                  </div>
+                      <SelectTrigger className="bg-background w-full md:w-[300px]">
+                        <SelectValue placeholder="Select Availability Option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sell">
+                          Sell (List for sale)
+                        </SelectItem>
+                        <SelectItem value="borrow">
+                          Borrow (Allow others to borrow)
+                        </SelectItem>
+                        <SelectItem value="swap">
+                          Swap (Swap this book)
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
 
-                  {forSell && (
-                    <div
-                      className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Selling Price (৳){" "}
-                          <span className="text-destructive">*</span>
-                        </Label>
-                        <Input
-                          type="number"
-                          placeholder="450"
-                          {...register("sellPrice")}
-                          className="bg-background"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Quantity <span className="text-destructive">*</span>
-                        </Label>
-                        <div className="bg-background flex h-10 w-[120px] items-center overflow-hidden rounded-md border">
-                          <button
-                            type="button"
-                            className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
-                            onClick={() => {
-                              const current = parseInt(
-                                getValues("sellQuantity") || "1",
-                              );
-                              if (current > 1)
-                                setValue(
-                                  "sellQuantity",
-                                  (current - 1).toString(),
-                                );
-                            }}
-                          >
-                            -
-                          </button>
-                          <div className="bg-border h-full w-px" />
-                          <input
-                            type="number"
-                            className="w-full [appearance:textfield] bg-transparent text-center text-sm font-medium outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                            {...register("sellQuantity")}
-                          />
-                          <div className="bg-border h-full w-px" />
-                          <button
-                            type="button"
-                            className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
-                            onClick={() => {
-                              const current = parseInt(
-                                getValues("sellQuantity") || "1",
-                              );
+                {forSell && (
+                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 max-w-md space-y-4 rounded-xl border p-4 duration-200">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Selling Price (৳){" "}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        type="number"
+                        placeholder="e.g. 450"
+                        {...register("sellPrice")}
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Quantity <span className="text-destructive">*</span>
+                      </Label>
+                      <div className="bg-background flex h-10 w-[120px] items-center overflow-hidden rounded-md border">
+                        <button
+                          type="button"
+                          className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
+                          onClick={() => {
+                            const current = parseInt(
+                              getValues("sellQuantity") || "1",
+                            );
+                            if (current > 1)
                               setValue(
                                 "sellQuantity",
-                                (current + 1).toString(),
+                                (current - 1).toString(),
                               );
-                            }}
+                          }}
+                        >
+                          -
+                        </button>
+                        <div className="bg-border h-full w-px" />
+                        <input
+                          type="number"
+                          placeholder="e.g. 1"
+                          className="w-full [appearance:textfield] bg-transparent text-center text-sm font-medium outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                          {...register("sellQuantity")}
+                        />
+                        <div className="bg-border h-full w-px" />
+                        <button
+                          type="button"
+                          className="hover:bg-muted text-muted-foreground flex h-full items-center justify-center px-3 text-lg transition-colors"
+                          onClick={() => {
+                            const current = parseInt(
+                              getValues("sellQuantity") || "1",
+                            );
+                            setValue("sellQuantity", (current + 1).toString());
+                          }}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {forBorrow && (
+                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 max-w-md space-y-4 rounded-xl border p-4 duration-200">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Borrow Quantity{" "}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        type="number"
+                        placeholder="e.g. 3"
+                        {...register("borrowQuantity")}
+                        className="bg-background"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Borrow Duration{" "}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <Controller
+                        control={control}
+                        name="borrowDuration"
+                        render={({ field }) => (
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value || undefined}
                           >
-                            +
-                          </button>
-                        </div>
-                      </div>
+                            <SelectTrigger className="bg-background">
+                              <SelectValue placeholder="7 days" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="7">7 days</SelectItem>
+                              <SelectItem value="14">14 days</SelectItem>
+                              <SelectItem value="30">30 days</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
                     </div>
-                  )}
-                </div>
-
-                {/* Borrow Card */}
-                <div
-                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${forBorrow ? "border-primary bg-primary/5" : "hover:bg-muted/50"}`}
-                  onClick={() =>
-                    setValue("availabilityMode", "borrow", {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex gap-3">
-                      <div className="bg-primary/10 text-primary flex h-8 w-8 items-center justify-center rounded-full">
-                        <BookOpen className="fill-primary h-4 w-4" />
-                      </div>
-                      <div>
-                        <h3
-                          className={`font-semibold ${forBorrow ? "text-primary" : ""}`}
-                        >
-                          Borrow
-                        </h3>
-                        <p className="text-muted-foreground mt-0.5 text-xs">
-                          Allow others to borrow
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${forBorrow ? "border-primary bg-primary text-white" : "border-muted-foreground/30"}`}
-                    >
-                      {forBorrow && <CheckCircle2 className="h-4 w-4" />}
-                    </div>
-                  </div>
-
-                  {forBorrow && (
-                    <div
-                      className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Borrow Quantity{" "}
-                          <span className="text-destructive">*</span>
-                        </Label>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Deposit{" "}
+                        <span className="text-muted-foreground font-normal">
+                          (Optional)
+                        </span>
+                      </Label>
+                      <div className="relative">
+                        <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm font-semibold">
+                          ৳
+                        </span>
                         <Input
                           type="number"
-                          placeholder="3"
-                          {...register("borrowQuantity")}
-                          className="bg-background"
+                          placeholder="e.g. 300"
+                          className="bg-background pl-7"
+                          {...register("deposit")}
                         />
                       </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Borrow Duration{" "}
-                          <span className="text-destructive">*</span>
-                        </Label>
-                        <Controller
-                          control={control}
-                          name="borrowDuration"
-                          render={({ field }) => (
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <SelectTrigger className="bg-background">
-                                <SelectValue placeholder="7 days" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="7">7 days</SelectItem>
-                                <SelectItem value="14">14 days</SelectItem>
-                                <SelectItem value="30">30 days</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          )}
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Deposit{" "}
-                          <span className="text-muted-foreground font-normal">
-                            (Optional)
-                          </span>
-                        </Label>
-                        <div className="relative">
-                          <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm font-semibold">
-                            ৳
-                          </span>
-                          <Input
-                            type="number"
-                            placeholder="300"
-                            className="bg-background pl-7"
-                            {...register("deposit")}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* Swap Card */}
-                <div
-                  className={`cursor-pointer rounded-xl border p-4 transition-colors ${forSwap ? "border-warning bg-warning/5" : "hover:bg-muted/50"}`}
-                  onClick={() =>
-                    setValue("availabilityMode", "swap", {
-                      shouldValidate: true,
-                    })
-                  }
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex gap-3">
-                      <div className="bg-warning/10 text-warning flex h-8 w-8 items-center justify-center rounded-full">
-                        <Repeat2 className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <h3
-                          className={`font-semibold ${forSwap ? "text-warning" : ""}`}
-                        >
-                          Swap
-                        </h3>
-                        <p className="text-muted-foreground mt-0.5 text-xs">
-                          Swap this book
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={`flex h-5 w-5 items-center justify-center rounded-full border-2 transition-colors ${forSwap ? "border-warning bg-warning text-white" : "border-muted-foreground/30"}`}
-                    >
-                      {forSwap && <CheckCircle2 className="h-4 w-4" />}
                     </div>
                   </div>
+                )}
 
-                  {forSwap && (
-                    <div className="animate-in fade-in zoom-in-95 mt-6 space-y-4 duration-200">
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Swap Quantity{" "}
-                          <span className="text-destructive">*</span>
-                        </Label>
-                        <Input
-                          type="number"
-                          placeholder="2"
-                          {...register("swapQuantity")}
-                          className="bg-background"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <Label className="text-xs font-semibold">
-                          Swap Preference
-                        </Label>
-                        <Controller
-                          control={control}
-                          name="swapPreference"
-                          render={({ field }) => (
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <SelectTrigger className="bg-background">
-                                <SelectValue placeholder="Any Book" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Any">Any Book</SelectItem>
-                                <SelectItem value="Fiction">
-                                  Fiction only
-                                </SelectItem>
-                                <SelectItem value="Same Value">
-                                  Same Value
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          )}
-                        />
-                      </div>
+                {forSwap && (
+                  <div className="animate-in fade-in zoom-in-95 bg-muted/20 max-w-md space-y-4 rounded-xl border p-4 duration-200">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Swap Quantity{" "}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <Input
+                        type="number"
+                        placeholder="e.g. 1"
+                        {...register("swapQuantity")}
+                        className="bg-background"
+                      />
                     </div>
-                  )}
-                </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-semibold">
+                        Swap Preference{" "}
+                        <span className="text-destructive">*</span>
+                      </Label>
+                      <Controller
+                        control={control}
+                        name="swapPreference"
+                        render={({ field }) => (
+                          <Select
+                            onValueChange={field.onChange}
+                            value={field.value || undefined}
+                          >
+                            <SelectTrigger className="bg-background">
+                              <SelectValue placeholder="Any Book" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Any">Any Book</SelectItem>
+                              <SelectItem value="Fiction">
+                                Fiction only
+                              </SelectItem>
+                              <SelectItem value="Same Value">
+                                Same Value
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        )}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
               {errors.availabilityMode && (
                 <p className="text-destructive mt-3 text-sm">
@@ -676,16 +596,16 @@ export default function BookUploadPage() {
                         />
                         <Label
                           htmlFor={`condition-${c.value}`}
-                          className="flex-1 cursor-pointer"
+                          className="flex flex-1 cursor-pointer flex-row flex-wrap items-center gap-x-2 gap-y-0.5"
                         >
-                          <p
+                          <span
                             className={`text-sm font-semibold ${field.value === c.value ? "text-primary" : ""}`}
                           >
                             {c.label}
-                          </p>
-                          <p className="text-muted-foreground mt-0.5 text-xs leading-tight">
+                          </span>
+                          <span className="text-muted-foreground text-xs leading-tight">
                             {c.desc}
-                          </p>
+                          </span>
                         </Label>
                       </div>
                     ))}
@@ -714,15 +634,12 @@ export default function BookUploadPage() {
                           <RadioGroupItem value="default" id="loc-default" />
                           <Label
                             htmlFor="loc-default"
-                            className="flex-1 cursor-pointer"
+                            className="flex flex-1 cursor-pointer flex-row items-center gap-2"
                           >
                             <span
                               className={`block text-sm font-semibold ${field.value === "default" ? "text-primary" : ""}`}
                             >
                               Use Profile Default Location
-                            </span>
-                            <span className="text-muted-foreground text-xs">
-                              Mirpur 10, Dhaka
                             </span>
                           </Label>
                         </div>
@@ -746,26 +663,11 @@ export default function BookUploadPage() {
                               </span>
                             </Label>
                             {field.value === "custom" && (
-                              <div className="mt-4 space-y-4">
-                                <Input
-                                  placeholder="Enter new address..."
-                                  {...register("locationAddress")}
-                                  className="bg-background"
-                                />
-                                <div className="space-y-2">
-                                  <Label className="text-muted-foreground block text-xs font-semibold">
-                                    Pin on Map (Optional)
-                                  </Label>
-                                  <LocationMap
-                                    lat={getValues("locationLat")}
-                                    lng={getValues("locationLng")}
-                                    onChange={(lat, lng) => {
-                                      setValue("locationLat", lat);
-                                      setValue("locationLng", lng);
-                                    }}
-                                  />
-                                </div>
-                              </div>
+                              <Input
+                                placeholder="Enter new address..."
+                                {...register("locationAddress")}
+                                className="bg-background mt-2"
+                              />
                             )}
                           </div>
                         </div>
@@ -774,14 +676,23 @@ export default function BookUploadPage() {
                   />
                 </div>
 
-                <div className="bg-muted relative flex h-full min-h-[140px] w-full items-center justify-center overflow-hidden rounded-xl border">
-                  <Image
-                    src="https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=800"
-                    alt="Map"
-                    fill
-                    className="object-cover opacity-50"
+                <div className="bg-muted/20 relative h-[200px] w-full overflow-hidden rounded-xl border md:h-auto">
+                  <LocationMap
+                    lat={getValues("locationLat")}
+                    lng={getValues("locationLng")}
+                    onChange={(lat, lng) => {
+                      if (locationType === "custom") {
+                        setValue("locationLat", lat);
+                        setValue("locationLng", lng);
+                      }
+                    }}
                   />
-                  <MapPin className="text-primary relative z-10 h-8 w-8 drop-shadow-md" />
+                  {locationType !== "custom" && (
+                    <div
+                      className="bg-background/20 absolute inset-0 z-[1000] cursor-not-allowed"
+                      title="Select 'Use Different Location' to interact with the map"
+                    />
+                  )}
                 </div>
               </div>
             </div>

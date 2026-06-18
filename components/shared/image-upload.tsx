@@ -1,6 +1,6 @@
 "use client";
 
-import { ImagePlusIcon, RefreshCcw, CheckCircle2 } from "lucide-react";
+import { ImagePlusIcon, RefreshCcw, CheckCircle2, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useId, useMemo } from "react";
 
@@ -57,7 +57,10 @@ export function ImageUpload({
         </div>
       )}
 
-      <div className="bg-muted/20 relative flex min-h-[160px] flex-1 items-center justify-center overflow-hidden rounded-lg">
+      <div
+        className={`bg-muted/20 relative flex min-h-[160px] flex-1 items-center justify-center overflow-hidden rounded-lg ${!imageUrl ? "hover:bg-muted/40 cursor-pointer transition-colors" : ""}`}
+        onClick={() => !imageUrl && document.getElementById(inputId)?.click()}
+      >
         {imageUrl ? (
           <>
             <Image
@@ -67,13 +70,27 @@ export function ImageUpload({
               sizes="320px"
               className="object-cover"
             />
-            <div className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-white">
-              <CheckCircle2 className="text-success fill-success h-6 w-6 text-white" />
+            <div className="absolute top-2 right-2 flex gap-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange?.(null);
+                }}
+                className="text-destructive hover:bg-destructive flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm transition-colors hover:text-white"
+                aria-label="Remove image"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm">
+                <CheckCircle2 className="text-success fill-success h-6 w-6 text-white" />
+              </div>
             </div>
           </>
         ) : (
           <div className="text-muted-foreground flex flex-col items-center gap-2 p-4 text-center">
             <ImagePlusIcon className="h-8 w-8 opacity-20" />
+            <span className="text-xs font-medium">Click to upload</span>
           </div>
         )}
       </div>
