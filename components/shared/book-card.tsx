@@ -185,7 +185,6 @@ export function BookCard({ book, className }: BookCardProps) {
           )}
         </div>
       </div>
-
       {/* Full-card click target (z-10) */}
       <Link
         href={`/books/${book.slug}`}
@@ -194,37 +193,39 @@ export function BookCard({ book, className }: BookCardProps) {
       />
 
       {/* Glassmorphism Hover Overlay over the entire card */}
-      <div className="pointer-events-none absolute inset-0 z-20 hidden flex-col items-center justify-center rounded-md border border-white/20 bg-white/60 p-3 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 md:flex dark:border-white/5 dark:bg-black/65">
-        <div className="flex w-full max-w-[136px] -translate-y-4 transform flex-col items-center justify-center gap-2 transition-transform duration-300 group-hover:translate-y-0">
-          {hasSell && (
-            <Button
-              size="sm"
-              className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
-            >
-              <ShoppingCartIcon className="size-4" />
-              <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
-            </Button>
-          )}
-          {hasBorrow && (
-            <Button
-              size="sm"
-              variant="success"
-              className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
-            >
-              <BookOpenIcon className="size-4" />
-              <span>Borrow Now</span>
-            </Button>
-          )}
-          {hasSwap && (
-            <Button
-              size="sm"
-              variant="outline"
-              className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
-            >
-              <Repeat2Icon className="size-4" />
-              <span>Swap Now</span>
-            </Button>
-          )}
+      <div className="pointer-events-none absolute inset-0 z-20 hidden rounded-md border border-white/20 bg-white/60 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 md:block dark:border-white/5 dark:bg-black/65">
+        <div className="absolute top-2 right-2 left-2 flex aspect-[3/4] flex-col items-center justify-center">
+          <div className="flex w-full max-w-[136px] -translate-y-4 transform flex-col items-center justify-center gap-2 transition-transform duration-300 group-hover:translate-y-0">
+            {hasSell && (
+              <Button
+                size="sm"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+              >
+                <ShoppingCartIcon className="size-4" />
+                <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
+              </Button>
+            )}
+            {hasBorrow && (
+              <Button
+                size="sm"
+                variant="success"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+              >
+                <BookOpenIcon className="size-4" />
+                <span>Borrow Now</span>
+              </Button>
+            )}
+            {hasSwap && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 px-3 text-xs transition-all hover:scale-105 active:scale-95"
+              >
+                <Repeat2Icon className="size-4" />
+                <span>Swap Now</span>
+              </Button>
+            )}
+          </div>
         </div>
         <Link
           href={`/books/${book.slug}`}
