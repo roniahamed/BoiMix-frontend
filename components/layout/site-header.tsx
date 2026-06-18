@@ -47,15 +47,10 @@ export function SiteHeader() {
               <BellIcon />
             </Link>
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="hidden sm:inline-flex"
-            asChild
-          >
+          <Button variant="outline" size="sm" className="inline-flex" asChild>
             <Link href="/auth/login">
-              <UserIcon />
-              Sign in
+              <UserIcon className="mr-0 size-4 sm:mr-2" />
+              <span className="hidden sm:inline">Sign in</span>
             </Link>
           </Button>
         </div>

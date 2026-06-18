@@ -32,4 +32,5 @@ pnpm-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
+test prompt.md
 
