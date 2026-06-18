@@ -211,17 +211,20 @@ Error Handling
 
 # Phase 6 — Authentication
 
-- [ ] Login
-- [ ] Register
-- [ ] OTP Verification
-- [ ] Forgot Password
-- [ ] Reset Password
-- [ ] Complete Profile
-- [ ] Choose Language
+- [x] Login
+- [x] Register
+- [x] OTP Verification
+- [x] Forgot Password
+- [x] Reset Password
+- [x] Complete Profile
+- [x] Choose Language
+- [x] Verify Student ID (Bonus)
 
 ---
 
 # Phase 7 — Book Module
+
+book upload
 
 ## Book Listing
 
