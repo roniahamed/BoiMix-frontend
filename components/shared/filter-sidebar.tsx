@@ -25,9 +25,18 @@ type FilterGroup = {
 type FilterSidebarProps = {
   groups: FilterGroup[];
   className?: string;
+  selectedFilters?: Record<string, string[]>;
+  onFilterChange?: (groupId: string, value: string, checked: boolean) => void;
+  onFilterReset?: () => void;
 };
 
-export function FilterSidebar({ groups, className }: FilterSidebarProps) {
+export function FilterSidebar({
+  groups,
+  className,
+  selectedFilters = {},
+  onFilterChange,
+  onFilterReset,
+}: FilterSidebarProps) {
   return (
     <aside className={cn("bg-card shadow-soft rounded-lg border", className)}>
       <div className="flex items-center justify-between gap-2 border-b p-4">
@@ -39,6 +48,7 @@ export function FilterSidebar({ groups, className }: FilterSidebarProps) {
           type="button"
           variant="ghost"
           size="sm"
+          onClick={onFilterReset}
           className="text-primary h-auto px-2 py-1 text-xs"
         >
           Reset Filter
@@ -70,7 +80,18 @@ export function FilterSidebar({ groups, className }: FilterSidebarProps) {
                     className="text-muted-foreground hover:text-foreground flex cursor-pointer items-center justify-between text-sm font-normal"
                   >
                     <div className="flex items-center gap-2">
-                      <Checkbox />
+                      <Checkbox
+                        checked={selectedFilters[group.id]?.includes(
+                          option.value,
+                        )}
+                        onCheckedChange={(checked) =>
+                          onFilterChange?.(
+                            group.id,
+                            option.value,
+                            checked === true,
+                          )
+                        }
+                      />
                       {option.label}
                     </div>
                     {option.count !== undefined && (
@@ -134,7 +155,18 @@ export function FilterSidebar({ groups, className }: FilterSidebarProps) {
                     key={option.value}
                     className="text-muted-foreground hover:text-foreground flex cursor-pointer items-center gap-2 text-sm font-normal"
                   >
-                    <Checkbox />
+                    <Checkbox
+                      checked={selectedFilters[group.id]?.includes(
+                        option.value,
+                      )}
+                      onCheckedChange={(checked) =>
+                        onFilterChange?.(
+                          group.id,
+                          option.value,
+                          checked === true,
+                        )
+                      }
+                    />
                     <RatingStars
                       rating={Number(option.value)}
                       className="origin-left scale-90"

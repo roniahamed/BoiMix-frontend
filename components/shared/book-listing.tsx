@@ -200,12 +200,34 @@ export function BookListing({
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
   const [sortBy, setSortBy] = useState("newest");
   const [hasMore, setHasMore] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState<
+    Record<string, string[]>
+  >({});
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const pageCountRef = useRef(1);
   const isIntersecting = useIntersectionObserver(loadMoreRef, {
     rootMargin: "400px",
   });
+
+  const handleFilterChange = useCallback(
+    (groupId: string, value: string, checked: boolean) => {
+      setSelectedFilters((prev) => {
+        const groupValues = prev[groupId] || [];
+        if (checked) {
+          return { ...prev, [groupId]: [...groupValues, value] };
+        } else {
+          return { ...prev, [groupId]: groupValues.filter((v) => v !== value) };
+        }
+      });
+    },
+    [],
+  );
+
+  const handleFilterReset = useCallback(() => {
+    setSelectedFilters({});
+    setSearchQuery("");
+  }, []);
 
   const loadMoreBooks = useCallback(() => {
     if (!hasMore) return;
@@ -227,6 +249,15 @@ export function BookListing({
     }, 300);
   }, [hasMore]);
 
+  // Continuous background loading for mock data
+  useEffect(() => {
+    if (!hasMore || isLoading) return;
+    const timer = setTimeout(() => {
+      loadMoreBooks();
+    }, 500); // load next chunk after 500ms automatically
+    return () => clearTimeout(timer);
+  }, [hasMore, isLoading, loadMoreBooks]);
+
   useEffect(() => {
     if (isIntersecting && !isLoading && hasMore) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -237,12 +268,45 @@ export function BookListing({
   // Derived state for filtering and sorting
   const filteredBooks = books
     .filter((book) => {
-      if (!searchQuery) return true;
-      const lowerQ = searchQuery.toLowerCase();
-      return (
-        book.title.toLowerCase().includes(lowerQ) ||
-        book.author.toLowerCase().includes(lowerQ)
-      );
+      // 1. Text Search
+      if (searchQuery) {
+        const lowerQ = searchQuery.toLowerCase();
+        if (
+          !book.title.toLowerCase().includes(lowerQ) &&
+          !book.author.toLowerCase().includes(lowerQ)
+        ) {
+          return false;
+        }
+      }
+
+      // 2. Sidebar Filters
+      for (const [groupId, values] of Object.entries(selectedFilters)) {
+        if (!values || values.length === 0) continue;
+
+        if (groupId === "category") {
+          // mock books don't have a specific genre property yet, but we'll assume they pass for now
+          // Or filter by some property if it exists
+        } else if (groupId === "availability") {
+          // book.tags contains "sell", "swap", "borrow"
+          // Also book.availability can be "in-stock"
+          const hasMatch = values.some(
+            (val) =>
+              (book.tags as string[])?.includes(val) ||
+              book.availability === val,
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "author") {
+          // value is author slug or something, we'll just check if author string includes label roughly
+          // or just accept all since it's mock
+        } else if (groupId === "rating") {
+          const hasMatch = values.some(
+            (val) => Math.floor(book.rating || 0) === Number(val),
+          );
+          if (!hasMatch) return false;
+        }
+      }
+
+      return true;
     })
     .sort((a, b) => {
       if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
@@ -281,7 +345,12 @@ export function BookListing({
       <div className="grid gap-8 lg:grid-cols-[260px_1fr] xl:grid-cols-[280px_1fr]">
         {/* Sidebar Filters (Desktop) */}
         <aside className="hidden lg:block">
-          <FilterSidebar groups={FILTER_GROUPS} />
+          <FilterSidebar
+            groups={FILTER_GROUPS}
+            selectedFilters={selectedFilters}
+            onFilterChange={handleFilterChange}
+            onFilterReset={handleFilterReset}
+          />
         </aside>
 
         {/* Main Content */}
