@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
+import { TagInput } from "@/components/ui/tag-input";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -215,7 +216,7 @@ export default function BookUploadPage() {
     ) {
       const timer = setTimeout(() => {
         fetch(
-          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationAddressWatch)}&format=geojson&countrycodes=bd&addressdetails=1&limit=5`,
+          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddressWatch)}&lat=23.8103&lon=90.4125&limit=5`,
         )
           .then((res) => res.json())
           .then((data) => {
@@ -417,7 +418,7 @@ export default function BookUploadPage() {
                           onValueChange={field.onChange}
                           value={field.value || undefined}
                         >
-                          <SelectTrigger>
+                          <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select Language" />
                           </SelectTrigger>
                           <SelectContent>
@@ -512,7 +513,7 @@ export default function BookUploadPage() {
 
                 {forSell && (
                   <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
-                    <div className="grid items-end gap-6 md:grid-cols-3">
+                    <div className="grid items-start gap-6 md:grid-cols-3">
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Original Price (৳)
@@ -588,7 +589,7 @@ export default function BookUploadPage() {
 
                 {forBorrow && (
                   <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
-                    <div className="grid items-end gap-6 md:grid-cols-3">
+                    <div className="grid items-start gap-6 md:grid-cols-3">
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Borrow Quantity{" "}
@@ -614,7 +615,7 @@ export default function BookUploadPage() {
                               onValueChange={field.onChange}
                               value={field.value || undefined}
                             >
-                              <SelectTrigger className="bg-background">
+                              <SelectTrigger className="bg-background w-full">
                                 <SelectValue placeholder="7 days" />
                               </SelectTrigger>
                               <SelectContent>
@@ -651,7 +652,7 @@ export default function BookUploadPage() {
 
                 {forSwap && (
                   <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
-                    <div className="grid items-end gap-6 md:grid-cols-2">
+                    <div className="grid items-start gap-6 md:grid-cols-2">
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Swap Quantity{" "}
@@ -673,23 +674,18 @@ export default function BookUploadPage() {
                           control={control}
                           name="swapPreference"
                           render={({ field }) => (
-                            <Select
-                              onValueChange={field.onChange}
-                              value={field.value || undefined}
-                            >
-                              <SelectTrigger className="bg-background">
-                                <SelectValue placeholder="Any Book" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="Any">Any Book</SelectItem>
-                                <SelectItem value="Fiction">
-                                  Fiction only
-                                </SelectItem>
-                                <SelectItem value="Same Value">
-                                  Same Value
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <CreatableCombobox
+                              options={[
+                                "Any Book",
+                                "Fiction only",
+                                "Same Value",
+                                "Academic Books",
+                                "Non-Fiction",
+                              ]}
+                              value={field.value || ""}
+                              onChange={field.onChange}
+                              placeholder="e.g. Any Book"
+                            />
                           )}
                         />
                       </div>
@@ -836,18 +832,14 @@ export default function BookUploadPage() {
                                           className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
                                           onMouseDown={(e) => {
                                             e.preventDefault();
-                                            const addr =
-                                              sug.properties.address || {};
+                                            const props = sug.properties || {};
                                             const rawAddressParts = [
-                                              sug.properties.name,
-                                              addr.road,
-                                              addr.neighbourhood,
-                                              addr.suburb || addr.locality,
-                                              addr.city ||
-                                                addr.town ||
-                                                addr.village,
-                                              addr.state,
-                                              addr.country,
+                                              props.name,
+                                              props.street,
+                                              props.locality,
+                                              props.city,
+                                              props.state,
+                                              props.country,
                                             ].filter(Boolean);
                                             const address = Array.from(
                                               new Set(rawAddressParts),
@@ -870,27 +862,19 @@ export default function BookUploadPage() {
                                         >
                                           <div className="font-medium">
                                             {sug.properties.name ||
-                                              (sug.properties.address &&
-                                                sug.properties.address
-                                                  .suburb) ||
+                                              sug.properties.street ||
+                                              sug.properties.locality ||
                                               "Unknown Location"}
                                           </div>
                                           <div className="text-muted-foreground text-xs">
                                             {Array.from(
                                               new Set(
                                                 [
-                                                  sug.properties.address?.road,
-                                                  sug.properties.address
-                                                    ?.suburb ||
-                                                    sug.properties.address
-                                                      ?.locality,
-                                                  sug.properties.address
-                                                    ?.city ||
-                                                    sug.properties.address
-                                                      ?.town,
-                                                  sug.properties.address?.state,
-                                                  sug.properties.address
-                                                    ?.country,
+                                                  sug.properties.street,
+                                                  sug.properties.locality,
+                                                  sug.properties.city,
+                                                  sug.properties.state,
+                                                  sug.properties.country,
                                                 ].filter(Boolean),
                                               ),
                                             ).join(", ")}
@@ -963,13 +947,17 @@ export default function BookUploadPage() {
               <div className="grid gap-5 sm:grid-cols-3">
                 <div className="space-y-2">
                   <Label className="text-xs">Tags</Label>
-                  <Input
-                    placeholder="e.g. Motivational, Best Seller..."
-                    {...register("tags")}
+                  <Controller
+                    control={control}
+                    name="tags"
+                    render={({ field }) => (
+                      <TagInput
+                        value={field.value || ""}
+                        onChange={field.onChange}
+                        placeholder="e.g. Motivational, Best Seller..."
+                      />
+                    )}
                   />
-                  <p className="text-muted-foreground text-xs">
-                    Press Enter to add tags
-                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label className="text-xs">Edition Details</Label>
