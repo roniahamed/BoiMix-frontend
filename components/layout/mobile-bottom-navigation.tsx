@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
 import { mobileBottomNavItems } from "@/lib/navigation";
+import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { cn } from "@/lib/utils";
 
 export function MobileBottomNavigation() {
@@ -22,7 +22,18 @@ export function MobileBottomNavigation() {
               ? pathname === item.href
               : pathname.startsWith(item.href);
 
-          return (
+          return item.href === "#menu" ? (
+            <MobileNavbar key={item.href}>
+              <button
+                className={cn(
+                  "text-muted-foreground flex flex-col items-center justify-center gap-1 text-[0.7rem] font-medium transition-colors",
+                )}
+              >
+                {Icon && <Icon className="size-5" aria-hidden="true" />}
+                <span>{item.title}</span>
+              </button>
+            </MobileNavbar>
+          ) : (
             <Link
               key={item.href}
               href={item.href}

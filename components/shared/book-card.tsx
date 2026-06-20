@@ -77,14 +77,14 @@ export function BookCard({ book, className }: BookCardProps) {
         {/* Info/Metadata Area */}
         <div className="flex flex-1 flex-col p-1.5 pt-1 md:p-2.5 md:pt-1.5">
           <div className="mt-1 flex flex-1 flex-col md:mt-0">
-            <div>
-              <Link
-                href={`/books/${book.slug}`}
-                className="text-foreground hover:text-primary line-clamp-2 text-[15px] leading-tight font-semibold md:text-[14px]"
-              >
-                {book.title}
-              </Link>
-              <div className="text-muted-foreground mt-0.5 flex items-center justify-between gap-1 text-[14px] md:text-[13px]">
+            <Link
+              href={`/books/${book.slug}`}
+              className="text-foreground hover:text-primary line-clamp-2 text-[15px] leading-tight font-semibold md:text-[14px]"
+            >
+              {book.title}
+            </Link>
+            <div className="mt-auto">
+              <div className="text-muted-foreground flex items-center justify-between gap-1 text-[14px] md:text-[13px]">
                 <span className="truncate">{book.author}</span>
                 {book.providerType === "library" && (
                   <LibraryIcon
@@ -99,71 +99,71 @@ export function BookCard({ book, className }: BookCardProps) {
                   />
                 )}
               </div>
-            </div>
-            <div className="text-muted-foreground mt-2 grid gap-0.5 text-[13px] md:text-xs">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1 font-medium">
-                  <div className="relative inline-block h-3.5 w-3.5 shrink-0">
-                    <StarIcon className="text-muted-foreground absolute inset-0 size-3.5 opacity-30" />
+              <div className="text-muted-foreground mt-1.5 grid gap-0.5 text-[13px] md:text-xs">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1 font-medium">
+                    <div className="relative inline-block h-3.5 w-3.5 shrink-0">
+                      <StarIcon className="text-muted-foreground absolute inset-0 size-3.5 opacity-30" />
+                      {book.rating > 0 && (
+                        <div
+                          className="absolute inset-0 overflow-hidden"
+                          style={{ width: `${(book.rating / 5) * 100}%` }}
+                        >
+                          <StarIcon className="size-3.5 fill-amber-500 text-amber-500" />
+                        </div>
+                      )}
+                    </div>
                     {book.rating > 0 && (
-                      <div
-                        className="absolute inset-0 overflow-hidden"
-                        style={{ width: `${(book.rating / 5) * 100}%` }}
-                      >
-                        <StarIcon className="size-3.5 fill-amber-500 text-amber-500" />
-                      </div>
+                      <>
+                        <span className="text-foreground">{book.rating}</span>
+                        <span className="opacity-70">({book.reviewCount})</span>
+                      </>
                     )}
                   </div>
-                  {book.rating > 0 && (
-                    <>
-                      <span className="text-foreground">{book.rating}</span>
-                      <span className="opacity-70">({book.reviewCount})</span>
-                    </>
+                  {book.distance && (
+                    <span className="shrink-0">{book.distance}</span>
                   )}
                 </div>
-                {book.distance && (
-                  <span className="shrink-0">{book.distance}</span>
-                )}
-              </div>
-              <div className="flex min-w-0 items-center justify-between gap-2">
-                <span
-                  className={cn(
-                    "inline-flex shrink-0 items-center gap-1",
-                    book.availability === "in-stock"
-                      ? "text-success"
-                      : "text-danger",
-                  )}
-                >
-                  {book.availability === "in-stock" && (
-                    <CheckCircle2Icon className="size-3" aria-hidden="true" />
-                  )}
-                  {book.availability === "in-stock"
-                    ? "In Stock"
-                    : "Out of Stock"}
-                </span>
-                {book.location && (
-                  <span className="min-w-0 truncate text-right">
-                    {book.location}
+                <div className="flex min-w-0 items-center justify-between gap-2">
+                  <span
+                    className={cn(
+                      "inline-flex shrink-0 items-center gap-1",
+                      book.availability === "in-stock"
+                        ? "text-success"
+                        : "text-danger",
+                    )}
+                  >
+                    {book.availability === "in-stock" && (
+                      <CheckCircle2Icon className="size-3" aria-hidden="true" />
+                    )}
+                    {book.availability === "in-stock"
+                      ? "In Stock"
+                      : "Out of Stock"}
                   </span>
-                )}
-              </div>
-              <div className="flex items-center justify-between gap-2">
-                <span className="min-w-0 truncate capitalize">
-                  {book.condition}
-                </span>
-                {book.price !== undefined && (
-                  <div className="flex shrink-0 items-center gap-1.5">
-                    {book.originalPrice !== undefined &&
-                      book.originalPrice > book.price && (
-                        <span className="text-muted-foreground text-[13px] line-through md:text-[12px]">
-                          ৳{book.originalPrice.toLocaleString("en-BD")}
-                        </span>
-                      )}
-                    <span className="text-accent text-[16px] font-bold md:text-[15px]">
-                      ৳{book.price.toLocaleString("en-BD")}
+                  {book.location && (
+                    <span className="min-w-0 truncate text-right">
+                      {book.location}
                     </span>
-                  </div>
-                )}
+                  )}
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="min-w-0 truncate capitalize">
+                    {book.condition}
+                  </span>
+                  {book.price !== undefined && (
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      {book.originalPrice !== undefined &&
+                        book.originalPrice > book.price && (
+                          <span className="text-muted-foreground text-[13px] line-through md:text-[12px]">
+                            ৳{book.originalPrice.toLocaleString("en-BD")}
+                          </span>
+                        )}
+                      <span className="text-accent text-[16px] font-bold md:text-[15px]">
+                        ৳{book.price.toLocaleString("en-BD")}
+                      </span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>

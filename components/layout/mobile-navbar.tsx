@@ -17,18 +17,22 @@ import {
 } from "@/components/ui/drawer";
 import { primaryNavItems } from "@/lib/navigation";
 
-export function MobileNavbar() {
+export function MobileNavbar({ children }: { children?: React.ReactNode }) {
   return (
     <Drawer direction="left">
       <DrawerTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="lg:hidden"
-          aria-label="Open navigation"
-        >
-          <MenuIcon />
-        </Button>
+        {children ? (
+          children
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            aria-label="Open navigation"
+          >
+            <MenuIcon />
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent className="p-0">
         <DrawerHeader className="border-b text-left">
