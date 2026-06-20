@@ -98,7 +98,9 @@ export function SiteHeader() {
       <div className="boimix-container-wide pt-2 pb-1 md:hidden">
         <SearchBar />
       </div>
-      {!isDetailsPage && <QuickNavBar />}
+      <div className={cn("w-full", isDetailsPage && "max-md:hidden")}>
+        <QuickNavBar />
+      </div>
     </header>
   );
 }

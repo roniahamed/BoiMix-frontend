@@ -253,9 +253,9 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
 
 export default function BookDetailsPage() {
   return (
-    <div className="boimix-container pt-8 pb-24 md:py-12">
-      <div className="bg-card border p-6 shadow-sm lg:p-8">
-        <div className="grid gap-8 lg:grid-cols-12">
+    <div className="boimix-container pt-3 pb-24 md:pt-8 md:pb-12">
+      <div className="bg-card border p-4 shadow-sm sm:p-6 lg:p-8">
+        <div className="grid gap-4 md:gap-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-4 lg:col-start-1">
             <div className="mx-auto max-w-[320px]">
@@ -266,9 +266,9 @@ export default function BookDetailsPage() {
           {/* Right Column: Info & Actions */}
           <div className="flex flex-col justify-between lg:col-span-8 lg:col-start-5">
             <div className="flex flex-col">
-              {/* Header & Badges */}
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-                <div className="flex gap-4">
+              {/* Header Actions & Pricing */}
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-4 md:mb-4">
+                <div className="flex flex-wrap items-center gap-3">
                   {MOCK_BOOK.tags.includes("sell") && (
                     <span className="text-warning text-sm font-semibold">
                       Sell
@@ -284,7 +284,22 @@ export default function BookDetailsPage() {
                       Borrow
                     </span>
                   )}
+
+                  {/* Mobile Pricing (Hidden on Desktop) */}
+                  <div className="ml-1 flex items-center gap-2 border-l pl-3 sm:hidden">
+                    {MOCK_BOOK.tags.includes("sell") && (
+                      <>
+                        <span className="text-accent text-lg leading-none font-bold">
+                          ৳{MOCK_BOOK.price}
+                        </span>
+                        <span className="text-muted-foreground text-xs leading-none line-through">
+                          ৳{MOCK_BOOK.originalPrice}
+                        </span>
+                      </>
+                    )}
+                  </div>
                 </div>
+
                 <BookHeaderActions />
               </div>
 
@@ -339,10 +354,10 @@ export default function BookDetailsPage() {
                 </a>
               </div>
 
-              <hr className="my-4 border-t" />
+              <hr className="my-4 border-t sm:my-6" />
 
-              {/* Pricing & Actions Section */}
-              <div className="space-y-4">
+              {/* Pricing & Actions Section (Hidden on Mobile as price is moved top & button is sticky) */}
+              <div className="hidden space-y-4 sm:block">
                 <div className="mb-4">
                   {MOCK_BOOK.tags.includes("sell") && (
                     <div>
@@ -616,7 +631,7 @@ export default function BookDetailsPage() {
       </div>
 
       {/* Mobile Sticky Action Bar */}
-      <div className="bg-background fixed bottom-0 left-0 z-50 w-full border-t p-3 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] sm:hidden">
+      <div className="bg-background fixed bottom-16 left-0 z-50 w-full border-t p-3 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] sm:hidden">
         <div className="boimix-container flex gap-2">
           {MOCK_BOOK.tags.includes("sell") && (
             <Button className="h-12 flex-1 gap-2 shadow-md">
