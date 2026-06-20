@@ -17,6 +17,8 @@ import {
   DrawerContent,
   DrawerTitle,
   DrawerTrigger,
+  DrawerClose,
+  DrawerFooter,
 } from "@/components/ui/drawer";
 import { FilterSidebar } from "@/components/shared/filter-sidebar";
 import { BookCard } from "@/components/shared/book-card";
@@ -753,6 +755,11 @@ export function BookListing({
                   className="border-none shadow-none"
                 />
               </div>
+              <DrawerFooter className="border-t pt-2 pb-6">
+                <DrawerClose asChild>
+                  <Button className="w-full">এপ্লাই করুন (Close)</Button>
+                </DrawerClose>
+              </DrawerFooter>
             </DrawerContent>
           </Drawer>
         </div>

@@ -15,14 +15,14 @@ import { cn } from "@/lib/utils";
 const actions = [
   {
     title: "Sell Book",
-    href: "/dashboard/books/add?action=sell",
+    href: "/books/upload?action=sell",
     icon: ShoppingCartIcon,
     color:
       "bg-warning text-warning-foreground hover:bg-warning/80 shadow-warning/30",
   },
   {
     title: "Swap Book",
-    href: "/dashboard/books/add?action=swap",
+    href: "/books/upload?action=swap",
     icon: Repeat2Icon,
     color: "bg-info text-info-foreground hover:bg-info/80 shadow-info/30",
   },

@@ -88,9 +88,9 @@ export function FilterSidebar({
                   >
                     <div className="flex items-center gap-2">
                       <Checkbox
-                        checked={selectedFilters[group.id]?.includes(
-                          option.value,
-                        )}
+                        checked={
+                          !!selectedFilters[group.id]?.includes(option.value)
+                        }
                         onCheckedChange={(checked) =>
                           onFilterChange?.(
                             group.id,
