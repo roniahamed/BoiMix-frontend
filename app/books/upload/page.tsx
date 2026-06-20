@@ -174,6 +174,7 @@ export default function BookUploadPage() {
     };
     properties: {
       name: string;
+      street?: string;
       locality?: string;
       city?: string;
       state?: string;
