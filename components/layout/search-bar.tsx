@@ -169,7 +169,7 @@ export function SearchBar({
           }}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
-          className="h-10 rounded-lg pr-8 pl-9"
+          className="h-10 rounded-lg pr-8 pl-9 [&::-webkit-search-cancel-button]:appearance-none"
         />
         {query && (
           <button

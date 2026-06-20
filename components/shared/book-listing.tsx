@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { SlidersHorizontal, Search, Loader2 } from "lucide-react";
+import { SlidersHorizontal, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import {
   Select,
   SelectContent,
@@ -12,6 +12,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { FilterSidebar } from "@/components/shared/filter-sidebar";
 import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook } from "@/types/book";
@@ -728,19 +734,27 @@ export function BookListing({
           </p>
         </div>
         <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row">
-          <div className="relative w-full md:w-80">
-            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="বইয়ের নাম, লেখক বা ISBN..."
-              className="pl-9"
-            />
-          </div>
-          <Button className="shrink-0 gap-2 md:hidden">
-            <SlidersHorizontal className="size-4" />
-            ফিল্টার
-          </Button>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button className="shrink-0 gap-2 md:hidden">
+                <SlidersHorizontal className="size-4" />
+                ফিল্টার
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent className="h-[85vh]">
+              <DrawerTitle className="sr-only">Filters</DrawerTitle>
+              <div className="overflow-y-auto pb-6">
+                <FilterSidebar
+                  groups={FILTER_GROUPS}
+                  selectedFilters={selectedFilters}
+                  onFilterChange={handleFilterChange}
+                  onFilterReset={handleFilterReset}
+                  onRangeChange={handleRangeChange}
+                  className="border-none shadow-none"
+                />
+              </div>
+            </DrawerContent>
+          </Drawer>
         </div>
       </div>
 
