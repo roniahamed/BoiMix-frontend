@@ -14,6 +14,7 @@ import {
   Send,
   FileText,
   Repeat2,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -29,6 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { CreatableCombobox } from "@/components/ui/creatable-combobox";
 import { ImageUploader } from "@/components/shared/image-uploader";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
@@ -98,6 +100,46 @@ const SectionTitle = ({ title, desc }: { title: string; desc?: string }) => (
     {desc && <p className="text-muted-foreground mt-1 text-sm">{desc}</p>}
   </div>
 );
+
+const TITLE_OPTIONS = [
+  "Atomic Habits",
+  "Rivers of Dhaka",
+  "Borrowed Light",
+  "Pather Panchali",
+  "Shesher Kobita",
+];
+const AUTHOR_OPTIONS = [
+  "James Clear",
+  "Nadia Rahman",
+  "Rabindranath Tagore",
+  "Humayun Ahmed",
+  "Kazi Nazrul Islam",
+];
+const PUBLISHER_OPTIONS = [
+  "Penguin Random House",
+  "Prothoma",
+  "Batighor",
+  "Oitijjho",
+  "Adarsha",
+];
+const GENRE_OPTIONS = [
+  "Self Help",
+  "Productivity",
+  "Fiction",
+  "Non-Fiction",
+  "Science Fiction",
+  "Biography",
+  "Business",
+  "Poetry",
+];
+const EDITION_OPTIONS = [
+  "1st Edition",
+  "2nd Edition",
+  "Revised Edition",
+  "Special Edition",
+  "Paperback",
+  "Hardcover",
+];
 
 export default function BookUploadPage() {
   const router = useRouter();
@@ -292,10 +334,18 @@ export default function BookUploadPage() {
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label>Book Title *</Label>
-                    <Input
-                      placeholder="e.g. Atomic Habits"
-                      {...register("title")}
-                      className={errors.title ? "border-destructive" : ""}
+                    <Controller
+                      control={control}
+                      name="title"
+                      render={({ field }) => (
+                        <CreatableCombobox
+                          options={TITLE_OPTIONS}
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="e.g. Atomic Habits"
+                          className={errors.title ? "border-destructive" : ""}
+                        />
+                      )}
                     />
                     {errors.title && (
                       <p className="text-destructive text-xs">
@@ -305,10 +355,18 @@ export default function BookUploadPage() {
                   </div>
                   <div className="space-y-2">
                     <Label>Author *</Label>
-                    <Input
-                      placeholder="e.g. James Clear"
-                      {...register("author")}
-                      className={errors.author ? "border-destructive" : ""}
+                    <Controller
+                      control={control}
+                      name="author"
+                      render={({ field }) => (
+                        <CreatableCombobox
+                          options={AUTHOR_OPTIONS}
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="e.g. James Clear"
+                          className={errors.author ? "border-destructive" : ""}
+                        />
+                      )}
                     />
                     {errors.author && (
                       <p className="text-destructive text-xs">
@@ -321,9 +379,17 @@ export default function BookUploadPage() {
                 <div className="grid items-start gap-6 md:grid-cols-3">
                   <div className="space-y-2">
                     <Label>Publisher</Label>
-                    <Input
-                      placeholder="e.g. Penguin Random House"
-                      {...register("publisher")}
+                    <Controller
+                      control={control}
+                      name="publisher"
+                      render={({ field }) => (
+                        <CreatableCombobox
+                          options={PUBLISHER_OPTIONS}
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="e.g. Penguin Random House"
+                        />
+                      )}
                     />
                   </div>
                   <div className="space-y-2">
@@ -332,21 +398,12 @@ export default function BookUploadPage() {
                       control={control}
                       name="genre"
                       render={({ field }) => (
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value || undefined}
-                        >
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Genre" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Self Help">Self Help</SelectItem>
-                            <SelectItem value="Productivity">
-                              Productivity
-                            </SelectItem>
-                            <SelectItem value="Fiction">Fiction</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <CreatableCombobox
+                          options={GENRE_OPTIONS}
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="Select Genre"
+                        />
                       )}
                     />
                   </div>
@@ -376,9 +433,17 @@ export default function BookUploadPage() {
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label>Edition</Label>
-                    <Input
-                      placeholder="e.g. 1st Edition"
-                      {...register("edition")}
+                    <Controller
+                      control={control}
+                      name="edition"
+                      render={({ field }) => (
+                        <CreatableCombobox
+                          options={EDITION_OPTIONS}
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="e.g. 1st Edition"
+                        />
+                      )}
                     />
                   </div>
                   <div className="space-y-2">
@@ -751,7 +816,20 @@ export default function BookUploadPage() {
                                 />
                                 {showSuggestions &&
                                   locationSuggestions.length > 0 && (
-                                    <div className="bg-popover absolute z-[1000] mt-1 max-h-[200px] w-full overflow-y-auto rounded-md border shadow-md">
+                                    <div className="bg-popover absolute z-[1000] mt-1 max-h-[250px] w-full overflow-y-auto rounded-md border shadow-md">
+                                      <div className="bg-popover/90 sticky top-0 z-10 flex justify-end border-b p-1 backdrop-blur-sm">
+                                        <Button
+                                          variant="ghost"
+                                          size="icon"
+                                          className="h-6 w-6"
+                                          onMouseDown={(e) => {
+                                            e.preventDefault();
+                                            setShowSuggestions(false);
+                                          }}
+                                        >
+                                          <X className="h-4 w-4" />
+                                        </Button>
+                                      </div>
                                       {locationSuggestions.map((sug, i) => (
                                         <div
                                           key={i}
