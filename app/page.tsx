@@ -733,12 +733,12 @@ function CategorySection() {
                 href={category.href}
                 className="group flex w-[76px] shrink-0 flex-col items-center gap-1.5 text-center sm:w-[90px] md:w-[100px]"
               >
-                <div className="group-hover:border-primary border-border bg-card relative h-12 w-12 overflow-hidden rounded-full border transition-all duration-300 group-hover:shadow-sm sm:h-16 sm:w-16 md:h-20 md:w-20">
+                <div className="group-hover:border-primary border-border bg-card relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-[10px] border transition-all duration-300 group-hover:shadow-sm">
                   <Image
                     src={category.image}
                     alt={category.title}
                     fill
-                    sizes="(min-width: 768px) 80px, 48px"
+                    sizes="70px"
                     className="object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
