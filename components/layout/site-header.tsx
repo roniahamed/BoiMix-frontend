@@ -14,41 +14,23 @@ import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   const [isAtTop, setIsAtTop] = useState(true);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      // Update at-top state
-      setIsAtTop(currentScrollY < 20);
-
-      // Determine visibility based on scroll direction
-      if (currentScrollY < 20) {
-        setIsVisible(true);
-      } else if (currentScrollY > lastScrollY) {
-        // Scrolling down
-        setIsVisible(false);
-      } else {
-        // Scrolling up
-        setIsVisible(true);
-      }
-
-      setLastScrollY(currentScrollY);
+      setIsAtTop((prev) => {
+        if (prev && currentScrollY > 80) return false;
+        if (!prev && currentScrollY < 10) return true;
+        return prev;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return (
-    <header
-      className={cn(
-        "bg-card/95 supports-[backdrop-filter]:bg-card/85 sticky top-0 z-40 border-b shadow-xs backdrop-blur transition-transform duration-300 ease-in-out",
-        isVisible ? "translate-y-0" : "-translate-y-full",
-      )}
-    >
+    <header className="bg-card/95 supports-[backdrop-filter]:bg-card/85 sticky top-0 z-40 border-b shadow-xs backdrop-blur">
       <div
         className={cn(
           "boimix-container-wide flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out md:h-16 md:opacity-100",
@@ -104,7 +86,7 @@ export function SiteHeader() {
           </Button>
         </div>
       </div>
-      <div className="boimix-container-wide pb-2 md:hidden">
+      <div className="boimix-container-wide pt-2 pb-1 md:hidden">
         <SearchBar />
       </div>
       <QuickNavBar />

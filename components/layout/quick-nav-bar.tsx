@@ -39,7 +39,7 @@ const quickLinks = [
 
 export function QuickNavBar() {
   return (
-    <div className="bg-card h-[44px] border-b">
+    <div className="h-[36px]">
       <div className="boimix-container-wide h-full">
         <nav
           aria-label="Quick navigation"
