@@ -9,19 +9,23 @@ import {
   Share2,
   Star,
   User,
+  Users,
   Send,
+  ShieldCheck,
+  PhoneCall,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { BookGallery } from "@/components/shared/book-gallery";
-import { UserCard } from "@/components/shared/user-card";
+import { UserBadge } from "@/components/shared/user-badge";
 import { RatingStars } from "@/components/shared/rating-stars";
 import { ReviewCard } from "@/components/shared/review-card";
-import { BadgePill } from "@/components/shared/badge-pill";
+
 import { BookConditionBadge } from "@/components/shared/book-condition-badge";
 import { BookCard } from "@/components/shared/book-card";
 import type { BookCardBook } from "@/types/book";
 import { ReviewForm } from "@/components/shared/review-form";
+import { BookHeaderActions } from "@/components/shared/book-header-actions";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -185,351 +189,354 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
 export default function BookDetailsPage() {
   return (
     <div className="boimix-container pt-8 pb-24 md:py-12">
-      <div className="grid gap-8 lg:grid-cols-12">
-        {/* Left Column: Image Gallery */}
-        <div className="lg:col-span-5 lg:col-start-1">
-          <div className="sticky top-24">
-            <BookGallery images={MOCK_BOOK.images} />
-          </div>
-        </div>
-
-        {/* Right Column: Info & Actions */}
-        <div className="space-y-6 lg:col-span-7 lg:col-start-6">
-          {/* Header & Badges */}
-          <div>
-            <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
-              <div className="flex gap-2">
-                {MOCK_BOOK.tags.includes("sell") && (
-                  <BadgePill tone="warning">Sell</BadgePill>
-                )}
-                {MOCK_BOOK.tags.includes("swap") && (
-                  <BadgePill tone="info">Swap</BadgePill>
-                )}
-                {MOCK_BOOK.tags.includes("borrow") && (
-                  <BadgePill tone="success">Borrow</BadgePill>
-                )}
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-full"
-                >
-                  <Heart className="size-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-muted-foreground hover:text-primary hover:bg-primary/5 rounded-full"
-                >
-                  <Share2 className="size-5" />
-                </Button>
-              </div>
-            </div>
-
-            <h1 className="type-heading mb-2 text-2xl leading-tight md:text-3xl lg:text-4xl">
-              {MOCK_BOOK.title}
-            </h1>
-            <p className="text-muted-foreground mb-4 text-base md:text-lg">
-              লেখক:{" "}
-              <span className="text-foreground font-medium">
-                {MOCK_BOOK.author}
-              </span>
-            </p>
-
-            <div className="flex flex-wrap items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <RatingStars rating={MOCK_BOOK.rating} />
-                <span className="text-muted-foreground text-sm font-medium">
-                  {MOCK_BOOK.rating} ({MOCK_BOOK.reviewCount} Reviews)
-                </span>
-              </div>
-              <span className="text-muted-foreground hidden sm:block">•</span>
-              <BookConditionBadge condition={MOCK_BOOK.condition} />
+      <div className="bg-card border p-6 shadow-sm lg:p-8">
+        <div className="grid gap-8 lg:grid-cols-12">
+          {/* Left Column: Image Gallery */}
+          <div className="lg:col-span-4 lg:col-start-1">
+            <div className="mx-auto max-w-[320px]">
+              <BookGallery images={MOCK_BOOK.images} />
             </div>
           </div>
 
-          <hr className="border-t" />
-
-          {/* Pricing & Actions Box */}
-          <div className="bg-card rounded-2xl border p-5 shadow-sm">
-            <div className="mb-6">
-              {MOCK_BOOK.tags.includes("sell") && (
-                <div>
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    Buy Price
-                  </p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-accent text-3xl font-bold">
-                      ৳{MOCK_BOOK.price}
-                    </p>
-                    <p className="text-muted-foreground mb-1 text-sm line-through">
-                      ৳{MOCK_BOOK.originalPrice}
-                    </p>
-                  </div>
-                  <p className="text-muted-foreground mt-1 text-xs">
-                    {MOCK_BOOK.availability.sell} copy available
-                  </p>
-                </div>
-              )}
-              {MOCK_BOOK.tags.includes("swap") && (
-                <div>
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    Estimated Swap Value
-                  </p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-foreground text-3xl font-bold">
-                      ৳{MOCK_BOOK.swapPrice}
-                    </p>
-                  </div>
-                  <p className="text-muted-foreground mt-1 text-xs">
-                    Depends on book condition
-                  </p>
-                </div>
-              )}
-              {MOCK_BOOK.tags.includes("borrow") && (
-                <div>
-                  <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                    Borrow Cost
-                  </p>
-                  <div className="flex items-end gap-2">
-                    <p className="text-success text-3xl font-bold">Free</p>
-                  </div>
-                  <p className="text-muted-foreground mt-1 text-xs">
-                    Library members only
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* Desktop Actions (Hidden on Mobile) */}
-            <div className="hidden sm:block">
-              {MOCK_BOOK.tags.includes("sell") && (
-                <Button className="h-12 w-full gap-2 text-base">
-                  <ShoppingCart className="size-5" />
-                  Add to Cart
-                </Button>
-              )}
-              {MOCK_BOOK.tags.includes("swap") && (
-                <Button className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-full gap-2 text-base">
-                  <Repeat2 className="size-5" />
-                  Swap Request
-                </Button>
-              )}
-              {MOCK_BOOK.tags.includes("borrow") && (
-                <Button
-                  variant="success"
-                  className="h-12 w-full gap-2 text-base"
-                >
-                  <BookOpen className="size-5" />
-                  Borrow Book
-                </Button>
-              )}
-            </div>
-          </div>
-
-          {/* Uploader / Location Summary */}
-          <div className="bg-muted/30 rounded-2xl border p-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src={MOCK_OWNER.avatarUrl}
-                  alt={MOCK_OWNER.name}
-                  className="h-10 w-10 rounded-full border bg-white"
-                />
-                <div>
-                  <p className="text-sm font-medium">
-                    Uploaded by{" "}
-                    <span className="text-primary font-semibold">
-                      {MOCK_OWNER.name}
+          {/* Right Column: Info & Actions */}
+          <div className="flex flex-col justify-between lg:col-span-8 lg:col-start-5">
+            <div className="space-y-6">
+              {/* Header & Badges */}
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+                <div className="flex gap-4">
+                  {MOCK_BOOK.tags.includes("sell") && (
+                    <span className="text-warning text-sm font-semibold">
+                      Sell
                     </span>
-                  </p>
-                  <div className="text-muted-foreground mt-0.5 flex items-center gap-1 text-xs">
-                    <MapPin className="size-3" />
-                    {MOCK_BOOK.location} ({MOCK_BOOK.distance})
+                  )}
+                  {MOCK_BOOK.tags.includes("swap") && (
+                    <span className="text-info text-sm font-semibold">
+                      Swap
+                    </span>
+                  )}
+                  {MOCK_BOOK.tags.includes("borrow") && (
+                    <span className="text-success text-sm font-semibold">
+                      Borrow
+                    </span>
+                  )}
+                </div>
+                <BookHeaderActions />
+              </div>
+
+              <h1 className="type-heading mb-2 text-2xl leading-tight md:text-3xl lg:text-4xl">
+                {MOCK_BOOK.title}
+              </h1>
+              <p className="text-muted-foreground mb-4 text-base md:text-lg">
+                লেখক:{" "}
+                <span className="text-foreground font-medium">
+                  {MOCK_BOOK.author}
+                </span>
+              </p>
+
+              <div className="mb-4 flex flex-col gap-2">
+                <div className="flex flex-wrap items-center gap-4">
+                  <div className="flex items-center gap-1.5">
+                    <RatingStars rating={MOCK_BOOK.rating} />
+                    <span className="text-muted-foreground text-sm font-medium">
+                      {MOCK_BOOK.rating}{" "}
+                      <a
+                        href="#reviews"
+                        className="hover:text-primary transition-colors hover:underline"
+                      >
+                        ({MOCK_BOOK.reviewCount} Reviews)
+                      </a>
+                    </span>
                   </div>
                 </div>
+                <p className="text-muted-foreground text-sm font-medium">
+                  Condition:{" "}
+                  <a
+                    href={`/explore?condition=${MOCK_BOOK.condition}`}
+                    className="text-primary capitalize hover:underline"
+                  >
+                    {MOCK_BOOK.condition}
+                  </a>
+                </p>
               </div>
-              <Button variant="outline" size="sm" className="shrink-0 gap-2">
-                <MessageCircle className="size-4" />
-                Contact Uploader
-              </Button>
-            </div>
-          </div>
 
-          {/* Stats Summary */}
-          <div className="flex gap-6 pt-2">
-            <div>
-              <p className="text-muted-foreground text-xs font-medium uppercase">
-                Borrowed
-              </p>
-              <p className="font-semibold">{MOCK_BOOK.totalBorrow} times</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs font-medium uppercase">
-                Sold
-              </p>
-              <p className="font-semibold">{MOCK_BOOK.totalSell} times</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground text-xs font-medium uppercase">
-                Swapped
-              </p>
-              <p className="font-semibold">{MOCK_BOOK.totalSwap} times</p>
+              <div className="text-muted-foreground mt-4 flex items-center gap-2 text-sm font-medium">
+                <Users className="text-primary size-4" />
+                ১২০ জনের পছন্দের তালিকায় আছে
+              </div>
+
+              <div className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
+                ক্যাটাগরি:{" "}
+                <a
+                  href={`/explore?category=${encodeURIComponent(MOCK_BOOK.genre)}`}
+                  className="text-primary font-medium hover:underline"
+                >
+                  {MOCK_BOOK.genre}
+                </a>
+              </div>
+
+              <hr className="my-6 border-t" />
+
+              {/* Pricing & Actions Section */}
+              <div className="space-y-6">
+                <div className="mb-6">
+                  {MOCK_BOOK.tags.includes("sell") && (
+                    <div>
+                      <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                        Buy Price
+                      </p>
+                      <div className="flex items-end gap-2">
+                        <p className="text-accent text-3xl font-bold">
+                          ৳{MOCK_BOOK.price}
+                        </p>
+                        <p className="text-muted-foreground mb-1 text-sm line-through">
+                          ৳{MOCK_BOOK.originalPrice}
+                        </p>
+                      </div>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        {MOCK_BOOK.availability.sell} copy available
+                      </p>
+                    </div>
+                  )}
+                  {MOCK_BOOK.tags.includes("swap") && (
+                    <div>
+                      <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                        Estimated Swap Value
+                      </p>
+                      <div className="flex items-end gap-2">
+                        <p className="text-foreground text-3xl font-bold">
+                          ৳{MOCK_BOOK.swapPrice}
+                        </p>
+                      </div>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        Depends on book condition
+                      </p>
+                    </div>
+                  )}
+                  {MOCK_BOOK.tags.includes("borrow") && (
+                    <div>
+                      <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
+                        Borrow Cost
+                      </p>
+                      <div className="flex items-end gap-2">
+                        <p className="text-success text-3xl font-bold">Free</p>
+                      </div>
+                      <p className="text-muted-foreground mt-1 text-xs">
+                        Library members only
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Desktop Actions (Hidden on Mobile) */}
+                <div className="hidden sm:block">
+                  {MOCK_BOOK.tags.includes("sell") && (
+                    <Button className="h-12 w-full gap-2 text-base">
+                      <ShoppingCart className="size-5" />
+                      Add to Cart
+                    </Button>
+                  )}
+                  {MOCK_BOOK.tags.includes("swap") && (
+                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-full gap-2 text-base">
+                      <Repeat2 className="size-5" />
+                      Swap Request
+                    </Button>
+                  )}
+                  {MOCK_BOOK.tags.includes("borrow") && (
+                    <Button
+                      variant="success"
+                      className="h-12 w-full gap-2 text-base"
+                    >
+                      <BookOpen className="size-5" />
+                      Borrow Book
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <hr className="my-12 border-t" />
-
       {/* Details Section (Full Width Below) */}
-      <div className="grid gap-12 lg:grid-cols-12">
-        <div className="space-y-12 lg:col-span-8 lg:col-start-1">
-          {/* Summary */}
-          <div>
-            <h3 className="type-heading mb-4 text-xl">সারাংশ (Summary)</h3>
-            <p className="text-muted-foreground text-justify leading-relaxed">
-              {MOCK_BOOK.description}
-            </p>
-          </div>
-
-          {/* Specifications */}
-          <div>
-            <h3 className="type-heading mb-4 text-xl">
-              বইয়ের বিস্তারিত তথ্য (Specifications)
-            </h3>
-            <div className="overflow-hidden rounded-xl border text-sm">
-              <div className="bg-muted/30 grid grid-cols-3 border-b">
-                <div className="text-muted-foreground p-3 font-medium">
-                  প্রকাশক
-                </div>
-                <div className="col-span-2 p-3 font-medium">
-                  {MOCK_BOOK.publisher}
-                </div>
-              </div>
-              <div className="grid grid-cols-3 border-b">
-                <div className="text-muted-foreground p-3 font-medium">
-                  ক্যাটাগরি
-                </div>
-                <div className="col-span-2 p-3 font-medium">
-                  {MOCK_BOOK.genre}
-                </div>
-              </div>
-              <div className="bg-muted/30 grid grid-cols-3 border-b">
-                <div className="text-muted-foreground p-3 font-medium">
-                  ভাষা
-                </div>
-                <div className="col-span-2 p-3 font-medium">
-                  {MOCK_BOOK.language}
-                </div>
-              </div>
-              <div className="grid grid-cols-3 border-b">
-                <div className="text-muted-foreground p-3 font-medium">
-                  সংস্করণ
-                </div>
-                <div className="col-span-2 p-3 font-medium">
-                  {MOCK_BOOK.edition}
-                </div>
-              </div>
-              <div className="bg-muted/30 grid grid-cols-3 border-b">
-                <div className="text-muted-foreground p-3 font-medium">
-                  পৃষ্ঠা সংখ্যা
-                </div>
-                <div className="col-span-2 p-3 font-medium">
-                  {MOCK_BOOK.pages}
-                </div>
-              </div>
-              <div className="grid grid-cols-3">
-                <div className="text-muted-foreground p-3 font-medium">
-                  ISBN
-                </div>
-                <div className="col-span-2 p-3 font-medium">
-                  {MOCK_BOOK.isbn}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Table of Contents */}
-          {MOCK_BOOK.tableOfContents &&
-            MOCK_BOOK.tableOfContents.length > 0 && (
-              <div>
-                <h3 className="type-heading mb-4 text-xl">
-                  সূচিপত্র (Table of Contents)
-                </h3>
-                <ul className="text-muted-foreground bg-card list-inside list-disc space-y-1.5 rounded-xl border p-5">
-                  {MOCK_BOOK.tableOfContents.map((item, idx) => (
-                    <li key={idx}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-          {/* Index */}
-          {MOCK_BOOK.index && MOCK_BOOK.index.length > 0 && (
-            <div>
-              <h3 className="type-heading mb-4 text-xl">ইনডেক্স (Index)</h3>
-              <ul className="text-muted-foreground bg-card list-inside list-disc space-y-1.5 rounded-xl border p-5">
-                {MOCK_BOOK.index.map((item, idx) => (
-                  <li key={idx}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {/* Reviews */}
-          <div>
-            <div className="mb-6 flex items-center justify-between">
-              <h3 className="type-heading text-xl">
-                রিভিউ ({MOCK_BOOK.reviewCount})
-              </h3>
-              <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="border-primary text-primary hover:bg-primary/10 hidden sm:flex"
-                >
-                  রিভিউ লিখুন
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="text-primary hover:bg-primary/10 hover:text-primary"
-                >
-                  সবগুলো দেখুন
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              {MOCK_REVIEWS.map((review) => (
-                <ReviewCard
-                  key={review.id}
-                  reviewerName={review.authorName}
-                  reviewerAvatarUrl={review.authorAvatar}
-                  rating={review.rating}
-                  body={review.content}
-                  createdAt={review.date}
+      <div className="mt-4 space-y-4">
+        {/* Seller Info Card */}
+        <div className="bg-card border p-5 shadow-sm lg:p-6">
+          <h3 className="type-heading mb-4 text-xl">
+            সেলার ইনফরমেশন (Seller Information)
+          </h3>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+            <div className="flex-1">
+              <div className="flex items-start gap-4">
+                <img
+                  src={MOCK_OWNER.avatarUrl}
+                  alt={MOCK_OWNER.name}
+                  className="size-12 rounded-full border bg-white object-cover"
                 />
-              ))}
+                <div>
+                  <h4 className="text-foreground text-lg font-semibold">
+                    {MOCK_OWNER.name}
+                  </h4>
+                  <div className="text-muted-foreground mt-0.5 flex items-center gap-1.5 text-sm">
+                    <MapPin className="size-4" />
+                    {MOCK_OWNER.location}
+                  </div>
+                  {!!MOCK_OWNER.badges?.length && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {MOCK_OWNER.badges.map((badge) => (
+                        <UserBadge key={badge.label} {...badge} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-4 text-sm font-medium">
+                <div className="text-success flex items-center gap-1.5">
+                  <ShieldCheck className="size-4" />
+                  Trust Score: 98%
+                </div>
+                <div className="text-primary flex items-center gap-1.5">
+                  <Star className="fill-primary size-4" />
+                  {MOCK_OWNER.rating} ({MOCK_BOOK.reviewCount} Reviews)
+                </div>
+              </div>
             </div>
-
-            <ReviewForm bookTitle={MOCK_BOOK.title} />
+            <div className="flex w-full shrink-0 flex-col gap-3 sm:w-auto">
+              <Button variant="outline" className="w-full gap-2 sm:w-auto">
+                <MessageCircle className="size-4" />
+                Message
+              </Button>
+              <Button className="w-full gap-2 sm:w-auto">
+                <PhoneCall className="size-4" />
+                Contact Seller
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Details Sidebar placeholder (e.g. related products) */}
-        <div className="hidden space-y-6 lg:col-span-3 lg:col-start-10 lg:block">
-          <div className="bg-muted/20 sticky top-24 rounded-xl border p-5">
-            <h4 className="text-muted-foreground mb-4 text-sm font-semibold tracking-wider uppercase">
-              Seller Information
-            </h4>
-            <UserCard user={MOCK_OWNER} />
-            <div className="mt-6">
-              <p className="text-muted-foreground text-center text-xs">
-                More books from this seller coming soon...
-              </p>
+        {/* Summary Card */}
+        <div className="bg-card border p-5 shadow-sm lg:p-6">
+          <h3 className="type-heading mb-4 text-xl">সারাংশ (Summary)</h3>
+          <p className="text-muted-foreground text-justify leading-relaxed">
+            {MOCK_BOOK.description}
+          </p>
+        </div>
+
+        {/* Specifications */}
+        <div className="bg-card border p-5 shadow-sm lg:p-6">
+          <h3 className="type-heading mb-4 text-xl">
+            বইয়ের বিস্তারিত তথ্য (Specifications)
+          </h3>
+          <div className="overflow-hidden rounded-xl border text-sm">
+            <div className="bg-muted/30 grid grid-cols-3 border-b">
+              <div className="text-muted-foreground p-3 font-medium">
+                প্রকাশক
+              </div>
+              <div className="col-span-2 p-3 font-medium">
+                {MOCK_BOOK.publisher}
+              </div>
+            </div>
+            <div className="grid grid-cols-3 border-b">
+              <div className="text-muted-foreground p-3 font-medium">
+                ক্যাটাগরি
+              </div>
+              <div className="col-span-2 p-3 font-medium">
+                {MOCK_BOOK.genre}
+              </div>
+            </div>
+            <div className="bg-muted/30 grid grid-cols-3 border-b">
+              <div className="text-muted-foreground p-3 font-medium">ভাষা</div>
+              <div className="col-span-2 p-3 font-medium">
+                {MOCK_BOOK.language}
+              </div>
+            </div>
+            <div className="grid grid-cols-3 border-b">
+              <div className="text-muted-foreground p-3 font-medium">
+                সংস্করণ
+              </div>
+              <div className="col-span-2 p-3 font-medium">
+                {MOCK_BOOK.edition}
+              </div>
+            </div>
+            <div className="bg-muted/30 grid grid-cols-3 border-b">
+              <div className="text-muted-foreground p-3 font-medium">
+                পৃষ্ঠা সংখ্যা
+              </div>
+              <div className="col-span-2 p-3 font-medium">
+                {MOCK_BOOK.pages}
+              </div>
+            </div>
+            <div className="grid grid-cols-3">
+              <div className="text-muted-foreground p-3 font-medium">ISBN</div>
+              <div className="col-span-2 p-3 font-medium">{MOCK_BOOK.isbn}</div>
             </div>
           </div>
+        </div>
+
+        {/* Table of Contents */}
+        {MOCK_BOOK.tableOfContents && MOCK_BOOK.tableOfContents.length > 0 && (
+          <div className="bg-card border p-5 shadow-sm lg:p-6">
+            <h3 className="type-heading mb-4 text-xl">
+              সূচিপত্র (Table of Contents)
+            </h3>
+            <ul className="text-muted-foreground bg-card list-inside list-disc space-y-1.5 rounded-xl border p-5">
+              {MOCK_BOOK.tableOfContents.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Index */}
+        {MOCK_BOOK.index && MOCK_BOOK.index.length > 0 && (
+          <div className="bg-card border p-5 shadow-sm lg:p-6">
+            <h3 className="type-heading mb-4 text-xl">ইনডেক্স (Index)</h3>
+            <ul className="text-muted-foreground bg-card list-inside list-disc space-y-1.5 rounded-xl border p-5">
+              {MOCK_BOOK.index.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Reviews */}
+        <div
+          id="reviews"
+          className="bg-card scroll-mt-24 border p-5 shadow-sm lg:p-6"
+        >
+          <div className="mb-6 flex items-center justify-between">
+            <h3 className="type-heading text-xl">
+              রিভিউ ({MOCK_BOOK.reviewCount})
+            </h3>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary/10 hidden sm:flex"
+              >
+                রিভিউ লিখুন
+              </Button>
+              <Button
+                variant="ghost"
+                className="text-primary hover:bg-primary/10 hover:text-primary"
+              >
+                সবগুলো দেখুন
+              </Button>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            {MOCK_REVIEWS.map((review) => (
+              <ReviewCard
+                key={review.id}
+                reviewerName={review.authorName}
+                reviewerAvatarUrl={review.authorAvatar}
+                rating={review.rating}
+                body={review.content}
+                createdAt={review.date}
+              />
+            ))}
+          </div>
+
+          <ReviewForm bookTitle={MOCK_BOOK.title} />
         </div>
       </div>
 

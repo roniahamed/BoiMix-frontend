@@ -33,14 +33,14 @@ export function BookGallery({ images, className }: BookGalleryProps) {
         />
       </div>
       {images.length > 1 && (
-        <div className="grid grid-cols-4 gap-2">
+        <div className="flex snap-x [scrollbar-width:none] gap-2 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden">
           {images.map((image, index) => (
             <Button
               key={image.src}
               type="button"
               variant="ghost"
               className={cn(
-                "relative aspect-[3/4] h-auto overflow-hidden rounded-lg border p-0",
+                "relative h-[50px] w-[50px] shrink-0 snap-start overflow-hidden rounded-lg border p-0",
                 selectedIndex === index && "border-primary ring-ring/30 ring-2",
               )}
               onClick={() => setSelectedIndex(index)}
@@ -50,7 +50,7 @@ export function BookGallery({ images, className }: BookGalleryProps) {
                 src={image.src}
                 alt=""
                 fill
-                sizes="96px"
+                sizes="50px"
                 className="object-cover"
               />
             </Button>
