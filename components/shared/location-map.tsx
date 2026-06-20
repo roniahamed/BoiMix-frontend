@@ -25,7 +25,7 @@ type LocationMapProps = {
 // Create a custom icon using Lucide MapPin to avoid Leaflet default icon issues in Next.js
 const customMarkerIcon = L.divIcon({
   html: renderToString(
-    <MapPin className="text-primary fill-primary/20 h-8 w-8 -translate-x-1/2 -translate-y-full" />,
+    <MapPin className="text-primary fill-primary/20 h-8 w-8" />,
   ),
   className: "bg-transparent border-none",
   iconSize: [32, 32],

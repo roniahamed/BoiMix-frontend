@@ -837,15 +837,16 @@ export default function BookUploadPage() {
                                           onMouseDown={(e) => {
                                             e.preventDefault();
                                             const props = sug.properties;
-                                            const address = [
+                                            const rawAddressParts = [
                                               props.name,
                                               props.locality,
                                               props.city,
                                               props.state,
                                               props.country,
-                                            ]
-                                              .filter(Boolean)
-                                              .join(", ");
+                                            ].filter(Boolean);
+                                            const address = Array.from(
+                                              new Set(rawAddressParts),
+                                            ).join(", ");
                                             setValue(
                                               "locationAddress",
                                               address,
@@ -866,14 +867,16 @@ export default function BookUploadPage() {
                                             {sug.properties.name}
                                           </div>
                                           <div className="text-muted-foreground text-xs">
-                                            {[
-                                              sug.properties.locality,
-                                              sug.properties.city,
-                                              sug.properties.state,
-                                              sug.properties.country,
-                                            ]
-                                              .filter(Boolean)
-                                              .join(", ")}
+                                            {Array.from(
+                                              new Set(
+                                                [
+                                                  sug.properties.locality,
+                                                  sug.properties.city,
+                                                  sug.properties.state,
+                                                  sug.properties.country,
+                                                ].filter(Boolean),
+                                              ),
+                                            ).join(", ")}
                                           </div>
                                         </div>
                                       ))}
@@ -908,7 +911,9 @@ export default function BookUploadPage() {
                                 data.principalSubdivision,
                                 data.countryName,
                               ].filter(Boolean);
-                              const address = parts.join(", ");
+                              const address = Array.from(new Set(parts)).join(
+                                ", ",
+                              );
                               if (address) {
                                 setValue("locationAddress", address, {
                                   shouldValidate: true,
@@ -1072,18 +1077,18 @@ export default function BookUploadPage() {
           </div>
 
           {/* Sticky Actions */}
-          <div className="bg-background/80 fixed right-0 bottom-0 left-0 z-50 border-t p-4 shadow-lg backdrop-blur-md md:relative md:border-none md:bg-transparent md:p-0 md:shadow-none">
-            <div className="boimix-container flex justify-end gap-4">
+          <div className="bg-background/80 fixed right-0 bottom-16 left-0 z-40 border-t p-4 shadow-lg backdrop-blur-md md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none">
+            <div className="boimix-container flex flex-row justify-end gap-3 md:gap-4">
               <Button
                 type="button"
                 variant="outline"
-                className="text-primary border-primary w-full min-w-[140px] md:w-auto"
+                className="text-primary border-primary flex-1 md:w-auto md:flex-none"
               >
                 <FileText className="mr-2 h-4 w-4" /> Save Draft
               </Button>
               <Button
                 type="submit"
-                className="w-full min-w-[160px] md:w-auto"
+                className="flex-1 md:w-auto md:flex-none"
                 disabled={isLoading}
               >
                 {isLoading ? (

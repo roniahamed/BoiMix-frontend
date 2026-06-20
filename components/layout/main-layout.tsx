@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { MobileBottomNavigation } from "@/components/layout/mobile-bottom-navigation";
-import { SiteFooter } from "@/components/layout/site-footer";
+import { ConditionalSiteFooter } from "@/components/layout/conditional-site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MobileFAB } from "@/components/layout/mobile-fab";
 
@@ -14,7 +14,7 @@ export function MainLayout({ children }: MainLayoutProps) {
     <div className="bg-background text-foreground min-h-svh">
       <SiteHeader />
       <main>{children}</main>
-      <SiteFooter />
+      <ConditionalSiteFooter />
       <MobileBottomNavigation />
       <MobileFAB />
     </div>
