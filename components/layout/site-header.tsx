@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BellIcon, HeartIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
 
@@ -13,7 +14,14 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
+  const pathname = usePathname();
   const [isAtTop, setIsAtTop] = useState(true);
+
+  // Check if we are on a specific book details page (e.g. /books/pather-panchali)
+  const isDetailsPage =
+    pathname.startsWith("/books/") &&
+    pathname.split("/").length === 3 &&
+    pathname.split("/")[2] !== "upload";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -34,8 +42,8 @@ export function SiteHeader() {
       <div
         className={cn(
           "boimix-container-wide flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out md:h-16 md:opacity-100",
-          // On mobile, hide the top row if not at the top
           isAtTop ? "h-16 opacity-100" : "h-0 opacity-0 md:h-16 md:opacity-100",
+          isDetailsPage && "max-md:hidden", // Hide top row entirely on mobile for details page
         )}
       >
         <div className="flex items-center gap-3 md:hidden">
@@ -47,6 +55,7 @@ export function SiteHeader() {
         </div>
         <DesktopNavbar />
         <SearchBar className="mx-auto hidden max-w-xl md:flex" />
+
         <div className="ml-auto flex items-center gap-1">
           <Button
             variant="ghost"
@@ -89,7 +98,7 @@ export function SiteHeader() {
       <div className="boimix-container-wide pt-2 pb-1 md:hidden">
         <SearchBar />
       </div>
-      <QuickNavBar />
+      {!isDetailsPage && <QuickNavBar />}
     </header>
   );
 }

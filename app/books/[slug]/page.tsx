@@ -23,6 +23,7 @@ import { ReviewCard } from "@/components/shared/review-card";
 
 import { BookConditionBadge } from "@/components/shared/book-condition-badge";
 import { BookCard } from "@/components/shared/book-card";
+import { ScrollContainer } from "@/components/shared/scroll-container";
 import type { BookCardBook } from "@/types/book";
 import { ReviewForm } from "@/components/shared/review-form";
 import { BookHeaderActions } from "@/components/shared/book-header-actions";
@@ -184,6 +185,70 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
     location: "উত্তরা, ঢাকা",
     distance: "১২ কি.মি.",
   },
+  {
+    id: "rec-5",
+    slug: "devdas",
+    title: "দেবদাস",
+    author: "শরৎচন্দ্র চট্টোপাধ্যায়",
+    coverUrl:
+      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400",
+    tags: ["borrow"],
+    rating: 4.6,
+    reviewCount: 320,
+    condition: "good",
+    availability: "in-stock",
+    location: "মিরপুর, ঢাকা",
+    distance: "২.০ কি.মি.",
+  },
+  {
+    id: "rec-6",
+    slug: "srikanta",
+    title: "শ্রীকান্ত",
+    author: "শরৎচন্দ্র চট্টোপাধ্যায়",
+    coverUrl:
+      "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
+    tags: ["swap", "sell"],
+    rating: 4.8,
+    reviewCount: 110,
+    price: 250,
+    originalPrice: 350,
+    condition: "excellent",
+    availability: "in-stock",
+    location: "মোহাম্মদপুর, ঢাকা",
+    distance: "৪.২ কি.মি.",
+  },
+  {
+    id: "rec-7",
+    slug: "bela-furabar-age",
+    title: "বেলা ফুরাবার আগে",
+    author: "আরিফ আজাদ",
+    coverUrl:
+      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
+    tags: ["sell"],
+    rating: 4.9,
+    reviewCount: 540,
+    price: 300,
+    originalPrice: 400,
+    condition: "new",
+    availability: "in-stock",
+    location: "উত্তরা, ঢাকা",
+    distance: "৮ কি.মি.",
+  },
+  {
+    id: "rec-8",
+    slug: "paradoxical-sajid",
+    title: "প্যারাডক্সিক্যাল সাজিদ",
+    author: "আরিফ আজাদ",
+    coverUrl:
+      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=400",
+    tags: ["borrow"],
+    rating: 4.8,
+    reviewCount: 890,
+    condition: "excellent",
+    availability: "out-of-stock",
+    location: "খিলক্ষেত, ঢাকা",
+    distance: "৯.৫ কি.মি.",
+  },
 ];
 
 export default function BookDetailsPage() {
@@ -200,7 +265,7 @@ export default function BookDetailsPage() {
 
           {/* Right Column: Info & Actions */}
           <div className="flex flex-col justify-between lg:col-span-8 lg:col-start-5">
-            <div className="space-y-6">
+            <div className="flex flex-col">
               {/* Header & Badges */}
               <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
                 <div className="flex gap-4">
@@ -241,7 +306,7 @@ export default function BookDetailsPage() {
                       {MOCK_BOOK.rating}{" "}
                       <a
                         href="#reviews"
-                        className="hover:text-primary transition-colors hover:underline"
+                        className="text-primary hover:text-primary/80 font-semibold underline transition-colors"
                       >
                         ({MOCK_BOOK.reviewCount} Reviews)
                       </a>
@@ -274,11 +339,11 @@ export default function BookDetailsPage() {
                 </a>
               </div>
 
-              <hr className="my-6 border-t" />
+              <hr className="my-4 border-t" />
 
               {/* Pricing & Actions Section */}
-              <div className="space-y-6">
-                <div className="mb-6">
+              <div className="space-y-4">
+                <div className="mb-4">
                   {MOCK_BOOK.tags.includes("sell") && (
                     <div>
                       <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
@@ -472,32 +537,6 @@ export default function BookDetailsPage() {
           </div>
         </div>
 
-        {/* Table of Contents */}
-        {MOCK_BOOK.tableOfContents && MOCK_BOOK.tableOfContents.length > 0 && (
-          <div className="bg-card border p-5 shadow-sm lg:p-6">
-            <h3 className="type-heading mb-4 text-xl">
-              সূচিপত্র (Table of Contents)
-            </h3>
-            <ul className="text-muted-foreground bg-card list-inside list-disc space-y-1.5 rounded-xl border p-5">
-              {MOCK_BOOK.tableOfContents.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Index */}
-        {MOCK_BOOK.index && MOCK_BOOK.index.length > 0 && (
-          <div className="bg-card border p-5 shadow-sm lg:p-6">
-            <h3 className="type-heading mb-4 text-xl">ইনডেক্স (Index)</h3>
-            <ul className="text-muted-foreground bg-card list-inside list-disc space-y-1.5 rounded-xl border p-5">
-              {MOCK_BOOK.index.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
         {/* Reviews */}
         <div
           id="reviews"
@@ -545,11 +584,35 @@ export default function BookDetailsPage() {
         <h2 className="type-heading mb-6 text-2xl">
           একই ধরনের আরও বই (Similar Books)
         </h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <ScrollContainer>
           {MOCK_RECOMMENDED_BOOKS.map((book) => (
-            <BookCard key={book.id} book={book} />
+            <div
+              key={book.id}
+              className="min-w-[160px] shrink-0 snap-start sm:min-w-[200px]"
+            >
+              <BookCard book={book} />
+            </div>
           ))}
-        </div>
+        </ScrollContainer>
+      </div>
+
+      {/* Recently Viewed Books Section */}
+      <div className="mt-12">
+        <h2 className="type-heading mb-6 text-2xl">
+          সম্প্রতি দেখা বই (Recently Viewed)
+        </h2>
+        <ScrollContainer>
+          {MOCK_RECOMMENDED_BOOKS.slice()
+            .reverse()
+            .map((book) => (
+              <div
+                key={book.id}
+                className="min-w-[160px] shrink-0 snap-start sm:min-w-[200px]"
+              >
+                <BookCard book={book} />
+              </div>
+            ))}
+        </ScrollContainer>
       </div>
 
       {/* Mobile Sticky Action Bar */}
