@@ -76,6 +76,10 @@ export function ImageUpload({
                 onClick={(e) => {
                   e.stopPropagation();
                   onChange?.(null);
+                  const inputElement = document.getElementById(
+                    inputId,
+                  ) as HTMLInputElement;
+                  if (inputElement) inputElement.value = "";
                 }}
                 className="text-destructive hover:bg-destructive flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-sm transition-colors hover:text-white"
                 aria-label="Remove image"

@@ -306,7 +306,7 @@ export default function BookUploadPage() {
                 />
               </div>
               <p className="text-muted-foreground mt-4 text-xs font-medium">
-                You can upload up to 10 images (JPG, PNG • Max 5MB each)
+                You can upload up to 5 images (JPG, PNG • Max 5MB each)
               </p>
             </div>
 
