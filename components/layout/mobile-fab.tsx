@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 
 const actions = [
   {
-    title: "Sell Book",
+    title: "Buy Book",
     href: "/books/upload?action=sell",
     icon: ShoppingCartIcon,
     color:
