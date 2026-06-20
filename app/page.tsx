@@ -765,16 +765,27 @@ function BookSection({
 }) {
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-2.5 shadow-sm md:p-6">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 md:rounded-xl md:border md:p-6 md:shadow-sm">
         <SectionHeader title={title} href={href} />
-        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mt-4 md:grid-cols-4 md:gap-3 lg:grid-cols-5 xl:grid-cols-6">
-          {books.map((book, index) => (
+        <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:hidden">
+          {books.slice(0, 10).map((book) => (
             <BookCard
-              key={`${title}-${book.id}`}
+              key={`mobile-${title}-${book.id}`}
               book={book}
-              className={`w-full ${index >= 10 ? "hidden md:block" : ""}`}
+              className="w-full"
             />
           ))}
+        </div>
+        <div className="hidden md:mt-4 md:block">
+          <ScrollContainer>
+            {books.map((book) => (
+              <BookCard
+                key={`desktop-${title}-${book.id}`}
+                book={book}
+                className="w-[160px] shrink-0 md:w-[180px] lg:w-[200px]"
+              />
+            ))}
+          </ScrollContainer>
         </div>
       </div>
     </section>
@@ -788,7 +799,7 @@ function CentralLibrarySection() {
 
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card grid gap-6 rounded-xl p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-xl md:border md:p-6 md:shadow-sm lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Central Library"
           href="/explore/central-library"
@@ -816,7 +827,7 @@ function MarketplaceSection() {
 
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card grid gap-6 rounded-xl p-4 shadow-sm md:p-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-xl md:border md:p-6 md:shadow-sm lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div className="w-full min-w-0">
           <HorizontalBookRow books={books} rowKey="market" />
         </div>
@@ -844,7 +855,7 @@ function SwapBooksSection() {
 
   return (
     <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card grid gap-6 rounded-xl p-4 shadow-sm md:p-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-xl md:border md:p-6 md:shadow-sm lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Swap Books"
           href="/explore/swaps"
@@ -873,15 +884,28 @@ function HorizontalBookRow({
   rowKey: string;
 }) {
   return (
-    <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mt-4 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
-      {books.map((book, index) => (
-        <BookCard
-          key={`${rowKey}-${book.id}`}
-          book={book}
-          className={`w-full ${index >= 10 ? "hidden md:block" : ""}`}
-        />
-      ))}
-    </div>
+    <>
+      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:hidden">
+        {books.slice(0, 10).map((book) => (
+          <BookCard
+            key={`mobile-${rowKey}-${book.id}`}
+            book={book}
+            className="w-full"
+          />
+        ))}
+      </div>
+      <div className="hidden md:mt-4 md:block">
+        <ScrollContainer>
+          {books.map((book) => (
+            <BookCard
+              key={`desktop-${rowKey}-${book.id}`}
+              book={book}
+              className="w-[160px] shrink-0 md:w-[180px] lg:w-[200px]"
+            />
+          ))}
+        </ScrollContainer>
+      </div>
+    </>
   );
 }
 
@@ -1326,7 +1350,7 @@ function AuthorSpotlightSection() {
   return (
     <section className="py-4 md:py-6">
       <div className="boimix-container-wide">
-        <div className="bg-card border-border/50 rounded-2xl border p-4 shadow-sm md:p-6">
+        <div className="md:bg-card md:border-border/50 md:rounded-2xl md:border md:p-6 md:shadow-sm">
           <div className="mb-5 flex items-center justify-between">
             <h2 className="type-subheading text-foreground">
               Author Spotlight
@@ -1397,14 +1421,25 @@ function AuthorSpotlightSection() {
 
             {/* Right Column: Author Books */}
             <div className="flex min-w-0 flex-col justify-center">
-              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:mt-4 md:grid-cols-4 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
-                {humayunBooks.map((book, index) => (
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:hidden">
+                {humayunBooks.slice(0, 10).map((book) => (
                   <BookCard
-                    key={`spotlight-${book.id}`}
+                    key={`mobile-spotlight-${book.id}`}
                     book={book}
-                    className={`w-full ${index >= 10 ? "hidden md:block" : ""}`}
+                    className="w-full"
                   />
                 ))}
+              </div>
+              <div className="hidden md:mt-4 md:block">
+                <ScrollContainer>
+                  {humayunBooks.map((book) => (
+                    <BookCard
+                      key={`desktop-spotlight-${book.id}`}
+                      book={book}
+                      className="w-[160px] shrink-0 md:w-[180px] lg:w-[200px]"
+                    />
+                  ))}
+                </ScrollContainer>
               </div>
             </div>
           </div>

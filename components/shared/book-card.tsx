@@ -36,43 +36,10 @@ export function BookCard({ book, className }: BookCardProps) {
   const hasSwap = book.tags.includes("swap");
   const hasBorrow = book.tags.includes("borrow");
 
-  let primaryAction = null;
-  if (hasSell) {
-    primaryAction = (
-      <Button
-        size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[16px] font-bold md:text-[15px]"
-      >
-        <ShoppingCartIcon className="size-4" />
-        <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
-      </Button>
-    );
-  } else if (hasSwap) {
-    primaryAction = (
-      <Button
-        size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[16px] font-bold md:text-[15px]"
-      >
-        <Repeat2Icon className="size-4" />
-        <span>Swap Now</span>
-      </Button>
-    );
-  } else if (hasBorrow) {
-    primaryAction = (
-      <Button
-        size="sm"
-        className="pointer-events-auto relative z-20 flex h-8 w-full items-center justify-center gap-1.5 px-3 text-[16px] font-bold md:text-[15px]"
-      >
-        <BookOpenIcon className="size-4" />
-        <span>Borrow Now</span>
-      </Button>
-    );
-  }
-
   return (
     <article
       className={cn(
-        "group relative overflow-hidden rounded-md bg-transparent transition-all duration-300",
+        "group bg-card relative overflow-hidden rounded-md shadow-xs transition-all duration-300 md:bg-transparent md:shadow-none",
         className,
       )}
     >
@@ -109,11 +76,11 @@ export function BookCard({ book, className }: BookCardProps) {
 
         {/* Info/Metadata Area */}
         <div className="flex flex-1 flex-col p-1.5 pt-1 md:p-2.5 md:pt-1.5">
-          <div className="space-y-1">
+          <div className="mt-1 flex flex-1 flex-col md:mt-0">
             <div>
               <Link
                 href={`/books/${book.slug}`}
-                className="text-foreground hover:text-primary line-clamp-2 min-h-[38px] text-[15px] leading-tight font-semibold md:min-h-9 md:text-[14px]"
+                className="text-foreground hover:text-primary line-clamp-2 text-[15px] leading-tight font-semibold md:text-[14px]"
               >
                 {book.title}
               </Link>
@@ -133,7 +100,7 @@ export function BookCard({ book, className }: BookCardProps) {
                 )}
               </div>
             </div>
-            <div className="text-muted-foreground grid gap-0.5 text-[13px] md:text-xs">
+            <div className="text-muted-foreground mt-2 grid gap-0.5 text-[13px] md:text-xs">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-1 font-medium">
                   <div className="relative inline-block h-3.5 w-3.5 shrink-0">
@@ -200,11 +167,6 @@ export function BookCard({ book, className }: BookCardProps) {
               </div>
             </div>
           </div>
-
-          {/* Mobile Action Button */}
-          {primaryAction && (
-            <div className="mt-auto pt-2 md:hidden">{primaryAction}</div>
-          )}
         </div>
       </div>
       {/* Full-card click target (z-10) */}
