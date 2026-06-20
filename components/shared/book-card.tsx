@@ -29,9 +29,10 @@ const tagClasses = {
 type BookCardProps = {
   book: BookCardBook;
   className?: string;
+  hidePrice?: boolean;
 };
 
-export function BookCard({ book, className }: BookCardProps) {
+export function BookCard({ book, className, hidePrice }: BookCardProps) {
   const hasSell = book.tags.includes("sell");
   const hasSwap = book.tags.includes("swap");
   const hasBorrow = book.tags.includes("borrow");
@@ -150,7 +151,7 @@ export function BookCard({ book, className }: BookCardProps) {
                   <span className="min-w-0 truncate capitalize">
                     {book.condition}
                   </span>
-                  {book.price !== undefined && (
+                  {!hidePrice && book.price !== undefined && (
                     <div className="flex shrink-0 items-center gap-1.5">
                       {book.originalPrice !== undefined &&
                         book.originalPrice > book.price && (

@@ -337,6 +337,15 @@ export default function BookDetailsPage() {
                     {MOCK_BOOK.condition}
                   </a>
                 </p>
+
+                <div className="text-muted-foreground mt-1 flex items-center gap-1.5 text-sm font-medium">
+                  <MapPin className="size-4 shrink-0" />
+                  <span>{MOCK_BOOK.location}</span>
+                  <span className="text-muted-foreground/50 shrink-0">•</span>
+                  <span className="text-foreground shrink-0">
+                    {MOCK_BOOK.distance} দূরে
+                  </span>
+                </div>
               </div>
 
               <div className="text-muted-foreground mt-4 flex items-center gap-2 text-sm font-medium">
@@ -457,8 +466,8 @@ export default function BookDetailsPage() {
                     {MOCK_OWNER.name}
                   </h4>
                   <div className="text-muted-foreground mt-0.5 flex items-center gap-1.5 text-sm">
-                    <MapPin className="size-4" />
-                    {MOCK_OWNER.location}
+                    <MapPin className="size-4 shrink-0" />
+                    <span className="truncate">{MOCK_OWNER.location}</span>
                   </div>
                   {!!MOCK_OWNER.badges?.length && (
                     <div className="mt-2 flex flex-wrap gap-2">
@@ -603,7 +612,7 @@ export default function BookDetailsPage() {
           {MOCK_RECOMMENDED_BOOKS.map((book) => (
             <div
               key={book.id}
-              className="min-w-[160px] shrink-0 snap-start sm:min-w-[200px]"
+              className="w-[140px] shrink-0 snap-start sm:w-[160px]"
             >
               <BookCard book={book} />
             </div>
@@ -622,7 +631,7 @@ export default function BookDetailsPage() {
             .map((book) => (
               <div
                 key={book.id}
-                className="min-w-[160px] shrink-0 snap-start sm:min-w-[200px]"
+                className="w-[140px] shrink-0 snap-start sm:w-[160px]"
               >
                 <BookCard book={book} />
               </div>
