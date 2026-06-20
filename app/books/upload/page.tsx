@@ -215,7 +215,7 @@ export default function BookUploadPage() {
     ) {
       const timer = setTimeout(() => {
         fetch(
-          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddressWatch)}&limit=5`,
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(locationAddressWatch)}&format=geojson&countrycodes=bd&addressdetails=1&limit=5`,
         )
           .then((res) => res.json())
           .then((data) => {
@@ -836,13 +836,18 @@ export default function BookUploadPage() {
                                           className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
                                           onMouseDown={(e) => {
                                             e.preventDefault();
-                                            const props = sug.properties;
+                                            const addr =
+                                              sug.properties.address || {};
                                             const rawAddressParts = [
-                                              props.name,
-                                              props.locality,
-                                              props.city,
-                                              props.state,
-                                              props.country,
+                                              sug.properties.name,
+                                              addr.road,
+                                              addr.neighbourhood,
+                                              addr.suburb || addr.locality,
+                                              addr.city ||
+                                                addr.town ||
+                                                addr.village,
+                                              addr.state,
+                                              addr.country,
                                             ].filter(Boolean);
                                             const address = Array.from(
                                               new Set(rawAddressParts),
@@ -864,16 +869,28 @@ export default function BookUploadPage() {
                                           }}
                                         >
                                           <div className="font-medium">
-                                            {sug.properties.name}
+                                            {sug.properties.name ||
+                                              (sug.properties.address &&
+                                                sug.properties.address
+                                                  .suburb) ||
+                                              "Unknown Location"}
                                           </div>
                                           <div className="text-muted-foreground text-xs">
                                             {Array.from(
                                               new Set(
                                                 [
-                                                  sug.properties.locality,
-                                                  sug.properties.city,
-                                                  sug.properties.state,
-                                                  sug.properties.country,
+                                                  sug.properties.address?.road,
+                                                  sug.properties.address
+                                                    ?.suburb ||
+                                                    sug.properties.address
+                                                      ?.locality,
+                                                  sug.properties.address
+                                                    ?.city ||
+                                                    sug.properties.address
+                                                      ?.town,
+                                                  sug.properties.address?.state,
+                                                  sug.properties.address
+                                                    ?.country,
                                                 ].filter(Boolean),
                                               ),
                                             ).join(", ")}
@@ -900,16 +917,19 @@ export default function BookUploadPage() {
                         setValue("locationLat", lat);
                         setValue("locationLng", lng);
                         fetch(
-                          `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
+                          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
                         )
                           .then((res) => res.json())
                           .then((data) => {
-                            if (data) {
+                            if (data && data.address) {
+                              const addr = data.address;
                               const parts = [
-                                data.locality,
-                                data.city,
-                                data.principalSubdivision,
-                                data.countryName,
+                                addr.road,
+                                addr.neighbourhood,
+                                addr.suburb || addr.locality,
+                                addr.city || addr.town || addr.village,
+                                addr.state,
+                                addr.country,
                               ].filter(Boolean);
                               const address = Array.from(new Set(parts)).join(
                                 ", ",
