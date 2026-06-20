@@ -9,12 +9,14 @@ type ScrollContainerProps = {
   children: ReactNode;
   className?: string;
   autoScroll?: boolean;
+  arrowClassName?: string;
 };
 
 export function ScrollContainer({
   children,
   className,
   autoScroll = false,
+  arrowClassName,
 }: ScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
@@ -99,10 +101,11 @@ export function ScrollContainer({
         variant="secondary"
         size="icon"
         className={cn(
-          "border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -left-3 z-20 hidden h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-left-6 md:inline-flex md:h-12 md:w-12",
+          "border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute -left-3 z-20 hidden h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-left-6 md:inline-flex md:h-12 md:w-12",
           showLeft
             ? "translate-x-0 opacity-100"
             : "pointer-events-none -translate-x-4 opacity-0",
+          arrowClassName || "top-1/2",
         )}
         onClick={() => scroll("left")}
         aria-label="Scroll left"
@@ -130,10 +133,11 @@ export function ScrollContainer({
         variant="secondary"
         size="icon"
         className={cn(
-          "border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute top-1/2 -right-3 z-20 hidden h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-right-6 md:inline-flex md:h-12 md:w-12",
+          "border-border bg-background text-foreground hover:bg-primary hover:text-primary-foreground hover:border-primary absolute -right-3 z-20 hidden h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full border shadow-lg transition-all duration-300 hover:scale-110 focus-visible:ring-2 active:scale-95 md:-right-6 md:inline-flex md:h-12 md:w-12",
           showRight
             ? "translate-x-0 opacity-100"
             : "pointer-events-none translate-x-4 opacity-0",
+          arrowClassName || "top-1/2",
         )}
         onClick={() => scroll("right")}
         aria-label="Scroll right"

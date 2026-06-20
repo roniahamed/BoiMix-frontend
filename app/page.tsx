@@ -725,7 +725,7 @@ function CategorySection() {
     <section className="py-4 md:py-6">
       <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
         <SectionHeader title="Categories" href="/books" />
-        <ScrollContainer autoScroll>
+        <ScrollContainer autoScroll arrowClassName="top-[35px]">
           {categories.map((category) => {
             return (
               <Link
