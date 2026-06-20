@@ -184,6 +184,13 @@ export function SearchBar({
       <Button type="submit" size="sm" className="hidden sm:inline-flex">
         Search
       </Button>
+      <Button
+        type="submit"
+        size="icon"
+        className="h-10 w-10 shrink-0 rounded-lg sm:hidden"
+      >
+        <SearchIcon className="size-4" />
+      </Button>
 
       {/* Autocomplete Dropdown */}
       {isOpen && (
