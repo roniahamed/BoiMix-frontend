@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import {
   MapPin,
   MessageCircle,
@@ -9,6 +10,8 @@ import {
   Users,
   ShieldCheck,
   PhoneCall,
+  Home,
+  MoreVertical,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -21,6 +24,7 @@ import type { BookCardBook } from "@/types/book";
 import { BookHeaderActions } from "@/components/shared/book-header-actions";
 import { BookReviews } from "@/components/shared/book-reviews";
 import { BookQA } from "@/components/shared/book-qa";
+import { MobileNavbar } from "@/components/layout/mobile-navbar";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -382,18 +386,53 @@ export default async function BookDetailsPage({
   }
 
   return (
-    <div className="boimix-container pt-3 pb-24 md:pt-8 md:pb-12">
-      <div className="bg-card border p-4 shadow-sm sm:p-6 lg:p-8">
+    <div className="sm:boimix-container w-full pt-0 pb-24 sm:px-4 md:px-6 md:pt-8 md:pb-12">
+      <div className="bg-card border-y p-0 shadow-sm sm:rounded-xl sm:border sm:p-6 lg:p-8">
         <div className="grid gap-4 md:gap-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-4 lg:col-start-1">
-            <div className="mx-auto max-w-[320px]">
+            <div className="relative mx-auto w-full sm:max-w-[320px]">
+              {/* Mobile Top Navigation (Overlaid on Image) */}
+              <div className="absolute top-4 right-4 left-4 z-20 flex items-center justify-between md:hidden">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
+                  asChild
+                >
+                  <Link href="/">
+                    <Home className="size-4.5" />
+                  </Link>
+                </Button>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
+                    asChild
+                  >
+                    <Link href="/dashboard/cart">
+                      <ShoppingCart className="size-4.5" />
+                    </Link>
+                  </Button>
+                  <MobileNavbar>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
+                    >
+                      <MoreVertical className="size-4.5" />
+                    </Button>
+                  </MobileNavbar>
+                </div>
+              </div>
+
               <BookGallery images={currentBook.images} />
             </div>
           </div>
 
           {/* Right Column: Info & Actions */}
-          <div className="flex flex-col justify-between lg:col-span-8 lg:col-start-5">
+          <div className="flex flex-col justify-between px-4 sm:px-0 lg:col-span-8 lg:col-start-5">
             <div className="flex flex-col">
               {/* Header Actions & Pricing */}
               <div className="mb-3 flex flex-wrap items-center justify-between gap-4 md:mb-4">
@@ -819,27 +858,25 @@ export default async function BookDetailsPage({
       </div>
 
       {/* Mobile Sticky Action Bar */}
-      <div className="bg-background fixed bottom-16 left-0 z-50 w-full border-t p-3 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] sm:hidden">
-        <div className="boimix-container flex gap-2">
-          {currentBook.tags.includes("sell") && (
-            <Button className="h-12 flex-1 gap-2 shadow-md">
-              <ShoppingCart className="size-4" />
-              <span className="text-base font-semibold">Add to Cart</span>
-            </Button>
-          )}
-          {currentBook.tags.includes("swap") && (
-            <Button className="h-12 flex-1 gap-2 shadow-md">
-              <Repeat2 className="size-4" />
-              <span className="text-base font-semibold">Swap</span>
-            </Button>
-          )}
-          {currentBook.tags.includes("borrow") && (
-            <Button className="h-12 flex-1 gap-2 shadow-md">
-              <BookOpen className="size-4" />
-              <span className="text-base font-semibold">Borrow</span>
-            </Button>
-          )}
-        </div>
+      <div className="pb-safe fixed bottom-0 left-0 z-50 flex w-full sm:hidden">
+        {currentBook.tags.includes("sell") && (
+          <Button className="h-[60px] flex-1 gap-2 rounded-none text-lg">
+            <ShoppingCart className="size-5" />
+            <span className="font-semibold">Add to Cart</span>
+          </Button>
+        )}
+        {currentBook.tags.includes("swap") && (
+          <Button className="h-[60px] flex-1 gap-2 rounded-none text-lg">
+            <Repeat2 className="size-5" />
+            <span className="font-semibold">Swap</span>
+          </Button>
+        )}
+        {currentBook.tags.includes("borrow") && (
+          <Button className="h-[60px] flex-1 gap-2 rounded-none text-lg">
+            <BookOpen className="size-5" />
+            <span className="font-semibold">Borrow</span>
+          </Button>
+        )}
       </div>
     </div>
   );

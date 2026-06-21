@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { MenuIcon } from "lucide-react";
+import { MenuIcon, SearchIcon } from "lucide-react";
 
 import { BrandLink } from "@/components/layout/brand-link";
-import { SearchBar } from "@/components/layout/search-bar";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -43,7 +42,15 @@ export function MobileNavbar({ children }: { children?: React.ReactNode }) {
           </DrawerDescription>
         </DrawerHeader>
         <div className="space-y-4 p-4">
-          <SearchBar />
+          <DrawerClose asChild>
+            <Link
+              href="/books/search"
+              className="text-muted-foreground border-border bg-background hover:bg-muted flex h-10 w-full items-center gap-2 rounded-lg border px-3 text-sm transition-colors"
+            >
+              <SearchIcon className="size-4 shrink-0" />
+              <span>Search books, authors, ISBN...</span>
+            </Link>
+          </DrawerClose>
           <nav className="grid gap-1" aria-label="Mobile">
             {primaryNavItems.map((item) => {
               const Icon = item.icon;

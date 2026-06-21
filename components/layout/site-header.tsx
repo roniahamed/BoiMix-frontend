@@ -38,10 +38,15 @@ export function SiteHeader() {
   }, []);
 
   return (
-    <header className="bg-card/95 supports-[backdrop-filter]:bg-card/85 sticky top-0 z-40 border-b shadow-xs backdrop-blur">
+    <header
+      className={cn(
+        "bg-card/95 supports-[backdrop-filter]:bg-card/85 sticky top-0 z-40 border-b shadow-xs backdrop-blur",
+        isDetailsPage && "max-md:hidden",
+      )}
+    >
       <div
         className={cn(
-          "boimix-container-wide flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out md:h-16 md:opacity-100",
+          "boimix-container-wide flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out md:h-16 md:overflow-visible md:opacity-100",
           isAtTop ? "h-16 opacity-100" : "h-0 opacity-0 md:h-16 md:opacity-100",
           isDetailsPage && "max-md:hidden", // Hide top row entirely on mobile for details page
         )}
@@ -95,7 +100,12 @@ export function SiteHeader() {
           </Button>
         </div>
       </div>
-      <div className="boimix-container-wide pt-2 pb-1 md:hidden">
+      <div
+        className={cn(
+          "boimix-container-wide pt-2 pb-1 md:hidden",
+          isDetailsPage && "hidden",
+        )}
+      >
         <SearchBar />
       </div>
       <div className={cn("w-full", isDetailsPage && "max-md:hidden")}>

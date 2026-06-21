@@ -45,7 +45,7 @@ export function BookGallery({ images, className }: BookGalleryProps) {
               index === selectedIndex ? "block" : "block sm:hidden",
             )}
           >
-            <div className="bg-muted relative aspect-[3/4] overflow-hidden rounded-xl border">
+            <div className="bg-muted relative h-[380px] overflow-hidden rounded-none border-none sm:aspect-[3/4] sm:h-auto sm:rounded-xl sm:border">
               <Image
                 src={image.src}
                 alt={image.alt || `Image ${index + 1}`}
