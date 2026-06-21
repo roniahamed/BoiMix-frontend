@@ -28,10 +28,14 @@ export function MobileBottomNavigation() {
   return (
     <nav
       className="bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur md:hidden"
-      style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
+      style={{
+        paddingBottom: "max(8px, env(safe-area-inset-bottom))",
+        transform: "translate3d(0, 0, 0)",
+        willChange: "transform",
+      }}
       aria-label="Mobile bottom"
     >
-      <div className="grid h-16 grid-cols-5">
+      <div className="grid h-13 grid-cols-5">
         {mobileBottomNavItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -43,10 +47,10 @@ export function MobileBottomNavigation() {
             <MobileNavbar key={item.href}>
               <button
                 className={cn(
-                  "text-muted-foreground flex flex-col items-center justify-center gap-1 text-[0.7rem] font-medium transition-colors",
+                  "text-muted-foreground flex flex-col items-center justify-center gap-0.5 text-[0.62rem] font-medium transition-colors",
                 )}
               >
-                {Icon && <Icon className="size-5" aria-hidden="true" />}
+                {Icon && <Icon className="size-4.5" aria-hidden="true" />}
                 <span>{item.title}</span>
               </button>
             </MobileNavbar>
@@ -55,11 +59,11 @@ export function MobileBottomNavigation() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 text-[0.7rem] font-medium transition-colors",
+                "flex flex-col items-center justify-center gap-0.5 text-[0.62rem] font-medium transition-colors",
                 isActive ? "text-primary" : "text-muted-foreground",
               )}
             >
-              {Icon && <Icon className="size-5" aria-hidden="true" />}
+              {Icon && <Icon className="size-4.5" aria-hidden="true" />}
               <span>{item.title}</span>
             </Link>
           );
