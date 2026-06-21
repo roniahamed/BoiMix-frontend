@@ -20,9 +20,23 @@ export function BookGallery({ images, className }: BookGalleryProps) {
     return null;
   }
 
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const width = e.currentTarget.clientWidth;
+    if (width > 0) {
+      const index = Math.round(scrollLeft / width);
+      if (index !== selectedIndex) {
+        setSelectedIndex(index);
+      }
+    }
+  };
+
   return (
-    <div className={cn("space-y-3", className)}>
-      <div className="flex w-full snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto sm:block sm:overflow-visible [&::-webkit-scrollbar]:hidden">
+    <div className={cn("relative space-y-3", className)}>
+      <div
+        className="flex w-full snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto sm:block sm:overflow-visible [&::-webkit-scrollbar]:hidden"
+        onScroll={handleScroll}
+      >
         {images.map((image, index) => (
           <div
             key={`${image.src}-${index}`}
@@ -44,6 +58,21 @@ export function BookGallery({ images, className }: BookGalleryProps) {
           </div>
         ))}
       </div>
+      {images.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1.5 sm:hidden">
+          {images.map((_, index) => (
+            <div
+              key={index}
+              className={cn(
+                "h-1.5 rounded-full transition-all",
+                selectedIndex === index
+                  ? "bg-primary w-4"
+                  : "bg-primary/30 w-1.5",
+              )}
+            />
+          ))}
+        </div>
+      )}
       {images.length > 1 && (
         <div className="hidden snap-x [scrollbar-width:none] gap-2 overflow-x-auto pb-2 sm:flex [&::-webkit-scrollbar]:hidden">
           {images.map((image, index) => (
