@@ -79,7 +79,7 @@ export function BookDetailsMobileActions({
         }}
         aria-label="Book actions"
       >
-        <div className="boimix-container flex h-14 w-full items-center gap-3">
+        <div className="boimix-container flex h-12 w-full items-center gap-3">
           {tags.includes("sell") && (
             <Button className="h-11 flex-1 gap-2 text-base font-semibold shadow-sm">
               <ShoppingCart className="size-5" />
