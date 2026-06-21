@@ -1119,18 +1119,26 @@ export default function BookUploadPage() {
           </div>
 
           {/* Sticky Actions */}
-          <div className="bg-background/80 fixed right-0 bottom-16 left-0 z-40 border-t p-4 shadow-lg backdrop-blur-md md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none">
-            <div className="boimix-container flex flex-row justify-end gap-3 md:gap-4">
+          <div
+            className="bg-card fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
+            style={
+              {
+                "--bottom-offset":
+                  "calc(64px + max(12px, env(safe-area-inset-bottom)))",
+              } as React.CSSProperties
+            }
+          >
+            <div className="md:boimix-container flex w-full flex-row md:justify-end md:gap-4">
               <Button
                 type="button"
                 variant="outline"
-                className="text-primary border-primary flex-1 md:w-auto md:flex-none"
+                className="text-primary border-primary h-14 flex-1 rounded-none border-y-0 border-r border-l-0 md:h-10 md:w-auto md:flex-none md:rounded-md md:border"
               >
                 <FileText className="mr-2 h-4 w-4" /> Save Draft
               </Button>
               <Button
                 type="submit"
-                className="flex-1 md:w-auto md:flex-none"
+                className="h-14 flex-1 rounded-none md:h-10 md:w-auto md:flex-none md:rounded-md"
                 disabled={isLoading}
               >
                 {isLoading ? (

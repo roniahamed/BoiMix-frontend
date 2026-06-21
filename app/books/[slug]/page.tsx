@@ -858,24 +858,39 @@ export default async function BookDetailsPage({
       </div>
 
       {/* Mobile Sticky Action Bar */}
-      <div
-        className="bg-background/95 fixed inset-x-0 bottom-0 z-50 flex w-full border-t p-3 shadow-lg backdrop-blur-sm sm:hidden"
-        style={{ paddingBottom: "max(24px, env(safe-area-inset-bottom))" }}
-      >
+      <div className="fixed right-0 bottom-0 left-0 z-50 flex w-full sm:hidden">
         {currentBook.tags.includes("sell") && (
-          <Button className="h-12 flex-1 gap-2 rounded-xl text-lg font-semibold shadow-sm">
+          <Button
+            className="flex-1 gap-2 rounded-none text-lg font-semibold"
+            style={{
+              height: "calc(56px + max(32px, env(safe-area-inset-bottom)))",
+              paddingBottom: "max(32px, env(safe-area-inset-bottom))",
+            }}
+          >
             <ShoppingCart className="size-5" />
             <span>Add to Cart</span>
           </Button>
         )}
         {currentBook.tags.includes("swap") && (
-          <Button className="h-12 flex-1 gap-2 rounded-xl text-lg font-semibold shadow-sm">
+          <Button
+            className="flex-1 gap-2 rounded-none text-lg font-semibold"
+            style={{
+              height: "calc(56px + max(32px, env(safe-area-inset-bottom)))",
+              paddingBottom: "max(32px, env(safe-area-inset-bottom))",
+            }}
+          >
             <Repeat2 className="size-5" />
             <span>Swap</span>
           </Button>
         )}
         {currentBook.tags.includes("borrow") && (
-          <Button className="h-12 flex-1 gap-2 rounded-xl text-lg font-semibold shadow-sm">
+          <Button
+            className="flex-1 gap-2 rounded-none text-lg font-semibold"
+            style={{
+              height: "calc(56px + max(32px, env(safe-area-inset-bottom)))",
+              paddingBottom: "max(32px, env(safe-area-inset-bottom))",
+            }}
+          >
             <BookOpen className="size-5" />
             <span>Borrow</span>
           </Button>
