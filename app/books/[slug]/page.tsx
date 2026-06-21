@@ -858,28 +858,28 @@ export default async function BookDetailsPage({
       </div>
 
       <div
-        className="from-background via-background/90 fixed right-0 bottom-0 left-0 z-50 flex w-full flex-col justify-end bg-gradient-to-t to-transparent px-4 pt-10 sm:hidden"
+        className="bg-background/95 sticky bottom-0 z-50 border-t backdrop-blur sm:hidden"
         style={{
-          paddingBottom: "max(16px, env(safe-area-inset-bottom))",
-          transform: "translate3d(0, 0, 0)",
-          willChange: "transform",
+          width: "100vw",
+          marginLeft: "calc(50% - 50vw)",
+          paddingBottom: "calc(20px + env(safe-area-inset-bottom))",
         }}
       >
-        <div className="flex w-full gap-3">
+        <div className="boimix-container flex h-16 w-full items-center gap-3">
           {currentBook.tags.includes("sell") && (
-            <Button className="h-12 flex-1 gap-2 rounded-full text-base font-semibold shadow-lg">
+            <Button className="h-12 flex-1 gap-2 text-base font-semibold shadow-sm">
               <ShoppingCart className="size-5" />
               <span>Add to Cart</span>
             </Button>
           )}
           {currentBook.tags.includes("swap") && (
-            <Button className="h-12 flex-1 gap-2 rounded-full text-base font-semibold shadow-lg">
+            <Button className="h-12 flex-1 gap-2 text-base font-semibold shadow-sm">
               <Repeat2 className="size-5" />
               <span>Swap</span>
             </Button>
           )}
           {currentBook.tags.includes("borrow") && (
-            <Button className="h-12 flex-1 gap-2 rounded-full text-base font-semibold shadow-lg">
+            <Button className="h-12 flex-1 gap-2 text-base font-semibold shadow-sm">
               <BookOpen className="size-5" />
               <span>Borrow</span>
             </Button>

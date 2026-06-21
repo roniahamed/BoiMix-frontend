@@ -1123,8 +1123,7 @@ export default function BookUploadPage() {
             className="fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
             style={
               {
-                "--bottom-offset":
-                  "calc(52px + max(8px, env(safe-area-inset-bottom)))",
+                "--bottom-offset": "calc(52px + env(safe-area-inset-bottom))",
               } as React.CSSProperties
             }
           >
