@@ -51,6 +51,7 @@
     "postcss": "latest",
     "prettier": "latest",
     "prettier-plugin-tailwindcss": "latest",
+    "puppeteer-core": "^24.43.1",
     "shadcn": "latest",
     "tailwindcss": "latest",
     "tw-animate-css": "latest",
