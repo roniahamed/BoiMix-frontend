@@ -475,21 +475,20 @@ export default async function BookDetailsPage({
                     {currentBook.distance} দূরে
                   </span>
                 </div>
-              </div>
+                <div className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
+                  <Users className="text-primary size-4" />
+                  ১২০ জনের পছন্দের তালিকায় আছে
+                </div>
 
-              <div className="text-muted-foreground mt-4 flex items-center gap-2 text-sm font-medium">
-                <Users className="text-primary size-4" />
-                ১২০ জনের পছন্দের তালিকায় আছে
-              </div>
-
-              <div className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
-                ক্যাটাগরি:{" "}
-                <a
-                  href={`/explore?category=${encodeURIComponent(currentBook.genre)}`}
-                  className="text-primary font-medium hover:underline"
-                >
-                  {currentBook.genre}
-                </a>
+                <div className="text-muted-foreground flex items-center gap-1.5 text-sm">
+                  ক্যাটাগরি:{" "}
+                  <a
+                    href={`/explore?category=${encodeURIComponent(currentBook.genre)}`}
+                    className="text-primary font-medium hover:underline"
+                  >
+                    {currentBook.genre}
+                  </a>
+                </div>
               </div>
 
               <hr className="my-4 border-t sm:my-6" />
