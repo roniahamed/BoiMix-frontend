@@ -60,29 +60,31 @@ export function BookReviews({
     >
       <h3 className="type-heading mb-6 text-xl">Reviews and Ratings</h3>
 
-      <div className="flex flex-col items-start gap-10 border-b pb-8 md:flex-row md:pr-4 md:pl-8 lg:gap-16 lg:pl-12">
-        {/* Rate Product */}
-        <div className="flex min-w-[150px] flex-col items-start">
-          <p className="text-foreground mb-1.5 font-medium">
-            Rate this product
-          </p>
-          <RatingStars rating={5} className="mb-4 text-orange-400" />
-          <Button
-            variant="outline"
-            onClick={() => setIsWriteModalOpen(true)}
-            className="border-primary text-primary hover:bg-primary/10 rounded-md"
-          >
-            রিভিউ লিখুন
-          </Button>
-        </div>
+      <div className="flex flex-col items-start gap-8 border-b pb-8 md:flex-row md:pr-4 md:pl-8 lg:gap-16 lg:pl-12">
+        <div className="flex w-full flex-row justify-between gap-4 md:w-auto md:flex-1 md:justify-start md:gap-10 lg:gap-16">
+          {/* Rate Product */}
+          <div className="flex min-w-[130px] flex-col items-start">
+            <p className="text-foreground mb-1.5 font-medium">
+              Rate this product
+            </p>
+            <RatingStars rating={5} className="mb-4 text-orange-400" />
+            <Button
+              variant="outline"
+              onClick={() => setIsWriteModalOpen(true)}
+              className="border-primary text-primary hover:bg-primary/10 rounded-md"
+            >
+              রিভিউ লিখুন
+            </Button>
+          </div>
 
-        {/* Overall Rating */}
-        <div className="flex min-w-[150px] flex-col items-start md:ml-auto">
-          <h4 className="text-foreground text-5xl font-semibold">2.33</h4>
-          <RatingStars rating={2.33} className="my-2" />
-          <p className="text-muted-foreground text-xs font-medium">
-            2 Ratings and 3 Reviews
-          </p>
+          {/* Overall Rating */}
+          <div className="flex min-w-[130px] flex-col items-start md:ml-auto">
+            <h4 className="text-foreground text-5xl font-semibold">2.33</h4>
+            <RatingStars rating={2.33} className="my-2" />
+            <p className="text-muted-foreground text-xs font-medium">
+              2 Ratings and 3 Reviews
+            </p>
+          </div>
         </div>
 
         {/* Progress Bars */}
@@ -122,9 +124,9 @@ export function BookReviews({
         </div>
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 sm:justify-end">
-        <div className="mr-auto flex items-center gap-2 sm:mr-4">
-          <span className="text-muted-foreground text-sm font-medium">
+      <div className="mt-6 flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
+        <div className="flex items-center gap-2 sm:mr-4">
+          <span className="text-muted-foreground text-xs font-medium sm:text-sm">
             Filter By
           </span>
           <select
@@ -134,7 +136,7 @@ export function BookReviews({
               setFilterStar(val === "All" ? null : Number(val));
               setCurrentPage(1);
             }}
-            className="cursor-pointer rounded-md border bg-transparent px-3 py-1.5 text-sm outline-none"
+            className="cursor-pointer rounded-md border bg-transparent px-2 py-1.5 text-xs outline-none sm:px-3 sm:text-sm"
           >
             <option value="All">All Stars</option>
             <option value="5">5 Stars</option>
@@ -146,7 +148,7 @@ export function BookReviews({
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground text-sm font-medium">
+          <span className="text-muted-foreground text-xs font-medium sm:text-sm">
             Sort By
           </span>
           <select
@@ -155,7 +157,7 @@ export function BookReviews({
               setSortOption(e.target.value);
               setCurrentPage(1);
             }}
-            className="cursor-pointer rounded-md border bg-transparent px-3 py-1.5 text-sm outline-none"
+            className="cursor-pointer rounded-md border bg-transparent px-2 py-1.5 text-xs outline-none sm:px-3 sm:text-sm"
           >
             <option>Default</option>
             <option>Recent</option>
