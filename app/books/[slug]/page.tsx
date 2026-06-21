@@ -25,6 +25,7 @@ import { BookHeaderActions } from "@/components/shared/book-header-actions";
 import { BookReviews } from "@/components/shared/book-reviews";
 import { BookQA } from "@/components/shared/book-qa";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
+import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -386,7 +387,7 @@ export default async function BookDetailsPage({
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-0 pt-0 pb-24 sm:px-4 md:px-6 md:pt-8 md:pb-12">
+    <div className="mx-auto w-full max-w-[1200px] px-0 pt-0 pb-28 sm:px-4 md:px-6 md:pt-8 md:pb-12">
       <div className="bg-card border-y p-0 shadow-sm sm:rounded-xl sm:border sm:p-6 lg:p-8">
         <div className="grid gap-4 md:gap-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
@@ -857,35 +858,7 @@ export default async function BookDetailsPage({
         </ScrollContainer>
       </div>
 
-      <div
-        className="bg-background/95 sticky bottom-0 z-50 border-t backdrop-blur sm:hidden"
-        style={{
-          width: "100vw",
-          marginLeft: "calc(50% - 50vw)",
-          paddingBottom: "calc(20px + env(safe-area-inset-bottom))",
-        }}
-      >
-        <div className="boimix-container flex h-16 w-full items-center gap-3">
-          {currentBook.tags.includes("sell") && (
-            <Button className="h-12 flex-1 gap-2 text-base font-semibold shadow-sm">
-              <ShoppingCart className="size-5" />
-              <span>Add to Cart</span>
-            </Button>
-          )}
-          {currentBook.tags.includes("swap") && (
-            <Button className="h-12 flex-1 gap-2 text-base font-semibold shadow-sm">
-              <Repeat2 className="size-5" />
-              <span>Swap</span>
-            </Button>
-          )}
-          {currentBook.tags.includes("borrow") && (
-            <Button className="h-12 flex-1 gap-2 text-base font-semibold shadow-sm">
-              <BookOpen className="size-5" />
-              <span>Borrow</span>
-            </Button>
-          )}
-        </div>
-      </div>
+      <BookDetailsMobileActions tags={currentBook.tags} />
     </div>
   );
 }
