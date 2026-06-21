@@ -58,30 +58,32 @@ export function BookReviews({
       id="reviews"
       className="bg-card scroll-mt-24 border p-5 shadow-sm lg:p-6"
     >
-      <h3 className="type-heading mb-6 text-xl">Reviews and Ratings</h3>
+      <h3 className="type-heading mb-4 text-xl md:mb-6">Reviews and Ratings</h3>
 
-      <div className="flex flex-col items-start gap-8 border-b pb-8 md:flex-row md:pr-4 md:pl-8 lg:gap-16 lg:pl-12">
+      <div className="flex flex-col items-start gap-5 border-b pb-5 md:flex-row md:gap-8 md:pr-4 md:pb-8 md:pl-8 lg:gap-16 lg:pl-12">
         <div className="flex w-full flex-row justify-between gap-4 md:w-auto md:flex-1 md:justify-start md:gap-10 lg:gap-16">
           {/* Rate Product */}
-          <div className="flex min-w-[130px] flex-col items-start">
-            <p className="text-foreground mb-1.5 font-medium">
+          <div className="flex min-w-[110px] flex-col items-start md:min-w-[130px]">
+            <p className="text-foreground mb-1 text-sm font-medium md:mb-1.5 md:text-base">
               Rate this product
             </p>
-            <RatingStars rating={5} className="mb-4 text-orange-400" />
+            <RatingStars rating={5} className="mb-3 text-orange-400 md:mb-4" />
             <Button
               variant="outline"
               onClick={() => setIsWriteModalOpen(true)}
-              className="border-primary text-primary hover:bg-primary/10 rounded-md"
+              className="border-primary text-primary hover:bg-primary/10 h-8 rounded-md px-3 text-xs md:h-10 md:px-4 md:text-sm"
             >
               রিভিউ লিখুন
             </Button>
           </div>
 
           {/* Overall Rating */}
-          <div className="flex min-w-[130px] flex-col items-start md:ml-auto">
-            <h4 className="text-foreground text-5xl font-semibold">2.33</h4>
-            <RatingStars rating={2.33} className="my-2" />
-            <p className="text-muted-foreground text-xs font-medium">
+          <div className="flex min-w-[110px] flex-col items-start md:ml-auto md:min-w-[130px]">
+            <h4 className="text-foreground text-4xl font-semibold md:text-5xl">
+              2.33
+            </h4>
+            <RatingStars rating={2.33} className="my-1.5 md:my-2" />
+            <p className="text-muted-foreground text-[10px] font-medium md:text-xs">
               2 Ratings and 3 Reviews
             </p>
           </div>
@@ -124,7 +126,7 @@ export function BookReviews({
         </div>
       </div>
 
-      <div className="mt-6 flex items-center justify-between gap-2 sm:justify-end sm:gap-4">
+      <div className="mt-4 flex items-center justify-between gap-2 sm:justify-end sm:gap-4 md:mt-6">
         <div className="flex items-center gap-2 sm:mr-4">
           <span className="text-muted-foreground text-xs font-medium sm:text-sm">
             Filter By
@@ -167,7 +169,7 @@ export function BookReviews({
         </div>
       </div>
 
-      <div className="mt-4 mb-6 grid gap-0">
+      <div className="mt-4 mb-4 grid gap-0 md:mt-6 md:mb-6">
         {paginatedReviews.length > 0 ? (
           paginatedReviews.map((review) => (
             <ReviewCard
