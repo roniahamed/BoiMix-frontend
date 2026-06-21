@@ -1120,15 +1120,15 @@ export default function BookUploadPage() {
 
           {/* Sticky Actions */}
           <div
-            className="bg-card fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
+            className="fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
             style={
               {
                 "--bottom-offset":
-                  "calc(64px + max(12px, env(safe-area-inset-bottom)))",
+                  "calc(52px + max(8px, env(safe-area-inset-bottom)))",
               } as React.CSSProperties
             }
           >
-            <div className="md:boimix-container flex w-full flex-row md:justify-end md:gap-4">
+            <div className="bg-card md:boimix-container flex w-full flex-row md:justify-end md:gap-4 md:bg-transparent">
               <Button
                 type="button"
                 variant="outline"

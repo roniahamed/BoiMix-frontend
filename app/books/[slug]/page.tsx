@@ -858,31 +858,33 @@ export default async function BookDetailsPage({
       </div>
 
       <div
-        className="bg-card fixed right-0 bottom-0 left-0 z-50 flex w-full border-t sm:hidden"
+        className="from-background via-background/90 fixed right-0 bottom-0 left-0 z-50 flex w-full flex-col justify-end bg-gradient-to-t to-transparent px-4 pt-10 sm:hidden"
         style={{
           paddingBottom: "max(16px, env(safe-area-inset-bottom))",
           transform: "translate3d(0, 0, 0)",
           willChange: "transform",
         }}
       >
-        {currentBook.tags.includes("sell") && (
-          <Button className="h-12 flex-1 gap-2 rounded-none text-base font-semibold">
-            <ShoppingCart className="size-5" />
-            <span>Add to Cart</span>
-          </Button>
-        )}
-        {currentBook.tags.includes("swap") && (
-          <Button className="h-12 flex-1 gap-2 rounded-none text-base font-semibold">
-            <Repeat2 className="size-5" />
-            <span>Swap</span>
-          </Button>
-        )}
-        {currentBook.tags.includes("borrow") && (
-          <Button className="h-12 flex-1 gap-2 rounded-none text-base font-semibold">
-            <BookOpen className="size-5" />
-            <span>Borrow</span>
-          </Button>
-        )}
+        <div className="flex w-full gap-3">
+          {currentBook.tags.includes("sell") && (
+            <Button className="h-12 flex-1 gap-2 rounded-full text-base font-semibold shadow-lg">
+              <ShoppingCart className="size-5" />
+              <span>Add to Cart</span>
+            </Button>
+          )}
+          {currentBook.tags.includes("swap") && (
+            <Button className="h-12 flex-1 gap-2 rounded-full text-base font-semibold shadow-lg">
+              <Repeat2 className="size-5" />
+              <span>Swap</span>
+            </Button>
+          )}
+          {currentBook.tags.includes("borrow") && (
+            <Button className="h-12 flex-1 gap-2 rounded-full text-base font-semibold shadow-lg">
+              <BookOpen className="size-5" />
+              <span>Borrow</span>
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
