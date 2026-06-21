@@ -607,7 +607,7 @@ export default function BookUploadPage() {
                       </div>
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
-                          Borrow Duration{" "}
+                          Max Borrow Duration{" "}
                           <span className="text-destructive">*</span>
                         </Label>
                         <Controller

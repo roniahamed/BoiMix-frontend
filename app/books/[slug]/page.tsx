@@ -494,8 +494,8 @@ export default async function BookDetailsPage({
 
               <hr className="my-4 border-t sm:my-6" />
 
-              {/* Pricing & Actions Section (Hidden on Mobile as price is moved top & button is sticky) */}
-              <div className="hidden space-y-4 sm:block">
+              {/* Pricing & Actions Section */}
+              <div className="space-y-4">
                 <div className="mb-4">
                   {currentBook.tags.includes("sell") && (
                     <div>
@@ -529,13 +529,26 @@ export default async function BookDetailsPage({
                         <p className="text-muted-foreground text-xs">
                           Depends on book condition
                         </p>
-                        <p className="text-muted-foreground text-xs">
-                          <span className="text-foreground font-semibold">
-                            Preferences:
-                          </span>{" "}
-                          {currentBook.swapPreferences.join(", ")}
-                        </p>
                       </div>
+
+                      {currentBook.swapPreferences &&
+                        currentBook.swapPreferences.length > 0 && (
+                          <div className="mt-4">
+                            <p className="text-foreground mb-2 text-sm font-semibold">
+                              Swap Preferences:
+                            </p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {currentBook.swapPreferences.map((pref) => (
+                                <span
+                                  key={pref}
+                                  className="bg-primary/10 text-primary rounded-md px-2.5 py-1 text-xs font-medium"
+                                >
+                                  {pref}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                     </div>
                   )}
                   {currentBook.tags.includes("borrow") && (
@@ -580,16 +593,13 @@ export default async function BookDetailsPage({
                     </Button>
                   )}
                   {currentBook.tags.includes("swap") && (
-                    <Button className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-full gap-2 text-base">
+                    <Button className="h-12 w-full gap-2 text-base">
                       <Repeat2 className="size-5" />
                       Swap Request
                     </Button>
                   )}
                   {currentBook.tags.includes("borrow") && (
-                    <Button
-                      variant="success"
-                      className="h-12 w-full gap-2 text-base"
-                    >
+                    <Button className="h-12 w-full gap-2 text-base">
                       <BookOpen className="size-5" />
                       Borrow Book
                     </Button>
@@ -777,18 +787,15 @@ export default async function BookDetailsPage({
             </Button>
           )}
           {currentBook.tags.includes("swap") && (
-            <Button
-              variant="outline"
-              className="border-primary text-primary hover:bg-primary h-12 flex-1 gap-2 shadow-sm hover:text-white"
-            >
+            <Button className="h-12 flex-1 gap-2 shadow-md">
               <Repeat2 className="size-4" />
-              <span className="font-semibold">Swap</span>
+              <span className="text-base font-semibold">Swap</span>
             </Button>
           )}
           {currentBook.tags.includes("borrow") && (
-            <Button variant="success" className="h-12 flex-1 gap-2 shadow-sm">
+            <Button className="h-12 flex-1 gap-2 shadow-md">
               <BookOpen className="size-4" />
-              <span className="font-semibold">Borrow</span>
+              <span className="text-base font-semibold">Borrow</span>
             </Button>
           )}
         </div>
