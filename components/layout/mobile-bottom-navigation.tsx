@@ -8,10 +8,20 @@ import { cn } from "@/lib/utils";
 
 export function MobileBottomNavigation() {
   const pathname = usePathname();
+  const nonDetailsRoutes = [
+    "upload",
+    "search",
+    "category",
+    "borrow",
+    "near-me",
+    "new",
+    "top-rated",
+    "trending",
+  ];
   const isDetailsPage =
     pathname.startsWith("/books/") &&
     pathname.split("/").length === 3 &&
-    pathname.split("/")[2] !== "upload";
+    !nonDetailsRoutes.includes(pathname.split("/")[2]);
 
   if (isDetailsPage) return null;
 

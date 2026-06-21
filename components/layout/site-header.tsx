@@ -18,10 +18,20 @@ export function SiteHeader() {
   const [isAtTop, setIsAtTop] = useState(true);
 
   // Check if we are on a specific book details page (e.g. /books/pather-panchali)
+  const nonDetailsRoutes = [
+    "upload",
+    "search",
+    "category",
+    "borrow",
+    "near-me",
+    "new",
+    "top-rated",
+    "trending",
+  ];
   const isDetailsPage =
     pathname.startsWith("/books/") &&
     pathname.split("/").length === 3 &&
-    pathname.split("/")[2] !== "upload";
+    !nonDetailsRoutes.includes(pathname.split("/")[2]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,7 +116,7 @@ export function SiteHeader() {
           isDetailsPage && "hidden",
         )}
       >
-        <SearchBar />
+        <SearchBar autoFocus={pathname === "/books/search"} />
       </div>
       <div className={cn("w-full", isDetailsPage && "max-md:hidden")}>
         <QuickNavBar />

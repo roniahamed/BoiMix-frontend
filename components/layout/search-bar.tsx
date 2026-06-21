@@ -9,7 +9,7 @@ import {
   BookOpenIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 type SearchBarProps = {
   className?: string;
   placeholder?: string;
+  autoFocus?: boolean;
 };
 
 // Dummy database for search suggestions
@@ -86,12 +87,35 @@ const initialRecents = ["Rivers of Dhaka", "English Grammar"];
 export function SearchBar({
   className,
   placeholder = "Search books, authors, ISBN...",
+  autoFocus = false,
 }: SearchBarProps) {
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams?.get("q") || "";
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(initialQuery);
   const [recents, setRecents] = useState<string[]>(initialRecents);
   const containerRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  // Focus input when autoFocus prop changes to true
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      // Use timeout to bypass Drawer/Dialog focus return animations
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+        setIsOpen(true);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [autoFocus]);
+
+  // Sync query if URL changes
+  useEffect(() => {
+    const q = searchParams?.get("q") || "";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setQuery(q);
+  }, [searchParams]);
 
   // Click outside to close
   useEffect(() => {
@@ -161,8 +185,10 @@ export function SearchBar({
       <div className="relative flex-1">
         <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
+          ref={inputRef}
           type="search"
           value={query}
+          autoFocus={autoFocus}
           onChange={(e) => {
             setQuery(e.target.value);
             setIsOpen(true);
@@ -194,7 +220,15 @@ export function SearchBar({
 
       {/* Autocomplete Dropdown */}
       {isOpen && (
-        <div className="bg-card border-border shadow-soft absolute top-full left-0 z-50 mt-1.5 w-full overflow-hidden rounded-xl border p-4 backdrop-blur-md md:min-w-[450px]">
+        <div className="bg-card border-border shadow-soft absolute top-full left-0 z-50 mt-1.5 w-full overflow-hidden rounded-xl border p-4 pt-8 backdrop-blur-md md:min-w-[450px]">
+          <button
+            type="button"
+            onClick={() => setIsOpen(false)}
+            className="text-muted-foreground hover:text-foreground hover:bg-muted absolute top-2 right-2 rounded-md p-1.5"
+            aria-label="Close suggestions"
+          >
+            <XIcon className="size-4" />
+          </button>
           {/* Quick search UI split */}
           {!query ? (
             <div className="grid gap-6 md:grid-cols-2">

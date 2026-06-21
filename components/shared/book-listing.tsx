@@ -642,6 +642,12 @@ export function BookListing({
     }, 300);
   }, [hasMore]);
 
+  // Sync defaultSearchQuery from URL params to local state
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSearchQuery(defaultSearchQuery);
+  }, [defaultSearchQuery]);
+
   // Continuous background loading for mock data
   useEffect(() => {
     if (!hasMore || isLoading) return;
@@ -735,34 +741,6 @@ export function BookListing({
             {description}
           </p>
         </div>
-        <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row">
-          <Drawer>
-            <DrawerTrigger asChild>
-              <Button className="shrink-0 gap-2 md:hidden">
-                <SlidersHorizontal className="size-4" />
-                ফিল্টার
-              </Button>
-            </DrawerTrigger>
-            <DrawerContent className="h-[85vh]">
-              <DrawerTitle className="sr-only">Filters</DrawerTitle>
-              <div className="overflow-y-auto pb-6">
-                <FilterSidebar
-                  groups={FILTER_GROUPS}
-                  selectedFilters={selectedFilters}
-                  onFilterChange={handleFilterChange}
-                  onFilterReset={handleFilterReset}
-                  onRangeChange={handleRangeChange}
-                  className="border-none shadow-none"
-                />
-              </div>
-              <DrawerFooter className="border-t pt-2 pb-6">
-                <DrawerClose asChild>
-                  <Button className="w-full">এপ্লাই করুন (Close)</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        </div>
       </div>
 
       <div className="grid gap-8 lg:grid-cols-[260px_1fr] xl:grid-cols-[280px_1fr]">
@@ -787,22 +765,56 @@ export function BookListing({
               </span>{" "}
               টি বই পাওয়া গেছে
             </p>
-            <div className="flex items-center gap-2">
-              <span className="text-muted-foreground text-sm whitespace-nowrap">
-                সর্ট করুন:
-              </span>
-              <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="w-[160px] bg-transparent">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="newest">নতুন যোগ করা</SelectItem>
-                  <SelectItem value="price-low">দাম: কম থেকে বেশি</SelectItem>
-                  <SelectItem value="price-high">দাম: বেশি থেকে কম</SelectItem>
-                  <SelectItem value="rating">সর্বোচ্চ রেটিং</SelectItem>
-                  <SelectItem value="distance">নিকটবর্তী</SelectItem>
-                </SelectContent>
-              </Select>
+            <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
+              <div className="flex flex-1 items-center gap-2 sm:flex-none">
+                <span className="text-muted-foreground hidden text-sm whitespace-nowrap sm:inline-block">
+                  সর্ট করুন:
+                </span>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className="w-full bg-transparent sm:w-[160px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="newest">নতুন যোগ করা</SelectItem>
+                    <SelectItem value="price-low">দাম: কম থেকে বেশি</SelectItem>
+                    <SelectItem value="price-high">
+                      দাম: বেশি থেকে কম
+                    </SelectItem>
+                    <SelectItem value="rating">সর্বোচ্চ রেটিং</SelectItem>
+                    <SelectItem value="distance">নিকটবর্তী</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="flex-1 shrink-0 gap-2 sm:flex-none md:hidden"
+                  >
+                    <SlidersHorizontal className="size-4" />
+                    ফিল্টার
+                  </Button>
+                </DrawerTrigger>
+                <DrawerContent className="h-[85vh]">
+                  <DrawerTitle className="sr-only">Filters</DrawerTitle>
+                  <div className="overflow-y-auto pb-6">
+                    <FilterSidebar
+                      groups={FILTER_GROUPS}
+                      selectedFilters={selectedFilters}
+                      onFilterChange={handleFilterChange}
+                      onFilterReset={handleFilterReset}
+                      onRangeChange={handleRangeChange}
+                      className="border-none shadow-none"
+                    />
+                  </div>
+                  <DrawerFooter className="border-t pt-2 pb-6">
+                    <DrawerClose asChild>
+                      <Button className="w-full">এপ্লাই করুন (Close)</Button>
+                    </DrawerClose>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
             </div>
           </div>
 

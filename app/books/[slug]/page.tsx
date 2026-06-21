@@ -386,7 +386,7 @@ export default async function BookDetailsPage({
   }
 
   return (
-    <div className="sm:boimix-container w-full pt-0 pb-24 sm:px-4 md:px-6 md:pt-8 md:pb-12">
+    <div className="mx-auto w-full max-w-[1200px] px-0 pt-0 pb-24 sm:px-4 md:px-6 md:pt-8 md:pb-12">
       <div className="bg-card border-y p-0 shadow-sm sm:rounded-xl sm:border sm:p-6 lg:p-8">
         <div className="grid gap-4 md:gap-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
