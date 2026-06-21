@@ -387,47 +387,49 @@ export default async function BookDetailsPage({
   }
 
   return (
-    <div className="mx-auto w-full max-w-[1200px] px-0 pt-0 pb-20 sm:px-4 md:px-6 md:pt-8 md:pb-12">
+    <div
+      className="mx-auto w-full max-w-[1200px] overflow-x-hidden overscroll-x-none px-0 pt-0 pb-20 sm:px-4 md:px-6 md:pt-8 md:pb-12"
+      style={{ touchAction: "pan-y" }}
+    >
+      <div className="fixed top-4 right-4 left-4 z-50 flex items-center justify-between md:hidden">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
+          asChild
+        >
+          <Link href="/">
+            <Home className="size-4.5" />
+          </Link>
+        </Button>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
+            asChild
+          >
+            <Link href="/dashboard/cart">
+              <ShoppingCart className="size-4.5" />
+            </Link>
+          </Button>
+          <MobileNavbar>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
+            >
+              <MoreVertical className="size-4.5" />
+            </Button>
+          </MobileNavbar>
+        </div>
+      </div>
+
       <div className="bg-card border-y p-0 shadow-sm sm:rounded-xl sm:border sm:p-6 lg:p-8">
         <div className="grid gap-4 md:gap-6 lg:grid-cols-12 lg:gap-8">
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-4 lg:col-start-1">
             <div className="relative mx-auto w-full sm:max-w-[320px]">
-              {/* Mobile Top Navigation (Overlaid on Image) */}
-              <div className="absolute top-4 right-4 left-4 z-20 flex items-center justify-between md:hidden">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
-                  asChild
-                >
-                  <Link href="/">
-                    <Home className="size-4.5" />
-                  </Link>
-                </Button>
-                <div className="flex items-center gap-1">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
-                    asChild
-                  >
-                    <Link href="/dashboard/cart">
-                      <ShoppingCart className="size-4.5" />
-                    </Link>
-                  </Button>
-                  <MobileNavbar>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
-                    >
-                      <MoreVertical className="size-4.5" />
-                    </Button>
-                  </MobileNavbar>
-                </div>
-              </div>
-
               <BookGallery images={currentBook.images} />
             </div>
           </div>
