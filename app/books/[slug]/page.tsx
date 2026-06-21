@@ -5,12 +5,8 @@ import {
   Repeat2,
   ShoppingCart,
   BookOpen,
-  Heart,
-  Share2,
   Star,
-  User,
   Users,
-  Send,
   ShieldCheck,
   PhoneCall,
 } from "lucide-react";
@@ -19,14 +15,12 @@ import { Button } from "@/components/ui/button";
 import { BookGallery } from "@/components/shared/book-gallery";
 import { UserBadge } from "@/components/shared/user-badge";
 import { RatingStars } from "@/components/shared/rating-stars";
-import { ReviewCard } from "@/components/shared/review-card";
-
-import { BookConditionBadge } from "@/components/shared/book-condition-badge";
 import { BookCard } from "@/components/shared/book-card";
 import { ScrollContainer } from "@/components/shared/scroll-container";
 import type { BookCardBook } from "@/types/book";
-import { ReviewForm } from "@/components/shared/review-form";
 import { BookHeaderActions } from "@/components/shared/book-header-actions";
+import { BookReviews } from "@/components/shared/book-reviews";
+import { BookQA } from "@/components/shared/book-qa";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -103,21 +97,119 @@ const MOCK_OWNER = {
 const MOCK_REVIEWS = [
   {
     id: "r1",
-    authorName: "তানিয়া আহমেদ",
-    authorAvatar: "https://i.pravatar.cc/150?u=tania",
-    rating: 5,
-    date: "2 days ago",
-    content:
-      "বইটি একদম নতুনের মতোই ছিল। রহিম ভাইয়ের ব্যবহার অনেক ভালো। খুব দ্রুতই বইটি হাতে পেয়েছি।",
+    authorName: "Dipto Hossain",
+    authorAvatar: "",
+    rating: 1,
+    date: "06 Jan 2025",
+    content: "বইটা বিশেষ কিছু নেই খুবই বাজে একটা বই।",
+    helpfulCount: 12,
   },
   {
     id: "r2",
-    authorName: "সাকিব হাসান",
-    authorAvatar: "https://i.pravatar.cc/150?u=sakib",
+    authorName: "Azizul Hakim",
+    authorAvatar: "https://i.pravatar.cc/150?u=azizul",
+    rating: 1,
+    date: "14 Feb 2024",
+    content: "faltu boi khube faltu keu kinben na",
+    helpfulCount: 39,
+  },
+  {
+    id: "r3",
+    authorName: "Mahfuz Ahmed Emon",
+    authorAvatar: "https://i.pravatar.cc/150?u=mahfuz",
+    rating: 5,
+    date: "19 Oct 2025",
+    content: "Great book on laws of attractions.",
+    helpfulCount: 3,
+  },
+  {
+    id: "r4",
+    authorName: "Sabbir Hasan",
+    authorAvatar: "",
     rating: 4,
-    date: "1 week ago",
-    content:
-      "দারুণ একটি বই। তবে কভারের একটা কোণায় একটু ভাজ ছিল, তা ছাড়া সব ঠিক আছে।",
+    date: "12 Dec 2023",
+    content: "Valoi lagse, kintu ar o details thakle valo hoto.",
+    helpfulCount: 5,
+  },
+  {
+    id: "r5",
+    authorName: "Nusrat Jahan",
+    authorAvatar: "",
+    rating: 5,
+    date: "10 Nov 2023",
+    content: "Excellent read! Highly recommended for everyone.",
+    helpfulCount: 12,
+  },
+  {
+    id: "r6",
+    authorName: "Rakib Uddin",
+    authorAvatar: "",
+    rating: 3,
+    date: "05 Sep 2023",
+    content: "Average book. Not bad but not great either.",
+    helpfulCount: 1,
+  },
+  {
+    id: "r7",
+    authorName: "Tariqul Islam",
+    authorAvatar: "",
+    rating: 2,
+    date: "01 Aug 2023",
+    content: "Didn't meet my expectations. Delivery was late too.",
+    helpfulCount: 0,
+  },
+];
+
+const MOCK_QA = [
+  {
+    id: "qa1",
+    question:
+      "এই বইটা কবে ছাপাবে? মানে এটা তো pdf আকারে পাওয়া যাচ্ছে? বাট প্রকাশনী থেকে কবে প্রকাশ করবে??",
+    asker: "Md Fardin Hossain",
+    askDate: "03 Jan, 2024",
+    answer:
+      "প্রিয় গ্রাহক, দুঃখিত, এটি নির্ভর করে প্রকাশনী কর্তৃক রিপ্রিন্ট করার মাধ্যমে; তাই নিশ্চিতভাবে বলা যাচ্ছে না কবে পাওয়া যাবে। ধন্যবাদ।",
+    answerer: "Zakariya Arif",
+    answerDate: "03 Jan, 2024",
+  },
+  {
+    id: "qa2",
+    question: "Is this the hardcover edition?",
+    asker: "Tanvir Ahmed",
+    askDate: "12 Feb, 2024",
+    answer: "No, this is the paperback edition.",
+    answerer: "BoiMix Support",
+    answerDate: "13 Feb, 2024",
+  },
+  {
+    id: "qa3",
+    question: "Boi tar pages koto gulo?",
+    asker: "Samiya Rahman",
+    askDate: "05 Mar, 2024",
+    answer: "এই বইটিতে মোট ৩২০ টি পৃষ্ঠা রয়েছে।",
+    answerer: "BoiMix Support",
+    answerDate: "06 Mar, 2024",
+  },
+  {
+    id: "qa4",
+    question: "Delivery charge koto nibe outside Dhaka?",
+    asker: "Kamrul Hasan",
+    askDate: "20 Apr, 2024",
+  },
+  {
+    id: "qa5",
+    question: "Boi ta ki English version e ase?",
+    asker: "Rifat Ali",
+    askDate: "15 May, 2024",
+    answer: "দুঃখিত, বর্তমানে শুধু বাংলা সংস্করণটিই আমাদের কাছে আছে।",
+    answerer: "BoiMix Support",
+    answerDate: "16 May, 2024",
+  },
+  {
+    id: "qa6",
+    question: "Order korle kobe pabo?",
+    asker: "Jubayer Hossain",
+    askDate: "22 Jun, 2024",
   },
 ];
 
@@ -571,46 +663,9 @@ export default function BookDetailsPage() {
           </div>
         </div>
 
-        {/* Reviews */}
-        <div
-          id="reviews"
-          className="bg-card scroll-mt-24 border p-5 shadow-sm lg:p-6"
-        >
-          <div className="mb-6 flex items-center justify-between">
-            <h3 className="type-heading text-xl">
-              রিভিউ ({MOCK_BOOK.reviewCount})
-            </h3>
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary/10 hidden sm:flex"
-              >
-                রিভিউ লিখুন
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-primary hover:bg-primary/10 hover:text-primary"
-              >
-                সবগুলো দেখুন
-              </Button>
-            </div>
-          </div>
+        <BookReviews reviews={MOCK_REVIEWS} bookTitle={MOCK_BOOK.title} />
 
-          <div className="grid gap-4">
-            {MOCK_REVIEWS.map((review) => (
-              <ReviewCard
-                key={review.id}
-                reviewerName={review.authorName}
-                reviewerAvatarUrl={review.authorAvatar}
-                rating={review.rating}
-                body={review.content}
-                createdAt={review.date}
-              />
-            ))}
-          </div>
-
-          <ReviewForm bookTitle={MOCK_BOOK.title} />
-        </div>
+        <BookQA qas={MOCK_QA} />
       </div>
 
       {/* Similar Books Section */}
