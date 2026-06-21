@@ -20,7 +20,17 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
-export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
+type QAItem = {
+  id: string;
+  question: string;
+  asker: string;
+  askDate: string;
+  answer?: string;
+  answerer?: string;
+  answerDate?: string;
+};
+
+export function BookQA({ qas }: { qas: QAItem[] }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isAskModalOpen, setIsAskModalOpen] = useState(false);
   const [askText, setAskText] = useState("");
@@ -43,7 +53,7 @@ export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
     setIsAskModalOpen(false);
   };
 
-  const handleAnswerSubmit = (_qaId: string) => {
+  const handleAnswerSubmit = () => {
     if (!answerText.trim()) return;
     toast.success("আপনার উত্তরটি সফলভাবে জমা দেওয়া হয়েছে!");
     setAnswerText("");
@@ -126,10 +136,7 @@ export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
                       >
                         Cancel
                       </Button>
-                      <Button
-                        size="sm"
-                        onClick={() => handleAnswerSubmit(qa.id)}
-                      >
+                      <Button size="sm" onClick={handleAnswerSubmit}>
                         Submit Answer
                       </Button>
                     </div>

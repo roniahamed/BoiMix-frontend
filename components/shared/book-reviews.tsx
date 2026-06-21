@@ -23,11 +23,21 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+type ReviewItem = {
+  id: string;
+  rating: number;
+  authorName: string;
+  authorAvatar: string;
+  content: string;
+  date: string;
+  helpfulCount: number;
+};
+
 export function BookReviews({
   reviews,
   bookTitle,
 }: {
-  reviews: Record<string, unknown>[];
+  reviews: ReviewItem[];
   bookTitle: string;
 }) {
   const [currentPage, setCurrentPage] = useState(1);

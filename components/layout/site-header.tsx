@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { BellIcon, HeartIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
 
 import { BrandLink } from "@/components/layout/brand-link";
@@ -69,7 +69,13 @@ export function SiteHeader() {
           <BrandLink className="shrink-0" />
         </div>
         <DesktopNavbar />
-        <SearchBar className="mx-auto hidden max-w-xl md:flex" />
+        <Suspense
+          fallback={
+            <div className="bg-muted mx-auto hidden h-10 w-full max-w-xl rounded-lg md:flex" />
+          }
+        >
+          <SearchBar className="mx-auto hidden max-w-xl md:flex" />
+        </Suspense>
 
         <div className="ml-auto flex items-center gap-1">
           <Button
@@ -116,7 +122,11 @@ export function SiteHeader() {
           isDetailsPage && "hidden",
         )}
       >
-        <SearchBar autoFocus={pathname === "/books/search"} />
+        <Suspense
+          fallback={<div className="bg-muted h-10 w-full rounded-lg" />}
+        >
+          <SearchBar autoFocus={pathname === "/books/search"} />
+        </Suspense>
       </div>
       <div className={cn("w-full", isDetailsPage && "max-md:hidden")}>
         <QuickNavBar />
