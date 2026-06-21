@@ -28,6 +28,7 @@ export function MobileBottomNavigation() {
   return (
     <nav
       className="bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur md:hidden"
+      style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom))" }}
       aria-label="Mobile bottom"
     >
       <div className="grid h-16 grid-cols-5">

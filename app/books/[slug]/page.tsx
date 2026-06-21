@@ -858,23 +858,26 @@ export default async function BookDetailsPage({
       </div>
 
       {/* Mobile Sticky Action Bar */}
-      <div className="pb-safe fixed bottom-0 left-0 z-50 flex w-full sm:hidden">
+      <div
+        className="bg-background/95 fixed inset-x-0 bottom-0 z-50 flex w-full border-t p-3 shadow-lg backdrop-blur-sm sm:hidden"
+        style={{ paddingBottom: "max(24px, env(safe-area-inset-bottom))" }}
+      >
         {currentBook.tags.includes("sell") && (
-          <Button className="h-[60px] flex-1 gap-2 rounded-none text-lg">
+          <Button className="h-12 flex-1 gap-2 rounded-xl text-lg font-semibold shadow-sm">
             <ShoppingCart className="size-5" />
-            <span className="font-semibold">Add to Cart</span>
+            <span>Add to Cart</span>
           </Button>
         )}
         {currentBook.tags.includes("swap") && (
-          <Button className="h-[60px] flex-1 gap-2 rounded-none text-lg">
+          <Button className="h-12 flex-1 gap-2 rounded-xl text-lg font-semibold shadow-sm">
             <Repeat2 className="size-5" />
-            <span className="font-semibold">Swap</span>
+            <span>Swap</span>
           </Button>
         )}
         {currentBook.tags.includes("borrow") && (
-          <Button className="h-[60px] flex-1 gap-2 rounded-none text-lg">
+          <Button className="h-12 flex-1 gap-2 rounded-xl text-lg font-semibold shadow-sm">
             <BookOpen className="size-5" />
-            <span className="font-semibold">Borrow</span>
+            <span>Borrow</span>
           </Button>
         )}
       </div>
