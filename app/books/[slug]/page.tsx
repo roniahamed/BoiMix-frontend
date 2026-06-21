@@ -585,7 +585,7 @@ export default async function BookDetailsPage({
                 </div>
 
                 {/* Desktop Actions (Hidden on Mobile) */}
-                <div className="hidden sm:block">
+                <div className="mx-auto hidden w-full max-w-[500px] gap-3 sm:flex sm:flex-col">
                   {currentBook.tags.includes("sell") && (
                     <Button className="h-12 w-full gap-2 text-base">
                       <ShoppingCart className="size-5" />
