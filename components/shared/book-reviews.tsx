@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star } from "lucide-react";
+import { MessageSquareDashed, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RatingStars } from "@/components/shared/rating-stars";
@@ -183,9 +183,21 @@ export function BookReviews({
             />
           ))
         ) : (
-          <p className="text-muted-foreground py-8 text-center">
-            No reviews found for this filter.
-          </p>
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="bg-muted/30 mb-4 flex size-20 items-center justify-center rounded-full">
+              <MessageSquareDashed className="text-muted-foreground size-10" />
+            </div>
+            <h4 className="text-foreground mb-2 text-lg font-semibold">
+              No reviews yet
+            </h4>
+            <p className="text-muted-foreground mb-6 max-w-sm text-sm">
+              We couldn&apos;t find any reviews matching your current filters.
+              Be the first to share your thoughts!
+            </p>
+            <Button onClick={() => setIsWriteModalOpen(true)}>
+              Write a Review
+            </Button>
+          </div>
         )}
       </div>
 
@@ -198,6 +210,9 @@ export function BookReviews({
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentPage((p) => Math.max(1, p - 1));
+                  document
+                    .getElementById("reviews")
+                    ?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className={
                   currentPage === 1 ? "pointer-events-none opacity-50" : ""
@@ -212,6 +227,9 @@ export function BookReviews({
                   onClick={(e) => {
                     e.preventDefault();
                     setCurrentPage(i + 1);
+                    document
+                      .getElementById("reviews")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   {i + 1}
@@ -224,6 +242,9 @@ export function BookReviews({
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentPage((p) => Math.min(totalPages, p + 1));
+                  document
+                    .getElementById("reviews")
+                    ?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className={
                   currentPage === totalPages

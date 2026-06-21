@@ -53,10 +53,10 @@ const MOCK_BOOK = {
       alt: "Back cover",
     },
   ],
-  tags: ["sell"],
+  tags: ["swap"],
   availability: {
-    sell: 1,
-    borrow: 2,
+    sell: 0,
+    borrow: 0,
     swap: 1,
   },
   location: "মিরপুর ১০, ঢাকা",
@@ -65,6 +65,9 @@ const MOCK_BOOK = {
   price: 250,
   originalPrice: 350,
   swapPrice: 300,
+  borrowFee: 50,
+  maxBorrowDays: 14,
+  swapPreferences: ["Fiction", "Self Help", "Any Book"],
   rating: 4.8,
   reviewCount: 24,
   totalBorrow: 15,
@@ -344,7 +347,40 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
   },
 ];
 
-export default function BookDetailsPage() {
+export default async function BookDetailsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
+
+  // Find the book in recommendations to see if it has specific tags,
+  // or use test slugs, or default to "sell"
+  const foundBook = MOCK_RECOMMENDED_BOOKS.find((b) => b.slug === slug);
+
+  const currentTag =
+    slug === "test-sell"
+      ? "sell"
+      : slug === "test-swap"
+        ? "swap"
+        : slug === "test-borrow"
+          ? "borrow"
+          : foundBook
+            ? foundBook.tags[0]
+            : "sell";
+
+  const currentBook = { ...MOCK_BOOK, tags: [currentTag] };
+
+  // Adjust availability based on the tag so it looks realistic
+  if (currentTag === "sell") {
+    currentBook.availability = { sell: 3, borrow: 0, swap: 0 };
+  } else if (currentTag === "borrow") {
+    currentBook.availability = { sell: 0, borrow: 2, swap: 0 };
+  } else if (currentTag === "swap") {
+    currentBook.availability = { sell: 0, borrow: 0, swap: 1 };
+  }
+
   return (
     <div className="boimix-container pt-3 pb-24 md:pt-8 md:pb-12">
       <div className="bg-card border p-4 shadow-sm sm:p-6 lg:p-8">
@@ -352,7 +388,7 @@ export default function BookDetailsPage() {
           {/* Left Column: Image Gallery */}
           <div className="lg:col-span-4 lg:col-start-1">
             <div className="mx-auto max-w-[320px]">
-              <BookGallery images={MOCK_BOOK.images} />
+              <BookGallery images={currentBook.images} />
             </div>
           </div>
 
@@ -362,17 +398,17 @@ export default function BookDetailsPage() {
               {/* Header Actions & Pricing */}
               <div className="mb-3 flex flex-wrap items-center justify-between gap-4 md:mb-4">
                 <div className="flex flex-wrap items-center gap-3">
-                  {MOCK_BOOK.tags.includes("sell") && (
+                  {currentBook.tags.includes("sell") && (
                     <span className="text-warning text-sm font-semibold">
                       Sell
                     </span>
                   )}
-                  {MOCK_BOOK.tags.includes("swap") && (
+                  {currentBook.tags.includes("swap") && (
                     <span className="text-info text-sm font-semibold">
                       Swap
                     </span>
                   )}
-                  {MOCK_BOOK.tags.includes("borrow") && (
+                  {currentBook.tags.includes("borrow") && (
                     <span className="text-success text-sm font-semibold">
                       Borrow
                     </span>
@@ -380,13 +416,13 @@ export default function BookDetailsPage() {
 
                   {/* Mobile Pricing (Hidden on Desktop) */}
                   <div className="ml-1 flex items-center gap-2 border-l pl-3 sm:hidden">
-                    {MOCK_BOOK.tags.includes("sell") && (
+                    {currentBook.tags.includes("sell") && (
                       <>
                         <span className="text-accent text-lg leading-none font-bold">
-                          ৳{MOCK_BOOK.price}
+                          ৳{currentBook.price}
                         </span>
                         <span className="text-muted-foreground text-xs leading-none line-through">
-                          ৳{MOCK_BOOK.originalPrice}
+                          ৳{currentBook.originalPrice}
                         </span>
                       </>
                     )}
@@ -397,26 +433,26 @@ export default function BookDetailsPage() {
               </div>
 
               <h1 className="type-heading mb-2 text-2xl leading-tight md:text-3xl lg:text-4xl">
-                {MOCK_BOOK.title}
+                {currentBook.title}
               </h1>
               <p className="text-muted-foreground mb-4 text-base md:text-lg">
                 লেখক:{" "}
                 <span className="text-foreground font-medium">
-                  {MOCK_BOOK.author}
+                  {currentBook.author}
                 </span>
               </p>
 
               <div className="mb-4 flex flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-4">
                   <div className="flex items-center gap-1.5">
-                    <RatingStars rating={MOCK_BOOK.rating} />
+                    <RatingStars rating={currentBook.rating} />
                     <span className="text-muted-foreground text-sm font-medium">
-                      {MOCK_BOOK.rating}{" "}
+                      {currentBook.rating}{" "}
                       <a
                         href="#reviews"
                         className="text-primary hover:text-primary/80 font-semibold underline transition-colors"
                       >
-                        ({MOCK_BOOK.reviewCount} Reviews)
+                        ({currentBook.reviewCount} Reviews)
                       </a>
                     </span>
                   </div>
@@ -424,19 +460,19 @@ export default function BookDetailsPage() {
                 <p className="text-muted-foreground text-sm font-medium">
                   Condition:{" "}
                   <a
-                    href={`/explore?condition=${MOCK_BOOK.condition}`}
+                    href={`/explore?condition=${currentBook.condition}`}
                     className="text-primary capitalize hover:underline"
                   >
-                    {MOCK_BOOK.condition}
+                    {currentBook.condition}
                   </a>
                 </p>
 
                 <div className="text-muted-foreground mt-1 flex items-center gap-1.5 text-sm font-medium">
                   <MapPin className="size-4 shrink-0" />
-                  <span>{MOCK_BOOK.location}</span>
+                  <span>{currentBook.location}</span>
                   <span className="text-muted-foreground/50 shrink-0">•</span>
                   <span className="text-foreground shrink-0">
-                    {MOCK_BOOK.distance} দূরে
+                    {currentBook.distance} দূরে
                   </span>
                 </div>
               </div>
@@ -449,10 +485,10 @@ export default function BookDetailsPage() {
               <div className="text-muted-foreground mt-2 flex items-center gap-1.5 text-sm">
                 ক্যাটাগরি:{" "}
                 <a
-                  href={`/explore?category=${encodeURIComponent(MOCK_BOOK.genre)}`}
+                  href={`/explore?category=${encodeURIComponent(currentBook.genre)}`}
                   className="text-primary font-medium hover:underline"
                 >
-                  {MOCK_BOOK.genre}
+                  {currentBook.genre}
                 </a>
               </div>
 
@@ -461,69 +497,95 @@ export default function BookDetailsPage() {
               {/* Pricing & Actions Section (Hidden on Mobile as price is moved top & button is sticky) */}
               <div className="hidden space-y-4 sm:block">
                 <div className="mb-4">
-                  {MOCK_BOOK.tags.includes("sell") && (
+                  {currentBook.tags.includes("sell") && (
                     <div>
                       <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
                         Buy Price
                       </p>
                       <div className="flex items-end gap-2">
                         <p className="text-accent text-3xl font-bold">
-                          ৳{MOCK_BOOK.price}
+                          ৳{currentBook.price}
                         </p>
                         <p className="text-muted-foreground mb-1 text-sm line-through">
-                          ৳{MOCK_BOOK.originalPrice}
+                          ৳{currentBook.originalPrice}
                         </p>
                       </div>
                       <p className="text-muted-foreground mt-1 text-xs">
-                        {MOCK_BOOK.availability.sell} copy available
+                        {currentBook.availability.sell} copy available
                       </p>
                     </div>
                   )}
-                  {MOCK_BOOK.tags.includes("swap") && (
+                  {currentBook.tags.includes("swap") && (
                     <div>
                       <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
                         Estimated Swap Value
                       </p>
                       <div className="flex items-end gap-2">
                         <p className="text-foreground text-3xl font-bold">
-                          ৳{MOCK_BOOK.swapPrice}
+                          ৳{currentBook.swapPrice}
                         </p>
                       </div>
-                      <p className="text-muted-foreground mt-1 text-xs">
-                        Depends on book condition
-                      </p>
+                      <div className="mt-2 space-y-1">
+                        <p className="text-muted-foreground text-xs">
+                          Depends on book condition
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                          <span className="text-foreground font-semibold">
+                            Preferences:
+                          </span>{" "}
+                          {currentBook.swapPreferences.join(", ")}
+                        </p>
+                      </div>
                     </div>
                   )}
-                  {MOCK_BOOK.tags.includes("borrow") && (
+                  {currentBook.tags.includes("borrow") && (
                     <div>
                       <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
                         Borrow Cost
                       </p>
                       <div className="flex items-end gap-2">
-                        <p className="text-success text-3xl font-bold">Free</p>
+                        {currentBook.borrowFee ? (
+                          <p className="text-foreground text-3xl font-bold">
+                            ৳{currentBook.borrowFee}
+                          </p>
+                        ) : (
+                          <p className="text-success text-3xl font-bold">
+                            Free
+                          </p>
+                        )}
                       </div>
-                      <p className="text-muted-foreground mt-1 text-xs">
-                        Library members only
-                      </p>
+                      <div className="mt-2 space-y-1">
+                        <p className="text-muted-foreground text-xs">
+                          {currentBook.borrowFee
+                            ? "Fixed borrow fee"
+                            : "Subscription required"}
+                        </p>
+                        <p className="text-muted-foreground text-xs">
+                          <span className="text-foreground font-semibold">
+                            Max Duration:
+                          </span>{" "}
+                          {currentBook.maxBorrowDays} days
+                        </p>
+                      </div>
                     </div>
                   )}
                 </div>
 
                 {/* Desktop Actions (Hidden on Mobile) */}
                 <div className="hidden sm:block">
-                  {MOCK_BOOK.tags.includes("sell") && (
+                  {currentBook.tags.includes("sell") && (
                     <Button className="h-12 w-full gap-2 text-base">
                       <ShoppingCart className="size-5" />
                       Add to Cart
                     </Button>
                   )}
-                  {MOCK_BOOK.tags.includes("swap") && (
+                  {currentBook.tags.includes("swap") && (
                     <Button className="bg-primary text-primary-foreground hover:bg-primary/90 h-12 w-full gap-2 text-base">
                       <Repeat2 className="size-5" />
                       Swap Request
                     </Button>
                   )}
-                  {MOCK_BOOK.tags.includes("borrow") && (
+                  {currentBook.tags.includes("borrow") && (
                     <Button
                       variant="success"
                       className="h-12 w-full gap-2 text-base"
@@ -549,6 +611,7 @@ export default function BookDetailsPage() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex-1">
               <div className="flex items-start gap-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={MOCK_OWNER.avatarUrl}
                   alt={MOCK_OWNER.name}
@@ -587,7 +650,7 @@ export default function BookDetailsPage() {
                 </div>
                 <div className="text-primary flex items-center gap-1.5">
                   <Star className="fill-primary size-4" />
-                  {MOCK_OWNER.rating} ({MOCK_BOOK.reviewCount} Reviews)
+                  {MOCK_OWNER.rating} ({currentBook.reviewCount} Reviews)
                 </div>
               </div>
             </div>
@@ -707,13 +770,13 @@ export default function BookDetailsPage() {
       {/* Mobile Sticky Action Bar */}
       <div className="bg-background fixed bottom-16 left-0 z-50 w-full border-t p-3 shadow-[0_-4px_20px_-10px_rgba(0,0,0,0.1)] sm:hidden">
         <div className="boimix-container flex gap-2">
-          {MOCK_BOOK.tags.includes("sell") && (
+          {currentBook.tags.includes("sell") && (
             <Button className="h-12 flex-1 gap-2 shadow-md">
               <ShoppingCart className="size-4" />
               <span className="text-base font-semibold">Add to Cart</span>
             </Button>
           )}
-          {MOCK_BOOK.tags.includes("swap") && (
+          {currentBook.tags.includes("swap") && (
             <Button
               variant="outline"
               className="border-primary text-primary hover:bg-primary h-12 flex-1 gap-2 shadow-sm hover:text-white"
@@ -722,7 +785,7 @@ export default function BookDetailsPage() {
               <span className="font-semibold">Swap</span>
             </Button>
           )}
-          {MOCK_BOOK.tags.includes("borrow") && (
+          {currentBook.tags.includes("borrow") && (
             <Button variant="success" className="h-12 flex-1 gap-2 shadow-sm">
               <BookOpen className="size-4" />
               <span className="font-semibold">Borrow</span>

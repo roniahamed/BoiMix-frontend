@@ -18,6 +18,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -37,20 +38,20 @@ export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
 
   const handleAskSubmit = () => {
     if (!askText.trim()) return;
-    console.log("Asked question:", askText);
-    setIsAskModalOpen(false);
+    toast.success("আপনার প্রশ্নটি সফলভাবে জমা দেওয়া হয়েছে!");
     setAskText("");
+    setIsAskModalOpen(false);
   };
 
-  const handleAnswerSubmit = (qaId: string) => {
+  const handleAnswerSubmit = (_qaId: string) => {
     if (!answerText.trim()) return;
-    console.log("Submitted answer for", qaId, ":", answerText);
-    setAnsweringId(null);
+    toast.success("আপনার উত্তরটি সফলভাবে জমা দেওয়া হয়েছে!");
     setAnswerText("");
+    setAnsweringId(null);
   };
 
   return (
-    <div className="bg-card border p-5 shadow-sm lg:p-6">
+    <div id="qa-section" className="bg-card border p-5 shadow-sm lg:p-6">
       <div className="mb-6 flex flex-col justify-between gap-4 border-b pb-4 sm:flex-row sm:items-center">
         <div>
           <h3 className="type-heading mb-1 text-xl">Product Q/A</h3>
@@ -163,6 +164,9 @@ export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentPage((p) => Math.max(1, p - 1));
+                  document
+                    .getElementById("qa-section")
+                    ?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className={
                   currentPage === 1 ? "pointer-events-none opacity-50" : ""
@@ -177,6 +181,9 @@ export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
                   onClick={(e) => {
                     e.preventDefault();
                     setCurrentPage(i + 1);
+                    document
+                      .getElementById("qa-section")
+                      ?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   {i + 1}
@@ -189,6 +196,9 @@ export function BookQA({ qas }: { qas: Record<string, unknown>[] }) {
                 onClick={(e) => {
                   e.preventDefault();
                   setCurrentPage((p) => Math.min(totalPages, p + 1));
+                  document
+                    .getElementById("qa-section")
+                    ?.scrollIntoView({ behavior: "smooth" });
                 }}
                 className={
                   currentPage === totalPages

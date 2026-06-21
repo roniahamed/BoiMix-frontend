@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MessageCircle, Star, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 interface ReviewFormProps {
   bookTitle: string;
@@ -18,8 +19,14 @@ export function ReviewForm({ bookTitle, isModal, onCancel }: ReviewFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (rating === 0) {
+      toast.error("দয়া করে রেটিং দিন!");
+      return;
+    }
     // Simulate submit
-    console.log("Submitting review:", { rating, review });
+    toast.success("আপনার রিভিউটি সফলভাবে সাবমিট হয়েছে!");
+    setRating(0);
+    setReview("");
     if (onCancel) onCancel();
   };
 

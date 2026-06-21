@@ -66,9 +66,11 @@ const uploadSchema = z.object({
   borrowQuantity: z.string().optional(),
   borrowDuration: z.string().optional(),
   deposit: z.string().optional(),
+  borrowFee: z.string().optional(),
 
   swapQuantity: z.string().optional(),
   swapPreference: z.string().optional(),
+  estimatedSwapValue: z.string().optional(),
 
   // Condition
   condition: z.string().min(1, "বইয়ের অবস্থা নির্বাচন করুন"),
@@ -590,7 +592,7 @@ export default function BookUploadPage() {
 
                 {forBorrow && (
                   <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
-                    <div className="grid items-start gap-6 md:grid-cols-3">
+                    <div className="grid items-start gap-6 md:grid-cols-2 lg:grid-cols-4">
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Borrow Quantity{" "}
@@ -647,13 +649,32 @@ export default function BookUploadPage() {
                           />
                         </div>
                       </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Borrow Fee{" "}
+                          <span className="text-muted-foreground font-normal">
+                            (Optional)
+                          </span>
+                        </Label>
+                        <div className="relative">
+                          <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm font-semibold">
+                            ৳
+                          </span>
+                          <Input
+                            type="number"
+                            placeholder="e.g. 50"
+                            className="bg-background pl-7"
+                            {...register("borrowFee")}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
 
                 {forSwap && (
                   <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
-                    <div className="grid items-start gap-6 md:grid-cols-2">
+                    <div className="grid items-start gap-6 md:grid-cols-3">
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
                           Swap Quantity{" "}
@@ -668,7 +689,18 @@ export default function BookUploadPage() {
                       </div>
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
-                          Swap Preference{" "}
+                          Estimated Swap Value (৳)
+                        </Label>
+                        <Input
+                          type="number"
+                          placeholder="e.g. 300"
+                          {...register("estimatedSwapValue")}
+                          className="bg-background"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-xs font-semibold">
+                          Swap Preference Categories{" "}
                           <span className="text-destructive">*</span>
                         </Label>
                         <Controller
@@ -682,6 +714,7 @@ export default function BookUploadPage() {
                                 "Same Value",
                                 "Academic Books",
                                 "Non-Fiction",
+                                "Self Help",
                               ]}
                               value={field.value || ""}
                               onChange={field.onChange}
