@@ -413,23 +413,65 @@ export default async function BookDetailsPage({
                       Borrow
                     </span>
                   )}
-
-                  {/* Mobile Pricing (Hidden on Desktop) */}
-                  <div className="ml-1 flex items-center gap-2 border-l pl-3 sm:hidden">
-                    {currentBook.tags.includes("sell") && (
-                      <>
-                        <span className="text-accent text-lg leading-none font-bold">
-                          ৳{currentBook.price}
-                        </span>
-                        <span className="text-muted-foreground text-xs leading-none line-through">
-                          ৳{currentBook.originalPrice}
-                        </span>
-                      </>
-                    )}
-                  </div>
                 </div>
 
                 <BookHeaderActions />
+              </div>
+
+              {/* Mobile Pricing (Hidden on Desktop) */}
+              <div className="mb-4 flex flex-col sm:hidden">
+                {currentBook.tags.includes("sell") && (
+                  <div className="flex flex-col gap-1">
+                    <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                      Buy Price
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-accent text-xl leading-none font-bold">
+                        ৳{currentBook.price}
+                      </span>
+                      <span className="text-muted-foreground text-sm leading-none line-through">
+                        ৳{currentBook.originalPrice}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {currentBook.tags.includes("swap") && (
+                  <div className="flex flex-col gap-1">
+                    <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                      Estimated Swap Value
+                    </span>
+                    <span className="text-foreground text-xl leading-none font-bold">
+                      ৳{currentBook.swapPrice}
+                    </span>
+                    {currentBook.swapPreferences &&
+                      currentBook.swapPreferences.length > 0 && (
+                        <span className="text-muted-foreground mt-1 text-xs leading-tight">
+                          <span className="text-foreground font-semibold">
+                            Preferences:
+                          </span>{" "}
+                          {currentBook.swapPreferences.join(", ")}
+                        </span>
+                      )}
+                  </div>
+                )}
+                {currentBook.tags.includes("borrow") && (
+                  <div className="flex flex-col gap-1">
+                    <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+                      Borrow Cost
+                    </span>
+                    <span className="text-foreground text-xl leading-none font-bold">
+                      {currentBook.borrowFee
+                        ? `৳${currentBook.borrowFee}`
+                        : "Free"}
+                    </span>
+                    <span className="text-muted-foreground mt-1 text-xs leading-none">
+                      <span className="text-foreground font-semibold">
+                        Max Duration:
+                      </span>{" "}
+                      {currentBook.maxBorrowDays} days
+                    </span>
+                  </div>
+                )}
               </div>
 
               <h1 className="type-heading mb-2 text-2xl leading-tight md:text-3xl lg:text-4xl">
@@ -491,10 +533,10 @@ export default async function BookDetailsPage({
                 </div>
               </div>
 
-              <hr className="my-4 border-t sm:my-6" />
+              <hr className="my-4 hidden border-t sm:my-6 sm:block" />
 
-              {/* Pricing & Actions Section */}
-              <div className="space-y-4">
+              {/* Pricing & Actions Section (Hidden on Mobile) */}
+              <div className="hidden space-y-4 sm:block">
                 <div className="mb-4">
                   {currentBook.tags.includes("sell") && (
                     <div>
