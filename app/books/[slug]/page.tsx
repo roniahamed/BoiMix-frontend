@@ -93,6 +93,7 @@ const MOCK_OWNER = {
   avatarUrl: "https://i.pravatar.cc/150?u=rahim",
   location: "মিরপুর, ঢাকা",
   rating: 4.9,
+  followers: 245,
   badges: [
     { label: "Top Swapper", variant: "success" as const },
     { label: "Verified", variant: "info" as const },
@@ -462,9 +463,18 @@ export default function BookDetailsPage() {
                   className="size-12 rounded-full border bg-white object-cover"
                 />
                 <div>
-                  <h4 className="text-foreground text-lg font-semibold">
-                    {MOCK_OWNER.name}
-                  </h4>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-foreground text-lg font-semibold">
+                      {MOCK_OWNER.name}
+                    </h4>
+                    <span className="text-muted-foreground/50 hidden shrink-0 sm:inline">
+                      •
+                    </span>
+                    <div className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
+                      <Users className="size-4" />
+                      {MOCK_OWNER.followers} Followers
+                    </div>
+                  </div>
                   <div className="text-muted-foreground mt-0.5 flex items-center gap-1.5 text-sm">
                     <MapPin className="size-4 shrink-0" />
                     <span className="truncate">{MOCK_OWNER.location}</span>
