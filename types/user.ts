@@ -34,10 +34,16 @@ export type UserProfileReview = {
   id: string;
   bookTitle: string;
   bookSlug: string;
+  bookAuthor?: string;
+  bookCover?: string;
   rating: number;
   body: string;
   createdAt: string;
   helpfulCount?: number;
+  reviewerName?: string;
+  reviewerAvatar?: string;
+  transactionType?: "For Swap" | "For Borrow" | "For Sale";
+  location?: string;
 };
 
 export type UserProfileActivity = {

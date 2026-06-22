@@ -117,8 +117,8 @@ function BooksViewerContent({
               onClick={() => handleFilterClick(filter)}
               className={
                 filter === activeFilter
-                  ? "bg-primary/10 text-primary hover:bg-primary/20 rounded-lg px-4 py-1.5 text-[15px] font-semibold transition-colors"
-                  : "bg-muted/60 text-muted-foreground hover:bg-muted rounded-lg px-4 py-1.5 text-[15px] font-semibold transition-colors"
+                  ? "bg-primary/10 text-primary hover:bg-primary/20 rounded-[10px] px-4 py-1.5 text-[15px] font-semibold transition-colors"
+                  : "bg-muted/60 text-muted-foreground hover:bg-muted rounded-[10px] px-4 py-1.5 text-[15px] font-semibold transition-colors"
               }
             >
               {filter}
@@ -128,7 +128,7 @@ function BooksViewerContent({
 
         <div className="flex items-center gap-3">
           <Select value={sortOption} onValueChange={setSortOption}>
-            <SelectTrigger className="w-[180px] rounded-xl bg-transparent px-4 text-sm font-semibold">
+            <SelectTrigger className="w-[180px] rounded-[10px] bg-transparent px-4 text-sm font-semibold">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
@@ -165,7 +165,7 @@ function BooksViewerContent({
 export function ProfileBooksViewer(props: ProfileBooksViewerProps) {
   return (
     <Suspense
-      fallback={<div className="bg-muted h-40 animate-pulse rounded-xl" />}
+      fallback={<div className="bg-muted h-40 animate-pulse rounded-[10px]" />}
     >
       <BooksViewerContent {...props} />
     </Suspense>
