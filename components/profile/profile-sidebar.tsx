@@ -37,7 +37,7 @@ export function ProfileSidebar({ profile }: ProfileSidebarProps) {
   return (
     <aside className="flex flex-col gap-5">
       {/* About Section */}
-      <section className="border-muted rounded-xl border p-5">
+      <section className="border-muted rounded-[5px] border p-5">
         <h2 className="text-foreground text-base font-bold tracking-tight">
           About
         </h2>
@@ -153,7 +153,7 @@ export function ProfileSidebar({ profile }: ProfileSidebarProps) {
 
       {/* Reading Interests */}
       {profile.readingInterests && profile.readingInterests.length > 0 && (
-        <section className="border-muted rounded-xl border p-5">
+        <section className="border-muted rounded-[5px] border p-5">
           <h2 className="text-foreground text-base font-bold tracking-tight">
             Reading Interests
           </h2>
@@ -177,7 +177,7 @@ export function ProfileSidebar({ profile }: ProfileSidebarProps) {
 
       {/* Member Highlights */}
       {profile.memberHighlights && profile.memberHighlights.length > 0 && (
-        <section className="border-muted rounded-xl border p-5">
+        <section className="border-muted rounded-[5px] border p-5">
           <h2 className="text-foreground text-base font-bold tracking-tight">
             Member Highlights
           </h2>
@@ -203,7 +203,7 @@ export function ProfileSidebar({ profile }: ProfileSidebarProps) {
 
       {/* Badges */}
       {profile.profileBadges && profile.profileBadges.length > 0 && (
-        <section className="border-muted rounded-xl border p-5">
+        <section className="border-muted rounded-[5px] border p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-foreground text-base font-bold tracking-tight">
               Badges

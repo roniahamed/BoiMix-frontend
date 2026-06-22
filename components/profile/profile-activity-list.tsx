@@ -124,7 +124,7 @@ export function ProfileActivityList({ activities }: ProfileActivityListProps) {
                     return (
                       <article
                         key={activity.id}
-                        className="bg-card border-border/50 relative rounded-xl border p-3 shadow-sm transition-shadow hover:shadow-md"
+                        className="bg-card border-border/50 relative rounded-[5px] border p-3 shadow-sm transition-shadow hover:shadow-md"
                       >
                         <div className="flex gap-4">
                           <div

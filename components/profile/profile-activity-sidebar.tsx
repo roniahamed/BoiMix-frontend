@@ -63,7 +63,7 @@ export function ProfileActivitySidebar() {
   const [activeFilter, setActiveFilter] = useState("all");
 
   return (
-    <aside className="bg-card border-border/50 hidden w-56 shrink-0 flex-col gap-4 rounded-2xl border p-4 shadow-sm lg:flex">
+    <aside className="bg-card border-border/50 hidden w-56 shrink-0 flex-col gap-4 rounded-[5px] border p-4 shadow-sm lg:flex">
       <h3 className="text-foreground px-2 text-[13px] font-bold">
         Activity Filters
       </h3>
@@ -77,7 +77,7 @@ export function ProfileActivitySidebar() {
               key={option.id}
               onClick={() => setActiveFilter(option.id)}
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors",
+                "flex items-center gap-3 rounded-[5px] px-3 py-2.5 text-sm font-semibold transition-colors",
                 isActive
                   ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground",

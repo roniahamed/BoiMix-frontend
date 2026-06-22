@@ -40,7 +40,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
   return (
     <article
       className={cn(
-        "group bg-card relative overflow-hidden rounded-[10px] shadow-xs transition-all duration-300 md:bg-transparent md:shadow-none",
+        "group bg-card relative overflow-hidden rounded-[5px] shadow-xs transition-all duration-300 md:bg-transparent md:shadow-none",
         className,
       )}
     >
@@ -50,7 +50,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
         <div className="relative p-1.5 pb-0 md:px-2.5 md:pt-2.5">
           <Link
             href={`/books/${book.slug}`}
-            className="bg-muted relative block aspect-[3/4] overflow-hidden rounded-[10px] shadow-xs"
+            className="bg-muted relative block aspect-[3/4] overflow-hidden rounded-[5px] shadow-xs"
           >
             <Image
               src={book.coverUrl}
@@ -65,7 +65,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               <span
                 key={tag}
                 className={cn(
-                  "type-badge rounded-[10px] px-2 py-0.5 text-xs font-bold shadow-xs",
+                  "type-badge rounded-[5px] px-2 py-0.5 text-xs font-bold shadow-xs",
                   tagClasses[tag],
                 )}
               >
@@ -178,13 +178,13 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
       />
 
       {/* Glassmorphism Hover Overlay over the entire card */}
-      <div className="pointer-events-none absolute inset-0 z-20 hidden rounded-[10px] border border-white/20 bg-white/60 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 md:block dark:border-white/5 dark:bg-black/65">
+      <div className="pointer-events-none absolute inset-0 z-20 hidden rounded-[5px] border border-white/20 bg-white/60 opacity-0 backdrop-blur-[3px] transition-all duration-300 group-hover:opacity-100 md:block dark:border-white/5 dark:bg-black/65">
         <div className="absolute top-2 right-2 left-2 flex aspect-[3/4] flex-col items-center justify-center">
           <div className="flex w-full max-w-[136px] -translate-y-4 transform flex-col items-center justify-center gap-2 transition-transform duration-300 group-hover:translate-y-0">
             {hasSell && (
               <Button
                 size="sm"
-                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[10px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[5px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <ShoppingCartIcon className="size-4" />
                 <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
@@ -194,7 +194,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               <Button
                 size="sm"
                 variant="success"
-                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[10px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[5px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <BookOpenIcon className="size-4" />
                 <span>Borrow Now</span>
@@ -204,7 +204,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               <Button
                 size="sm"
                 variant="outline"
-                className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[10px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
+                className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[5px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <Repeat2Icon className="size-4" />
                 <span>Swap Now</span>
@@ -214,7 +214,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
         </div>
         <Link
           href={`/books/${book.slug}`}
-          className="border-border bg-secondary/90 text-primary hover:bg-primary hover:text-primary-foreground pointer-events-auto absolute right-0 bottom-0 left-0 flex h-12 cursor-pointer items-center justify-center gap-1 rounded-b-[10px] border-t text-sm font-bold transition-all active:scale-95"
+          className="border-border bg-secondary/90 text-primary hover:bg-primary hover:text-primary-foreground pointer-events-auto absolute right-0 bottom-0 left-0 flex h-12 cursor-pointer items-center justify-center gap-1 rounded-b-[5px] border-t text-sm font-bold transition-all active:scale-95"
         >
           View Details
         </Link>

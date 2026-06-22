@@ -12,13 +12,13 @@ export function ProfileBadgeCollection({
 }: ProfileBadgeCollectionProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      {badges.map((badge) => (
-        <article
-          key={badge.label}
-          className="bg-card rounded-2xl border p-5 shadow-[0_16px_36px_rgba(51,51,51,0.08)]"
+      {badges.map((badge, idx) => (
+        <section
+          key={idx}
+          className="bg-card rounded-[5px] border p-5 shadow-[0_16px_36px_rgba(51,51,51,0.08)]"
         >
-          <div className="flex items-start gap-3">
-            <span className="bg-warning-soft text-warning inline-flex size-11 shrink-0 items-center justify-center rounded-2xl">
+          <div className="flex items-start gap-4">
+            <span className="bg-warning-soft text-warning inline-flex size-11 shrink-0 items-center justify-center rounded-[5px]">
               <AwardIcon className="size-5" aria-hidden="true" />
             </span>
             <div className="min-w-0">
@@ -33,7 +33,7 @@ export function ProfileBadgeCollection({
               )}
             </div>
           </div>
-        </article>
+        </section>
       ))}
     </div>
   );

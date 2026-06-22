@@ -9,7 +9,7 @@ import type { UserProfile } from "@/types/user";
 
 export function ProfileVerifications({ profile }: { profile: UserProfile }) {
   return (
-    <div className="border-muted rounded-[10px] border bg-slate-50 px-5 py-2.5 dark:bg-zinc-900/50">
+    <div className="border-muted rounded-[5px] border bg-slate-50 px-5 py-2.5 dark:bg-zinc-900/50">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:gap-5">
         {/* Left: Trust Score */}
         <div className="flex shrink-0 items-center gap-3">

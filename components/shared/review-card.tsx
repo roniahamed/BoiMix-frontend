@@ -30,7 +30,7 @@ export function ReviewCard({
   return (
     <article
       className={cn(
-        "bg-card border-border/50 mb-2 flex flex-col gap-4 rounded-[10px] border p-4 shadow-sm sm:flex-row",
+        "bg-card border-border/20 mb-2 flex flex-col gap-4 rounded-[5px] border p-4 shadow-none sm:flex-row",
         className,
       )}
     >
@@ -74,7 +74,7 @@ export function ReviewCard({
             {transactionType && (
               <span
                 className={cn(
-                  "rounded px-2.5 py-1 text-[11px] font-bold",
+                  "block w-[88px] rounded px-2.5 py-1 text-center text-[10px] font-bold tracking-wider whitespace-nowrap uppercase",
                   transactionType === "For Swap"
                     ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-500"
                     : transactionType === "For Borrow"

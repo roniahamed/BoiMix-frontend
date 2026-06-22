@@ -45,7 +45,7 @@ export default async function UserReviewsPage({
         {/* Left Sidebar: Ratings */}
         <div className="w-full shrink-0 space-y-6 lg:w-[200px]">
           {/* Overall Rating */}
-          <section className="bg-card border-border/50 rounded-[10px] border p-4 shadow-sm">
+          <section className="bg-card border-border/20 rounded-[5px] border p-4 shadow-none">
             <h2 className="text-foreground text-[14px] font-bold">
               Overall Rating
             </h2>
@@ -80,10 +80,10 @@ export default async function UserReviewsPage({
                   key={row.stars}
                   className="text-foreground flex items-center gap-2 text-[10px] font-bold"
                 >
-                  <span className="w-4 text-right">
-                    {row.stars}{" "}
-                    <StarIcon className="inline size-2.5 fill-current" />
-                  </span>
+                  <div className="flex w-7 items-center justify-end gap-0.5 whitespace-nowrap">
+                    <span>{row.stars}</span>
+                    <StarIcon className="size-2.5 fill-current" />
+                  </div>
                   <div className="bg-muted h-1 flex-1 overflow-hidden rounded-full">
                     <div
                       className={cn("h-full rounded-full", row.bg, row.width)}
