@@ -23,8 +23,26 @@ export const mockProfiles: UserProfile[] = [
     badges: [{ label: "Trusted Member", tone: "warning" }],
     profileBadges: [
       {
-        label: "Verified Reader",
+        label: "Book Lover",
+        tone: "default",
+        description: "Has a large library of books.",
+        earnedAt: "May 2026",
+      },
+      {
+        label: "Swap Master",
         tone: "info",
+        description: "Completed over 50 successful book swaps.",
+        earnedAt: "June 2026",
+      },
+      {
+        label: "Top Reviewer",
+        tone: "warning",
+        description: "Consistently provides helpful book reviews.",
+        earnedAt: "June 2026",
+      },
+      {
+        label: "Helpful Member",
+        tone: "success",
         description: "Identity and profile details reviewed by BoiMix.",
         earnedAt: "May 2026",
       },

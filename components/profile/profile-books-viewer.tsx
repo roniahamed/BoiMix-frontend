@@ -56,7 +56,7 @@ function BooksViewerContent({
 
   const handleShowMore = () => {
     if (libraryUrl) {
-      router.push(libraryUrl, { scroll: false });
+      router.push(`${libraryUrl}#profile-content`);
     } else {
       setVisibleCount((prev) => prev + 5);
     }

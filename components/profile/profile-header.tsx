@@ -19,6 +19,8 @@ import {
   BanknoteIcon,
   CheckCircle2Icon,
   InfoIcon,
+  BookOpenIcon,
+  StarIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -175,64 +177,96 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
             </div>
           </div>
 
-          {/* Extreme Right Side: 4 Main Stats */}
-          <div className="mt-4 flex shrink-0 items-center gap-4 sm:gap-6 lg:mt-6 lg:ml-auto">
-            {/* Added left divider as requested */}
-            <div className="bg-border mr-2 hidden h-12 w-px lg:block" />
+          {/* Extreme Right Side: 4 Main Stats and Badges */}
+          <div className="mt-4 flex shrink-0 flex-col items-end gap-4 lg:mt-6 lg:ml-auto">
+            <div className="flex items-center gap-4 sm:gap-6">
+              {/* Added left divider as requested */}
+              <div className="bg-border mr-2 hidden h-12 w-px lg:block" />
 
-            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
-              <div className="mb-1 flex items-center gap-1.5">
-                <LibraryIcon className="text-primary size-4 sm:size-5" />
-                <span className="text-foreground text-base font-bold sm:text-lg">
-                  {profile.stats.booksInLibrary}
+              <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <LibraryIcon className="text-primary size-4 sm:size-5" />
+                  <span className="text-foreground text-base font-bold sm:text-lg">
+                    {profile.stats.booksInLibrary}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
+                  Books in Library
                 </span>
               </div>
-              <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Books in Library
-              </span>
-            </div>
 
-            <div className="bg-border h-8 w-px" />
+              <div className="bg-border h-8 w-px" />
 
-            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
-              <div className="mb-1 flex items-center gap-1.5">
-                <ArrowRightLeftIcon className="text-primary size-4 sm:size-5" />
-                <span className="text-foreground text-base font-bold sm:text-lg">
-                  {profile.stats.successfulSwaps}
+              <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <ArrowRightLeftIcon className="text-primary size-4 sm:size-5" />
+                  <span className="text-foreground text-base font-bold sm:text-lg">
+                    {profile.stats.successfulSwaps}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
+                  Successful Swaps
                 </span>
               </div>
-              <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Successful Swaps
-              </span>
-            </div>
 
-            <div className="bg-border h-8 w-px" />
+              <div className="bg-border h-8 w-px" />
 
-            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
-              <div className="mb-1 flex items-center gap-1.5">
-                <BookDownIcon className="text-primary size-4 sm:size-5" />
-                <span className="text-foreground text-base font-bold sm:text-lg">
-                  {profile.stats.booksBorrowed}
+              <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <BookDownIcon className="text-primary size-4 sm:size-5" />
+                  <span className="text-foreground text-base font-bold sm:text-lg">
+                    {profile.stats.booksBorrowed}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
+                  Books Borrowed
                 </span>
               </div>
-              <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Books Borrowed
-              </span>
-            </div>
 
-            <div className="bg-border h-8 w-px" />
+              <div className="bg-border h-8 w-px" />
 
-            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
-              <div className="mb-1 flex items-center gap-1.5">
-                <BanknoteIcon className="text-primary size-4 sm:size-5" />
-                <span className="text-foreground text-base font-bold sm:text-lg">
-                  {profile.stats.booksSold}
+              <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
+                <div className="mb-1 flex items-center gap-1.5">
+                  <BanknoteIcon className="text-primary size-4 sm:size-5" />
+                  <span className="text-foreground text-base font-bold sm:text-lg">
+                    {profile.stats.booksSold}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
+                  Books Sold
                 </span>
               </div>
-              <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Books Sold
-              </span>
             </div>
+
+            {/* Badges Area */}
+            {profile.profileBadges && profile.profileBadges.length > 0 && (
+              <div className="flex flex-wrap items-center justify-end gap-2 lg:pr-4">
+                {profile.profileBadges.map((badge, idx) => (
+                  <div
+                    key={idx}
+                    title={badge.description}
+                    className={cn(
+                      "flex cursor-default items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-colors",
+                      badge.tone === "success" &&
+                        "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-500/10 dark:text-green-500 dark:hover:bg-green-500/20",
+                      badge.tone === "warning" &&
+                        "bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-500/10 dark:text-orange-500 dark:hover:bg-orange-500/20",
+                      badge.tone === "info" &&
+                        "bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-500 dark:hover:bg-blue-500/20",
+                      (!badge.tone || badge.tone === "default") &&
+                        "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-500/10 dark:text-slate-500 dark:hover:bg-slate-500/20",
+                    )}
+                  >
+                    {badge.tone === "warning" ? (
+                      <CrownIcon className="size-3.5" />
+                    ) : (
+                      <ShieldCheckIcon className="size-3.5" />
+                    )}
+                    {badge.label}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
