@@ -7,6 +7,7 @@ import {
   profileReviews,
 } from "@/lib/mock/profile";
 import Image from "next/image";
+import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
 
 export const metadata: Metadata = {
@@ -39,10 +40,18 @@ export default async function UserProfilePage({
         />
 
         {/* Reviews Section */}
-        <section className="bg-card rounded-[24px] border p-6 shadow-[0_18px_40px_rgba(51,51,51,0.08)]">
-          <h2 className="text-foreground mb-6 text-lg font-bold tracking-tight">
-            Reviews (238)
-          </h2>
+        <section className="bg-card border-border/50 rounded-[10px] border p-6 shadow-sm">
+          <div className="mb-6 flex items-center justify-between">
+            <h2 className="text-foreground text-lg font-bold tracking-tight">
+              Reviews (238)
+            </h2>
+            <Link
+              href={`/u/${profile.username}/reviews`}
+              className="text-primary hover:text-primary/80 text-sm font-semibold transition-colors"
+            >
+              View all
+            </Link>
+          </div>
 
           <div className="flex flex-col gap-8 md:flex-row">
             {/* Rating Summary */}
@@ -100,8 +109,8 @@ export default async function UserProfilePage({
             </div>
 
             {/* Individual Reviews */}
-            <div className="grid flex-1 gap-6 md:grid-cols-3">
-              {profileReviews.slice(0, 3).map((review) => (
+            <div className="grid flex-1 gap-6 md:grid-cols-2">
+              {profileReviews.slice(0, 2).map((review) => (
                 <div key={review.id} className="flex flex-col gap-3">
                   <div className="flex items-start gap-3">
                     <div className="bg-muted relative size-10 shrink-0 overflow-hidden rounded-full">

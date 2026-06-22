@@ -107,7 +107,7 @@ function BooksViewerContent({
   const visibleBooks = sortedBooks.slice(0, visibleCount);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Library Filters and Sort */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-wrap gap-2">
@@ -158,7 +158,7 @@ function BooksViewerContent({
       )}
 
       {visibleBooks.length < filteredBooks.length && (
-        <div className="flex justify-center pt-2 pb-6">
+        <div className="flex justify-center py-2">
           <Button
             variant="outline"
             onClick={handleShowMore}
