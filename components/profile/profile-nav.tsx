@@ -2,16 +2,20 @@ import Link from "next/link";
 import {
   ActivityIcon,
   BookOpenIcon,
-  MapPinIcon,
   ShieldCheckIcon,
   StarIcon,
-  UsersIcon,
   UserCheckIcon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
 const profileNavItems = [
+  {
+    label: "Overview",
+    segment: "overview",
+    href: "",
+    icon: UserCheckIcon,
+  },
   {
     label: "Library",
     segment: "library",
@@ -56,6 +60,7 @@ export function ProfileNav({ username, active }: ProfileNavProps) {
             <Link
               key={item.label}
               href={`/u/${username}${item.href}`}
+              scroll={false}
               className={cn(
                 "group relative flex items-center gap-2 pt-2 pb-4 text-[15px] font-semibold transition-colors",
                 isActive

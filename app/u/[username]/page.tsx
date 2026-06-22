@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { ChevronDownIcon, LayoutGridIcon, ListIcon } from "lucide-react";
-
-import { BookCard } from "@/components/shared/book-card";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
-import { Button } from "@/components/ui/button";
 import {
   getUserProfile,
   profileLibraryBooks,
   profileReviews,
 } from "@/lib/mock/profile";
 import Image from "next/image";
+import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
 
 export const metadata: Metadata = {
   title: "Reader Profile - BoiMix",
@@ -29,77 +26,17 @@ export default async function UserProfilePage({
     return <ProfileNotFound />;
   }
 
-  const filters = [
-    "All",
-    "Selling",
-    "Swapping",
-    "Borrowing",
-    "Wishlist",
-    "Collection",
-  ];
+  const isOwnProfile = true; // TODO: Replace with actual auth check
 
   return (
-    <ProfileShell profile={profile} active="library">
-      <div className="space-y-8">
-        {/* Library Filters and Sort */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex flex-wrap gap-2">
-            {filters.map((filter) => (
-              <span
-                key={filter}
-                className={
-                  filter === "All"
-                    ? "bg-primary/10 text-primary hover:bg-primary/20 rounded-lg px-4 py-1.5 text-[15px] font-semibold transition-colors"
-                    : "bg-muted/60 text-muted-foreground hover:bg-muted rounded-lg px-4 py-1.5 text-[15px] font-semibold transition-colors"
-                }
-              >
-                {filter}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              className="rounded-xl bg-transparent px-4 text-sm font-semibold"
-            >
-              Sort by: Newest
-              <ChevronDownIcon className="ml-2 size-4" />
-            </Button>
-            <div className="bg-muted/40 flex items-center gap-1 rounded-xl border p-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground size-8 rounded-lg shadow-xs"
-              >
-                <LayoutGridIcon className="size-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-muted-foreground hover:text-foreground size-8 rounded-lg"
-              >
-                <ListIcon className="size-4" />
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* Books Grid */}
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {profileLibraryBooks.map((book) => (
-            <BookCard key={book.id} book={book} />
-          ))}
-        </div>
-
-        <div className="flex justify-center pt-2 pb-6">
-          <Button
-            variant="outline"
-            className="bg-card rounded-full px-8 font-semibold shadow-sm"
-          >
-            Show more books
-          </Button>
-        </div>
+    <ProfileShell profile={profile} active="overview">
+      <div className="space-y-6">
+        {/* Interactive Books Viewer */}
+        <ProfileBooksViewer
+          books={profileLibraryBooks}
+          isOwnProfile={isOwnProfile}
+          libraryUrl={`/u/${profile.username}/library`}
+        />
 
         {/* Reviews Section */}
         <section className="bg-card rounded-[24px] border p-6 shadow-[0_18px_40px_rgba(51,51,51,0.08)]">
@@ -172,6 +109,7 @@ export default async function UserProfilePage({
                         src={`https://i.pravatar.cc/150?u=${review.id}`}
                         alt="Reviewer"
                         fill
+                        sizes="(max-width: 768px) 40px, 40px"
                         className="object-cover"
                       />
                     </div>
@@ -205,6 +143,7 @@ export default async function UserProfilePage({
                         src={`/book-covers/${review.bookSlug}.svg`}
                         alt={review.bookTitle}
                         fill
+                        sizes="(max-width: 768px) 32px, 32px"
                         className="bg-muted object-cover"
                       />
                     </div>
