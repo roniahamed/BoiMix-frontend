@@ -1,4 +1,9 @@
-export type BookAvailabilityMode = "sell" | "swap" | "borrow";
+export type BookAvailabilityMode =
+  | "sell"
+  | "swap"
+  | "borrow"
+  | "wishlist"
+  | "collection";
 
 export type BookCondition = "new" | "excellent" | "good" | "fair" | "poor";
 

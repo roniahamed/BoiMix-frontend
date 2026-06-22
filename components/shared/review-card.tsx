@@ -17,6 +17,8 @@ type ReviewCardProps = {
   bookTitle?: string;
   bookAuthor?: string;
   transactionType?: string;
+  location?: string;
+  helpfulCount?: number;
 };
 
 export function ReviewCard({

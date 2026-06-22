@@ -3,8 +3,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BookCard } from "@/components/shared/book-card";
-import { Button } from "@/components/ui/button";
-import { BookCardBook } from "@/types/book";
+import { BookCardBook, BookAvailabilityMode } from "@/types/book";
 import {
   Select,
   SelectContent,
@@ -40,7 +39,6 @@ function BooksViewerContent({
   const rawFilter = searchParams.get("filter") || "All";
   const activeFilter = filters.includes(rawFilter) ? rawFilter : "All";
 
-  const [visibleCount, setVisibleCount] = useState(5);
   const [sortOption, setSortOption] = useState("newest");
 
   const handleFilterClick = (filter: string) => {
@@ -50,15 +48,6 @@ function BooksViewerContent({
     } else {
       // Update URL without reload to trigger filter change
       router.replace(`?filter=${filter}`, { scroll: false });
-      setVisibleCount(5);
-    }
-  };
-
-  const handleShowMore = () => {
-    if (libraryUrl) {
-      router.push(`${libraryUrl}#profile-content`);
-    } else {
-      setVisibleCount((prev) => prev + 5);
     }
   };
 
@@ -74,7 +63,7 @@ function BooksViewerContent({
       collection: "collection",
     };
     const targetTag = tagMap[lowerFilter] || lowerFilter;
-    return book.tags?.includes(targetTag);
+    return book.tags?.includes(targetTag as BookAvailabilityMode);
   });
 
   // 2. Sort
@@ -103,8 +92,6 @@ function BooksViewerContent({
     }
     return 0;
   });
-
-  const visibleBooks = sortedBooks.slice(0, visibleCount);
 
   return (
     <div className="space-y-4">
@@ -147,12 +134,12 @@ function BooksViewerContent({
       {/* Books Grid - Scrollable Container */}
       <div className="scrollbar-thumb-muted-foreground/20 h-[calc(100vh-320px)] scrollbar-thin scrollbar-track-transparent overflow-y-auto pr-2 pb-10">
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {filteredBooks.map((book) => (
+          {sortedBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </div>
 
-        {filteredBooks.length === 0 && (
+        {sortedBooks.length === 0 && (
           <div className="text-muted-foreground py-10 text-center">
             No books found in this section.
           </div>

@@ -14,16 +14,21 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BookCardBook } from "@/types/book";
 
-const tagLabels = {
+const tagLabels: Record<string, string> = {
   sell: "Sell",
   swap: "Swap",
   borrow: "Borrow",
+  wishlist: "Wishlist",
+  collection: "Collection",
 } as const;
 
-const tagClasses = {
+const tagClasses: Record<string, string> = {
   sell: "bg-warning text-warning-foreground",
   swap: "bg-info text-info-foreground",
   borrow: "bg-success text-success-foreground",
+  wishlist:
+    "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-500",
+  collection: "bg-secondary text-secondary-foreground",
 } as const;
 
 type BookCardProps = {
