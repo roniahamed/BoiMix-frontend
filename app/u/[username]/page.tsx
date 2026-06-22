@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Reader Profile - BoiMix",
@@ -43,7 +44,7 @@ export default async function UserProfilePage({
         <section className="bg-card border-border/50 relative rounded-[10px] border p-5 shadow-none">
           <Link
             href={`/u/${profile.username}/reviews#profile-content`}
-            className="text-primary hover:text-primary/80 absolute top-5 right-5 text-sm font-semibold transition-colors"
+            className="text-primary hover:text-primary/80 absolute top-5 right-5 z-10 text-sm font-semibold transition-colors"
           >
             View all
           </Link>
@@ -113,8 +114,16 @@ export default async function UserProfilePage({
             </div>
 
             {/* Individual Reviews (Columns 2 and 3) */}
-            {profileReviews.slice(0, 2).map((review) => (
-              <div key={review.id} className="flex flex-col">
+            {profileReviews.slice(0, 2).map((review, index) => (
+              <div
+                key={review.id}
+                className={cn(
+                  "relative flex flex-col",
+                  index === 1
+                    ? "before:bg-border/50 before:absolute before:inset-x-0 before:-top-4 before:h-px before:content-[''] md:before:top-0 md:before:-left-3 md:before:h-full md:before:w-px"
+                    : "",
+                )}
+              >
                 <div className="mb-2 flex items-center gap-3">
                   <div className="bg-muted relative size-10 shrink-0 overflow-hidden rounded-full">
                     <Image
