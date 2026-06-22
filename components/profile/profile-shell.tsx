@@ -8,7 +8,7 @@ import type { UserProfile } from "@/types/user";
 
 type ProfileShellProps = {
   profile: UserProfile;
-  active: "" | "reviews" | "library" | "activity" | "badges";
+  active: "overview" | "reviews" | "library" | "activity" | "badges";
   children: ReactNode;
 };
 
