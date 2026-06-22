@@ -49,9 +49,9 @@ export default async function UserProfilePage({
             View all
           </Link>
 
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6">
+          <div className="flex flex-col gap-8 md:flex-row md:gap-8">
             {/* Column 1: Rating Summary */}
-            <div className="flex flex-col">
+            <div className="flex w-full shrink-0 flex-col md:w-[280px]">
               <h2 className="text-foreground mb-4 text-lg font-bold tracking-tight">
                 Reviews (238)
               </h2>
@@ -114,65 +114,50 @@ export default async function UserProfilePage({
             </div>
 
             {/* Individual Reviews (Columns 2 and 3) */}
-            {profileReviews.slice(0, 2).map((review, index) => (
-              <div
-                key={review.id}
-                className={cn(
-                  "relative flex flex-col",
-                  index === 1
-                    ? "before:bg-border/50 before:absolute before:inset-x-0 before:-top-4 before:h-px before:content-[''] md:before:top-0 md:before:-left-3 md:before:h-full md:before:w-px"
-                    : "",
-                )}
-              >
-                <div className="mb-2 flex items-center gap-3">
-                  <div className="bg-muted relative size-10 shrink-0 overflow-hidden rounded-full">
-                    <Image
-                      src={`https://i.pravatar.cc/150?u=${review.id}`}
-                      alt="Reviewer"
-                      fill
-                      sizes="(max-width: 768px) 40px, 40px"
-                      className="object-cover"
-                    />
+            <div className="relative grid flex-1 grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+              {profileReviews.slice(0, 2).map((review) => (
+                <div key={review.id} className="relative flex flex-col">
+                  <div className="mb-2 flex items-center gap-3">
+                    <div className="bg-muted relative size-10 shrink-0 overflow-hidden rounded-full">
+                      <Image
+                        src={`https://i.pravatar.cc/150?u=${review.id}`}
+                        alt="Reviewer"
+                        fill
+                        sizes="(max-width: 768px) 40px, 40px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-foreground text-sm font-bold">
+                        Hasan Mahmud
+                      </span>
+                      <span className="text-muted-foreground text-xs">
+                        {review.createdAt}
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex flex-col">
-                    <span className="text-foreground text-sm font-bold">
-                      Hasan Mahmud
+                  <div className="text-warning mb-2 flex">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        className={`size-4 ${star <= review.rating ? "fill-current" : "fill-muted text-muted"}`}
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+                  <p className="text-foreground mb-3 line-clamp-3 text-sm leading-relaxed">
+                    {review.body}
+                  </p>
+                  <div className="mt-auto flex items-center gap-2">
+                    <span className="text-primary text-xs font-semibold">
+                      {review.bookTitle}
                     </span>
-                    <span className="text-muted-foreground text-xs">
-                      {review.createdAt}
-                    </span>
                   </div>
                 </div>
-                <div className="text-warning mb-2 flex">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
-                      key={star}
-                      className={`size-4 ${star <= review.rating ? "fill-current" : "fill-muted text-muted"}`}
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-foreground mb-3 line-clamp-3 text-sm leading-relaxed">
-                  {review.body}
-                </p>
-                <div className="mt-auto flex items-center gap-2">
-                  <div className="relative size-8 overflow-hidden rounded shadow-xs">
-                    <Image
-                      src={`/book-covers/${review.bookSlug}.svg`}
-                      alt={review.bookTitle}
-                      fill
-                      sizes="(max-width: 768px) 32px, 32px"
-                      className="bg-muted object-cover"
-                    />
-                  </div>
-                  <span className="text-primary text-xs font-semibold">
-                    {review.bookTitle}
-                  </span>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </section>
       </div>
