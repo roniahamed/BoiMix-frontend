@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileNav } from "@/components/profile/profile-nav";
 import { ProfileSidebar } from "@/components/profile/profile-sidebar";
+import { ProfileVerifications } from "@/components/profile/profile-verifications";
 import type { UserProfile } from "@/types/user";
 
 type ProfileShellProps = {
@@ -19,8 +20,9 @@ export function ProfileShell({ profile, active, children }: ProfileShellProps) {
         <main className="bg-card overflow-hidden rounded-b-[10px] border shadow-sm">
           <ProfileHeader profile={profile} />
 
-          <div className="mt-6 grid grid-cols-1 items-start gap-6 px-4 pb-6 sm:px-6 lg:grid-cols-[1fr_320px] lg:px-8 xl:grid-cols-[1fr_360px]">
+          <div className="mt-6 grid grid-cols-1 items-start gap-6 px-4 pb-6 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8 xl:grid-cols-[1fr_300px]">
             <div className="flex min-w-0 flex-col gap-6">
+              <ProfileVerifications profile={profile} />
               <ProfileNav username={profile.username} active={active} />
               <div className="text-[13px]">{children}</div>
             </div>

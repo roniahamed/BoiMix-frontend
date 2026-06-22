@@ -1,9 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
   BadgeCheckIcon,
   MessageSquareIcon,
-  Share2Icon,
+  ForwardIcon,
   ShieldCheckIcon,
   UserCheckIcon,
   UsersIcon,
@@ -15,7 +17,10 @@ import {
   ArrowRightLeftIcon,
   BookDownIcon,
   BanknoteIcon,
+  CheckCircle2Icon,
+  InfoIcon,
 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/shared/user-avatar";
@@ -26,7 +31,28 @@ type ProfileHeaderProps = {
   profile: UserProfile;
 };
 
-export function ProfileHeader({ profile }: ProfileHeaderProps) {
+const CustomShareArrow = ({ className }: { className?: string }) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M13 21v-6C6 15 2 19 2 22c1-6 6-11 11-11V3l9 9l-9 9z" />
+  </svg>
+);
+
+export function ProfileHeader({ profile }: { profile: UserProfile }) {
+  const handleShare = () => {
+    if (typeof window !== "undefined") {
+      navigator.clipboard.writeText(window.location.href);
+      toast.success("Profile link copied to clipboard!");
+    }
+  };
+
   return (
     <section>
       {/* Cover Image */}
@@ -47,11 +73,11 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
           {/* Avatar and Info Block */}
           <div className="flex w-full flex-col gap-5 sm:flex-row sm:items-start lg:gap-6">
             {/* Avatar overlapping the cover */}
-            <div className="relative -mt-16 shrink-0 md:-mt-20">
+            <div className="relative -mt-12 shrink-0 md:-mt-16">
               <UserAvatar
                 name={profile.name}
                 src={profile.avatarUrl}
-                className="bg-card relative z-10 size-32 border-4 border-white text-3xl text-white shadow-sm md:size-40 dark:border-zinc-900"
+                className="bg-card relative z-10 size-24 border-4 border-white text-2xl text-white shadow-sm md:size-32 md:text-3xl dark:border-zinc-900"
               />
             </div>
 
@@ -117,16 +143,19 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
               )}
 
               {/* Row 4: Action Buttons grouped together */}
-              <div className="mt-5 flex flex-wrap items-center gap-3">
-                <Button className="rounded-lg px-6 font-semibold shadow-sm">
+              <div className="mt-4 flex items-center gap-4 sm:mt-5">
+                <Button className="h-9 w-[110px] rounded-md bg-[#0ea5e9] text-[14px] font-semibold text-white shadow-none transition-colors hover:bg-[#0284c7]">
                   Follow
                 </Button>
                 <Button
                   variant="outline"
-                  className="rounded-lg bg-transparent px-5 shadow-sm"
+                  className="bg-card text-muted-foreground h-9 w-[110px] rounded-md px-0 text-[14px] font-medium shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
                   asChild
                 >
-                  <Link href="/dashboard/messages">
+                  <Link
+                    href="/dashboard/messages"
+                    className="flex items-center justify-center"
+                  >
                     <MessageSquareIcon
                       className="mr-2 size-4"
                       aria-hidden="true"
@@ -136,10 +165,10 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
                 </Button>
                 <Button
                   variant="outline"
-                  size="icon"
-                  className="rounded-lg bg-transparent shadow-sm"
+                  onClick={handleShare}
+                  className="bg-card text-muted-foreground flex h-9 w-12 items-center justify-center rounded-md px-0 shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
                 >
-                  <Share2Icon className="size-4" aria-hidden="true" />
+                  <CustomShareArrow className="size-4" />
                   <span className="sr-only">Share</span>
                 </Button>
               </div>
@@ -203,86 +232,6 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
               <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
                 Books Sold
               </span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Verifications Bar */}
-      <div className="bg-muted/30 border-y px-5 py-4 sm:px-8">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-3">
-            <div className="bg-success-soft text-success flex items-center justify-center rounded-full p-1.5">
-              <ShieldCheckIcon className="size-5" />
-            </div>
-            <div>
-              <p className="text-muted-foreground text-sm font-semibold">
-                Trust Score
-              </p>
-              <p className="text-foreground flex items-center gap-2 font-bold">
-                <span className="text-success text-xl">
-                  {profile.reputation ?? 0}%
-                </span>
-                <span>Excellent</span>
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
-            <div
-              className={cn(
-                "flex items-center gap-1.5 text-sm font-medium",
-                profile.verification?.email
-                  ? "text-success"
-                  : "text-muted-foreground",
-              )}
-            >
-              <MailIcon className="size-4" />
-              Email Verified
-            </div>
-            <div
-              className={cn(
-                "flex items-center gap-1.5 text-sm font-medium",
-                profile.verification?.phone
-                  ? "text-success"
-                  : "text-muted-foreground",
-              )}
-            >
-              <PhoneIcon className="size-4" />
-              Phone Verified
-            </div>
-            <div
-              className={cn(
-                "flex items-center gap-1.5 text-sm font-medium",
-                profile.verification?.identity
-                  ? "text-primary"
-                  : "text-muted-foreground",
-              )}
-            >
-              <BadgeCheckIcon className="size-4" />
-              Identity Verified
-            </div>
-            <div
-              className={cn(
-                "flex items-center gap-1.5 text-sm font-medium",
-                profile.verification?.trustedSeller
-                  ? "text-warning"
-                  : "text-muted-foreground",
-              )}
-            >
-              <ShieldIcon className="size-4" />
-              Trusted Seller
-            </div>
-            <div
-              className={cn(
-                "flex items-center gap-1.5 text-sm font-medium",
-                profile.verification?.premium
-                  ? "text-purple-600 dark:text-purple-400"
-                  : "text-muted-foreground",
-              )}
-            >
-              <CrownIcon className="size-4" />
-              Premium Member
             </div>
           </div>
         </div>
