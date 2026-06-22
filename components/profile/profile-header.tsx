@@ -2,18 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   BadgeCheckIcon,
-  BookOpenIcon,
   MessageSquareIcon,
-  Repeat2Icon,
   Share2Icon,
   ShieldCheckIcon,
-  ShoppingCartIcon,
   UserCheckIcon,
   UsersIcon,
   PhoneIcon,
   MailIcon,
   CrownIcon,
   ShieldIcon,
+  LibraryIcon,
+  ArrowRightLeftIcon,
+  BookDownIcon,
+  BanknoteIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -147,57 +148,60 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
 
           {/* Extreme Right Side: 4 Main Stats */}
           <div className="mt-4 flex shrink-0 items-center gap-4 sm:gap-6 lg:mt-6 lg:ml-auto">
-            <div className="flex min-w-[60px] flex-col items-center text-center sm:min-w-[70px]">
+            {/* Added left divider as requested */}
+            <div className="bg-border mr-2 hidden h-12 w-px lg:block" />
+
+            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
               <div className="mb-1 flex items-center gap-1.5">
-                <BookOpenIcon className="text-primary size-4 sm:size-5" />
+                <LibraryIcon className="text-primary size-4 sm:size-5" />
                 <span className="text-foreground text-base font-bold sm:text-lg">
                   {profile.stats.booksInLibrary}
                 </span>
               </div>
               <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Library
+                Books in Library
               </span>
             </div>
 
             <div className="bg-border h-8 w-px" />
 
-            <div className="flex min-w-[60px] flex-col items-center text-center sm:min-w-[70px]">
+            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
               <div className="mb-1 flex items-center gap-1.5">
-                <Repeat2Icon className="text-primary size-4 sm:size-5" />
+                <ArrowRightLeftIcon className="text-primary size-4 sm:size-5" />
                 <span className="text-foreground text-base font-bold sm:text-lg">
                   {profile.stats.successfulSwaps}
                 </span>
               </div>
               <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Swaps
+                Successful Swaps
               </span>
             </div>
 
             <div className="bg-border h-8 w-px" />
 
-            <div className="flex min-w-[60px] flex-col items-center text-center sm:min-w-[70px]">
+            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
               <div className="mb-1 flex items-center gap-1.5">
-                <ShoppingCartIcon className="text-primary size-4 sm:size-5" />
+                <BookDownIcon className="text-primary size-4 sm:size-5" />
                 <span className="text-foreground text-base font-bold sm:text-lg">
                   {profile.stats.booksBorrowed}
                 </span>
               </div>
               <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Borrowed
+                Books Borrowed
               </span>
             </div>
 
             <div className="bg-border h-8 w-px" />
 
-            <div className="flex min-w-[60px] flex-col items-center text-center sm:min-w-[70px]">
+            <div className="flex min-w-[70px] flex-col items-center text-center sm:min-w-[85px]">
               <div className="mb-1 flex items-center gap-1.5">
-                <BadgeCheckIcon className="text-primary size-4 sm:size-5" />
+                <BanknoteIcon className="text-primary size-4 sm:size-5" />
                 <span className="text-foreground text-base font-bold sm:text-lg">
                   {profile.stats.booksSold}
                 </span>
               </div>
               <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                Sold
+                Books Sold
               </span>
             </div>
           </div>
