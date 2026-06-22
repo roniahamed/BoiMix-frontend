@@ -144,30 +144,20 @@ function BooksViewerContent({
         </div>
       </div>
 
-      {/* Books Grid */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        {visibleBooks.map((book) => (
-          <BookCard key={book.id} book={book} />
-        ))}
+      {/* Books Grid - Scrollable Container */}
+      <div className="scrollbar-thumb-muted-foreground/20 h-[calc(100vh-320px)] scrollbar-thin scrollbar-track-transparent overflow-y-auto pr-2 pb-10">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {filteredBooks.map((book) => (
+            <BookCard key={book.id} book={book} />
+          ))}
+        </div>
+
+        {filteredBooks.length === 0 && (
+          <div className="text-muted-foreground py-10 text-center">
+            No books found in this section.
+          </div>
+        )}
       </div>
-
-      {filteredBooks.length === 0 && (
-        <div className="text-muted-foreground py-10 text-center">
-          No books found in this section.
-        </div>
-      )}
-
-      {visibleBooks.length < filteredBooks.length && (
-        <div className="flex justify-center py-2">
-          <Button
-            variant="outline"
-            onClick={handleShowMore}
-            className="bg-card rounded-full px-8 font-semibold shadow-sm"
-          >
-            Show more books
-          </Button>
-        </div>
-      )}
     </div>
   );
 }
