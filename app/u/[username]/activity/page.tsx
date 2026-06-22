@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ProfileActivityList } from "@/components/profile/profile-activity-list";
+import { ProfileActivitySidebar } from "@/components/profile/profile-activity-sidebar";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
 import { getUserProfile, profileActivity } from "@/lib/mock/profile";
@@ -24,18 +25,15 @@ export default async function UserActivityPage({
 
   return (
     <ProfileShell profile={profile} active="activity">
-      <section>
-        <div className="mb-4">
-          <h2 className="text-foreground text-xl font-bold tracking-tight">
-            Recent activity
-          </h2>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Public actions only. Private network and owner-only data stay out of
-            this profile.
-          </p>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
+        {/* Left Sidebar */}
+        <ProfileActivitySidebar />
+
+        {/* Main Content */}
+        <div className="min-w-0 flex-1">
+          <ProfileActivityList activities={profileActivity} />
         </div>
-        <ProfileActivityList activities={profileActivity} />
-      </section>
+      </div>
     </ProfileShell>
   );
 }

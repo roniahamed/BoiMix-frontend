@@ -240,31 +240,61 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
 
             {/* Badges Area */}
             {profile.profileBadges && profile.profileBadges.length > 0 && (
-              <div className="flex flex-wrap items-center justify-end gap-2 lg:pr-4">
-                {profile.profileBadges.map((badge, idx) => (
-                  <div
-                    key={idx}
-                    title={badge.description}
-                    className={cn(
-                      "flex cursor-default items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-colors",
-                      badge.tone === "success" &&
-                        "bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-500/10 dark:text-green-500 dark:hover:bg-green-500/20",
-                      badge.tone === "warning" &&
-                        "bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-500/10 dark:text-orange-500 dark:hover:bg-orange-500/20",
-                      badge.tone === "info" &&
-                        "bg-blue-100 text-blue-700 hover:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-500 dark:hover:bg-blue-500/20",
-                      (!badge.tone || badge.tone === "default") &&
-                        "bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-500/10 dark:text-slate-500 dark:hover:bg-slate-500/20",
-                    )}
-                  >
-                    {badge.tone === "warning" ? (
-                      <CrownIcon className="size-3.5" />
-                    ) : (
-                      <ShieldCheckIcon className="size-3.5" />
-                    )}
-                    {badge.label}
-                  </div>
-                ))}
+              <div className="mt-2 flex flex-wrap items-start justify-end gap-5 lg:pr-4">
+                {profile.profileBadges.map((badge, idx) => {
+                  let IconComponent = ShieldCheckIcon;
+                  if (badge.tone === "default") IconComponent = BookOpenIcon;
+                  if (badge.tone === "info") IconComponent = ArrowRightLeftIcon;
+                  if (badge.tone === "warning") IconComponent = StarIcon;
+
+                  let gradientClass = "from-purple-400 to-purple-600";
+                  if (badge.tone === "info")
+                    gradientClass = "from-blue-400 to-blue-500";
+                  if (badge.tone === "warning")
+                    gradientClass = "from-orange-400 to-orange-500";
+                  if (badge.tone === "success")
+                    gradientClass = "from-emerald-400 to-emerald-500";
+
+                  const labelParts = badge.label.split(" ");
+
+                  return (
+                    <div
+                      key={idx}
+                      title={badge.description}
+                      className="group flex w-14 cursor-default flex-col items-center gap-2"
+                    >
+                      <div className="relative size-[52px] drop-shadow-sm transition-transform group-hover:-translate-y-0.5">
+                        <div
+                          className={cn(
+                            "absolute inset-0 flex items-center justify-center bg-gradient-to-br text-white",
+                            gradientClass,
+                            "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
+                          )}
+                        >
+                          <div
+                            className={cn(
+                              "absolute inset-[2px] flex items-center justify-center bg-gradient-to-br",
+                              gradientClass,
+                              "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
+                            )}
+                          >
+                            <IconComponent
+                              className="size-[22px] drop-shadow-md"
+                              strokeWidth={2.5}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <span className="text-foreground/80 text-center text-[11px] leading-[1.15] font-bold">
+                        {labelParts.map((part, i) => (
+                          <span key={i} className="block">
+                            {part}
+                          </span>
+                        ))}
+                      </span>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

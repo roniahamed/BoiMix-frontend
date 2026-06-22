@@ -42,10 +42,17 @@ export type UserProfileReview = {
 
 export type UserProfileActivity = {
   id: string;
-  type: "review" | "listed" | "swap" | "borrow" | "badge";
+  type: "review" | "listed" | "swap" | "borrow" | "badge" | "wishlist" | "sale";
   title: string;
   description: string;
   createdAt: string;
+  // new fields for timeline UI
+  time?: string;
+  dateLabel?: string;
+  bookTitle?: string;
+  bookAuthor?: string;
+  bookCover?: string;
+  rating?: number;
 };
 
 export type UserProfileLocation = {
