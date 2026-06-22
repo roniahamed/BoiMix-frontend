@@ -14,6 +14,8 @@ type ReviewCardProps = {
   createdAt?: string;
   className?: string;
   bookCover?: string;
+  bookTitle?: string;
+  bookAuthor?: string;
   transactionType?: string;
 };
 
