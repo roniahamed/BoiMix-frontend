@@ -20,8 +20,8 @@ type ProfileHeaderProps = {
 
 export function ProfileHeader({ profile }: ProfileHeaderProps) {
   return (
-    <section className="bg-card overflow-hidden border shadow-sm md:rounded-xl">
-      <div className="bg-muted relative h-36 md:h-48">
+    <section>
+      <div className="bg-muted relative h-36 md:h-48 lg:h-56">
         <Image
           src={profile.coverUrl}
           alt={`${profile.name} profile cover`}
@@ -43,32 +43,32 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
             />
             <div className="min-w-0 pb-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-foreground text-2xl font-bold md:text-3xl">
+                <h1 className="text-foreground text-xl font-bold md:text-2xl">
                   {profile.name}
                 </h1>
                 <ShieldCheckIcon
-                  className="text-primary size-5"
+                  className="text-primary size-4"
                   aria-label="Verified reader"
                 />
               </div>
-              <p className="text-muted-foreground mt-1 text-sm">
+              <p className="text-muted-foreground mt-1 text-xs">
                 @{profile.username}
               </p>
-              <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+              <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs">
                 {profile.location && (
                   <span className="inline-flex items-center gap-1">
-                    <MapPinIcon className="size-4" aria-hidden="true" />
+                    <MapPinIcon className="size-3.5" aria-hidden="true" />
                     {profile.location}
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1">
-                  <CalendarDaysIcon className="size-4" aria-hidden="true" />
+                  <CalendarDaysIcon className="size-3.5" aria-hidden="true" />
                   {profile.joinedAt}
                 </span>
                 {profile.rating !== undefined && (
                   <span className="inline-flex items-center gap-1">
                     <StarIcon
-                      className="fill-warning text-warning size-4"
+                      className="fill-warning text-warning size-3.5"
                       aria-hidden="true"
                     />
                     {profile.rating.toFixed(1)} rating
@@ -92,7 +92,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
           </div>
         </div>
 
-        <p className="text-muted-foreground mt-5 max-w-3xl text-sm leading-6 md:text-base">
+        <p className="text-muted-foreground mt-5 max-w-3xl text-xs leading-5 md:text-sm md:leading-6">
           {profile.bio}
         </p>
 
@@ -102,7 +102,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
           ))}
         </div>
 
-        <div className="text-muted-foreground mt-4 grid gap-2 text-sm sm:grid-cols-3">
+        <div className="text-muted-foreground mt-4 grid gap-2 text-xs sm:grid-cols-3">
           <p>
             <span className="text-foreground font-semibold">
               {profile.reputation ?? 0}%

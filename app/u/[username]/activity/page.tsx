@@ -25,9 +25,15 @@ export default async function UserActivityPage({
   return (
     <ProfileShell profile={profile} active="activity">
       <section>
-        <h2 className="text-foreground mb-3 text-xl font-bold">
-          Recent activity
-        </h2>
+        <div className="mb-4">
+          <h2 className="text-foreground text-xl font-bold tracking-tight">
+            Recent activity
+          </h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Public actions only. Private network and owner-only data stay out of
+            this profile.
+          </p>
+        </div>
         <ProfileActivityList activities={profileActivity} />
       </section>
     </ProfileShell>

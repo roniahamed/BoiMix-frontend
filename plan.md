@@ -14,8 +14,6 @@
   - `/u/[username]/library`
   - `/u/[username]/activity`
   - `/u/[username]/badges`
-  - `/u/[username]/followers`
-  - `/u/[username]/following`
   - `/u/[username]/location`
 - Use static mock profile data until backend contracts are defined.
 - Reuse existing shared components where possible:
@@ -28,6 +26,8 @@
   - `EmptyState`
 - Keep profile pages public and presentational.
 - Keep follow/message actions non-mutating.
+- Do not expose follower/following lists on public profiles.
+- Reserve follower/following views for the future owner dashboard only.
 - Show public service-area information only; do not expose exact private addresses.
 - Unknown usernames should render a friendly not-found state.
 
@@ -123,6 +123,7 @@ Keep this section as the project memory. Do not delete completed phase plans whe
 ### Phase 8 — User Profile
 - Current active phase.
 - Added public profile routes, profile components, shared mock profile data, profile types, not-found state, route smoke testing, and responsive overflow checks.
+- Refined public-profile privacy so follower/following lists are owner-dashboard-only and not shown on public pages.
 
 ## Locked Future Phases
 - Phase 9: Dashboard  
@@ -152,8 +153,9 @@ Keep this section as the project memory. Do not delete completed phase plans whe
 - All public profile routes render for `/u/rahim_sheikh`.
 - Unknown usernames render a friendly profile not-found state.
 - Profile pages are responsive and avoid horizontal overflow.
-- Public profile tabs include profile, reviews, library, activity, badges, followers, following, and location.
+- Public profile tabs include profile, reviews, library, activity, badges, and location.
 - Library uses public listed/shared books only.
+- Follower/following lists are not exposed on public profiles.
 - Location page shows readable service-area details without private address exposure.
 - No Phase 9 dashboard management, checkout, borrow request, swap agreement, real messaging, or notification workflows are implemented.
 - `npm run lint` passes.

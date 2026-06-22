@@ -23,7 +23,7 @@ type ProfileActivityListProps = {
 
 export function ProfileActivityList({ activities }: ProfileActivityListProps) {
   return (
-    <div className="bg-card rounded-lg border shadow-sm">
+    <div className="bg-card overflow-hidden rounded-2xl border shadow-[0_16px_38px_rgba(51,51,51,0.08)]">
       {activities.map((activity, index) => {
         const Icon = activityIcons[activity.type];
 
@@ -31,11 +31,11 @@ export function ProfileActivityList({ activities }: ProfileActivityListProps) {
           <article
             key={activity.id}
             className={cn(
-              "flex gap-4 p-4",
+              "flex gap-4 p-4 md:p-5",
               index !== activities.length - 1 && "border-b",
             )}
           >
-            <span className="bg-info-soft text-primary flex size-10 shrink-0 items-center justify-center rounded-full">
+            <span className="bg-info-soft text-primary flex size-10 shrink-0 items-center justify-center rounded-2xl">
               <Icon className="size-5" aria-hidden="true" />
             </span>
             <div className="min-w-0">

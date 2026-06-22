@@ -17,10 +17,10 @@ export type UserSummary = {
 };
 
 export type UserProfileStats = {
-  booksShared: number;
-  reviewsWritten: number;
-  swapsCompleted: number;
-  borrowLends: number;
+  booksInLibrary: number;
+  successfulSwaps: number;
+  booksBorrowed: number;
+  booksSold: number;
   followers: number;
   following: number;
 };
@@ -60,10 +60,30 @@ export type UserProfile = UserSummary & {
   username: string;
   coverUrl: string;
   bio: string;
+  role?: string;
   joinedAt: string;
   responseRate: number;
   responseTime: string;
   stats: UserProfileStats;
   profileBadges: UserProfileBadge[];
   locationDetails: UserProfileLocation;
+  socialLinks?: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    website?: string;
+  };
+  readingInterests?: string[];
+  memberHighlights?: {
+    icon: string;
+    title: string;
+    subtitle: string;
+  }[];
+  verification?: {
+    email: boolean;
+    phone: boolean;
+    identity: boolean;
+    trustedSeller: boolean;
+    premium: boolean;
+  };
 };

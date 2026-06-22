@@ -25,7 +25,14 @@ export default async function UserBadgesPage({
   return (
     <ProfileShell profile={profile} active="badges">
       <section>
-        <h2 className="text-foreground mb-3 text-xl font-bold">Badges</h2>
+        <div className="mb-4">
+          <h2 className="text-foreground text-xl font-bold tracking-tight">
+            Badges
+          </h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Trust and activity signals earned by this reader on the platform.
+          </p>
+        </div>
         <ProfileBadgeCollection badges={profile.profileBadges} />
       </section>
     </ProfileShell>

@@ -25,8 +25,15 @@ export default async function UserReviewsPage({
 
   return (
     <ProfileShell profile={profile} active="reviews">
-      <section className="bg-card rounded-lg border p-4 shadow-sm">
-        <h2 className="text-foreground text-xl font-bold">Reviews</h2>
+      <section className="bg-card rounded-[24px] border p-4 shadow-[0_18px_40px_rgba(51,51,51,0.08)] md:p-5">
+        <div className="mb-4">
+          <h2 className="text-foreground text-xl font-bold tracking-tight">
+            Reviews
+          </h2>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Public review history shared by this reader.
+          </p>
+        </div>
         <div className="mt-2">
           {profileReviews.map((review) => (
             <div key={review.id}>

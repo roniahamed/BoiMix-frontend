@@ -9,9 +9,9 @@ type ProfileLocationCardProps = {
 
 export function ProfileLocationCard({ location }: ProfileLocationCardProps) {
   return (
-    <section className="bg-card rounded-lg border p-5 shadow-sm">
+    <section className="bg-card rounded-[24px] border p-5 shadow-[0_18px_40px_rgba(51,51,51,0.08)] md:p-6">
       <div className="flex items-start gap-3">
-        <span className="bg-info-soft text-primary inline-flex size-11 shrink-0 items-center justify-center rounded-full">
+        <span className="bg-info-soft text-primary inline-flex size-11 shrink-0 items-center justify-center rounded-2xl">
           <MapPinIcon className="size-5" aria-hidden="true" />
         </span>
         <div className="min-w-0">
@@ -35,7 +35,7 @@ export function ProfileLocationCard({ location }: ProfileLocationCardProps) {
         </div>
       </div>
 
-      <div className="bg-success-soft text-success mt-5 flex gap-2 rounded-lg p-4 text-sm leading-6">
+      <div className="bg-success-soft text-success mt-5 flex gap-2 rounded-2xl p-4 text-sm leading-6">
         <ShieldCheckIcon
           className="mt-0.5 size-4 shrink-0"
           aria-hidden="true"

@@ -3,66 +3,86 @@ import type {
   UserProfile,
   UserProfileActivity,
   UserProfileReview,
-  UserSummary,
 } from "@/types/user";
 
 export const mockProfiles: UserProfile[] = [
   {
-    id: "user-rahim",
-    name: "Rahim Sheikh",
-    username: "rahim_sheikh",
-    avatarUrl: "https://i.pravatar.cc/240?u=rahim_sheikh",
-    coverUrl: "/banners/swap-community.png",
-    location: "Mirpur, Dhaka",
+    id: "user-roni",
+    name: "Roni Ahamed",
+    username: "roni",
+    avatarUrl: "https://i.pravatar.cc/240?u=roni",
+    coverUrl: "/banners/swap-community.png", // We'll keep a placeholder or generate an image if needed
+    location: "Dhaka, Bangladesh",
+    role: "Backend Engineer",
     reputation: 96,
     rating: 4.9,
-    bio: "Dhaka-based reader sharing Bangla classics, swap-friendly paperbacks, and well-kept library finds with nearby readers.",
-    joinedAt: "Joined March 2024",
+    bio: "Love reading. Love sharing. Let's build a community of book lovers.",
+    joinedAt: "Member since May 2026",
     responseRate: 98,
     responseTime: "Usually replies within 2 hours",
-    badges: [
-      { label: "Verified Reader", tone: "info" },
-      { label: "Top Swapper", tone: "success" },
-      { label: "Fast Responder", tone: "warning" },
-    ],
+    badges: [{ label: "Trusted Member", tone: "warning" }],
     profileBadges: [
       {
         label: "Verified Reader",
         tone: "info",
         description: "Identity and profile details reviewed by BoiMix.",
-        earnedAt: "Mar 2024",
-      },
-      {
-        label: "Top Swapper",
-        tone: "success",
-        description: "Completed multiple successful book swaps with readers.",
-        earnedAt: "Oct 2024",
-      },
-      {
-        label: "Careful Keeper",
-        tone: "success",
-        description: "Consistently shares books in good condition.",
-        earnedAt: "Jan 2025",
-      },
-      {
-        label: "Fast Responder",
-        tone: "warning",
-        description: "Keeps conversations active and replies quickly.",
-        earnedAt: "Feb 2025",
+        earnedAt: "May 2026",
       },
     ],
     stats: {
-      booksShared: 42,
-      reviewsWritten: 18,
-      swapsCompleted: 27,
-      borrowLends: 34,
-      followers: 245,
-      following: 118,
+      booksInLibrary: 152,
+      successfulSwaps: 78,
+      booksBorrowed: 63,
+      booksSold: 42,
+      followers: 482,
+      following: 120,
     },
+    verification: {
+      email: true,
+      phone: true,
+      identity: true,
+      trustedSeller: true,
+      premium: true,
+    },
+    socialLinks: {
+      website: "boimix.com/roni",
+      facebook: "https://facebook.com",
+      twitter: "https://twitter.com",
+      instagram: "https://instagram.com",
+    },
+    readingInterests: [
+      "Self-help",
+      "Psychology",
+      "Business",
+      "Biographies",
+      "Technology",
+    ],
+    memberHighlights: [
+      {
+        icon: "star",
+        title: "Top Reviewer",
+        subtitle: "Given 235 helpful reviews",
+      },
+      {
+        icon: "repeat",
+        title: "Active Swapper",
+        subtitle: "Completed 78 swaps",
+      },
+      {
+        icon: "message",
+        title: "Quick Responder",
+        subtitle: "Replies within 12 mins (avg)",
+      },
+      {
+        icon: "clock",
+        title: "On-time Returner",
+        subtitle: "100% borrow returns on time",
+      },
+    ],
     locationDetails: {
       district: "Dhaka",
-      area: "Mirpur 10",
-      serviceArea: ["Mirpur", "Dhanmondi", "Banani", "Uttara"],
+      area: "Dhanmondi",
+      serviceArea: ["Dhanmondi", "Banani", "Gulshan", "Uttara"],
       meetingPreference:
         "Prefers public handover points near metro stations or book cafes.",
       privacyNote:
@@ -199,57 +219,6 @@ export const profileActivity: UserProfileActivity[] = [
     title: "Earned Careful Keeper",
     description: "Recognized for sharing books in excellent condition.",
     createdAt: "Jan 2025",
-  },
-];
-
-export const profileFollowers: UserSummary[] = [
-  {
-    id: "user-nusrat",
-    name: "Nusrat Jahan",
-    username: "nusrat_reads",
-    avatarUrl: "https://i.pravatar.cc/160?u=nusrat_reads",
-    location: "Dhanmondi, Dhaka",
-    rating: 4.8,
-    badges: [{ label: "Reviewer", tone: "info" }],
-  },
-  {
-    id: "user-sabbir",
-    name: "Sabbir Hasan",
-    username: "sabbir_books",
-    avatarUrl: "https://i.pravatar.cc/160?u=sabbir_books",
-    location: "Banani, Dhaka",
-    rating: 4.7,
-    badges: [{ label: "Swapper", tone: "success" }],
-  },
-  {
-    id: "user-tasnim",
-    name: "Tasnim Ara",
-    username: "tasnim_library",
-    avatarUrl: "https://i.pravatar.cc/160?u=tasnim_library",
-    location: "Uttara, Dhaka",
-    rating: 4.9,
-    badges: [{ label: "Verified", tone: "info" }],
-  },
-];
-
-export const profileFollowing: UserSummary[] = [
-  {
-    id: "user-arif",
-    name: "Arif Hossain",
-    username: "arif_pages",
-    avatarUrl: "https://i.pravatar.cc/160?u=arif_pages",
-    location: "Mirpur, Dhaka",
-    rating: 4.6,
-    badges: [{ label: "Borrower", tone: "success" }],
-  },
-  {
-    id: "user-maliha",
-    name: "Maliha Karim",
-    username: "maliha_swap",
-    avatarUrl: "https://i.pravatar.cc/160?u=maliha_swap",
-    location: "Mohammadpur, Dhaka",
-    rating: 4.8,
-    badges: [{ label: "Top Swapper", tone: "success" }],
   },
 ];
 
