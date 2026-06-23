@@ -26,15 +26,6 @@ export default async function UserLibraryPage({
 
   return (
     <ProfileShell profile={profile} active="library">
-      <div className="mb-6">
-        <h2 className="text-foreground text-2xl font-bold tracking-tight">
-          Public library
-        </h2>
-        <p className="text-muted-foreground mt-1 text-[15px]">
-          Books this reader has publicly listed for sale, swap, or borrow.
-        </p>
-      </div>
-
       <ProfileBooksViewer
         books={profileLibraryBooks}
         isOwnProfile={isOwnProfile}

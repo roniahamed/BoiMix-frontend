@@ -44,7 +44,7 @@ export function ProfileShell({
               <div className="hidden sm:block">
                 <ProfileVerifications profile={profile} />
               </div>
-              <div id="profile-nav-anchor" className="invisible h-0 w-0" />
+              <div id="profile-nav-anchor" className="absolute -mt-4 h-0 w-0" />
               <ProfileNav username={profile.username} active={active} />
 
               {active === "overview" && (
