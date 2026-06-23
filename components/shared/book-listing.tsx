@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import { SlidersHorizontal, Loader2 } from "lucide-react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -23,7 +23,6 @@ import {
 import { FilterSidebar } from "@/components/shared/filter-sidebar";
 import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook } from "@/types/book";
-import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 
 const BASE_MOCK_BOOKS: BookCardBook[] = [
   {
@@ -576,10 +575,8 @@ export function BookListing({
   initialSortBy = "newest",
 }: BookListingProps) {
   const [books, setBooks] = useState<BookCardBook[]>(MOCK_BOOKS);
-  const [isLoading, setIsLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
   const [sortBy, setSortBy] = useState(initialSortBy);
-  const [hasMore, setHasMore] = useState(true);
   const [selectedFilters, setSelectedFilters] =
     useState<Record<string, string[]>>(initialFilters);
   const [priceRange, setPriceRange] = useState<{
@@ -587,11 +584,9 @@ export function BookListing({
     max: string;
   } | null>(null);
 
-  const loadMoreRef = useRef<HTMLDivElement>(null);
-  const pageCountRef = useRef(1);
-  const isIntersecting = useIntersectionObserver(loadMoreRef, {
-    rootMargin: "400px",
-  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+  const listRef = useRef<HTMLDivElement>(null);
 
   const handleFilterChange = useCallback(
     (groupId: string, value: string, checked: boolean) => {
@@ -603,6 +598,7 @@ export function BookListing({
           return { ...prev, [groupId]: groupValues.filter((v) => v !== value) };
         }
       });
+      setCurrentPage(1); // Reset to first page on filter change
     },
     [],
   );
@@ -611,6 +607,7 @@ export function BookListing({
     (groupId: string, min: string, max: string) => {
       if (groupId === "price") {
         setPriceRange({ min, max });
+        setCurrentPage(1); // Reset to first page on filter change
       }
     },
     [],
@@ -620,49 +617,15 @@ export function BookListing({
     setSelectedFilters({});
     setPriceRange(null);
     setSearchQuery("");
+    setCurrentPage(1);
   }, []);
-
-  const loadMoreBooks = useCallback(() => {
-    if (!hasMore) return;
-    setIsLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
-      setBooks((prev) => [
-        ...prev,
-        ...MOCK_BOOKS.map((book) => ({
-          ...book,
-          id: book.id + "-" + Date.now() + Math.random(),
-        })),
-      ]);
-      pageCountRef.current += 1;
-      if (pageCountRef.current >= 3) {
-        setHasMore(false);
-      }
-      setIsLoading(false);
-    }, 300);
-  }, [hasMore]);
 
   // Sync defaultSearchQuery from URL params to local state
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearchQuery(defaultSearchQuery);
+    setCurrentPage(1);
   }, [defaultSearchQuery]);
-
-  // Continuous background loading for mock data
-  useEffect(() => {
-    if (!hasMore || isLoading) return;
-    const timer = setTimeout(() => {
-      loadMoreBooks();
-    }, 500); // load next chunk after 500ms automatically
-    return () => clearTimeout(timer);
-  }, [hasMore, isLoading, loadMoreBooks]);
-
-  useEffect(() => {
-    if (isIntersecting && !isLoading && hasMore) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      loadMoreBooks();
-    }
-  }, [isIntersecting, isLoading, loadMoreBooks, hasMore]);
 
   // Derived state for filtering and sorting
   const filteredBooks = books
@@ -731,8 +694,47 @@ export function BookListing({
       return 0; // default / newest / distance mocked
     });
 
+  const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
+  const paginatedBooks = filteredBooks.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage,
+  );
+
+  const getPageNumbers = () => {
+    const pages: (number | string)[] = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Always include page 1
+      pages.push(1);
+
+      if (currentPage > 3) {
+        pages.push("...");
+      }
+
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(totalPages - 1, currentPage + 1);
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (currentPage < totalPages - 2) {
+        pages.push("...");
+      }
+
+      // Always include last page
+      pages.push(totalPages);
+    }
+    return pages;
+  };
+
   return (
-    <div className="boimix-container py-6 md:py-8">
+    <div ref={listRef} className="boimix-container py-6 md:py-8">
       {/* Page Header & Search */}
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
@@ -756,104 +758,154 @@ export function BookListing({
         </aside>
 
         {/* Main Content */}
-        <div className="space-y-6">
-          {/* Active Filters & Sort */}
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-muted-foreground text-sm">
-              <span className="text-foreground font-semibold">
-                {filteredBooks.length}
-              </span>{" "}
-              টি বই পাওয়া গেছে
-            </p>
-            <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
-              <div className="flex flex-1 items-center gap-2 sm:flex-none">
-                <span className="text-muted-foreground hidden text-sm whitespace-nowrap sm:inline-block">
-                  সর্ট করুন:
-                </span>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-full bg-transparent sm:w-[160px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">নতুন যোগ করা</SelectItem>
-                    <SelectItem value="price-low">দাম: কম থেকে বেশি</SelectItem>
-                    <SelectItem value="price-high">
-                      দাম: বেশি থেকে কম
-                    </SelectItem>
-                    <SelectItem value="rating">সর্বোচ্চ রেটিং</SelectItem>
-                    <SelectItem value="distance">নিকটবর্তী</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+        <div className="w-full">
+          <div className="flex flex-col space-y-6">
+            {/* Active Filters & Sort */}
+            <div className="flex shrink-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between lg:mb-6">
+              <p className="text-muted-foreground text-sm">
+                <span className="text-foreground font-semibold">
+                  {filteredBooks.length}
+                </span>{" "}
+                টি বই পাওয়া গেছে
+              </p>
+              <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
+                <div className="flex flex-1 items-center gap-2 sm:flex-none">
+                  <span className="text-muted-foreground hidden text-sm whitespace-nowrap sm:inline-block">
+                    সর্ট করুন:
+                  </span>
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full bg-transparent sm:w-[160px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="newest">নতুন যোগ করা</SelectItem>
+                      <SelectItem value="price-low">
+                        দাম: কম থেকে বেশি
+                      </SelectItem>
+                      <SelectItem value="price-high">
+                        দাম: বেশি থেকে কম
+                      </SelectItem>
+                      <SelectItem value="rating">সর্বোচ্চ রেটিং</SelectItem>
+                      <SelectItem value="distance">নিকটবর্তী</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <Drawer>
-                <DrawerTrigger asChild>
+                <Drawer>
+                  <DrawerTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="flex-1 shrink-0 gap-2 sm:flex-none md:hidden"
+                    >
+                      <SlidersHorizontal className="size-4" />
+                      ফিল্টার
+                    </Button>
+                  </DrawerTrigger>
+                  <DrawerContent className="h-[85vh]">
+                    <DrawerTitle className="sr-only">Filters</DrawerTitle>
+                    <div className="overflow-y-auto pb-6">
+                      <FilterSidebar
+                        groups={FILTER_GROUPS}
+                        selectedFilters={selectedFilters}
+                        onFilterChange={handleFilterChange}
+                        onFilterReset={handleFilterReset}
+                        onRangeChange={handleRangeChange}
+                        className="border-none shadow-none"
+                      />
+                    </div>
+                    <DrawerFooter className="border-t pt-2 pb-6">
+                      <DrawerClose asChild>
+                        <Button className="w-full">এপ্লাই করুন (Close)</Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+              </div>
+            </div>
+
+            {/* Book Grid */}
+            <div className="flex-1">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                {paginatedBooks.length > 0 ? (
+                  paginatedBooks.map((book) => (
+                    <BookCard key={book.id} book={book} />
+                  ))
+                ) : (
+                  <div className="text-muted-foreground col-span-full py-12 text-center">
+                    কোনো বই পাওয়া যায়নি। আবার চেষ্টা করুন।
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="mt-6 flex shrink-0 justify-center pb-2 lg:mt-8">
+                <div className="flex items-center gap-2">
                   <Button
                     variant="outline"
-                    className="flex-1 shrink-0 gap-2 sm:flex-none md:hidden"
+                    size="sm"
+                    onClick={() => {
+                      setCurrentPage((p) => Math.max(1, p - 1));
+                      listRef.current?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    disabled={currentPage === 1}
                   >
-                    <SlidersHorizontal className="size-4" />
-                    ফিল্টার
+                    Prev
                   </Button>
-                </DrawerTrigger>
-                <DrawerContent className="h-[85vh]">
-                  <DrawerTitle className="sr-only">Filters</DrawerTitle>
-                  <div className="overflow-y-auto pb-6">
-                    <FilterSidebar
-                      groups={FILTER_GROUPS}
-                      selectedFilters={selectedFilters}
-                      onFilterChange={handleFilterChange}
-                      onFilterReset={handleFilterReset}
-                      onRangeChange={handleRangeChange}
-                      className="border-none shadow-none"
-                    />
-                  </div>
-                  <DrawerFooter className="border-t pt-2 pb-6">
-                    <DrawerClose asChild>
-                      <Button className="w-full">এপ্লাই করুন (Close)</Button>
-                    </DrawerClose>
-                  </DrawerFooter>
-                </DrawerContent>
-              </Drawer>
-            </div>
-          </div>
 
-          {/* Book Grid */}
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-            {filteredBooks.length > 0 ? (
-              filteredBooks.map((book) => (
-                <BookCard key={book.id} book={book} />
-              ))
-            ) : (
-              <div className="text-muted-foreground col-span-full py-12 text-center">
-                কোনো বই পাওয়া যায়নি। আবার চেষ্টা করুন।
+                  <div className="flex items-center gap-1.5">
+                    {getPageNumbers().map((page, index) => {
+                      if (page === "...") {
+                        return (
+                          <span
+                            key={`ellipsis-${index}`}
+                            className="text-muted-foreground flex h-9 w-9 items-center justify-center text-sm font-medium select-none"
+                          >
+                            ...
+                          </span>
+                        );
+                      }
+
+                      const pageNum = page as number;
+                      const isActive = pageNum === currentPage;
+
+                      return (
+                        <Button
+                          key={`page-${pageNum}`}
+                          variant={isActive ? "default" : "outline"}
+                          size="sm"
+                          className={`h-9 w-9 p-0 ${
+                            isActive ? "pointer-events-none" : ""
+                          }`}
+                          onClick={() => {
+                            setCurrentPage(pageNum);
+                            listRef.current?.scrollIntoView({
+                              behavior: "smooth",
+                            });
+                          }}
+                        >
+                          {pageNum}
+                        </Button>
+                      );
+                    })}
+                  </div>
+
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      setCurrentPage((p) => Math.min(totalPages, p + 1));
+                      listRef.current?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             )}
           </div>
-
-          {/* Infinite Scroll trigger */}
-          {hasMore ? (
-            <div ref={loadMoreRef} className="mt-12 flex justify-center pb-12">
-              {isLoading ? (
-                <div className="text-primary flex items-center gap-2">
-                  <Loader2 className="size-5 animate-spin" />
-                  <span className="text-sm font-medium">
-                    আরও বই লোড হচ্ছে...
-                  </span>
-                </div>
-              ) : (
-                <p className="text-muted-foreground text-sm">
-                  স্ক্রল করতে থাকুন
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="mt-12 flex justify-center pb-12">
-              <p className="text-muted-foreground text-sm">
-                সব বই দেখানো হয়েছে
-              </p>
-            </div>
-          )}
         </div>
       </div>
     </div>
