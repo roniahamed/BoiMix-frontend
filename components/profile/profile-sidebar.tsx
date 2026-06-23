@@ -13,6 +13,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import type { UserProfile } from "@/types/user";
+import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 
 type ProfileSidebarProps = {
   profile: UserProfile;
@@ -202,85 +203,48 @@ export function ProfileSidebar({ profile }: ProfileSidebarProps) {
       )}
 
       {/* Badges */}
-      {profile.profileBadges && profile.profileBadges.length > 0 && (
-        <section className="border-muted rounded-[5px] border p-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-foreground text-base font-bold tracking-tight">
-              Badges
-            </h2>
-            <a
-              href={`/u/${profile.username}/badges`}
-              className="text-primary text-[13px] font-semibold hover:underline"
-            >
-              View all
-            </a>
-          </div>
-          <div className="mt-5 flex flex-wrap gap-4">
-            {profile.profileBadges.map((badge, idx) => {
-              let IconComponent = StarIcon;
-              let colorClass =
-                "text-purple-500 drop-shadow-[0_4px_6px_rgba(168,85,247,0.4)]";
-
-              if (badge.tone === "default") {
-                IconComponent = BookOpenIcon;
-                colorClass =
-                  "text-purple-500 drop-shadow-[0_4px_6px_rgba(168,85,247,0.4)]";
-              }
-              if (badge.tone === "info") {
-                IconComponent = Repeat2Icon;
-                colorClass =
-                  "text-blue-500 drop-shadow-[0_4px_6px_rgba(59,130,246,0.4)]";
-              }
-              if (badge.tone === "warning") {
-                IconComponent = StarIcon;
-                colorClass =
-                  "text-orange-500 drop-shadow-[0_4px_6px_rgba(249,115,22,0.4)]";
-              }
-              if (badge.tone === "success") {
-                IconComponent = ShieldCheckIcon; // Wait, ShieldCheckIcon needs to be imported or use another
-                colorClass =
-                  "text-emerald-500 drop-shadow-[0_4px_6px_rgba(16,185,129,0.4)]";
-              }
-
-              return (
-                <div
-                  key={idx}
-                  title={badge.description}
-                  className="flex cursor-default items-center justify-center transition-transform hover:-translate-y-0.5"
-                >
-                  <div className={cn("relative size-12", colorClass)}>
-                    {/* SVG Rounded Hexagon Background */}
-                    <svg
-                      viewBox="0 0 100 100"
-                      className="absolute inset-0 size-full"
+      {profile.profileBadges &&
+        profile.profileBadges.filter((b) => b.isEarned).length > 0 && (
+          <section className="border-muted rounded-[5px] border p-5">
+            <div className="flex items-center justify-between">
+              <h2 className="text-foreground text-base font-bold tracking-tight">
+                Badges
+              </h2>
+            </div>
+            <div className="mt-5 flex flex-wrap gap-4">
+              {profile.profileBadges
+                .filter((b) => b.isEarned)
+                .slice(0, 3)
+                .map((badge, idx) => {
+                  return (
+                    <div
+                      key={idx}
+                      title={badge.description}
+                      className="flex cursor-default items-center justify-center transition-transform hover:-translate-y-0.5"
                     >
-                      <polygon
-                        points="50 5, 90 28, 90 72, 50 95, 10 72, 10 28"
-                        fill="currentColor"
-                        stroke="currentColor"
-                        strokeWidth="10"
-                        strokeLinejoin="round"
+                      <BeautifulBadge
+                        type={badge.icon}
+                        color={badge.badgeColor || "red"}
+                        isEarned={badge.isEarned}
+                        className="h-[52px] w-[46px]"
+                        iconClassName="size-5"
                       />
-                      {/* Inner lighter border effect */}
-                      <polygon
-                        points="50 5, 90 28, 90 72, 50 95, 10 72, 10 28"
-                        fill="transparent"
-                        stroke="rgba(255,255,255,0.4)"
-                        strokeWidth="4"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                    {/* Icon centered inside */}
-                    <div className="absolute inset-0 flex items-center justify-center text-white">
-                      <IconComponent className="size-5" strokeWidth={2.5} />
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
+                  );
+                })}
+            </div>
+            {profile.profileBadges.filter((b) => b.isEarned).length > 3 && (
+              <div className="mt-4">
+                <a
+                  href={`/u/${profile.username}/badges`}
+                  className="text-primary text-[13px] font-semibold hover:underline"
+                >
+                  See more
+                </a>
+              </div>
+            )}
+          </section>
+        )}
     </aside>
   );
 }

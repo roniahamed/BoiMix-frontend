@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 import { cn } from "@/lib/utils";
 import {
   AwardIcon,
@@ -58,6 +58,7 @@ export function BeautifulBadge({
   iconClassName,
 }: BeautifulBadgeProps) {
   const Icon = iconMap[type] || AwardIcon;
+  const idPrefix = useId().replace(/:/g, ""); // Remove colons to ensure valid CSS ID
 
   const colors = colorMap[color as keyof typeof colorMap] || colorMap.red;
   const primaryColor = isEarned ? colors.primary : "#4b5563";
@@ -81,7 +82,7 @@ export function BeautifulBadge({
       >
         <defs>
           <linearGradient
-            id={`grad-${color}-${isEarned}`}
+            id={`${idPrefix}-grad`}
             x1="0%"
             y1="0%"
             x2="100%"
@@ -91,7 +92,7 @@ export function BeautifulBadge({
             <stop offset="100%" stopColor={secondaryColor} />
           </linearGradient>
           <linearGradient
-            id={`gold-border-${isEarned}`}
+            id={`${idPrefix}-gold-border`}
             x1="0%"
             y1="0%"
             x2="100%"
@@ -102,7 +103,7 @@ export function BeautifulBadge({
             <stop offset="100%" stopColor={goldMid} />
           </linearGradient>
           <linearGradient
-            id={`gold-inner-${isEarned}`}
+            id={`${idPrefix}-gold-inner`}
             x1="0%"
             y1="100%"
             x2="100%"
@@ -113,7 +114,7 @@ export function BeautifulBadge({
             <stop offset="100%" stopColor={goldDark} />
           </linearGradient>
 
-          <filter id="inner-shadow">
+          <filter id={`${idPrefix}-inner-shadow`}>
             <feOffset dx="0" dy="4" />
             <feGaussianBlur stdDeviation="3" result="offset-blur" />
             <feComposite
@@ -136,27 +137,27 @@ export function BeautifulBadge({
         {/* Outer thick gold border */}
         <polygon
           points="50,2 98,28 98,82 50,108 2,82 2,28"
-          fill={`url(#gold-border-${isEarned})`}
+          fill={`url(#${idPrefix}-gold-border)`}
         />
 
         {/* Inner gold edge to create 3D bevel effect */}
         <polygon
           points="50,8 92,31 92,79 50,102 8,79 8,31"
-          fill={`url(#gold-inner-${isEarned})`}
+          fill={`url(#${idPrefix}-gold-inner)`}
         />
 
         {/* The colored center */}
         <polygon
           points="50,12 88,34 88,76 50,98 12,76 12,34"
-          fill={`url(#grad-${color}-${isEarned})`}
-          filter="url(#inner-shadow)"
+          fill={`url(#${idPrefix}-grad)`}
+          filter={`url(#${idPrefix}-inner-shadow)`}
         />
 
         {/* Inner thin gold ring */}
         <polygon
           points="50,18 83,36 83,74 50,92 17,74 17,36"
           fill="none"
-          stroke={`url(#gold-border-${isEarned})`}
+          stroke={`url(#${idPrefix}-gold-border)`}
           strokeWidth="1"
           opacity="0.6"
         />

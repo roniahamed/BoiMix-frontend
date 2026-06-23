@@ -13,6 +13,8 @@ import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileNav } from "@/components/profile/profile-nav";
 import { ProfileSidebar } from "@/components/profile/profile-sidebar";
 import { ProfileVerifications } from "@/components/profile/profile-verifications";
+import { BeautifulBadge } from "@/components/shared/beautiful-badge";
+import Link from "next/link";
 import type { UserProfile } from "@/types/user";
 import { cn } from "@/lib/utils";
 
@@ -93,65 +95,48 @@ export function ProfileShell({
 
                   {/* Badges Section */}
                   {profile.profileBadges &&
-                    profile.profileBadges.length > 0 && (
+                    profile.profileBadges.filter((b) => b.isEarned).length >
+                      0 && (
                       <div className="mt-2 flex flex-wrap items-center justify-start gap-4 px-1">
-                        {profile.profileBadges.map((badge, idx) => {
-                          let IconComponent = ShieldCheckIcon;
-                          if (badge.tone === "default")
-                            IconComponent = BookOpenIcon;
-                          if (badge.tone === "info")
-                            IconComponent = ArrowRightLeftIcon;
-                          if (badge.tone === "warning")
-                            IconComponent = StarIcon;
-
-                          let gradientClass = "from-purple-400 to-purple-600";
-                          if (badge.tone === "info")
-                            gradientClass = "from-blue-400 to-blue-500";
-                          if (badge.tone === "warning")
-                            gradientClass = "from-orange-400 to-orange-500";
-                          if (badge.tone === "success")
-                            gradientClass = "from-emerald-400 to-emerald-500";
-
-                          const labelParts = badge.label.split(" ");
-
-                          return (
-                            <div
-                              key={idx}
-                              title={badge.description}
-                              className="group flex w-12 cursor-default flex-col items-center gap-2"
-                            >
-                              <div className="relative size-[44px] drop-shadow-sm transition-transform group-hover:-translate-y-0.5">
-                                <div
-                                  className={cn(
-                                    "absolute inset-0 flex items-center justify-center bg-gradient-to-br text-white",
-                                    gradientClass,
-                                    "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
-                                  )}
-                                >
-                                  <div
-                                    className={cn(
-                                      "absolute inset-[2px] flex items-center justify-center bg-gradient-to-br",
-                                      gradientClass,
-                                      "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
-                                    )}
-                                  >
-                                    <IconComponent
-                                      className="size-[18px] drop-shadow-md"
-                                      strokeWidth={2.5}
-                                    />
-                                  </div>
+                        {profile.profileBadges
+                          .filter((b) => b.isEarned)
+                          .slice(0, 3)
+                          .map((badge, idx) => {
+                            const labelParts = badge.label.split(" ");
+                            return (
+                              <div
+                                key={idx}
+                                title={badge.description}
+                                className="group flex w-12 cursor-default flex-col items-center gap-2"
+                              >
+                                <div className="transition-transform group-hover:-translate-y-0.5">
+                                  <BeautifulBadge
+                                    type={badge.icon}
+                                    color={badge.badgeColor || "red"}
+                                    isEarned={badge.isEarned}
+                                    className="h-[44px] w-[38px]"
+                                    iconClassName="size-4"
+                                  />
                                 </div>
+                                <span className="text-foreground/80 text-center text-[10px] leading-[1.15] font-bold">
+                                  {labelParts.map((part, i) => (
+                                    <span key={i} className="block">
+                                      {part}
+                                    </span>
+                                  ))}
+                                </span>
                               </div>
-                              <span className="text-foreground/80 text-center text-[10px] leading-[1.15] font-bold">
-                                {labelParts.map((part, i) => (
-                                  <span key={i} className="block">
-                                    {part}
-                                  </span>
-                                ))}
-                              </span>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        {profile.profileBadges.filter((b) => b.isEarned)
+                          .length > 3 && (
+                          <Link
+                            href={`/u/${profile.username}/badges`}
+                            className="text-primary hover:text-primary/80 mt-1 text-[12px] font-semibold hover:underline"
+                          >
+                            See more
+                          </Link>
+                        )}
                       </div>
                     )}
 

@@ -18,6 +18,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/shared/user-avatar";
+import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import type { UserProfile } from "@/types/user";
 import { cn } from "@/lib/utils";
 
@@ -365,64 +366,50 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
             </div>
 
             {/* Badges Area */}
-            {profile.profileBadges && profile.profileBadges.length > 0 && (
-              <div className="mt-2 flex flex-wrap items-start justify-end gap-5 lg:pr-4">
-                {profile.profileBadges.map((badge, idx) => {
-                  let IconComponent = ShieldCheckIcon;
-                  if (badge.tone === "default") IconComponent = BookOpenIcon;
-                  if (badge.tone === "info") IconComponent = ArrowRightLeftIcon;
-                  if (badge.tone === "warning") IconComponent = StarIcon;
-
-                  let gradientClass = "from-purple-400 to-purple-600";
-                  if (badge.tone === "info")
-                    gradientClass = "from-blue-400 to-blue-500";
-                  if (badge.tone === "warning")
-                    gradientClass = "from-orange-400 to-orange-500";
-                  if (badge.tone === "success")
-                    gradientClass = "from-emerald-400 to-emerald-500";
-
-                  const labelParts = badge.label.split(" ");
-
-                  return (
-                    <div
-                      key={idx}
-                      title={badge.description}
-                      className="group flex w-14 cursor-default flex-col items-center gap-2"
-                    >
-                      <div className="relative size-[52px] drop-shadow-sm transition-transform group-hover:-translate-y-0.5">
+            {profile.profileBadges &&
+              profile.profileBadges.filter((b) => b.isEarned).length > 0 && (
+                <div className="mt-2 flex flex-wrap items-center justify-end gap-5 lg:pr-4">
+                  {profile.profileBadges
+                    .filter((b) => b.isEarned)
+                    .slice(0, 3)
+                    .map((badge, idx) => {
+                      const labelParts = badge.label.split(" ");
+                      return (
                         <div
-                          className={cn(
-                            "absolute inset-0 flex items-center justify-center bg-gradient-to-br text-white",
-                            gradientClass,
-                            "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
-                          )}
+                          key={idx}
+                          title={badge.description}
+                          className="group flex w-14 cursor-default flex-col items-center gap-2"
                         >
-                          <div
-                            className={cn(
-                              "absolute inset-[2px] flex items-center justify-center bg-gradient-to-br",
-                              gradientClass,
-                              "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
-                            )}
-                          >
-                            <IconComponent
-                              className="size-[22px] drop-shadow-md"
-                              strokeWidth={2.5}
+                          <div className="transition-transform group-hover:-translate-y-0.5">
+                            <BeautifulBadge
+                              type={badge.icon}
+                              color={badge.badgeColor || "red"}
+                              isEarned={badge.isEarned}
+                              className="h-[52px] w-[46px]"
+                              iconClassName="size-5"
                             />
                           </div>
-                        </div>
-                      </div>
-                      <span className="text-foreground/80 text-center text-[11px] leading-[1.15] font-bold">
-                        {labelParts.map((part, i) => (
-                          <span key={i} className="block">
-                            {part}
+                          <span className="text-foreground/80 text-center text-[11px] leading-[1.15] font-bold">
+                            {labelParts.map((part, i) => (
+                              <span key={i} className="block">
+                                {part}
+                              </span>
+                            ))}
                           </span>
-                        ))}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                        </div>
+                      );
+                    })}
+                  {profile.profileBadges.filter((b) => b.isEarned).length >
+                    3 && (
+                    <Link
+                      href={`/u/${profile.username}/badges`}
+                      className="text-primary hover:text-primary/80 mt-1 text-[13px] font-semibold hover:underline"
+                    >
+                      See more
+                    </Link>
+                  )}
+                </div>
+              )}
           </div>
         </div>
       </div>
