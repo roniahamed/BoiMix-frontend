@@ -59,7 +59,136 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
       </div>
 
       <div className="relative z-10 px-5 pb-6 sm:px-8">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
+        {/* ----- MOBILE VIEW ----- */}
+        <div className="flex flex-col gap-5 sm:hidden">
+          {/* Avatar + Name + Stats */}
+          <div className="flex flex-row items-center gap-3">
+            <div className="relative -mt-8 shrink-0">
+              <UserAvatar
+                name={profile.name}
+                src={profile.avatarUrl}
+                className="bg-card border-card text-foreground relative z-10 size-[76px] border-[3px] text-2xl shadow-sm dark:border-zinc-900"
+              />
+            </div>
+            <div className="flex flex-col pt-3">
+              <div className="flex items-center gap-1.5">
+                <h1 className="text-foreground text-[20px] leading-none font-bold tracking-tight">
+                  {profile.name}
+                </h1>
+                {profile.badges && profile.badges.length > 0 && (
+                  <ShieldCheckIcon className="fill-primary text-primary size-4" />
+                )}
+              </div>
+              <div className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium">
+                <span className="text-foreground font-semibold">
+                  {profile.stats.followers}{" "}
+                  <span className="text-muted-foreground font-normal">
+                    followers
+                  </span>
+                </span>
+                <span className="text-muted-foreground font-normal">
+                  &bull;
+                </span>
+                <span className="text-foreground font-semibold">
+                  {profile.stats.following}{" "}
+                  <span className="text-muted-foreground font-normal">
+                    following
+                  </span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            {/* Profile heading and Bio */}
+            <div className="mt-1 flex flex-col gap-y-1">
+              <div className="text-foreground text-[16px] font-bold">
+                Profile
+              </div>
+              {profile.bio && (
+                <p className="text-foreground text-[14px]">{profile.bio}</p>
+              )}
+            </div>
+
+            {/* Action Buttons (Facebook Style) */}
+            <div className="mt-4 flex w-full flex-row items-center gap-2">
+              <Button className="bg-muted text-foreground hover:bg-muted/80 h-9 flex-1 rounded-md font-semibold shadow-none">
+                Following
+              </Button>
+              <Button
+                className="h-9 flex-1 rounded-md bg-[#0866ff] font-semibold text-white shadow-none hover:bg-[#0866ff]/90"
+                asChild
+              >
+                <Link
+                  href="/dashboard/messages"
+                  className="flex items-center justify-center"
+                >
+                  <MessageSquareIcon className="mr-2 size-4" />
+                  Message
+                </Link>
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleShare}
+                className="bg-muted text-foreground hover:bg-muted/80 flex h-9 w-12 shrink-0 items-center justify-center rounded-md border-0 px-0 shadow-none"
+              >
+                <CustomShareArrow className="size-4" />
+                <span className="sr-only">Share</span>
+              </Button>
+            </div>
+
+            {/* Mobile Stats */}
+            <div className="border-border/50 mt-5 flex w-full justify-between border-y py-3">
+              <div className="flex min-w-0 flex-col items-center text-center">
+                <div className="mb-1 flex items-center gap-1">
+                  <LibraryIcon className="text-primary size-4" />
+                  <span className="text-foreground text-[15px] font-bold">
+                    {profile.stats.booksInLibrary}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] leading-tight font-medium">
+                  Books
+                </span>
+              </div>
+              <div className="flex min-w-0 flex-col items-center text-center">
+                <div className="mb-1 flex items-center gap-1">
+                  <ArrowRightLeftIcon className="text-primary size-4" />
+                  <span className="text-foreground text-[15px] font-bold">
+                    {profile.stats.successfulSwaps}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] leading-tight font-medium">
+                  Swaps
+                </span>
+              </div>
+              <div className="flex min-w-0 flex-col items-center text-center">
+                <div className="mb-1 flex items-center gap-1">
+                  <BookDownIcon className="text-primary size-4" />
+                  <span className="text-foreground text-[15px] font-bold">
+                    {profile.stats.booksBorrowed}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] leading-tight font-medium">
+                  Borrowed
+                </span>
+              </div>
+              <div className="flex min-w-0 flex-col items-center text-center">
+                <div className="mb-1 flex items-center gap-1">
+                  <BanknoteIcon className="text-primary size-4" />
+                  <span className="text-foreground text-[15px] font-bold">
+                    {profile.stats.booksSold}
+                  </span>
+                </div>
+                <span className="text-muted-foreground text-[11px] leading-tight font-medium">
+                  Sold
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ----- DESKTOP VIEW ----- */}
+        <div className="hidden flex-col gap-6 sm:flex lg:flex-row lg:items-start lg:justify-between">
           {/* Avatar and Info Block */}
           <div className="flex w-full flex-col gap-5 sm:flex-row sm:items-start lg:gap-6">
             {/* Avatar overlapping the cover */}
@@ -72,9 +201,9 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
             </div>
 
             <div className="min-w-0 flex-1 pt-2 sm:pt-4">
-              {/* Row 1: Name, Badge, Followers, Following */}
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <h1 className="text-foreground text-2xl font-bold tracking-tight md:text-[28px]">
+              {/* Row 1: Name and Badge */}
+              <div className="flex items-center gap-x-3">
+                <h1 className="text-foreground text-[28px] font-bold tracking-tight">
                   {profile.name}
                 </h1>
                 {profile.badges && profile.badges.length > 0 && (
@@ -83,57 +212,54 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
                     {profile.badges[0].label}
                   </span>
                 )}
-
-                <div className="bg-muted-foreground/40 mx-1 hidden h-1 w-1 rounded-full sm:block" />
-
-                <div className="mt-1 flex items-center gap-4 text-sm sm:mt-0">
-                  <div className="flex items-center gap-1.5">
-                    <UsersIcon className="text-primary size-4" />
-                    <span className="text-foreground font-bold">
-                      {profile.stats.followers}
-                    </span>
-                    <span className="text-muted-foreground text-xs font-medium">
-                      Followers
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <UserCheckIcon className="text-primary size-4" />
-                    <span className="text-foreground font-bold">
-                      {profile.stats.following}
-                    </span>
-                    <span className="text-muted-foreground text-xs font-medium">
-                      Following
-                    </span>
-                  </div>
-                </div>
               </div>
 
-              {/* Row 2: Role, Location */}
-              <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-2 text-[15px]">
-                <div className="flex items-center gap-2">
-                  <span className="text-foreground font-semibold">
-                    {profile.role || "Member"}
+              {/* Row 2: Followers, Following */}
+              <div className="mt-1.5 flex items-center gap-4 text-[13px]">
+                <div className="flex items-center gap-1.5">
+                  <UsersIcon className="text-primary size-4" />
+                  <span className="text-foreground font-bold">
+                    {profile.stats.followers}
                   </span>
-                  {profile.location && (
-                    <span className="text-muted-foreground">&bull;</span>
-                  )}
-                  {profile.location && (
-                    <span className="text-muted-foreground">
-                      {profile.location}
-                    </span>
-                  )}
+                  <span className="text-muted-foreground font-medium">
+                    Followers
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <UserCheckIcon className="text-primary size-4" />
+                  <span className="text-foreground font-bold">
+                    {profile.stats.following}
+                  </span>
+                  <span className="text-muted-foreground font-medium">
+                    Following
+                  </span>
                 </div>
               </div>
 
-              {/* Row 3: Joined Date */}
+              {/* Row 3: Role, Location */}
+              <div className="mt-2.5 flex items-center gap-2 text-[14px]">
+                <span className="text-foreground font-semibold">
+                  {profile.role || "Member"}
+                </span>
+                {profile.location && (
+                  <span className="text-muted-foreground">&bull;</span>
+                )}
+                {profile.location && (
+                  <span className="text-muted-foreground">
+                    {profile.location}
+                  </span>
+                )}
+              </div>
+
+              {/* Row 4: Joined Date */}
               {profile.joinedAt && (
-                <p className="text-muted-foreground mt-2 text-[14px]">
+                <p className="text-muted-foreground mt-1.5 text-[14px]">
                   {profile.joinedAt}
                 </p>
               )}
 
-              {/* Row 4: Action Buttons grouped together */}
-              <div className="mt-4 flex items-center gap-4 sm:mt-5">
+              {/* Row 5: Action Buttons grouped together */}
+              <div className="mt-4 flex items-center gap-4">
                 <Button className="h-9 w-[110px] rounded-md bg-[#0ea5e9] text-[14px] font-semibold text-white shadow-none transition-colors hover:bg-[#0284c7]">
                   Follow
                 </Button>

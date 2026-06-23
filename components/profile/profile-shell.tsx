@@ -1,10 +1,17 @@
 import type { ReactNode } from "react";
+import {
+  ShieldCheckIcon,
+  BookOpenIcon,
+  ArrowRightLeftIcon,
+  StarIcon,
+} from "lucide-react";
 
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileNav } from "@/components/profile/profile-nav";
 import { ProfileSidebar } from "@/components/profile/profile-sidebar";
 import { ProfileVerifications } from "@/components/profile/profile-verifications";
 import type { UserProfile } from "@/types/user";
+import { cn } from "@/lib/utils";
 
 type ProfileShellProps = {
   profile: UserProfile;
@@ -22,8 +29,8 @@ export function ProfileShell({
   return (
     <div className="relative pb-6 md:pb-8">
       <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top_left,_rgba(3,151,211,0.16),_transparent_50%),radial-gradient(circle_at_top_right,_rgba(255,153,0,0.14),_transparent_42%)]" />
-      <div className="relative container mx-auto max-w-7xl px-4 md:px-8">
-        <main className="bg-card overflow-hidden rounded-b-[5px] border shadow-sm">
+      <div className="relative container mx-auto max-w-7xl px-0 md:px-8">
+        <main className="bg-card border-border/50 overflow-hidden rounded-none border-y shadow-sm md:rounded-b-[5px] md:border-x md:border-t-0">
           <ProfileHeader profile={profile} />
 
           <div
@@ -31,8 +38,120 @@ export function ProfileShell({
             className="mt-6 grid grid-cols-1 items-start gap-6 px-4 pb-6 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8 xl:grid-cols-[1fr_300px]"
           >
             <div className="flex min-w-0 flex-col gap-4">
-              <ProfileVerifications profile={profile} />
+              <div className="hidden sm:block">
+                <ProfileVerifications profile={profile} />
+              </div>
               <ProfileNav username={profile.username} active={active} />
+
+              {active === "overview" && (
+                <div className="flex flex-col gap-4 sm:hidden">
+                  <ProfileVerifications profile={profile} />
+
+                  {/* About Section */}
+                  <div className="mt-2 flex flex-col gap-y-2 px-1">
+                    <div className="text-foreground text-[16px] font-bold">
+                      About
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 text-[14px]">
+                      <span className="text-foreground font-semibold">
+                        {profile.role || "Member"}
+                      </span>
+                      {profile.location && (
+                        <>
+                          <span className="text-muted-foreground">&bull;</span>
+                          <span className="text-foreground flex items-center gap-1 font-semibold">
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="size-4"
+                            >
+                              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                              <circle cx="12" cy="10" r="3" />
+                            </svg>
+                            {profile.location}
+                          </span>
+                        </>
+                      )}
+                      {profile.joinedAt && (
+                        <>
+                          <span className="text-muted-foreground">&bull;</span>
+                          <span className="text-muted-foreground">
+                            Joined {profile.joinedAt}
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Badges Section */}
+                  {profile.profileBadges &&
+                    profile.profileBadges.length > 0 && (
+                      <div className="mt-2 flex flex-wrap items-center justify-start gap-4 px-1">
+                        {profile.profileBadges.map((badge, idx) => {
+                          let IconComponent = ShieldCheckIcon;
+                          if (badge.tone === "default")
+                            IconComponent = BookOpenIcon;
+                          if (badge.tone === "info")
+                            IconComponent = ArrowRightLeftIcon;
+                          if (badge.tone === "warning")
+                            IconComponent = StarIcon;
+
+                          let gradientClass = "from-purple-400 to-purple-600";
+                          if (badge.tone === "info")
+                            gradientClass = "from-blue-400 to-blue-500";
+                          if (badge.tone === "warning")
+                            gradientClass = "from-orange-400 to-orange-500";
+                          if (badge.tone === "success")
+                            gradientClass = "from-emerald-400 to-emerald-500";
+
+                          const labelParts = badge.label.split(" ");
+
+                          return (
+                            <div
+                              key={idx}
+                              title={badge.description}
+                              className="group flex w-12 cursor-default flex-col items-center gap-2"
+                            >
+                              <div className="relative size-[44px] drop-shadow-sm transition-transform group-hover:-translate-y-0.5">
+                                <div
+                                  className={cn(
+                                    "absolute inset-0 flex items-center justify-center bg-gradient-to-br text-white",
+                                    gradientClass,
+                                    "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
+                                  )}
+                                >
+                                  <div
+                                    className={cn(
+                                      "absolute inset-[2px] flex items-center justify-center bg-gradient-to-br",
+                                      gradientClass,
+                                      "[clip-path:polygon(50%_0%,100%_25%,100%_75%,50%_100%,0%_75%,0%_25%)]",
+                                    )}
+                                  >
+                                    <IconComponent
+                                      className="size-[18px] drop-shadow-md"
+                                      strokeWidth={2.5}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <span className="text-foreground/80 text-center text-[10px] leading-[1.15] font-bold">
+                                {labelParts.map((part, i) => (
+                                  <span key={i} className="block">
+                                    {part}
+                                  </span>
+                                ))}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                </div>
+              )}
               <div className="text-[13px]">{children}</div>
             </div>
 
