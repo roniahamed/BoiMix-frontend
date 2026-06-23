@@ -52,10 +52,10 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
       {/* Outer Card Content */}
       <div className="flex h-full flex-col bg-transparent">
         {/* Cover Image Area */}
-        <div className="relative p-1.5 pb-0 md:px-2.5 md:pt-2.5">
+        <div className="relative pt-1">
           <Link
             href={`/books/${book.slug}`}
-            className="bg-muted relative block aspect-[3/4] overflow-hidden rounded-[5px] shadow-xs"
+            className="bg-muted relative mx-auto block aspect-[3/4] w-[65%] overflow-hidden rounded-[5px] shadow-xs sm:w-[75%] md:w-[85%]"
           >
             <Image
               src={book.coverUrl}
@@ -64,20 +64,20 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               sizes="(min-width: 1400px) 180px, (min-width: 992px) 16vw, 50vw"
               className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
+            <div className="absolute top-1.5 left-1.5 flex flex-wrap gap-1 md:top-2 md:left-2">
+              {book.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className={cn(
+                    "type-badge rounded-[5px] px-1.5 py-0.5 text-[10px] font-bold shadow-xs md:px-2 md:text-xs",
+                    tagClasses[tag],
+                  )}
+                >
+                  {tagLabels[tag]}
+                </span>
+              ))}
+            </div>
           </Link>
-          <div className="absolute top-4 left-4 flex flex-wrap gap-1 md:top-4 md:left-4">
-            {book.tags.map((tag) => (
-              <span
-                key={tag}
-                className={cn(
-                  "type-badge rounded-[5px] px-2 py-0.5 text-xs font-bold shadow-xs",
-                  tagClasses[tag],
-                )}
-              >
-                {tagLabels[tag]}
-              </span>
-            ))}
-          </div>
         </div>
 
         {/* Info/Metadata Area */}
