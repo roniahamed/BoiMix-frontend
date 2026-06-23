@@ -13,51 +13,50 @@ export function ProfileBadgeCollection({
 
   return (
     <div className="space-y-10">
-      {/* Earned Badges Section */}
-      {earnedBadges.length > 0 && (
-        <section>
-          <div className="mb-5">
-            <h2 className="text-foreground text-lg font-bold tracking-tight">
-              Earned Badges ({earnedBadges.length})
-            </h2>
-            <p className="text-muted-foreground mt-1 text-sm">
-              Badges you&apos;ve earned for being an active and trusted member
-              of BoiMix.
-            </p>
+      {/* 1. Badge Level Section */}
+      <section>
+        <article className="bg-card border-border/50 rounded-[5px] border p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all">
+          <h2 className="text-foreground mb-4 text-[16px] font-bold">
+            Badge Level
+          </h2>
+          <div className="flex items-center gap-4">
+            <div className="shrink-0">
+              <BeautifulBadge
+                type="award"
+                color="purple"
+                isEarned={true}
+                className="h-[64px] w-[56px]"
+                iconClassName="size-7"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <h3 className="text-foreground text-[15px] font-bold">Level 7</h3>
+              <p className="text-muted-foreground mt-0.5 text-[13px]">
+                Super Contributor
+              </p>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            {earnedBadges.map((badge, idx) => (
-              <article
-                key={idx}
-                className="bg-card border-border/50 flex flex-col items-center rounded-[5px] border p-4 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all hover:-translate-y-1 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
-              >
-                <BeautifulBadge
-                  type={badge.icon}
-                  color={badge.badgeColor || "red"}
-                  isEarned={badge.isEarned}
-                  className="mb-3 h-[64px] w-[56px]"
-                  iconClassName="size-7"
-                />
-                <h3 className="text-foreground text-[13px] font-bold">
-                  {badge.label}
-                </h3>
-                <p className="text-muted-foreground mt-1.5 line-clamp-2 text-[11px] leading-snug">
-                  {badge.description}
-                </p>
-                {badge.earnedAt && (
-                  <p className="text-muted-foreground mt-3 text-[10px] font-medium">
-                    Earned on
-                    <br />
-                    {badge.earnedAt}
-                  </p>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
 
-      {/* Badges in Progress Section */}
+          <div className="mt-5">
+            <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full shadow-inner">
+              <div
+                className="bg-primary h-full rounded-full transition-all duration-1000 ease-out"
+                style={{ width: `${(2350 / 3000) * 100}%` }}
+              />
+            </div>
+            <div className="mt-2 flex items-center justify-between">
+              <span className="text-muted-foreground text-[11px] font-medium">
+                2,350 / 3,000 XP
+              </span>
+              <span className="text-muted-foreground text-[11px] font-medium">
+                Next Level 8
+              </span>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      {/* 2. Badges in Progress Section */}
       {inProgressBadges.length > 0 && (
         <section>
           <div className="mb-5">
@@ -111,6 +110,50 @@ export function ProfileBadgeCollection({
                     )}
                   </div>
                 </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* 3. Earned Badges Section */}
+      {earnedBadges.length > 0 && (
+        <section>
+          <div className="mb-5">
+            <h2 className="text-foreground text-lg font-bold tracking-tight">
+              Earned Badges ({earnedBadges.length})
+            </h2>
+            <p className="text-muted-foreground mt-1 text-sm">
+              Badges you&apos;ve earned for being an active and trusted member
+              of BoiMix.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+            {earnedBadges.map((badge, idx) => (
+              <article
+                key={idx}
+                className="bg-card border-border/50 flex flex-col items-center rounded-[5px] border p-4 text-center shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all hover:-translate-y-1 hover:shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+              >
+                <BeautifulBadge
+                  type={badge.icon}
+                  color={badge.badgeColor || "red"}
+                  isEarned={badge.isEarned}
+                  className="mb-3 h-[64px] w-[56px]"
+                  iconClassName="size-7"
+                />
+                <h3 className="text-foreground text-[13px] font-bold">
+                  {badge.label}
+                </h3>
+                <p className="text-muted-foreground mt-1.5 line-clamp-2 text-[11px] leading-snug">
+                  {badge.description}
+                </p>
+                {badge.earnedAt && (
+                  <p className="text-muted-foreground mt-3 text-[10px] font-medium">
+                    Earned on
+                    <br />
+                    {badge.earnedAt}
+                  </p>
+                )}
               </article>
             ))}
           </div>

@@ -16,36 +16,6 @@ export function ProfileBadgeSidebar({ profile }: ProfileBadgeSidebarProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* Badge Level */}
-      <section className="bg-card border-border/50 rounded-[5px] border p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-        <h3 className="text-foreground mb-4 font-bold tracking-tight">
-          Badge Level
-        </h3>
-        <div className="flex items-center gap-4">
-          <BeautifulBadge
-            type="award"
-            color="purple"
-            className="h-[60px] w-14"
-            iconClassName="size-5"
-          />
-          <div>
-            <div className="text-foreground font-bold">Level 7</div>
-            <div className="text-muted-foreground text-sm">
-              Super Contributor
-            </div>
-          </div>
-        </div>
-        <div className="mt-5">
-          <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full shadow-inner">
-            <div className="bg-primary h-full w-[78%] rounded-full" />
-          </div>
-          <div className="text-muted-foreground mt-2 flex items-center justify-between text-[11px] font-medium">
-            <span>2,350 / 3,000 XP</span>
-            <span>Next Level 8</span>
-          </div>
-        </div>
-      </section>
-
       {/* How to earn badges */}
       <section className="bg-card border-border/50 rounded-[5px] border p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
         <h3 className="text-foreground mb-4 font-bold tracking-tight">

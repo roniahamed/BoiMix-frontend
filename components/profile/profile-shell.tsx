@@ -4,6 +4,9 @@ import {
   BookOpenIcon,
   ArrowRightLeftIcon,
   StarIcon,
+  MessageCircleIcon,
+  Repeat2Icon,
+  ClockIcon,
 } from "lucide-react";
 
 import { ProfileHeader } from "@/components/profile/profile-header";
@@ -148,6 +151,78 @@ export function ProfileShell({
                             </div>
                           );
                         })}
+                      </div>
+                    )}
+
+                  {/* Reading Interests Section */}
+                  {profile.readingInterests &&
+                    profile.readingInterests.length > 0 && (
+                      <div className="mt-5 flex flex-col gap-y-3 px-1">
+                        <div className="text-foreground text-[16px] font-bold">
+                          Reading Interests
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {profile.readingInterests
+                            .slice(0, 5)
+                            .map((interest) => (
+                              <span
+                                key={interest}
+                                className="bg-muted/70 text-foreground rounded-xl px-3 py-1 text-[11px] font-medium"
+                              >
+                                {interest}
+                              </span>
+                            ))}
+                          {profile.readingInterests.length > 5 && (
+                            <span className="text-primary bg-primary/10 rounded-xl px-3 py-1 text-[11px] font-medium">
+                              +{profile.readingInterests.length - 5} more
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                  {/* Member Highlights Section */}
+                  {profile.memberHighlights &&
+                    profile.memberHighlights.length > 0 && (
+                      <div className="mt-5 flex flex-col gap-y-4 px-1">
+                        <div className="text-foreground text-[16px] font-bold">
+                          Member Highlights
+                        </div>
+                        <ul className="flex flex-col gap-4">
+                          {profile.memberHighlights.map((highlight, index) => {
+                            let IconComp = (
+                              <StarIcon className="size-5 fill-orange-500 text-orange-500" />
+                            );
+                            if (highlight.icon === "repeat")
+                              IconComp = (
+                                <Repeat2Icon className="size-5 text-blue-500" />
+                              );
+                            if (highlight.icon === "message")
+                              IconComp = (
+                                <MessageCircleIcon className="size-5 fill-emerald-500 text-emerald-500" />
+                              );
+                            if (highlight.icon === "clock")
+                              IconComp = (
+                                <ClockIcon className="size-5 text-emerald-500" />
+                              );
+
+                            return (
+                              <li key={index} className="flex gap-3">
+                                <div className="mt-0.5 shrink-0">
+                                  {IconComp}
+                                </div>
+                                <div>
+                                  <p className="text-foreground text-[13px] font-bold">
+                                    {highlight.title}
+                                  </p>
+                                  <p className="text-muted-foreground mt-0.5 text-[12px]">
+                                    {highlight.subtitle}
+                                  </p>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </div>
                     )}
                 </div>

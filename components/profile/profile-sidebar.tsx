@@ -35,7 +35,7 @@ function getHighlightIcon(iconName: string) {
 
 export function ProfileSidebar({ profile }: ProfileSidebarProps) {
   return (
-    <aside className="flex flex-col gap-5">
+    <aside className="hidden flex-col gap-5 lg:flex">
       {/* About Section */}
       <section className="border-muted rounded-[5px] border p-5">
         <h2 className="text-foreground text-base font-bold tracking-tight">
