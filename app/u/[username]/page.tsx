@@ -34,7 +34,7 @@ export default async function UserProfilePage({
       <div className="space-y-6">
         {/* Interactive Books Viewer */}
         <ProfileBooksViewer
-          books={profileLibraryBooks}
+          books={profileLibraryBooks.slice(0, 20)}
           isOwnProfile={isOwnProfile}
           libraryUrl={`/u/${profile.username}/library`}
         />
