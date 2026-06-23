@@ -58,7 +58,7 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
       </div>
 
-      <div className="relative z-10 px-5 pb-6 sm:px-8">
+      <div className="relative z-10 px-5 pb-0 sm:px-8 sm:pb-6">
         {/* ----- MOBILE VIEW ----- */}
         <div className="flex flex-col gap-5 sm:hidden">
           {/* Avatar + Name + Stats */}
@@ -138,7 +138,7 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
             </div>
 
             {/* Mobile Stats */}
-            <div className="border-border/50 mt-5 flex w-full justify-between border-y py-3">
+            <div className="border-border/50 mt-5 flex w-full items-center justify-between gap-2 border-y py-3">
               <div className="flex min-w-0 flex-col items-center text-center">
                 <div className="mb-1 flex items-center gap-1">
                   <LibraryIcon className="text-primary size-4" />
@@ -150,6 +150,10 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
                   Books
                 </span>
               </div>
+
+              {/* Divider */}
+              <div className="bg-border h-8 w-px" />
+
               <div className="flex min-w-0 flex-col items-center text-center">
                 <div className="mb-1 flex items-center gap-1">
                   <ArrowRightLeftIcon className="text-primary size-4" />
@@ -161,6 +165,10 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
                   Swaps
                 </span>
               </div>
+
+              {/* Divider */}
+              <div className="bg-border h-8 w-px" />
+
               <div className="flex min-w-0 flex-col items-center text-center">
                 <div className="mb-1 flex items-center gap-1">
                   <BookDownIcon className="text-primary size-4" />
@@ -172,6 +180,10 @@ export function ProfileHeader({ profile }: { profile: UserProfile }) {
                   Borrowed
                 </span>
               </div>
+
+              {/* Divider */}
+              <div className="bg-border h-8 w-px" />
+
               <div className="flex min-w-0 flex-col items-center text-center">
                 <div className="mb-1 flex items-center gap-1">
                   <BanknoteIcon className="text-primary size-4" />

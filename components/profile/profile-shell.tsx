@@ -35,7 +35,7 @@ export function ProfileShell({
 
           <div
             id="profile-content"
-            className="mt-6 grid grid-cols-1 items-start gap-6 px-4 pb-6 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8 xl:grid-cols-[1fr_300px]"
+            className="mt-2 grid grid-cols-1 items-start gap-6 px-4 pb-6 sm:mt-6 sm:px-6 lg:grid-cols-[1fr_280px] lg:px-8 xl:grid-cols-[1fr_300px]"
           >
             <div className="flex min-w-0 flex-col gap-4">
               <div className="hidden sm:block">
@@ -44,11 +44,11 @@ export function ProfileShell({
               <ProfileNav username={profile.username} active={active} />
 
               {active === "overview" && (
-                <div className="flex flex-col gap-4 sm:hidden">
+                <div className="flex flex-col gap-3 sm:hidden">
                   <ProfileVerifications profile={profile} />
 
                   {/* About Section */}
-                  <div className="mt-2 flex flex-col gap-y-2 px-1">
+                  <div className="mt-1 flex flex-col gap-y-2 px-1">
                     <div className="text-foreground text-[16px] font-bold">
                       About
                     </div>
