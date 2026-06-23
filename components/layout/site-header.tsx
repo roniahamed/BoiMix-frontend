@@ -33,6 +33,8 @@ export function SiteHeader() {
     pathname.split("/").length === 3 &&
     !nonDetailsRoutes.includes(pathname.split("/")[2]);
 
+  const isProfilePage = pathname.startsWith("/u/");
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -128,7 +130,12 @@ export function SiteHeader() {
           <SearchBar autoFocus={pathname === "/books/search"} />
         </Suspense>
       </div>
-      <div className={cn("w-full", isDetailsPage && "max-md:hidden")}>
+      <div
+        className={cn(
+          "w-full",
+          (isDetailsPage || isProfilePage) && "max-md:hidden",
+        )}
+      >
         <QuickNavBar />
       </div>
     </header>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ActivityIcon,
@@ -47,9 +49,24 @@ export function ProfileNav({ username, active }: ProfileNavProps) {
     },
   ];
 
+  const handleTabClick = () => {
+    // Use a short timeout to let Next.js start the navigation
+    setTimeout(() => {
+      const anchor = document.getElementById("profile-nav-anchor");
+      if (anchor) {
+        const isDesktop = window.innerWidth >= 768;
+        const offset = isDesktop ? 101 : 53;
+        const top =
+          anchor.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }, 10);
+  };
+
   return (
     <nav
-      className="bg-card scrollbar-hide sticky top-0 z-20 overflow-x-auto border-b px-4 py-0 sm:px-0 md:static md:overflow-visible md:border-b-0 md:py-0"
+      id="profile-nav"
+      className="bg-card scrollbar-hide sticky top-[53px] z-20 overflow-x-auto border-b px-4 py-0 sm:px-0 md:top-[101px] md:overflow-visible md:py-0"
       aria-label="Profile sections"
     >
       <div className="flex min-w-max flex-nowrap items-center gap-4 md:gap-8">
@@ -62,6 +79,7 @@ export function ProfileNav({ username, active }: ProfileNavProps) {
               key={item.id}
               href={item.href}
               scroll={false}
+              onClick={handleTabClick}
               className={cn(
                 "group relative flex items-center justify-center transition-colors",
                 // Mobile classes: text with underline (no pill), smaller vertical padding
