@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook, BookAvailabilityMode } from "@/types/book";
 import {
@@ -142,6 +143,17 @@ function BooksViewerContent({
         {sortedBooks.length === 0 && (
           <div className="text-muted-foreground py-10 text-center">
             No books found in this section.
+          </div>
+        )}
+
+        {libraryUrl && sortedBooks.length > 0 && (
+          <div className="mt-8 flex justify-center pb-4">
+            <Link
+              href={libraryUrl}
+              className="text-primary hover:text-primary/80 text-[15px] font-bold hover:underline"
+            >
+              See all books
+            </Link>
           </div>
         )}
       </div>

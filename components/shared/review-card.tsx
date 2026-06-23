@@ -34,12 +34,12 @@ export function ReviewCard({
   return (
     <article
       className={cn(
-        "bg-card border-border/20 mb-2 flex flex-col gap-4 rounded-[5px] border p-4 shadow-none sm:flex-row",
+        "bg-card border-border/20 mb-2 flex flex-row gap-4 rounded-[5px] border p-4 shadow-none",
         className,
       )}
     >
       {/* Left: Book Cover Only */}
-      <div className="border-border/40 flex shrink-0 items-center justify-center pr-4 sm:border-r">
+      <div className="border-border/40 flex shrink-0 items-center justify-center border-r pr-4">
         {bookCover ? (
           <div className="bg-muted relative h-12 w-8 shrink-0 overflow-hidden rounded shadow-sm">
             <Image
