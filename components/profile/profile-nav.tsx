@@ -66,7 +66,7 @@ export function ProfileNav({ username, active }: ProfileNavProps) {
   return (
     <nav
       id="profile-nav"
-      className="bg-card scrollbar-hide sticky top-[53px] z-20 overflow-x-auto border-b px-4 py-0 sm:px-0 md:top-[101px] md:overflow-visible md:py-0"
+      className="bg-card scrollbar-hide sticky top-[53px] z-30 overflow-x-auto border-b px-4 py-0 sm:px-0 md:top-[101px] md:overflow-visible md:py-0"
       aria-label="Profile sections"
     >
       <div className="flex min-w-max flex-nowrap items-center gap-4 md:gap-8">
