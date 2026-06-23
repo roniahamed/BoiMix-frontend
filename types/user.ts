@@ -3,6 +3,8 @@ export type UserBadgeTone = "default" | "success" | "warning" | "info";
 export type UserBadge = {
   label: string;
   tone?: UserBadgeTone;
+  icon?: string;
+  badgeColor?: "red" | "blue" | "green" | "purple" | "orange" | string;
 };
 
 export type UserSummary = {
@@ -28,6 +30,12 @@ export type UserProfileStats = {
 export type UserProfileBadge = UserBadge & {
   description: string;
   earnedAt?: string;
+  isEarned: boolean;
+  progress?: {
+    current: number;
+    required: number;
+    label: string;
+  };
 };
 
 export type UserProfileReview = {

@@ -5,7 +5,6 @@ import {
   AwardIcon,
   BookOpenIcon,
   HeartIcon,
-  MessageSquareTextIcon,
   Repeat2Icon,
   ShoppingBagIcon,
   StarIcon,

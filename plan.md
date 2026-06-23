@@ -127,9 +127,9 @@ Keep this section as the project memory. Do not delete completed phase plans whe
 
 ## Locked Future Phases
 - Phase 9: Dashboard  
-  Build user overview, library management, wishlist, cart, borrowed, purchases, sales, reviews, notifications, messages, analytics, settings, and security.
+  Build user overview, library management, wishlist, cart, borrowed, purchases, sales, reviews, notifications, messages, analytics, settings, and security, follower and following management
 - Phase 10: Marketplace  
-  Build product listing, product details, cart, checkout, payment, and order tracking.
+  Build product listing, product details, cart, checkout, payment, and order tracking, and request for buy a book.
 - Phase 11: Borrow System  
   Build membership, borrow request, timeline, handover, return, review, and dispute.
 - Phase 12: Swap System  

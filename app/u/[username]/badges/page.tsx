@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { ProfileBadgeCollection } from "@/components/profile/profile-badge-collection";
+import { ProfileBadgeSidebar } from "@/components/profile/profile-badge-sidebar";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
 import { getUserProfile } from "@/lib/mock/profile";
@@ -23,18 +24,14 @@ export default async function UserBadgesPage({
   }
 
   return (
-    <ProfileShell profile={profile} active="badges">
-      <section>
-        <div className="mb-4">
-          <h2 className="text-foreground text-xl font-bold tracking-tight">
-            Badges
-          </h2>
-          <p className="text-muted-foreground mt-1 text-sm">
-            Trust and activity signals earned by this reader on the platform.
-          </p>
-        </div>
+    <ProfileShell
+      profile={profile}
+      active="badges"
+      sidebar={<ProfileBadgeSidebar profile={profile} />}
+    >
+      <div className="space-y-10">
         <ProfileBadgeCollection badges={profile.profileBadges} />
-      </section>
+      </div>
     </ProfileShell>
   );
 }

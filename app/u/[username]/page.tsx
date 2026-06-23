@@ -9,7 +9,6 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
-import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Reader Profile - BoiMix",

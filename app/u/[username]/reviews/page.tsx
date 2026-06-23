@@ -3,15 +3,7 @@ import { ReviewCard } from "@/components/shared/review-card";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
 import { getUserProfile, profileReviews } from "@/lib/mock/profile";
-import {
-  StarIcon,
-  CheckCircle2Icon,
-  MessageCircleIcon,
-  ClockIcon,
-  MessageSquareIcon,
-  PackageCheckIcon,
-  FilterIcon,
-} from "lucide-react";
+import { StarIcon, FilterIcon } from "lucide-react";
 import {
   Select,
   SelectContent,

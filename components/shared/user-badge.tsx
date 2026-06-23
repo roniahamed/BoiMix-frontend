@@ -1,5 +1,4 @@
-import { BadgeCheckIcon } from "lucide-react";
-
+import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import { cn } from "@/lib/utils";
 import type { UserBadge as UserBadgeType } from "@/types/user";
 
@@ -17,17 +16,24 @@ type UserBadgeProps = UserBadgeType & {
 export function UserBadge({
   label,
   tone = "default",
+  icon = "award",
+  badgeColor,
   className,
 }: UserBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-2 py-1 text-xs font-medium",
+        "inline-flex items-center gap-1.5 rounded-full py-1 pr-2.5 pl-1 text-xs font-medium",
         toneClasses[tone],
         className,
       )}
     >
-      <BadgeCheckIcon className="size-3" aria-hidden="true" />
+      <BeautifulBadge
+        type={icon}
+        color={badgeColor}
+        className="size-5 drop-shadow-none"
+        iconClassName="size-2.5"
+      />
       {label}
     </span>
   );

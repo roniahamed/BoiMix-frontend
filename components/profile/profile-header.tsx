@@ -3,22 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  BadgeCheckIcon,
   MessageSquareIcon,
-  ForwardIcon,
   ShieldCheckIcon,
   UserCheckIcon,
   UsersIcon,
-  PhoneIcon,
-  MailIcon,
-  CrownIcon,
-  ShieldIcon,
   LibraryIcon,
   ArrowRightLeftIcon,
   BookDownIcon,
   BanknoteIcon,
-  CheckCircle2Icon,
-  InfoIcon,
   BookOpenIcon,
   StarIcon,
 } from "lucide-react";
@@ -28,10 +20,6 @@ import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import type { UserProfile } from "@/types/user";
 import { cn } from "@/lib/utils";
-
-type ProfileHeaderProps = {
-  profile: UserProfile;
-};
 
 const CustomShareArrow = ({ className }: { className?: string }) => (
   <svg

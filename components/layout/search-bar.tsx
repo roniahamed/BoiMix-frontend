@@ -182,7 +182,7 @@ export function SearchBar({
       className={cn("relative flex w-full items-center gap-2", className)}
       role="search"
     >
-      <div className="relative flex-1">
+      <div className="relative flex-1" suppressHydrationWarning>
         <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
         <Input
           ref={inputRef}
