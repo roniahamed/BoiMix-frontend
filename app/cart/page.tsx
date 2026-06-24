@@ -123,7 +123,7 @@ export default function CartPage() {
           {/* ── Left: Cart Items ── */}
           <div className="flex flex-col gap-2 lg:col-span-8">
             {/* Select-all header */}
-            <div className="bg-card border-border/30 flex items-center justify-between rounded-[3px] border px-4 py-2.5 shadow-none">
+            <div className="bg-card border-border/30 flex items-center justify-between rounded-[3px] border px-3 py-2.5 shadow-none sm:px-4">
               <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium select-none">
                 <input
                   type="checkbox"
@@ -154,7 +154,7 @@ export default function CartPage() {
                   className="bg-card border-border/30 overflow-hidden rounded-[3px] border shadow-none"
                 >
                   {/* Seller row */}
-                  <div className="bg-muted/20 flex items-center gap-2.5 border-b px-4 py-2.5">
+                  <div className="bg-muted/20 flex items-center gap-2.5 border-b px-3 py-2.5 sm:px-4">
                     <input
                       type="checkbox"
                       checked={sellerSelected}
@@ -178,7 +178,7 @@ export default function CartPage() {
                     {group.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-start gap-2.5 px-4 py-3 sm:gap-3 sm:py-4"
+                        className="flex items-start gap-2.5 px-3 py-3 sm:gap-3 sm:px-4 sm:py-4"
                       >
                         {/* Checkbox */}
                         <div className="shrink-0 pt-0 sm:pt-8">

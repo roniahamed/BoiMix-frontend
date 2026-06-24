@@ -198,7 +198,7 @@ export function SearchBar({
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           className={cn(
-            "h-10 rounded-lg pr-8 [&::-webkit-search-cancel-button]:appearance-none",
+            "bg-muted h-10 rounded-lg border-none pr-8 [&::-webkit-search-cancel-button]:appearance-none",
             isOpen ? "px-4" : "pl-9",
           )}
         />

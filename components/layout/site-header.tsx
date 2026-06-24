@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { BellIcon, HeartIcon, UserIcon } from "lucide-react";
+import { BellIcon, HeartIcon, UserIcon, MenuIcon } from "lucide-react";
 
 import { BrandLink } from "@/components/layout/brand-link";
 import { DesktopNavbar } from "@/components/layout/desktop-navbar";
@@ -53,7 +53,7 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "bg-card/95 supports-[backdrop-filter]:bg-card/85 sticky top-0 z-40 border-b shadow-xs backdrop-blur",
+        "bg-card sticky top-0 z-40 border-b shadow-xs",
         isDetailsPage && "max-md:hidden",
       )}
     >
@@ -113,12 +113,23 @@ export function SiteHeader() {
       </div>
       <div
         className={cn(
-          "boimix-container-wide pt-1 pb-0 md:hidden",
+          "boimix-container-wide pt-[10px] pb-0 md:hidden",
           isDetailsPage && "hidden",
         )}
       >
         <div className="flex items-center gap-2">
-          <MobileNavbar />
+          <div className="flex h-10 items-center">
+            <MobileNavbar>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10 shrink-0 lg:hidden [&_svg]:!size-[28px]"
+                aria-label="Open navigation"
+              >
+                <MenuIcon />
+              </Button>
+            </MobileNavbar>
+          </div>
           <Suspense
             fallback={<div className="bg-muted h-10 w-full rounded-lg" />}
           >
@@ -127,7 +138,7 @@ export function SiteHeader() {
               className="flex-1"
             />
           </Suspense>
-          <CartButton className="shrink-0" />
+          <CartButton className="h-10 w-10 shrink-0 [&_svg]:!size-[28px]" />
         </div>
       </div>
       <div
