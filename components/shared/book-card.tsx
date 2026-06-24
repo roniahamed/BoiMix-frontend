@@ -1,5 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   BadgeCheckIcon,
   BookOpenIcon,
@@ -13,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BookCardBook } from "@/types/book";
+import { useCartStore } from "@/lib/store/use-cart-store";
 
 const tagLabels: Record<string, string> = {
   sell: "Sell",
@@ -38,9 +44,47 @@ type BookCardProps = {
 };
 
 export function BookCard({ book, className, hidePrice }: BookCardProps) {
+  const router = useRouter();
+  const addItem = useCartStore((state) => state.addItem);
+  const items = useCartStore((state) => state.items);
+  const isInCart = items.some((item) => item.id === book.id);
+  const [isAdding, setIsAdding] = useState(false);
+
   const hasSell = book.tags.includes("sell");
   const hasSwap = book.tags.includes("swap");
   const hasBorrow = book.tags.includes("borrow");
+
+  const handleAddToCart = async (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent linking to the book
+    if (isInCart) {
+      router.push("/cart");
+      return;
+    }
+
+    setIsAdding(true);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    addItem({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      price: book.price || 0,
+      condition: book.condition,
+      coverUrl: book.coverUrl,
+      sellerName:
+        book.providerType === "library" ? "Central Library" : "User Seller",
+      sellerId: book.providerType === "library" ? "lib_1" : "usr_1",
+    });
+
+    toast.success("Added to cart", {
+      description: `${book.title} has been added to your cart.`,
+      action: {
+        label: "View Cart",
+        onClick: () => router.push("/cart"),
+      },
+    });
+    setIsAdding(false);
+  };
 
   return (
     <article
@@ -189,10 +233,19 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             {hasSell && (
               <Button
                 size="sm"
+                variant={isInCart ? "outline" : "default"}
+                onClick={handleAddToCart}
+                disabled={isAdding}
                 className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-[5px] px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
               >
                 <ShoppingCartIcon className="size-4" />
-                <span>{book.isInCart ? "In Cart" : "Add to Cart"}</span>
+                <span>
+                  {isAdding
+                    ? "Adding..."
+                    : isInCart
+                      ? "View Cart"
+                      : "Add to Cart"}
+                </span>
               </Button>
             )}
             {hasBorrow && (

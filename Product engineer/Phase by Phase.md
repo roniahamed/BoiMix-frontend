@@ -269,12 +269,12 @@ book upload
 
 # Phase 9 — Marketplace
 
-- [ ] Product Listing
-- [ ] Product Details
-- [ ] Cart
-- [ ] Checkout
-- [ ] Payment
-- [ ] Order Tracking
+- [x] Product Listing
+- [x] Product Details
+- [x] Cart
+- [x] Checkout
+- [x] Payment
+- [x] Order Tracking
 
 ---
 

@@ -1,16 +1,29 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Repeat2, ShoppingCart } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { BookOpen, Repeat2, ShoppingCart, CreditCard } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
+import { useCartStore } from "@/lib/store/use-cart-store";
 
 type BookDetailsMobileActionsProps = {
-  tags: string[];
+  book: {
+    id: string;
+    title: string;
+    author: string;
+    price: number;
+    condition: string;
+    images: { src: string }[];
+    sellerName: string;
+    sellerId: string;
+    tags: string[];
+  };
 };
 
 export function BookDetailsMobileActions({
-  tags,
+  book,
 }: BookDetailsMobileActionsProps) {
   const [bottomOffset, setBottomOffset] = useState(0);
   const frameRef = useRef<number | null>(null);
@@ -60,6 +73,59 @@ export function BookDetailsMobileActions({
     };
   }, []);
 
+  const router = useRouter();
+  const addItem = useCartStore((state) => state.addItem);
+  const items = useCartStore((state) => state.items);
+  const isInCart = items.some((item) => item.id === book.id);
+  const [isAdding, setIsAdding] = useState(false);
+  const [isBuying, setIsBuying] = useState(false);
+
+  const handleAddToCart = async () => {
+    if (isInCart) {
+      router.push("/cart");
+      return;
+    }
+
+    setIsAdding(true);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    addItem({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      price: book.price,
+      condition: book.condition,
+      coverUrl: book.images[0]?.src || "",
+      sellerName: book.sellerName,
+      sellerId: book.sellerId,
+    });
+    toast.success("Added to cart", {
+      description: `${book.title} has been added to your cart.`,
+      action: {
+        label: "View Cart",
+        onClick: () => router.push("/cart"),
+      },
+    });
+    setIsAdding(false);
+  };
+
+  const handleBuyNow = async () => {
+    setIsBuying(true);
+    if (!isInCart) {
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      addItem({
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        price: book.price,
+        condition: book.condition,
+        coverUrl: book.images[0]?.src || "",
+        sellerName: book.sellerName,
+        sellerId: book.sellerId,
+      });
+    }
+    router.push("/cart/checkout");
+  };
+
   return (
     <>
       <div
@@ -80,19 +146,37 @@ export function BookDetailsMobileActions({
         aria-label="Book actions"
       >
         <div className="boimix-container flex h-12 w-full items-center gap-3">
-          {tags.includes("sell") && (
-            <Button className="h-11 flex-1 gap-2 text-base font-semibold shadow-sm">
-              <ShoppingCart className="size-5" />
-              <span>Add to Cart</span>
-            </Button>
+          {book.tags.includes("sell") && (
+            <>
+              <Button
+                variant={isInCart ? "outline" : "default"}
+                className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm"
+                onClick={handleAddToCart}
+                disabled={isAdding || isBuying}
+              >
+                <ShoppingCart className="size-4" />
+                <span>
+                  {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add"}
+                </span>
+              </Button>
+              <Button
+                variant="secondary"
+                className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm"
+                onClick={handleBuyNow}
+                disabled={isAdding || isBuying}
+              >
+                <CreditCard className="size-4" />
+                <span>{isBuying ? "Processing..." : "Buy Now"}</span>
+              </Button>
+            </>
           )}
-          {tags.includes("swap") && (
+          {book.tags.includes("swap") && (
             <Button className="h-11 flex-1 gap-2 text-base font-semibold shadow-sm">
               <Repeat2 className="size-5" />
               <span>Swap</span>
             </Button>
           )}
-          {tags.includes("borrow") && (
+          {book.tags.includes("borrow") && (
             <Button className="h-11 flex-1 gap-2 text-base font-semibold shadow-sm">
               <BookOpen className="size-5" />
               <span>Borrow</span>

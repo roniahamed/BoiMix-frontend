@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { BellIcon, HeartIcon, ShoppingCartIcon, UserIcon } from "lucide-react";
+import { BellIcon, HeartIcon, UserIcon } from "lucide-react";
 
 import { BrandLink } from "@/components/layout/brand-link";
 import { DesktopNavbar } from "@/components/layout/desktop-navbar";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { QuickNavBar } from "@/components/layout/quick-nav-bar";
 import { SearchBar } from "@/components/layout/search-bar";
+import { CartButton } from "@/components/shared/cart-button";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -90,16 +91,7 @@ export function SiteHeader() {
               <HeartIcon />
             </Link>
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden md:inline-flex"
-            asChild
-          >
-            <Link href="/dashboard/cart" aria-label="Cart">
-              <ShoppingCartIcon />
-            </Link>
-          </Button>
+          <CartButton className="hidden md:inline-flex" />
           <Button
             variant="ghost"
             size="icon"

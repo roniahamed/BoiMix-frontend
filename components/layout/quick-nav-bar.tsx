@@ -21,7 +21,7 @@ const quickLinks = [
   { label: "Trending", href: "/books/trending", icon: FlameIcon },
   { label: "New Books", href: "/books/new", icon: SparklesIcon },
   { label: "Near Me", href: "/books/near-me", icon: MapPinIcon },
-  { label: "Marketplace", href: "/explore/store", icon: ShoppingBagIcon },
+  { label: "Marketplace", href: "/books", icon: ShoppingBagIcon },
   { label: "Swap Books", href: "/explore/swaps", icon: Repeat2Icon },
   {
     label: "Central Library",

@@ -38,30 +38,30 @@ export const primaryNavItems: NavItem[] = [
   { title: "Books", href: "/books", icon: BookOpenIcon },
   {
     title: "Central Library",
-    href: "/explore/central-library",
+    href: "/books?type=borrow",
     icon: LibraryIcon,
   },
-  { title: "Store", href: "/explore/store", icon: ShoppingCartIcon },
-  { title: "Swaps", href: "/explore/swaps", icon: Repeat2Icon },
+  { title: "Marketplace", href: "/books?type=sell", icon: ShoppingCartIcon },
+  { title: "Swaps", href: "/books?type=swap", icon: Repeat2Icon },
   { title: "Community", href: "/community", icon: UsersRoundIcon },
 ];
 
 export const megaMenuItems: NavItem[] = [
   {
     title: "Borrow Books",
-    href: "/explore/central-library",
+    href: "/books?type=borrow",
     description: "Browse official BoiMix library inventory.",
     icon: LibraryIcon,
   },
   {
     title: "Buy Books",
-    href: "/explore/store",
+    href: "/books?type=sell",
     description: "Explore marketplace books from BoiMix and readers.",
     icon: ShoppingCartIcon,
   },
   {
     title: "Swap Books",
-    href: "/explore/swaps",
+    href: "/books?type=swap",
     description: "Find peer-to-peer exchange opportunities.",
     icon: Repeat2Icon,
   },
@@ -131,9 +131,9 @@ export const footerSections = [
   {
     title: "Explore",
     links: [
-      { title: "Central Library", href: "/explore/central-library" },
-      { title: "Book Store", href: "/explore/store" },
-      { title: "Book Swaps", href: "/explore/swaps" },
+      { title: "Central Library", href: "/books?type=borrow" },
+      { title: "Book Store", href: "/books?type=sell" },
+      { title: "Book Swaps", href: "/books?type=swap" },
       { title: "Top Readers", href: "/top-readers" },
     ],
   },

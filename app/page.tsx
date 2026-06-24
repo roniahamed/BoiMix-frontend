@@ -833,7 +833,7 @@ function MarketplaceSection() {
         </div>
         <FeaturePanel
           title="Marketplace"
-          href="/explore/store"
+          href="/books"
           icon={ShoppingCartIcon}
           tone="warning"
           description="Buy and sell books through reader listings with clear condition, price, location, and availability."

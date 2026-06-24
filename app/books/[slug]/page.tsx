@@ -26,6 +26,7 @@ import { BookReviews } from "@/components/shared/book-reviews";
 import { BookQA } from "@/components/shared/book-qa";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
+import { BookBuyActions } from "@/components/shared/book-buy-actions";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -375,16 +376,50 @@ export default async function BookDetailsPage({
             ? foundBook.tags[0]
             : "sell";
 
-  const currentBook = { ...MOCK_BOOK, tags: [currentTag] };
-
   // Adjust availability based on the tag so it looks realistic
-  if (currentTag === "sell") {
-    currentBook.availability = { sell: 3, borrow: 0, swap: 0 };
-  } else if (currentTag === "borrow") {
-    currentBook.availability = { sell: 0, borrow: 2, swap: 0 };
-  } else if (currentTag === "swap") {
-    currentBook.availability = { sell: 0, borrow: 0, swap: 1 };
-  }
+  const availability = { sell: 0, borrow: 0, swap: 0 };
+  if (currentTag === "sell") availability.sell = 3;
+  else if (currentTag === "borrow") availability.borrow = 2;
+  else if (currentTag === "swap") availability.swap = 1;
+
+  // Merge foundBook data so the details page reflects the actual clicked book
+  const coverImages = foundBook
+    ? [
+        {
+          src: foundBook.coverUrl.replace("w=400", "w=800"),
+          alt: `${foundBook.title} — Cover`,
+        },
+        { src: MOCK_BOOK.images[1].src, alt: "Inside page" },
+        { src: MOCK_BOOK.images[2].src, alt: "Back cover" },
+      ]
+    : MOCK_BOOK.images;
+
+  const currentBook = {
+    ...MOCK_BOOK,
+    tags: [currentTag],
+    availability,
+    ...(foundBook
+      ? {
+          id: foundBook.id,
+          title: foundBook.title,
+          author: foundBook.author,
+          price: foundBook.price ?? MOCK_BOOK.price,
+          originalPrice: foundBook.originalPrice ?? MOCK_BOOK.originalPrice,
+          images: coverImages,
+          rating: foundBook.rating,
+          reviewCount: foundBook.reviewCount,
+          condition: foundBook.condition as typeof MOCK_BOOK.condition,
+          location: foundBook.location ?? MOCK_BOOK.location,
+          distance: foundBook.distance ?? MOCK_BOOK.distance,
+        }
+      : {
+          title: slug
+            .split("-")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(" "),
+          images: MOCK_BOOK.images,
+        }),
+  };
 
   return (
     <div
@@ -669,12 +704,20 @@ export default async function BookDetailsPage({
 
                 {/* Desktop Actions (Hidden on Mobile) */}
                 <div className="mx-auto hidden w-full max-w-[500px] gap-3 sm:flex sm:flex-col">
-                  {currentBook.tags.includes("sell") && (
-                    <Button className="h-12 w-full gap-2 text-base">
-                      <ShoppingCart className="size-5" />
-                      Add to Cart
-                    </Button>
-                  )}
+                  <BookBuyActions
+                    book={{
+                      id: currentBook.id,
+                      title: currentBook.title,
+                      author: currentBook.author,
+                      price: currentBook.price,
+                      originalPrice: currentBook.originalPrice,
+                      condition: currentBook.condition,
+                      images: currentBook.images,
+                      sellerName: MOCK_OWNER.name,
+                      sellerId: MOCK_OWNER.id,
+                      tags: currentBook.tags,
+                    }}
+                  />
                   {currentBook.tags.includes("swap") && (
                     <Button className="h-12 w-full gap-2 text-base">
                       <Repeat2 className="size-5" />
@@ -860,7 +903,19 @@ export default async function BookDetailsPage({
         </ScrollContainer>
       </div>
 
-      <BookDetailsMobileActions tags={currentBook.tags} />
+      <BookDetailsMobileActions
+        book={{
+          id: currentBook.id,
+          title: currentBook.title,
+          author: currentBook.author,
+          price: currentBook.price,
+          condition: currentBook.condition,
+          images: currentBook.images,
+          sellerName: MOCK_OWNER.name,
+          sellerId: MOCK_OWNER.id,
+          tags: currentBook.tags,
+        }}
+      />
     </div>
   );
 }
