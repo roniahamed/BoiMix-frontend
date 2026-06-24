@@ -178,7 +178,7 @@ export default function CartPage() {
                     {group.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-start gap-2 px-3 py-3 sm:gap-3 sm:px-4 sm:py-4"
+                        className="flex items-start gap-2.5 px-4 py-3 sm:gap-3 sm:py-4"
                       >
                         {/* Checkbox */}
                         <div className="shrink-0 pt-0 sm:pt-8">
@@ -186,7 +186,7 @@ export default function CartPage() {
                             type="checkbox"
                             checked={selectedItems.has(item.id)}
                             onChange={() => toggleItem(item.id)}
-                            className="mt-1 size-4 cursor-pointer accent-primary"
+                            className="accent-primary mt-1 size-4 cursor-pointer"
                           />
                         </div>
 
