@@ -158,15 +158,15 @@ export default function CartPage() {
                     {group.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-start gap-3 px-4 py-3"
+                        className="flex items-start gap-3 px-4 py-4"
                       >
                         {/* Checkbox */}
-                        <div className="shrink-0 pt-1">
+                        <div className="shrink-0 pt-8">
                           <input
                             type="checkbox"
                             checked={selectedItems.has(item.id)}
                             onChange={() => toggleItem(item.id)}
-                            className="accent-primary size-4 cursor-pointer"
+                            className="size-4 cursor-pointer accent-[#f57224]"
                           />
                         </div>
 
@@ -175,80 +175,72 @@ export default function CartPage() {
                         <img
                           src={item.coverUrl}
                           alt={item.title}
-                          className="border-border/40 h-[90px] w-[65px] shrink-0 rounded border object-cover"
+                          className="border-border/40 h-[80px] w-[80px] shrink-0 rounded-[3px] border object-contain"
                         />
 
-                        {/* Title + meta  (flex-1 grows) */}
-                        <div className="min-w-0 flex-1">
-                          <p className="text-foreground hover:text-primary line-clamp-2 cursor-pointer text-sm leading-snug font-medium">
+                        {/* Title + Meta */}
+                        <div className="min-w-0 flex-1 pt-1 pl-1">
+                          <p className="text-foreground line-clamp-2 cursor-pointer text-sm leading-snug font-medium hover:text-[#f57224]">
                             {item.title}
                           </p>
-                          <p className="text-muted-foreground mt-0.5 text-xs">
-                            {item.author}
-                          </p>
-                          <p className="text-muted-foreground mt-0.5 text-xs capitalize">
-                            Condition:{" "}
-                            <span className="text-foreground">
-                              {item.condition}
-                            </span>
+                          <p className="text-muted-foreground mt-1.5 text-[12px]">
+                            Author: {item.author}, Condition: {item.condition}
                           </p>
                         </div>
 
-                        {/* Price + qty + actions — right column */}
-                        <div className="flex shrink-0 flex-col items-end gap-1.5 pl-2">
-                          {/* Current price */}
-                          <span className="text-base font-bold text-[#f57224]">
+                        {/* Price & Actions */}
+                        <div className="flex w-[120px] shrink-0 flex-col gap-0.5 pt-1">
+                          <span className="text-[16px] font-medium text-[#f57224]">
                             ৳{(item.price * item.quantity).toLocaleString()}
                           </span>
-                          {/* Original price strikethrough */}
                           {item.originalPrice &&
                             item.originalPrice > item.price && (
-                              <span className="text-muted-foreground text-xs line-through">
+                              <span className="text-[13px] text-[#9e9e9e] line-through decoration-[#9e9e9e] decoration-1">
                                 ৳
                                 {(
                                   item.originalPrice * item.quantity
                                 ).toLocaleString()}
                               </span>
                             )}
+                          <div className="mt-2.5 flex items-center gap-3">
+                            <button
+                              title="Add to wishlist"
+                              className="text-[#9e9e9e] transition-colors hover:text-rose-500"
+                            >
+                              <Heart className="size-[18px]" />
+                            </button>
+                            <button
+                              title="Remove item"
+                              onClick={() => removeItem(item.id)}
+                              className="hover:text-destructive text-[#9e9e9e] transition-colors"
+                            >
+                              <Trash2 className="size-[18px]" />
+                            </button>
+                          </div>
+                        </div>
 
-                          {/* Qty stepper */}
-                          <div className="mt-1 flex items-center overflow-hidden rounded border">
+                        {/* Quantity Stepper */}
+                        <div className="flex w-[100px] shrink-0 justify-end pt-1">
+                          <div className="flex items-center gap-1">
                             <button
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity - 1)
                               }
                               disabled={item.quantity <= 1}
-                              className="text-muted-foreground hover:bg-muted flex h-7 w-7 items-center justify-center border-r text-base leading-none transition-colors disabled:pointer-events-none disabled:opacity-40"
+                              className="flex h-8 w-8 items-center justify-center rounded-[2px] bg-[#fafafa] text-lg text-[#9e9e9e] transition-colors hover:bg-[#f0f0f0] disabled:pointer-events-none disabled:opacity-40"
                             >
                               −
                             </button>
-                            <span className="w-8 text-center text-sm font-medium">
+                            <span className="flex h-8 w-8 items-center justify-center text-sm font-medium">
                               {item.quantity}
                             </span>
                             <button
                               onClick={() =>
                                 updateQuantity(item.id, item.quantity + 1)
                               }
-                              className="text-muted-foreground hover:bg-muted flex h-7 w-7 items-center justify-center border-l text-base leading-none transition-colors"
+                              className="flex h-8 w-8 items-center justify-center rounded-[2px] bg-[#f4f4f6] text-lg text-[#9e9e9e] transition-colors hover:bg-[#e8e8eb]"
                             >
                               +
-                            </button>
-                          </div>
-
-                          {/* Wishlist + Delete */}
-                          <div className="mt-0.5 flex items-center gap-2">
-                            <button
-                              title="Add to wishlist"
-                              className="text-muted-foreground transition-colors hover:text-rose-500"
-                            >
-                              <Heart className="size-4" />
-                            </button>
-                            <button
-                              title="Remove item"
-                              onClick={() => removeItem(item.id)}
-                              className="text-muted-foreground hover:text-destructive transition-colors"
-                            >
-                              <Trash2 className="size-4" />
                             </button>
                           </div>
                         </div>
