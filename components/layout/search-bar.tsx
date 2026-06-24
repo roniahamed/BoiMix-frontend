@@ -183,7 +183,9 @@ export function SearchBar({
       role="search"
     >
       <div className="relative flex-1" suppressHydrationWarning>
-        <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+        {!isOpen && (
+          <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+        )}
         <Input
           ref={inputRef}
           type="search"
@@ -195,7 +197,10 @@ export function SearchBar({
           }}
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
-          className="h-10 rounded-lg pr-8 pl-9 [&::-webkit-search-cancel-button]:appearance-none"
+          className={cn(
+            "h-10 rounded-lg pr-8 [&::-webkit-search-cancel-button]:appearance-none",
+            isOpen ? "px-4" : "pl-9",
+          )}
         />
         {query && (
           <button
@@ -209,13 +214,6 @@ export function SearchBar({
       </div>
       <Button type="submit" size="sm" className="hidden sm:inline-flex">
         Search
-      </Button>
-      <Button
-        type="submit"
-        size="icon"
-        className="h-10 w-10 shrink-0 rounded-lg sm:hidden"
-      >
-        <SearchIcon className="size-4" />
       </Button>
 
       {/* Autocomplete Dropdown */}

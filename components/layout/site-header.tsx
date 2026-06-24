@@ -60,12 +60,13 @@ export function SiteHeader() {
       <div
         className={cn(
           "boimix-container-wide flex items-center gap-3 overflow-hidden transition-all duration-300 ease-in-out md:h-16 md:overflow-visible md:opacity-100",
-          isAtTop ? "h-16 opacity-100" : "h-0 opacity-0 md:h-16 md:opacity-100",
+          isAtTop
+            ? "h-12 opacity-100 md:h-16"
+            : "h-0 opacity-0 md:h-16 md:opacity-100",
           isDetailsPage && "max-md:hidden", // Hide top row entirely on mobile for details page
         )}
       >
-        <div className="flex items-center gap-3 md:hidden">
-          <MobileNavbar />
+        <div className="flex flex-1 items-center justify-center md:hidden">
           <BrandLink className="shrink-0" />
         </div>
         <div className="hidden md:flex">
@@ -112,15 +113,22 @@ export function SiteHeader() {
       </div>
       <div
         className={cn(
-          "boimix-container-wide pt-2 pb-1 md:hidden",
+          "boimix-container-wide pt-1 pb-0 md:hidden",
           isDetailsPage && "hidden",
         )}
       >
-        <Suspense
-          fallback={<div className="bg-muted h-10 w-full rounded-lg" />}
-        >
-          <SearchBar autoFocus={pathname === "/books/search"} />
-        </Suspense>
+        <div className="flex items-center gap-2">
+          <MobileNavbar />
+          <Suspense
+            fallback={<div className="bg-muted h-10 w-full rounded-lg" />}
+          >
+            <SearchBar
+              autoFocus={pathname === "/books/search"}
+              className="flex-1"
+            />
+          </Suspense>
+          <CartButton className="shrink-0" />
+        </div>
       </div>
       <div
         className={cn(

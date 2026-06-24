@@ -33,6 +33,7 @@ export default function CartPage() {
   };
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     setTimeout(() => {
       setMounted(true);
       // Auto-select all items on mount
@@ -185,7 +186,7 @@ export default function CartPage() {
                             type="checkbox"
                             checked={selectedItems.has(item.id)}
                             onChange={() => toggleItem(item.id)}
-                            className="mt-1 size-4 cursor-pointer accent-[#f57224]"
+                            className="mt-1 size-4 cursor-pointer accent-primary"
                           />
                         </div>
 
