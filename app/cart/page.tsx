@@ -1,17 +1,36 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Trash2, ShieldCheck, Store, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCartStore, CartItem } from "@/lib/store/use-cart-store";
+import { useWishlistStore } from "@/lib/store/use-wishlist-store";
+import { toast } from "sonner";
 
 export default function CartPage() {
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const { items, removeItem, updateQuantity } = useCartStore();
+  const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
+
+  const handleWishlistToggle = (id: string, title: string) => {
+    toggleWishlist(id);
+    const inWishlist = useWishlistStore.getState().items.includes(id);
+    if (inWishlist) {
+      toast.success("Added to wishlist", {
+        description: `${title} has been added to your wishlist.`,
+      });
+    } else {
+      toast.info("Removed from wishlist", {
+        description: `${title} has been removed from your wishlist.`,
+      });
+    }
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -171,18 +190,22 @@ export default function CartPage() {
                         </div>
 
                         {/* Cover */}
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={item.coverUrl}
-                          alt={item.title}
-                          className="border-border/40 h-[65px] w-auto shrink-0 rounded-[3px] border bg-transparent object-contain sm:h-[80px]"
-                        />
+                        <Link href={`/books/${item.id}`} className="shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={item.coverUrl}
+                            alt={item.title}
+                            className="border-border/40 h-[65px] w-auto rounded-[3px] border bg-transparent object-contain transition-opacity hover:opacity-90 sm:h-[80px]"
+                          />
+                        </Link>
 
                         {/* Title + Meta + mobile price row */}
                         <div className="min-w-0 flex-1 pt-1 pl-1">
-                          <p className="text-foreground line-clamp-2 cursor-pointer text-sm leading-snug font-medium hover:text-[#f57224]">
-                            {item.title}
-                          </p>
+                          <Link href={`/books/${item.id}`}>
+                            <p className="text-foreground line-clamp-2 cursor-pointer text-sm leading-snug font-medium transition-colors hover:text-[#f57224]">
+                              {item.title}
+                            </p>
+                          </Link>
                           <p className="text-muted-foreground mt-1 text-[11px] sm:text-[12px]">
                             {item.author} · {item.condition}
                           </p>
@@ -233,9 +256,23 @@ export default function CartPage() {
                             <div className="flex items-center gap-2">
                               <button
                                 title="Add to wishlist"
-                                className="text-[#9e9e9e] hover:text-rose-500"
+                                onClick={() =>
+                                  handleWishlistToggle(item.id, item.title)
+                                }
+                                className={`transition-colors hover:text-rose-500 ${
+                                  isInWishlist(item.id)
+                                    ? "text-rose-500"
+                                    : "text-[#9e9e9e]"
+                                }`}
                               >
-                                <Heart className="size-4" />
+                                <Heart
+                                  className="size-4"
+                                  fill={
+                                    isInWishlist(item.id)
+                                      ? "currentColor"
+                                      : "none"
+                                  }
+                                />
                               </button>
                               <button
                                 title="Remove item"
@@ -265,9 +302,23 @@ export default function CartPage() {
                           <div className="mt-2.5 flex items-center gap-3">
                             <button
                               title="Add to wishlist"
-                              className="text-[#9e9e9e] transition-colors hover:text-rose-500"
+                              onClick={() =>
+                                handleWishlistToggle(item.id, item.title)
+                              }
+                              className={`transition-colors hover:text-rose-500 ${
+                                isInWishlist(item.id)
+                                  ? "text-rose-500"
+                                  : "text-[#9e9e9e]"
+                              }`}
                             >
-                              <Heart className="size-[18px]" />
+                              <Heart
+                                className="size-[18px]"
+                                fill={
+                                  isInWishlist(item.id)
+                                    ? "currentColor"
+                                    : "none"
+                                }
+                              />
                             </button>
                             <button
                               title="Remove item"
@@ -359,12 +410,14 @@ export default function CartPage() {
 
               <div className="px-5 pb-5">
                 <Button
-                  asChild
-                  className="h-11 w-full rounded bg-[#f57224] text-sm font-bold text-white hover:bg-[#e0651f]"
+                  onClick={() => {
+                    const ids = Array.from(selectedItems).join(",");
+                    router.push(`/cart/checkout?items=${ids}`);
+                  }}
+                  disabled={selectedCount === 0}
+                  className="h-11 w-full rounded bg-[#f57224] text-sm font-bold text-white hover:bg-[#e0651f] disabled:opacity-50"
                 >
-                  <Link href="/cart/checkout">
-                    PROCEED TO CHECKOUT ({selectedCount})
-                  </Link>
+                  PROCEED TO CHECKOUT ({selectedCount})
                 </Button>
               </div>
 

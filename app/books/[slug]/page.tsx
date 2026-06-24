@@ -444,7 +444,7 @@ export default async function BookDetailsPage({
             className="rounded-full bg-black/30 text-white backdrop-blur-sm hover:bg-black/40 hover:text-white"
             asChild
           >
-            <Link href="/dashboard/cart">
+            <Link href="/cart">
               <ShoppingCart className="size-4.5" />
             </Link>
           </Button>

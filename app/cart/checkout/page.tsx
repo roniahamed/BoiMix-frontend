@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import { CreditCard, Banknote, ShieldCheck } from "lucide-react";
 import { useForm, useWatch } from "react-hook-form";
@@ -40,10 +40,22 @@ const DISTRICT_OPTIONS = BD_DISTRICTS.map(
 
 export default function CheckoutPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { items, clearCart } = useCartStore();
+  const { items: allItems, clearCart } = useCartStore();
   const { addOrder } = useOrderStore();
+
+  // Filter to only the selected items passed via URL
+  const selectedIds = useMemo(() => {
+    const param = searchParams.get("items");
+    return param ? new Set(param.split(",")) : null;
+  }, [searchParams]);
+
+  const items = useMemo(() => {
+    if (!selectedIds || selectedIds.size === 0) return allItems;
+    return allItems.filter((item) => selectedIds.has(item.id));
+  }, [allItems, selectedIds]);
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
