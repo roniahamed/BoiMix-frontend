@@ -5,31 +5,11 @@
 - Implementation order: `Product engineer/Phase by Phase.md`.
 - Active implementation scope: **Phase 8 — User Profile**.
 - Completed/background phases: Phase 0 through Phase 7 are treated as already implemented for this frontend pass.
-- Do not build Phase 9 dashboard, Phase 10 marketplace checkout, borrow workflows, swap workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
+- Do not build Phase 16 dashboard, Phase 9 marketplace checkout, borrow workflows, swap workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
 
-## Active Phase: Phase 8 — User Profile
-- Build public user profile routes:
-  - `/u/[username]`
-  - `/u/[username]/reviews`
-  - `/u/[username]/library`
-  - `/u/[username]/activity`
-  - `/u/[username]/badges`
-  - `/u/[username]/location`
-- Use static mock profile data until backend contracts are defined.
-- Reuse existing shared components where possible:
-  - `BookCard`
-  - `ReviewCard`
-  - `UserCard`
-  - `UserAvatar`
-  - `UserBadge`
-  - `StatsWidget`
-  - `EmptyState`
-- Keep profile pages public and presentational.
-- Keep follow/message actions non-mutating.
-- Do not expose follower/following lists on public profiles.
-- Reserve follower/following views for the future owner dashboard only.
-- Show public service-area information only; do not expose exact private addresses.
-- Unknown usernames should render a friendly not-found state.
+## Active Phase: Phase 9 — Marketplace
+- Paused Dashboard work for now. It has been moved to Phase 16.
+- Plan and implement the Marketplace listing, details, cart, and checkout workflows.
 
 ## Phase History / Previous Plan Log
 Keep this section as the project memory. Do not delete completed phase plans when moving to a new phase.
@@ -121,27 +101,26 @@ Keep this section as the project memory. Do not delete completed phase plans whe
 - Implemented listing, search, filters, categories, book details, gallery, owner information, reviews, similar/related books, and book upload surface.
 
 ### Phase 8 — User Profile
-- Current active phase.
 - Added public profile routes, profile components, shared mock profile data, profile types, not-found state, route smoke testing, and responsive overflow checks.
 - Refined public-profile privacy so follower/following lists are owner-dashboard-only and not shown on public pages.
 
 ## Locked Future Phases
-- Phase 9: Dashboard  
-  Build user overview, library management, wishlist, cart, borrowed, purchases, sales, reviews, notifications, messages, analytics, settings, and security, follower and following management
-- Phase 10: Marketplace  
-  Build product listing, product details, cart, checkout, payment, and order tracking, and request for buy a book.
-- Phase 11: Borrow System  
+- Phase 9: Marketplace  
+  Build product listing, product details, cart, checkout, payment, order tracking, and request to buy.
+- Phase 10: Borrow System  
   Build membership, borrow request, timeline, handover, return, review, and dispute.
-- Phase 12: Swap System  
+- Phase 11: Swap System  
   Build discover, offer, proposal, counter offer, agreement, handover, complete, and dispute.
-- Phase 13: Central Library  
+- Phase 12: Central Library  
   Build Central Library landing page, BoiMix verified inventory, direct buy, library borrow integration, and featured collections.
-- Phase 14: Community  
+- Phase 13: Community  
   Build feed, create post, post details, comments, reactions, and reviews.
-- Phase 15: Messaging  
+- Phase 14: Messaging  
   Build conversation list, chat window, attachments, typing indicator, and seen status.
-- Phase 16: Notifications  
+- Phase 15: Notifications  
   Build notification center, unread state, grouped notifications, and archive.
+- Phase 16: Dashboard
+  Build user dashboard foundational structure and layout, manage books, transactions, and settings.
 - Phase 17: Moderator Panel  
   Build reports, disputes, verification queue, review moderation, slider, and inventory.
 - Phase 18: Admin Panel  

@@ -574,7 +574,7 @@ export function BookListing({
   initialFilters = {},
   initialSortBy = "newest",
 }: BookListingProps) {
-  const [books, setBooks] = useState<BookCardBook[]>(MOCK_BOOKS);
+  const [books] = useState<BookCardBook[]>(MOCK_BOOKS);
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
   const [sortBy, setSortBy] = useState(initialSortBy);
   const [selectedFilters, setSelectedFilters] =

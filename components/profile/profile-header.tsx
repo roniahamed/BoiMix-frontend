@@ -11,8 +11,6 @@ import {
   ArrowRightLeftIcon,
   BookDownIcon,
   BanknoteIcon,
-  BookOpenIcon,
-  StarIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -20,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import type { UserProfile } from "@/types/user";
-import { cn } from "@/lib/utils";
 
 const CustomShareArrow = ({ className }: { className?: string }) => (
   <svg

@@ -1,8 +1,5 @@
 import type { ReactNode } from "react";
 import {
-  ShieldCheckIcon,
-  BookOpenIcon,
-  ArrowRightLeftIcon,
   StarIcon,
   MessageCircleIcon,
   Repeat2Icon,
@@ -16,7 +13,6 @@ import { ProfileVerifications } from "@/components/profile/profile-verifications
 import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import Link from "next/link";
 import type { UserProfile } from "@/types/user";
-import { cn } from "@/lib/utils";
 
 type ProfileShellProps = {
   profile: UserProfile;

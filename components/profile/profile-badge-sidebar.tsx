@@ -1,4 +1,3 @@
-import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import type { UserProfile } from "@/types/user";
 import { CheckCircleIcon } from "lucide-react";
 

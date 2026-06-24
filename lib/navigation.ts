@@ -19,6 +19,8 @@ import {
   TriangleAlertIcon,
   UserIcon,
   UsersRoundIcon,
+  StarIcon,
+  ActivityIcon,
 } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 
@@ -87,9 +89,14 @@ export const dashboardNavItems: NavItem[] = [
   { title: "Borrowed", href: "/dashboard/borrowed", icon: BookOpenIcon },
   { title: "Purchases", href: "/dashboard/purchases", icon: PackageIcon },
   { title: "Sales", href: "/dashboard/sales", icon: BarChart3Icon },
+  { title: "Reviews", href: "/dashboard/reviews", icon: StarIcon },
   { title: "Messages", href: "/dashboard/messages", icon: MessageSquareIcon },
   { title: "Notifications", href: "/dashboard/notifications", icon: BellIcon },
+  { title: "Analytics", href: "/dashboard/analytics", icon: ActivityIcon },
   { title: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
+  { title: "Security", href: "/dashboard/security", icon: ShieldCheckIcon },
+  { title: "Followers", href: "/dashboard/followers", icon: UsersRoundIcon },
+  { title: "Following", href: "/dashboard/following", icon: UserIcon },
 ];
 
 export const adminNavItems: NavItem[] = [

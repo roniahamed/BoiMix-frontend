@@ -259,35 +259,35 @@ book upload
 
 # Phase 8 — User Profile
 
-- [ ] Profile
-- [ ] Reviews
-- [ ] Library
-- [ ] Activity
-- [ ] Followers
-- [ ] Following
-- [ ] Badges
+- [x] Profile
+- [x] Reviews
+- [x] Library
+- [x] Activity
+- [x] Badges
 
 ---
 
 # Phase 9 — Dashboard
 
-- [ ] Dashboard Overview
-- [ ] My Library
-- [ ] Wishlist
-- [ ] Cart
-- [ ] Borrowed
-- [ ] Purchases
-- [ ] Sales
-- [ ] Reviews
-- [ ] Notifications
-- [ ] Messages
-- [ ] Analytics
-- [ ] Settings
-- [ ] Security
+- [x] Dashboard Overview
+- [x] My Library
+- [x] Wishlist
+- [x] Cart
+- [x] Borrowed
+- [x] Purchases
+- [x] Sales
+- [x] Reviews
+- [x] Notifications
+- [x] Messages
+- [x] Analytics
+- [x] Settings
+- [x] Security
+- [x] Followers
+- [x] Following
 
 ---
 
-# Phase 10 — Marketplace
+# Phase 9 — Marketplace
 
 - [ ] Product Listing
 - [ ] Product Details
@@ -302,7 +302,7 @@ book upload
 
 ---
 
-# Phase 11 — Borrow System
+# Phase 10 — Borrow System
 
 - [ ] Membership
 - [ ] Borrow Request
@@ -314,7 +314,7 @@ book upload
 
 ---
 
-# Phase 12 — Swap System
+# Phase 11 — Swap System
 
 - [ ] Discover
 - [ ] Offer
@@ -327,7 +327,7 @@ book upload
 
 ---
 
-# Phase 13 — Central Library
+# Phase 12 — Central Library
 
 - [ ] Central Library Landing Page
 - [ ] BoiMix Verified Inventory Listing
@@ -339,7 +339,7 @@ book upload
 - [ ] Recommended & Featured Collections
 - [ ] Book Donation / Contribution Guide
 
-# Phase 14 — Community
+# Phase 13 — Community
 
 - [ ] Feed
 - [ ] Create Post
@@ -350,7 +350,7 @@ book upload
 
 ---
 
-# Phase 15 — Messaging
+# Phase 14 — Messaging
 
 - [ ] Conversation List
 - [ ] Chat Window
@@ -360,7 +360,7 @@ book upload
 
 ---
 
-# Phase 16 — Notifications
+# Phase 15 — Notifications
 
 - [ ] Notification Center
 - [ ] Unread
@@ -368,6 +368,9 @@ book upload
 - [ ] Archive
 
 ---
+
+# Phase 16 — Dashboard\n\n- \[x\] Dashboard Overview\n- \[x\] My Library\n- \[x\] Wishlist\n- \[x\] Cart\n- \[x\] Borrowed\n- \[x\] Purchases\n- \[x\] Sales\n- \[x\] Reviews\n- \[x\] Notifications\n- \[x\] Messages\n- \[x\] Analytics\n- \[x\] Settings\n- \[x\] Security\n- \[x\] Followers\n- \[x\] Following\n\n---\n\n
+
 
 # Phase 17 — Moderator Panel
 

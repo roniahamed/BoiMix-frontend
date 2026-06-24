@@ -7,11 +7,8 @@ import {
   MessageCircleIcon,
   Repeat2Icon,
   StarIcon,
-  BookOpenIcon,
-  ShieldCheckIcon,
 } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import type { UserProfile } from "@/types/user";
 import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 

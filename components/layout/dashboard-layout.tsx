@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 
 import { MobileBottomNavigation } from "@/components/layout/mobile-bottom-navigation";

@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 
 import { SidebarNavigation } from "@/components/layout/sidebar-navigation";
