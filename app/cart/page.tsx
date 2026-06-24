@@ -5,6 +5,7 @@ import { Trash2, ShieldCheck, Store, Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useCartStore, CartItem } from "@/lib/store/use-cart-store";
 
 export default function CartPage() {
@@ -79,7 +80,7 @@ export default function CartPage() {
   const total = subtotal + deliveryFee;
 
   return (
-    <div className="boimix-container-wide py-6 md:py-10">
+    <div className="mx-auto w-full max-w-[1200px] px-4 py-6 md:py-10">
       <h1 className="type-heading mb-4 text-2xl">
         আপনার কার্ট ({items.length} Item{items.length !== 1 ? "s" : ""})
       </h1>
@@ -98,11 +99,11 @@ export default function CartPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid gap-4 lg:grid-cols-12">
+        <div className="grid gap-5 lg:grid-cols-12">
           {/* ── Left: Cart Items ── */}
-          <div className="flex flex-col gap-3 lg:col-span-8">
+          <div className="flex flex-col gap-2 lg:col-span-8">
             {/* Select-all header */}
-            <div className="bg-card flex items-center justify-between rounded-lg border px-4 py-2.5">
+            <div className="bg-card border-border/30 flex items-center justify-between rounded-[3px] border px-4 py-2.5 shadow-none">
               <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium select-none">
                 <input
                   type="checkbox"
@@ -130,7 +131,7 @@ export default function CartPage() {
               return (
                 <div
                   key={sellerId}
-                  className="bg-card overflow-hidden rounded-lg border"
+                  className="bg-card border-border/30 overflow-hidden rounded-[3px] border shadow-none"
                 >
                   {/* Seller row */}
                   <div className="bg-muted/20 flex items-center gap-2.5 border-b px-4 py-2.5">
@@ -141,10 +142,15 @@ export default function CartPage() {
                       className="accent-primary size-4 cursor-pointer"
                     />
                     <Store className="text-primary size-4" />
-                    <span className="text-sm font-semibold">
-                      {group.sellerName}
-                    </span>
-                    <span className="text-muted-foreground text-xs">›</span>
+                    <Link
+                      href={`/seller/${sellerId}`}
+                      className="flex items-center gap-1 hover:underline"
+                    >
+                      <span className="text-sm font-semibold">
+                        {group.sellerName}
+                      </span>
+                      <span className="text-muted-foreground text-xs">›</span>
+                    </Link>
                   </div>
 
                   {/* Items */}
@@ -256,7 +262,7 @@ export default function CartPage() {
 
           {/* ── Right: Order Summary ── */}
           <div className="lg:col-span-4">
-            <div className="bg-card sticky top-24 overflow-hidden rounded-lg border shadow-sm">
+            <div className="bg-card border-border/30 sticky top-24 overflow-hidden rounded-[3px] border shadow-none">
               <div className="bg-muted/20 border-b px-5 py-3">
                 <h2 className="text-base font-semibold">Order Summary</h2>
               </div>
@@ -280,6 +286,17 @@ export default function CartPage() {
                 <p className="text-muted-foreground text-[11px] leading-snug">
                   * ৳60/seller inside Dhaka. Final charge at checkout.
                 </p>
+
+                <div className="flex gap-2 pt-2 pb-1">
+                  <Input
+                    placeholder="Enter Voucher Code"
+                    className="focus-visible:ring-primary/50 h-10 rounded-[3px] text-sm focus-visible:ring-1"
+                  />
+                  <Button className="h-10 rounded-[3px] bg-[#1a9cb7] px-6 text-sm font-semibold text-white hover:bg-[#147a8f]">
+                    APPLY
+                  </Button>
+                </div>
+
                 <div className="flex justify-between border-t pt-3 text-base font-bold">
                   <span>Total</span>
                   <span className="text-lg text-[#f57224]">
