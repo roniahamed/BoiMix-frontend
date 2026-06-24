@@ -99,7 +99,7 @@ export default function CartPage() {
           </Button>
         </div>
       ) : (
-        <div className="grid gap-5 lg:grid-cols-12">
+        <div className="grid gap-2 lg:grid-cols-12 lg:gap-5">
           {/* ── Left: Cart Items ── */}
           <div className="flex flex-col gap-2 lg:col-span-8">
             {/* Select-all header */}
@@ -158,15 +158,15 @@ export default function CartPage() {
                     {group.items.map((item) => (
                       <div
                         key={item.id}
-                        className="flex items-start gap-3 px-4 py-4"
+                        className="flex items-start gap-2 px-3 py-3 sm:gap-3 sm:px-4 sm:py-4"
                       >
                         {/* Checkbox */}
-                        <div className="shrink-0 pt-8">
+                        <div className="shrink-0 pt-0 sm:pt-8">
                           <input
                             type="checkbox"
                             checked={selectedItems.has(item.id)}
                             onChange={() => toggleItem(item.id)}
-                            className="size-4 cursor-pointer accent-[#f57224]"
+                            className="mt-1 size-4 cursor-pointer accent-[#f57224]"
                           />
                         </div>
 
@@ -175,21 +175,81 @@ export default function CartPage() {
                         <img
                           src={item.coverUrl}
                           alt={item.title}
-                          className="border-border/40 h-[80px] w-auto shrink-0 rounded-[3px] border bg-transparent object-contain"
+                          className="border-border/40 h-[65px] w-auto shrink-0 rounded-[3px] border bg-transparent object-contain sm:h-[80px]"
                         />
 
-                        {/* Title + Meta */}
+                        {/* Title + Meta + mobile price row */}
                         <div className="min-w-0 flex-1 pt-1 pl-1">
                           <p className="text-foreground line-clamp-2 cursor-pointer text-sm leading-snug font-medium hover:text-[#f57224]">
                             {item.title}
                           </p>
-                          <p className="text-muted-foreground mt-1.5 text-[12px]">
-                            Author: {item.author}, Condition: {item.condition}
+                          <p className="text-muted-foreground mt-1 text-[11px] sm:text-[12px]">
+                            {item.author} · {item.condition}
                           </p>
+
+                          {/* Mobile-only: price + qty + actions stacked below meta */}
+                          <div className="mt-2 flex items-center justify-between sm:hidden">
+                            {/* Price */}
+                            <div className="flex flex-col gap-0">
+                              <span className="text-[15px] font-medium text-[#f57224]">
+                                ৳{(item.price * item.quantity).toLocaleString()}
+                              </span>
+                              <span className="text-[11px] text-[#9e9e9e] line-through decoration-[#9e9e9e] decoration-1">
+                                ৳
+                                {(
+                                  (item.originalPrice &&
+                                  item.originalPrice > item.price
+                                    ? item.originalPrice
+                                    : item.price + 50) * item.quantity
+                                ).toLocaleString()}
+                              </span>
+                            </div>
+
+                            {/* Qty stepper */}
+                            <div className="flex items-center gap-0.5">
+                              <button
+                                onClick={() =>
+                                  updateQuantity(item.id, item.quantity - 1)
+                                }
+                                disabled={item.quantity <= 1}
+                                className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#fafafa] text-base text-[#9e9e9e] transition-colors hover:bg-[#f0f0f0] disabled:pointer-events-none disabled:opacity-40"
+                              >
+                                −
+                              </button>
+                              <span className="flex h-7 w-7 items-center justify-center text-sm font-medium">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={() =>
+                                  updateQuantity(item.id, item.quantity + 1)
+                                }
+                                className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#f4f4f6] text-base text-[#9e9e9e] transition-colors hover:bg-[#e8e8eb]"
+                              >
+                                +
+                              </button>
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex items-center gap-2">
+                              <button
+                                title="Add to wishlist"
+                                className="text-[#9e9e9e] hover:text-rose-500"
+                              >
+                                <Heart className="size-4" />
+                              </button>
+                              <button
+                                title="Remove item"
+                                onClick={() => removeItem(item.id)}
+                                className="hover:text-destructive text-[#9e9e9e]"
+                              >
+                                <Trash2 className="size-4" />
+                              </button>
+                            </div>
+                          </div>
                         </div>
 
-                        {/* Price & Actions */}
-                        <div className="flex w-[120px] shrink-0 flex-col gap-0.5 pt-1">
+                        {/* Price & Actions — Desktop only */}
+                        <div className="hidden w-[120px] shrink-0 flex-col gap-0.5 pt-1 sm:flex">
                           <span className="text-[16px] font-medium text-[#f57224]">
                             ৳{(item.price * item.quantity).toLocaleString()}
                           </span>
@@ -219,8 +279,8 @@ export default function CartPage() {
                           </div>
                         </div>
 
-                        {/* Quantity Stepper */}
-                        <div className="flex w-[100px] shrink-0 justify-end pt-1">
+                        {/* Quantity Stepper — Desktop only */}
+                        <div className="hidden w-[100px] shrink-0 justify-end pt-1 sm:flex">
                           <div className="flex items-center gap-1">
                             <button
                               onClick={() =>
