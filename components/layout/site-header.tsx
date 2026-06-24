@@ -118,12 +118,12 @@ export function SiteHeader() {
         )}
       >
         <div className="flex items-center gap-2">
-          <div className="flex h-10 items-center">
+          <div className="flex h-8 items-center sm:h-10">
             <MobileNavbar>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-10 w-10 shrink-0 lg:hidden [&_svg]:!size-[28px]"
+                className="h-8 w-8 shrink-0 sm:h-10 sm:w-10 lg:hidden [&_svg]:!size-5"
                 aria-label="Open navigation"
               >
                 <MenuIcon />
@@ -131,14 +131,16 @@ export function SiteHeader() {
             </MobileNavbar>
           </div>
           <Suspense
-            fallback={<div className="bg-muted h-10 w-full rounded-lg" />}
+            fallback={
+              <div className="bg-muted h-8 w-full rounded-lg sm:h-10" />
+            }
           >
             <SearchBar
               autoFocus={pathname === "/books/search"}
               className="flex-1"
             />
           </Suspense>
-          <CartButton className="h-10 w-10 shrink-0 [&_svg]:!size-[28px]" />
+          <CartButton className="h-8 w-8 shrink-0 sm:h-10 sm:w-10 lg:hidden [&_svg]:!size-5" />
         </div>
       </div>
       <div
