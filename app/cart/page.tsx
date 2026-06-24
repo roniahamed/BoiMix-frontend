@@ -175,7 +175,7 @@ export default function CartPage() {
                         <img
                           src={item.coverUrl}
                           alt={item.title}
-                          className="border-border/40 h-[80px] w-[80px] shrink-0 rounded-[3px] border object-contain"
+                          className="border-border/40 h-[80px] w-auto shrink-0 rounded-[3px] border bg-transparent object-contain"
                         />
 
                         {/* Title + Meta */}
@@ -193,15 +193,15 @@ export default function CartPage() {
                           <span className="text-[16px] font-medium text-[#f57224]">
                             ৳{(item.price * item.quantity).toLocaleString()}
                           </span>
-                          {item.originalPrice &&
-                            item.originalPrice > item.price && (
-                              <span className="text-[13px] text-[#9e9e9e] line-through decoration-[#9e9e9e] decoration-1">
-                                ৳
-                                {(
-                                  item.originalPrice * item.quantity
-                                ).toLocaleString()}
-                              </span>
-                            )}
+                          <span className="text-[13px] text-[#9e9e9e] line-through decoration-[#9e9e9e] decoration-1">
+                            ৳
+                            {(
+                              (item.originalPrice &&
+                              item.originalPrice > item.price
+                                ? item.originalPrice
+                                : item.price + 50) * item.quantity
+                            ).toLocaleString()}
+                          </span>
                           <div className="mt-2.5 flex items-center gap-3">
                             <button
                               title="Add to wishlist"
