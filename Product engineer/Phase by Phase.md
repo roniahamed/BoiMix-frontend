@@ -267,26 +267,6 @@ book upload
 
 ---
 
-# Phase 9 — Dashboard
-
-- [x] Dashboard Overview
-- [x] My Library
-- [x] Wishlist
-- [x] Cart
-- [x] Borrowed
-- [x] Purchases
-- [x] Sales
-- [x] Reviews
-- [x] Notifications
-- [x] Messages
-- [x] Analytics
-- [x] Settings
-- [x] Security
-- [x] Followers
-- [x] Following
-
----
-
 # Phase 9 — Marketplace
 
 - [ ] Product Listing
@@ -369,8 +349,25 @@ book upload
 
 ---
 
-# Phase 16 — Dashboard\n\n- \[x\] Dashboard Overview\n- \[x\] My Library\n- \[x\] Wishlist\n- \[x\] Cart\n- \[x\] Borrowed\n- \[x\] Purchases\n- \[x\] Sales\n- \[x\] Reviews\n- \[x\] Notifications\n- \[x\] Messages\n- \[x\] Analytics\n- \[x\] Settings\n- \[x\] Security\n- \[x\] Followers\n- \[x\] Following\n\n---\n\n
+# Phase 16 — Dashboard
 
+- [x] Dashboard Overview
+- [x] My Library
+- [x] Wishlist
+- [x] Cart
+- [x] Borrowed
+- [x] Purchases
+- [x] Sales
+- [x] Reviews
+- [x] Notifications
+- [x] Messages
+- [x] Analytics
+- [x] Settings
+- [x] Security
+- [x] Followers
+- [x] Following
+
+---
 
 # Phase 17 — Moderator Panel
 
