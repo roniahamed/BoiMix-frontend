@@ -13,12 +13,14 @@ import {
   Repeat2Icon,
   ShoppingCartIcon,
   StarIcon,
+  HeartIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BookCardBook } from "@/types/book";
 import { useCartStore } from "@/lib/store/use-cart-store";
+import { useWishlistStore } from "@/lib/store/use-wishlist-store";
 
 const tagLabels: Record<string, string> = {
   sell: "Sell",
@@ -49,6 +51,9 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
   const items = useCartStore((state) => state.items);
   const isInCart = items.some((item) => item.id === book.id);
   const [isAdding, setIsAdding] = useState(false);
+
+  const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
+  const inWishlist = isInWishlist(book.id);
 
   const hasSell = book.tags.includes("sell");
   const hasSwap = book.tags.includes("swap");
@@ -121,6 +126,30 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                 </span>
               ))}
             </div>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleWishlist(book.id);
+                toast.success(
+                  inWishlist ? "Removed from wishlist" : "Added to wishlist",
+                  {
+                    description: `${book.title} has been ${inWishlist ? "removed from" : "added to"} your wishlist.`,
+                  },
+                );
+              }}
+              className={cn(
+                "text-foreground absolute top-1.5 right-1.5 z-20 flex size-7 items-center justify-center rounded-full bg-white/50 backdrop-blur-md transition-all hover:bg-white/80 md:top-2 md:right-2 dark:bg-black/50 dark:hover:bg-black/80",
+                inWishlist && "text-rose-500",
+              )}
+              aria-label={
+                inWishlist ? "Remove from wishlist" : "Add to wishlist"
+              }
+            >
+              <HeartIcon
+                className={cn("size-4", inWishlist && "fill-current")}
+              />
+            </button>
           </Link>
         </div>
 

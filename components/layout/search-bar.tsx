@@ -184,7 +184,7 @@ export function SearchBar({
     >
       <div className="relative flex-1" suppressHydrationWarning>
         {!isOpen && (
-          <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+          <SearchIcon className="text-muted-foreground pointer-events-none absolute top-1/2 left-3.5 size-[18px] -translate-y-1/2" />
         )}
         <Input
           ref={inputRef}
@@ -198,8 +198,8 @@ export function SearchBar({
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           className={cn(
-            "bg-muted h-8 rounded-lg border-none pr-8 text-sm sm:h-10 [&::-webkit-search-cancel-button]:appearance-none",
-            isOpen ? "px-4" : "pl-8",
+            "bg-background border-primary/40 focus-visible:border-primary focus-visible:ring-primary/20 h-10 rounded-full border pr-8 text-[15px] focus-visible:ring-1 sm:h-10 [&::-webkit-search-cancel-button]:appearance-none",
+            isOpen ? "px-4" : "pl-10",
           )}
         />
         {query && (
