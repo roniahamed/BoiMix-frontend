@@ -198,7 +198,7 @@ export function SearchBar({
           onFocus={() => setIsOpen(true)}
           placeholder={placeholder}
           className={cn(
-            "bg-background border-primary/40 focus-visible:border-primary focus-visible:ring-primary/20 h-10 rounded-full border pr-8 text-[15px] focus-visible:ring-1 sm:h-10 [&::-webkit-search-cancel-button]:appearance-none",
+            "bg-background border-primary/40 focus-visible:border-primary focus-visible:ring-primary/20 h-[38px] rounded-full border pr-8 text-[15px] focus-visible:ring-1 sm:h-10 [&::-webkit-search-cancel-button]:appearance-none",
             isOpen ? "px-4" : "pl-10",
           )}
         />

@@ -117,12 +117,12 @@ export function SiteHeader() {
           isDetailsPage && "hidden",
         )}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-1.5">
           <MobileNavbar>
             <Button
               variant="ghost"
               size="icon"
-              className="text-foreground h-10 w-10 shrink-0 lg:hidden [&_svg]:size-6"
+              className="text-foreground h-11 w-11 shrink-0 lg:hidden [&_svg]:!size-7"
               aria-label="Open navigation"
             >
               <MenuIcon />
@@ -130,15 +130,15 @@ export function SiteHeader() {
           </MobileNavbar>
           <Suspense
             fallback={
-              <div className="bg-background border-primary/20 h-10 w-full rounded-full border sm:h-10" />
+              <div className="bg-background border-primary/20 mx-1 h-[38px] w-full rounded-full border sm:h-10" />
             }
           >
             <SearchBar
               autoFocus={pathname === "/books/search"}
-              className="flex-1"
+              className="mx-1 flex-1"
             />
           </Suspense>
-          <CartButton className="text-foreground h-10 w-10 shrink-0 lg:hidden [&_svg]:size-6" />
+          <CartButton className="text-foreground mr-[2px] h-11 w-11 shrink-0 lg:hidden [&_svg]:!size-7" />
         </div>
       </div>
       <div
