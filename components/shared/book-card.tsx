@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import {
   BadgeCheckIcon,
@@ -31,14 +31,11 @@ const tagLabels: Record<string, string> = {
 } as const;
 
 const tagClasses: Record<string, string> = {
-  sell: "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
-  swap: "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
-  borrow:
-    "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
-  wishlist:
-    "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
-  collection:
-    "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
+  sell: "bg-orange-500 text-white",
+  swap: "bg-emerald-500 text-white",
+  borrow: "bg-blue-500 text-white",
+  wishlist: "bg-rose-500 text-white",
+  collection: "bg-purple-500 text-white",
 } as const;
 
 type BookCardProps = {
@@ -49,13 +46,20 @@ type BookCardProps = {
 
 export function BookCard({ book, className, hidePrice }: BookCardProps) {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
   const addItem = useCartStore((state) => state.addItem);
   const items = useCartStore((state) => state.items);
-  const isInCart = items.some((item) => item.id === book.id);
+  const isInCart = mounted ? items.some((item) => item.id === book.id) : false;
   const [isAdding, setIsAdding] = useState(false);
 
   const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
-  const inWishlist = isInWishlist(book.id);
+  const inWishlist = mounted ? isInWishlist(book.id) : false;
 
   const hasSell = book.tags.includes("sell");
   const hasSwap = book.tags.includes("swap");
@@ -115,22 +119,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             ][(book.id.length + (book.id.charCodeAt(0) || 0)) % 5],
           )}
         >
-          {/* Tags - Top Left */}
-          <div className="absolute top-2.5 left-2.5 z-20 flex flex-col items-start gap-1.5 md:top-3 md:left-3">
-            {book.tags.map((tag) => (
-              <span
-                key={tag}
-                className={cn(
-                  "type-badge rounded-md px-2 py-0.5 text-[11px] font-bold tracking-wide shadow-sm md:px-2.5 md:text-xs",
-                  tagClasses[tag],
-                )}
-              >
-                {tagLabels[tag]}
-              </span>
-            ))}
-          </div>
-
-          {/* Heart Icon - Top Right */}
+          {/* Heart Icon - Top Left */}
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -144,7 +133,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               );
             }}
             className={cn(
-              "absolute top-2.5 right-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-rose-500 dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
+              "absolute top-2.5 left-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-rose-500 dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
               inWishlist && "bg-white/70 text-rose-500 dark:bg-black/40",
             )}
             aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
@@ -156,6 +145,18 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               )}
             />
           </button>
+
+          {/* Ribbon Tag - Top Right */}
+          {book.tags.length > 0 && (
+            <div
+              className={cn(
+                "absolute top-[16px] -right-[34px] z-20 w-[120px] rotate-45 py-1 text-center text-[10px] font-extrabold tracking-widest uppercase shadow-sm",
+                tagClasses[book.tags[0]] || "bg-gray-500 text-white",
+              )}
+            >
+              {tagLabels[book.tags[0]]}
+            </div>
+          )}
 
           <Link
             href={`/books/${book.slug}`}
