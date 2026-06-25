@@ -149,6 +149,14 @@ export function BookDetailsMobileActions({
           {book.tags.includes("sell") && (
             <>
               <Button
+                className="h-11 flex-1 gap-2 bg-[#f57224] px-2 text-sm font-semibold text-white shadow-sm hover:bg-[#e0651f]"
+                onClick={handleBuyNow}
+                disabled={isAdding || isBuying}
+              >
+                <CreditCard className="size-4" />
+                <span>{isBuying ? "Processing..." : "Buy Now"}</span>
+              </Button>
+              <Button
                 variant={isInCart ? "outline" : "default"}
                 className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm"
                 onClick={handleAddToCart}
@@ -158,15 +166,6 @@ export function BookDetailsMobileActions({
                 <span>
                   {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add"}
                 </span>
-              </Button>
-              <Button
-                variant="secondary"
-                className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm"
-                onClick={handleBuyNow}
-                disabled={isAdding || isBuying}
-              >
-                <CreditCard className="size-4" />
-                <span>{isBuying ? "Processing..." : "Buy Now"}</span>
               </Button>
             </>
           )}
