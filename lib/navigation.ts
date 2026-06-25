@@ -75,7 +75,7 @@ export const megaMenuItems: NavItem[] = [
 
 export const mobileBottomNavItems: NavItem[] = [
   { title: "Home", href: "/", icon: HomeIcon },
-  { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
+  { title: "Wishlist", href: "/wishlist", icon: HeartIcon },
   { title: "Add Book", href: "#add", icon: BookPlusIcon },
   { title: "Alerts", href: "/notifications/all", icon: BellIcon },
   { title: "Profile", href: "/dashboard/overview", icon: UserIcon },
@@ -84,7 +84,7 @@ export const mobileBottomNavItems: NavItem[] = [
 export const dashboardNavItems: NavItem[] = [
   { title: "Overview", href: "/dashboard/overview", icon: LayoutDashboardIcon },
   { title: "My Library", href: "/dashboard/library", icon: LibraryIcon },
-  { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
+  { title: "Wishlist", href: "/wishlist", icon: HeartIcon },
   { title: "Cart", href: "/dashboard/cart", icon: ShoppingCartIcon },
   { title: "Borrowed", href: "/dashboard/borrowed", icon: BookOpenIcon },
   { title: "Purchases", href: "/dashboard/purchases", icon: PackageIcon },

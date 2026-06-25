@@ -88,7 +88,7 @@ export function SiteHeader() {
             className="hidden md:inline-flex"
             asChild
           >
-            <Link href="/dashboard/wishlist" aria-label="Wishlist">
+            <Link href="/wishlist" aria-label="Wishlist">
               <HeartIcon />
             </Link>
           </Button>
