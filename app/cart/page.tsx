@@ -230,44 +230,44 @@ export default function CartPage() {
                             </div>
 
                             {/* Qty stepper */}
-                            <div className="flex items-center gap-0.5">
+                            <div className="flex items-center gap-1">
                               <button
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity - 1)
                                 }
                                 disabled={item.quantity <= 1}
-                                className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#fafafa] text-base text-[#9e9e9e] transition-colors hover:bg-[#f0f0f0] disabled:pointer-events-none disabled:opacity-40"
+                                className="flex h-8 w-8 items-center justify-center rounded-[2px] bg-[#fafafa] text-lg text-[#9e9e9e] transition-colors hover:bg-[#f0f0f0] disabled:pointer-events-none disabled:opacity-40"
                               >
                                 −
                               </button>
-                              <span className="flex h-7 w-7 items-center justify-center text-sm font-medium">
+                              <span className="flex h-8 w-8 items-center justify-center text-sm font-medium">
                                 {item.quantity}
                               </span>
                               <button
                                 onClick={() =>
                                   updateQuantity(item.id, item.quantity + 1)
                                 }
-                                className="flex h-7 w-7 items-center justify-center rounded-[2px] bg-[#f4f4f6] text-base text-[#9e9e9e] transition-colors hover:bg-[#e8e8eb]"
+                                className="flex h-8 w-8 items-center justify-center rounded-[2px] bg-[#f4f4f6] text-lg text-[#9e9e9e] transition-colors hover:bg-[#e8e8eb]"
                               >
                                 +
                               </button>
                             </div>
 
                             {/* Actions */}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-4">
                               <button
                                 title="Add to wishlist"
                                 onClick={() =>
                                   handleWishlistToggle(item.id, item.title)
                                 }
-                                className={`transition-colors hover:text-rose-500 ${
+                                className={`p-1 transition-colors hover:text-rose-500 ${
                                   isInWishlist(item.id)
                                     ? "text-rose-500"
                                     : "text-[#9e9e9e]"
                                 }`}
                               >
                                 <Heart
-                                  className="size-4"
+                                  className="size-5"
                                   fill={
                                     isInWishlist(item.id)
                                       ? "currentColor"
@@ -278,9 +278,9 @@ export default function CartPage() {
                               <button
                                 title="Remove item"
                                 onClick={() => removeItem(item.id)}
-                                className="hover:text-destructive text-[#9e9e9e]"
+                                className="hover:text-destructive p-1 text-[#9e9e9e]"
                               >
-                                <Trash2 className="size-4" />
+                                <Trash2 className="size-5" />
                               </button>
                             </div>
                           </div>
