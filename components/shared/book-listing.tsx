@@ -514,7 +514,7 @@ const FILTER_GROUPS = [
     title: "Book Type",
     type: "checkbox" as const,
     options: [
-      { label: "Sell", value: "sell" },
+      { label: "Sale", value: "sell" },
       { label: "Swap", value: "swap" },
       { label: "Borrow", value: "borrow" },
       { label: "In Stock", value: "in-stock" },

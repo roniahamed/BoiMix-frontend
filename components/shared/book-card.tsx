@@ -23,7 +23,7 @@ import { useCartStore } from "@/lib/store/use-cart-store";
 import { useWishlistStore } from "@/lib/store/use-wishlist-store";
 
 const tagLabels: Record<string, string> = {
-  sell: "Sell",
+  sell: "Sale",
   swap: "Swap",
   borrow: "Borrow",
   wishlist: "Wishlist",
@@ -31,11 +31,11 @@ const tagLabels: Record<string, string> = {
 } as const;
 
 const tagClasses: Record<string, string> = {
-  sell: "bg-orange-500 text-white",
-  swap: "bg-emerald-500 text-white",
-  borrow: "bg-blue-500 text-white",
-  wishlist: "bg-rose-500 text-white",
-  collection: "bg-purple-500 text-white",
+  sell: "bg-orange-400/90 backdrop-blur-sm text-white",
+  swap: "bg-emerald-400/90 backdrop-blur-sm text-white",
+  borrow: "bg-blue-400/90 backdrop-blur-sm text-white",
+  wishlist: "bg-rose-400/90 backdrop-blur-sm text-white",
+  collection: "bg-purple-400/90 backdrop-blur-sm text-white",
 } as const;
 
 type BookCardProps = {
@@ -150,7 +150,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
           {book.tags.length > 0 && (
             <div
               className={cn(
-                "absolute top-[16px] -right-[34px] z-20 w-[120px] rotate-45 py-1 text-center text-[10px] font-extrabold tracking-widest uppercase shadow-sm",
+                "absolute top-[10px] -right-[38px] z-20 w-[120px] rotate-45 py-0.5 text-center text-[9px] font-extrabold tracking-widest uppercase shadow-sm",
                 tagClasses[book.tags[0]] || "bg-gray-500 text-white",
               )}
             >
