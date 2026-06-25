@@ -19,6 +19,7 @@
     "axios": "latest",
     "class-variance-authority": "latest",
     "clsx": "latest",
+    "color-thief-react": "^2.1.0",
     "date-fns": "^4.4.0",
     "framer-motion": "latest",
     "leaflet": "^1.9.4",

@@ -103,55 +103,71 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
       {/* Outer Card Content */}
       <div className="flex h-full flex-col bg-transparent">
         {/* Cover Image Area */}
-        <div className="relative pt-1">
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-t-lg pt-6 pb-6 transition-colors duration-500 md:rounded-lg",
+            [
+              "bg-[#E3F2FD] dark:bg-[#1A365D]", // Light Blue
+              "bg-[#E8F8F5] dark:bg-[#114B3E]", // Mint
+              "bg-[#FEF5E7] dark:bg-[#5C3A11]", // Orange
+              "bg-[#F5EEF8] dark:bg-[#3B1F4F]", // Purple
+              "bg-[#FDEDEC] dark:bg-[#4A1516]", // Rose
+            ][(book.id.length + (book.id.charCodeAt(0) || 0)) % 5],
+          )}
+        >
+          {/* Tags - Top Left */}
+          <div className="absolute top-2.5 left-2.5 z-20 flex flex-col items-start gap-1.5 md:top-3 md:left-3">
+            {book.tags.map((tag) => (
+              <span
+                key={tag}
+                className={cn(
+                  "type-badge rounded-md px-2 py-0.5 text-[11px] font-bold tracking-wide shadow-sm md:px-2.5 md:text-xs",
+                  tagClasses[tag],
+                )}
+              >
+                {tagLabels[tag]}
+              </span>
+            ))}
+          </div>
+
+          {/* Heart Icon - Top Right */}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleWishlist(book.id);
+              toast.success(
+                inWishlist ? "Removed from wishlist" : "Added to wishlist",
+                {
+                  description: `${book.title} has been ${inWishlist ? "removed from" : "added to"} your wishlist.`,
+                },
+              );
+            }}
+            className={cn(
+              "absolute top-2.5 right-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-rose-500 dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
+              inWishlist && "bg-white/70 text-rose-500 dark:bg-black/40",
+            )}
+            aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+          >
+            <HeartIcon
+              className={cn(
+                "size-4.5 drop-shadow-sm",
+                inWishlist && "fill-current",
+              )}
+            />
+          </button>
+
           <Link
             href={`/books/${book.slug}`}
-            className="bg-muted relative mx-auto block aspect-[3/4] w-[65%] overflow-hidden rounded-lg shadow-none sm:w-[75%] md:w-[70%]"
+            className="relative z-10 mx-auto block aspect-[3/4] w-[60%] sm:w-[65%] md:w-[65%]"
           >
             <Image
               src={book.coverUrl}
               alt={book.title}
               fill
               sizes="(min-width: 1400px) 180px, (min-width: 992px) 16vw, 50vw"
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.3)] transition-transform duration-300 hover:scale-105"
             />
-            <div className="absolute top-1.5 left-1.5 flex flex-wrap gap-1 md:top-2 md:left-2">
-              {book.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={cn(
-                    "type-badge rounded-lg px-1.5 py-0.5 text-[10px] font-normal shadow-none md:px-2 md:text-xs",
-                    tagClasses[tag],
-                  )}
-                >
-                  {tagLabels[tag]}
-                </span>
-              ))}
-            </div>
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleWishlist(book.id);
-                toast.success(
-                  inWishlist ? "Removed from wishlist" : "Added to wishlist",
-                  {
-                    description: `${book.title} has been ${inWishlist ? "removed from" : "added to"} your wishlist.`,
-                  },
-                );
-              }}
-              className={cn(
-                "absolute top-1.5 right-1.5 z-30 text-white transition-all hover:scale-110 hover:text-rose-500 md:top-2 md:right-2",
-                inWishlist && "text-rose-500",
-              )}
-              aria-label={
-                inWishlist ? "Remove from wishlist" : "Add to wishlist"
-              }
-            >
-              <HeartIcon
-                className={cn("size-5", inWishlist && "fill-current")}
-              />
-            </button>
           </Link>
         </div>
 
