@@ -150,21 +150,23 @@ function CheckoutContent() {
   };
 
   return (
-    <div className="boimix-container-wide py-8 md:py-12">
-      <div className="mb-8">
-        <h1 className="type-heading text-3xl">চেকআউট (Checkout)</h1>
+    <div className="boimix-container-wide py-4 sm:py-8 md:py-12">
+      <div className="mb-4 sm:mb-8">
+        <h1 className="type-heading text-2xl sm:text-3xl">চেকআউট (Checkout)</h1>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid gap-8 lg:grid-cols-12"
+        className="grid gap-6 sm:gap-8 lg:grid-cols-12"
       >
         {/* Left Column: Forms */}
-        <div className="flex flex-col gap-8 lg:col-span-8">
+        <div className="flex flex-col gap-6 sm:gap-8 lg:col-span-8">
           {/* Shipping Details */}
-          <div className="bg-card rounded-xl border p-6 shadow-sm sm:p-8">
-            <h2 className="type-heading mb-6 text-xl">ডেলিভারি ঠিকানা</h2>
-            <div className="grid gap-6 sm:grid-cols-2">
+          <div className="bg-card rounded-xl border p-4 shadow-sm sm:p-6 md:p-8">
+            <h2 className="type-heading mb-4 text-lg sm:mb-6 sm:text-xl">
+              ডেলিভারি ঠিকানা
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 sm:gap-6">
               <div className="space-y-2">
                 <Label htmlFor="name">আপনার নাম</Label>
                 <Input
@@ -240,7 +242,7 @@ function CheckoutContent() {
                 <Textarea
                   id="address"
                   placeholder="বাড়ি নং, রাস্তা নং, পাড়া/মহল্লা"
-                  className="min-h-[100px] resize-y"
+                  className="min-h-[80px] resize-y sm:min-h-[100px]"
                   {...form.register("address")}
                 />
                 {errors.address && (
@@ -253,11 +255,11 @@ function CheckoutContent() {
           </div>
 
           {/* Payment Methods */}
-          <div className="bg-card rounded-xl border p-6 shadow-sm sm:p-8">
-            <h2 className="type-heading mb-6 text-xl">
+          <div className="bg-card rounded-xl border p-4 shadow-sm sm:p-6 md:p-8">
+            <h2 className="type-heading mb-4 text-lg sm:mb-6 sm:text-xl">
               পেমেন্ট মেথড নির্বাচন করুন
             </h2>
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {/* bKash */}
               <button
                 type="button"

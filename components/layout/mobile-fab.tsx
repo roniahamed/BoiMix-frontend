@@ -79,7 +79,7 @@ export function MobileFAB() {
       <div
         aria-hidden="true"
         className={cn(
-          "fixed inset-0 z-40 bg-black/25 backdrop-blur-[2px] transition-all duration-300",
+          "fixed inset-0 z-40 hidden bg-black/25 backdrop-blur-[2px] transition-all duration-300 md:block",
           isOpen
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0",
@@ -108,7 +108,7 @@ export function MobileFAB() {
             isDraggingRef.current = false;
           }, 150);
         }}
-        className="fixed right-4 bottom-20 z-50 md:top-1/2 md:right-6 md:bottom-auto md:-translate-y-1/2"
+        className="fixed right-4 bottom-20 z-50 hidden md:top-1/2 md:right-6 md:bottom-auto md:block md:-translate-y-1/2"
         style={{ touchAction: "none" }} // Prevents scrolling while dragging on touch devices
       >
         {/* Sub-actions */}
