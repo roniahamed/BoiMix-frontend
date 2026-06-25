@@ -149,7 +149,7 @@ export function BookDetailsMobileActions({
           {book.tags.includes("sell") && (
             <>
               <Button
-                className="h-11 flex-1 gap-2 bg-[#f57224] px-2 text-sm font-semibold text-white shadow-sm hover:bg-[#e0651f]"
+                className="h-11 flex-1 gap-2 bg-[#f57224] px-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]"
                 onClick={handleBuyNow}
                 disabled={isAdding || isBuying}
               >
@@ -158,7 +158,11 @@ export function BookDetailsMobileActions({
               </Button>
               <Button
                 variant={isInCart ? "outline" : "default"}
-                className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm"
+                className={`h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm transition-all ${
+                  isInCart
+                    ? "border-[#f57224] text-[#f57224] hover:bg-[#f57224]/10 hover:text-[#f57224]"
+                    : ""
+                }`}
                 onClick={handleAddToCart}
                 disabled={isAdding || isBuying}
               >

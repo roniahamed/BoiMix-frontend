@@ -92,7 +92,11 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
     <div className="flex flex-col gap-3">
       <Button
         variant={isInCart ? "outline" : "default"}
-        className="h-12 w-full gap-2 text-base transition-all"
+        className={`h-12 w-full gap-2 text-base transition-all ${
+          isInCart
+            ? "border-[#f57224] text-[#f57224] hover:bg-[#f57224]/10 hover:text-[#f57224]"
+            : ""
+        }`}
         onClick={handleAddToCart}
         disabled={isAdding || isBuying}
       >
@@ -100,8 +104,7 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
         {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add to Cart"}
       </Button>
       <Button
-        variant="secondary"
-        className="h-12 w-full gap-2 text-base transition-all"
+        className="h-12 w-full gap-2 bg-[#f57224] text-base text-white transition-all hover:bg-[#d65e1c] active:scale-[0.98]"
         onClick={handleBuyNow}
         disabled={isAdding || isBuying}
       >
