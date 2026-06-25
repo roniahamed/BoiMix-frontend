@@ -722,8 +722,8 @@ export default function Home() {
 
 function CategorySection() {
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
         <SectionHeader title="Categories" href="/books" />
         <ScrollContainer autoScroll arrowClassName="top-[35px]">
           {categories.map((category) => {
@@ -733,7 +733,7 @@ function CategorySection() {
                 href={category.href}
                 className="group flex w-[76px] shrink-0 flex-col items-center gap-1.5 text-center sm:w-[90px] md:w-[100px]"
               >
-                <div className="group-hover:border-primary border-border bg-card relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-[10px] border transition-all duration-300 group-hover:shadow-sm">
+                <div className="group-hover:border-primary border-border bg-card relative h-[70px] w-[70px] shrink-0 overflow-hidden rounded-[10px] border transition-all duration-300 group-hover:shadow-none">
                   <Image
                     src={category.image}
                     alt={category.title}
@@ -764,8 +764,8 @@ function BookSection({
   books: BookCardBook[];
 }) {
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide md:bg-card md:border-border/50 md:rounded-xl md:border md:p-6 md:shadow-sm">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 md:rounded-lg md:border md:p-6 md:shadow-none">
         <SectionHeader title={title} href={href} />
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 md:hidden">
           {books.slice(0, 10).map((book) => (
@@ -798,8 +798,8 @@ function CentralLibrarySection() {
     .slice(0, 12);
 
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-xl md:border md:p-6 md:shadow-sm lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-lg md:border md:p-6 md:shadow-none lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Central Library"
           href="/explore/central-library"
@@ -826,8 +826,8 @@ function MarketplaceSection() {
     .slice(0, 12);
 
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-xl md:border md:p-6 md:shadow-sm lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-lg md:border md:p-6 md:shadow-none lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
         <div className="w-full min-w-0">
           <HorizontalBookRow books={books} rowKey="market" />
         </div>
@@ -854,8 +854,8 @@ function SwapBooksSection() {
     .slice(0, 12);
 
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-xl md:border md:p-6 md:shadow-sm lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-lg md:border md:p-6 md:shadow-none lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
           title="Swap Books"
           href="/explore/swaps"
@@ -992,9 +992,9 @@ function CommunityReaderSection() {
   ];
 
   return (
-    <section className="py-4 md:py-6">
+    <section className="py-2 md:py-3">
       <div className="boimix-container-wide">
-        <div className="from-primary/10 via-card to-info/5 border-primary/10 overflow-hidden rounded-2xl border bg-gradient-to-br p-6 shadow-sm md:p-8">
+        <div className="from-primary/10 via-card to-info/5 border-primary/10 overflow-hidden rounded-lg border bg-gradient-to-br p-6 shadow-none md:p-8">
           {/* Header */}
           <div className="mb-6 flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -1036,7 +1036,7 @@ function CommunityReaderSection() {
             ].map(({ icon: Icon, label, value }) => (
               <div
                 key={label}
-                className="bg-card/70 flex flex-col items-center gap-1 rounded-xl p-4 text-center shadow-sm backdrop-blur-sm"
+                className="bg-card/70 flex flex-col items-center gap-1 rounded-lg p-4 text-center shadow-none backdrop-blur-sm"
               >
                 <Icon className="text-primary size-5" aria-hidden="true" />
                 <p className="text-foreground text-lg font-bold">{value}</p>
@@ -1051,7 +1051,7 @@ function CommunityReaderSection() {
               <Link
                 key={reader.name}
                 href={`/community/readers/${reader.name.toLowerCase().replace(" ", "-")}`}
-                className="bg-card/80 hover:border-primary group flex flex-col gap-3 rounded-xl border p-4 shadow-sm backdrop-blur-sm transition-all hover:shadow-md"
+                className="bg-card/80 hover:border-primary group flex flex-col gap-3 rounded-lg border p-4 shadow-none backdrop-blur-sm transition-all hover:shadow-md"
               >
                 {/* Avatar placeholder */}
                 <div className="flex items-center gap-3">
@@ -1111,8 +1111,8 @@ function CommunityReaderSection() {
 
 function CommunitySection() {
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
         <SectionHeader title="Community Posts" href="/community" />
         <div className="grid gap-4 md:grid-cols-3">
           {communityPosts.map((post) => (
@@ -1140,8 +1140,8 @@ function CommunitySection() {
 
 function SponsorsSection() {
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 rounded-xl border p-4 shadow-sm md:p-6">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
         <SectionHeader title="Sponsors" href="/featured-libraries" />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {sponsors.map((sponsor) => (
@@ -1206,9 +1206,9 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
 function PersonalizationSection() {
   const recentlyViewed = featuredBooks.slice(0, 3);
   return (
-    <section className="py-4 md:py-6">
+    <section className="py-2 md:py-3">
       <div className="boimix-container-wide">
-        <div className="from-primary/10 via-card to-info/5 border-primary/10 rounded-2xl border bg-gradient-to-r p-4 shadow-sm md:p-6">
+        <div className="from-primary/10 via-card to-info/5 border-primary/10 rounded-lg border bg-gradient-to-r p-4 shadow-none md:p-6">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             {/* User Greeting */}
             <div className="flex items-center gap-4">
@@ -1228,7 +1228,7 @@ function PersonalizationSection() {
             {/* Dashboard widgets */}
             <div className="grid flex-1 gap-4 sm:grid-cols-2 md:max-w-xl">
               {/* Recently Viewed */}
-              <div className="bg-card/75 border-border rounded-xl border p-3 shadow-xs">
+              <div className="bg-card/75 border-border rounded-lg border p-3 shadow-xs">
                 <p className="text-muted-foreground mb-2 text-[0.7rem] font-bold tracking-wider uppercase">
                   Recently Viewed
                 </p>
@@ -1257,7 +1257,7 @@ function PersonalizationSection() {
               </div>
 
               {/* Active Swaps Card */}
-              <div className="bg-card/75 border-border flex items-center justify-between rounded-xl border p-3 shadow-xs">
+              <div className="bg-card/75 border-border flex items-center justify-between rounded-lg border p-3 shadow-xs">
                 <div className="min-w-0">
                   <p className="text-muted-foreground text-[0.7rem] font-bold tracking-wider uppercase">
                     Active Swaps
@@ -1348,9 +1348,9 @@ function AuthorSpotlightSection() {
   ];
 
   return (
-    <section className="py-4 md:py-6">
+    <section className="py-2 md:py-3">
       <div className="boimix-container-wide">
-        <div className="md:bg-card md:border-border/50 md:rounded-2xl md:border md:p-6 md:shadow-sm">
+        <div className="md:bg-card md:border-border/50 md:rounded-lg md:border md:p-6 md:shadow-none">
           <div className="mb-5 flex items-center justify-between">
             <h2 className="type-subheading text-foreground">
               Author Spotlight
@@ -1364,7 +1364,7 @@ function AuthorSpotlightSection() {
 
           <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
             {/* Left Column: Author Card */}
-            <div className="from-primary/10 via-primary/5 to-info/10 border-primary/20 flex flex-col justify-between rounded-xl border bg-gradient-to-br p-5 shadow-xs">
+            <div className="from-primary/10 via-primary/5 to-info/10 border-primary/20 flex flex-col justify-between rounded-lg border bg-gradient-to-br p-5 shadow-xs">
               <div>
                 <div className="flex items-center gap-4">
                   {/* Styled avatar placeholder */}
@@ -1478,8 +1478,8 @@ function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-4 md:py-6">
-      <div className="boimix-container-wide bg-card border-border/50 rounded-2xl border p-4 shadow-sm md:p-6">
+    <section className="py-2 md:py-3">
+      <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
         <div className="mb-6 text-center">
           <h2 className="text-foreground text-2xl font-bold md:text-3xl">
             পাঠকদের মতামত
@@ -1493,7 +1493,7 @@ function TestimonialsSection() {
           {testimonials.map((t, idx) => (
             <div
               key={`${t.name}-${idx}`}
-              className="bg-card shadow-soft hover:border-primary/30 flex flex-col justify-between rounded-xl border p-5 transition-all hover:-translate-y-0.5"
+              className="bg-card shadow-soft hover:border-primary/30 flex flex-col justify-between rounded-lg border p-5 transition-all hover:-translate-y-0.5"
             >
               <div>
                 {/* Rating stars */}
