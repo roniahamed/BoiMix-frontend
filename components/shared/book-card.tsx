@@ -31,12 +31,14 @@ const tagLabels: Record<string, string> = {
 } as const;
 
 const tagClasses: Record<string, string> = {
-  sell: "bg-warning text-warning-foreground",
-  swap: "bg-info text-info-foreground",
-  borrow: "bg-success text-success-foreground",
+  sell: "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
+  swap: "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
+  borrow:
+    "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
   wishlist:
-    "bg-purple-100 text-purple-700 dark:bg-purple-500/10 dark:text-purple-500",
-  collection: "bg-secondary text-secondary-foreground",
+    "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
+  collection:
+    "bg-white/40 backdrop-blur-md border border-white/40 text-black shadow-none",
 } as const;
 
 type BookCardProps = {
@@ -118,7 +120,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                 <span
                   key={tag}
                   className={cn(
-                    "type-badge rounded-lg px-1.5 py-0.5 text-[10px] font-bold shadow-none md:px-2 md:text-xs",
+                    "type-badge rounded-lg px-1.5 py-0.5 text-[10px] font-normal shadow-none md:px-2 md:text-xs",
                     tagClasses[tag],
                   )}
                 >
@@ -139,7 +141,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                 );
               }}
               className={cn(
-                "text-foreground absolute top-1.5 right-1.5 z-20 flex size-7 items-center justify-center rounded-full bg-white/50 backdrop-blur-md transition-all hover:bg-white/80 md:top-2 md:right-2 dark:bg-black/50 dark:hover:bg-black/80",
+                "absolute top-1.5 right-1.5 z-30 text-white transition-all hover:scale-110 hover:text-rose-500 md:top-2 md:right-2",
                 inWishlist && "text-rose-500",
               )}
               aria-label={
@@ -147,7 +149,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               }
             >
               <HeartIcon
-                className={cn("size-4", inWishlist && "fill-current")}
+                className={cn("size-5", inWishlist && "fill-current")}
               />
             </button>
           </Link>

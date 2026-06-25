@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { BookCard } from "@/components/shared/book-card";
 import { profileLibraryBooks } from "@/lib/mock/profile";
 import { useWishlistStore } from "@/lib/store/use-wishlist-store";
@@ -93,9 +94,15 @@ export default function WishlistPage() {
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-24 text-center">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground mb-4 text-sm">
             Your wishlist is empty. Browse books and add them to your wishlist.
           </p>
+          <Link
+            href="/books"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-10 items-center justify-center rounded-md px-8 text-sm font-medium shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+          >
+            বই খুঁজুন
+          </Link>
         </div>
       )}
     </div>
