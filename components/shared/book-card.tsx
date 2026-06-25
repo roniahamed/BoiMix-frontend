@@ -109,7 +109,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
         {/* Cover Image Area */}
         <div
           className={cn(
-            "relative overflow-hidden rounded-t-lg pt-6 pb-6 transition-colors duration-500 md:rounded-lg",
+            "relative overflow-hidden rounded-t-lg pt-3 pb-3 transition-colors duration-500 md:rounded-lg",
             [
               "bg-[#E3F2FD] dark:bg-[#1A365D]", // Light Blue
               "bg-[#E8F8F5] dark:bg-[#114B3E]", // Mint
