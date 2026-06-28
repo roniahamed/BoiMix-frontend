@@ -146,6 +146,26 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             />
           </button>
 
+          {/* Add to Cart - Bottom Right (Mobile Only) */}
+          {hasSell && (
+            <button
+              onClick={handleAddToCart}
+              disabled={isAdding}
+              className={cn(
+                "absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
+                isInCart && "bg-white/70 text-[#f57224] dark:bg-black/40",
+              )}
+              aria-label={isInCart ? "View cart" : "Add to cart"}
+            >
+              <ShoppingCartIcon
+                className={cn(
+                  "size-4.5 drop-shadow-sm",
+                  isInCart && "fill-current",
+                )}
+              />
+            </button>
+          )}
+
           {/* Ribbon Tag - Top Right */}
           {book.tags.length > 0 && (
             <div

@@ -43,7 +43,7 @@ function CheckoutContent() {
   const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const { items: allItems, clearCart } = useCartStore();
+  const { items: allItems, removeItems } = useCartStore();
   const { addOrder } = useOrderStore();
 
   // Filter to only the selected items passed via URL
@@ -140,7 +140,7 @@ function CheckoutContent() {
     addOrder(newOrder);
 
     if (data.paymentMethod === "cod") {
-      clearCart();
+      removeItems(items.map((i) => i.id));
       router.push("/orders/success");
     } else {
       router.push(

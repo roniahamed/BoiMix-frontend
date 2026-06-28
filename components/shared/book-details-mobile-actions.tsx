@@ -123,7 +123,7 @@ export function BookDetailsMobileActions({
         sellerId: book.sellerId,
       });
     }
-    router.push("/cart/checkout");
+    router.push(`/cart/checkout?items=${book.id}`);
   };
 
   return (

@@ -1,4 +1,5 @@
-import { BookCard } from "@/components/shared/book-card";
+import Link from "next/link";
+import { DashboardLibraryCard } from "@/components/shared/dashboard-library-card";
 import { profileLibraryBooks } from "@/lib/mock/profile";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
@@ -13,14 +14,16 @@ export default function LibraryPage() {
             Manage all the books you&apos;ve uploaded for sell, swap, or borrow.
           </p>
         </div>
-        <Button className="gap-2">
-          <PlusIcon className="size-4" /> Add New Book
+        <Button asChild className="gap-2">
+          <Link href="/books/upload">
+            <PlusIcon className="size-4" /> Add New Book
+          </Link>
         </Button>
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         {profileLibraryBooks.map((book) => (
-          <BookCard key={book.id} book={book} />
+          <DashboardLibraryCard key={book.id} book={book} />
         ))}
       </div>
     </div>

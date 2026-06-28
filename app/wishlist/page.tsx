@@ -22,9 +22,9 @@ export default function WishlistPage() {
     return (
       <div className="mx-auto w-full max-w-[1200px] space-y-8 px-4 py-6 md:py-10">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Wishlist</h1>
+          <h1 className="text-3xl font-bold tracking-tight">উইশলিস্ট</h1>
           <p className="text-muted-foreground mt-2">
-            Books you&apos;ve saved to read or buy later.
+            আপনার পছন্দের সেভ করা বইগুলো
           </p>
         </div>
       </div>
@@ -80,9 +80,9 @@ export default function WishlistPage() {
   return (
     <div className="mx-auto w-full max-w-[1200px] space-y-8 px-4 py-6 md:py-10">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Wishlist</h1>
+        <h1 className="type-heading text-3xl tracking-tight">উইশলিস্ট</h1>
         <p className="text-muted-foreground mt-2">
-          Books you&apos;ve saved to read or buy later.
+          আপনার পছন্দের সেভ করা বইগুলো
         </p>
       </div>
 
@@ -95,7 +95,8 @@ export default function WishlistPage() {
       ) : (
         <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-24 text-center">
           <p className="text-muted-foreground mb-4 text-sm">
-            Your wishlist is empty. Browse books and add them to your wishlist.
+            আপনার উইশলিস্ট সম্পূর্ণ খালি। বই ব্রাউজ করুন এবং পছন্দের বই যুক্ত
+            করুন।
           </p>
           <Link
             href="/books"

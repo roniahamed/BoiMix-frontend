@@ -81,7 +81,7 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
         sellerId: book.sellerId,
       });
     }
-    router.push("/cart/checkout");
+    router.push(`/cart/checkout?items=${book.id}`);
   };
 
   if (!book.tags.includes("sell")) {
