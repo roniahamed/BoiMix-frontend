@@ -28,11 +28,11 @@ type DashboardLibraryCardProps = {
     id: string;
     title: string;
     author: string;
-    price: number;
+    price?: number;
     originalPrice?: number;
     condition: string;
-    images: { src: string }[];
-    sellerName: string;
+    coverUrl: string;
+    sellerName?: string;
     tags: string[];
     isSold?: boolean;
     isSwapped?: boolean;
@@ -99,7 +99,7 @@ export function DashboardLibraryCard({ book }: DashboardLibraryCardProps) {
       {/* Book Cover */}
       <div className="bg-muted/30 relative aspect-[3/4] w-full shrink-0 overflow-hidden">
         <Image
-          src={book.images[0]?.src || "/images/books/placeholder.jpg"}
+          src={book.coverUrl || "/images/books/placeholder.jpg"}
           alt={book.title}
           fill
           className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -163,11 +163,13 @@ export function DashboardLibraryCard({ book }: DashboardLibraryCardProps) {
           {book.tags.includes("sell") && (
             <div className="text-primary flex items-center gap-1.5 font-bold">
               <span>৳{book.price}</span>
-              {book.originalPrice && book.originalPrice > book.price && (
-                <span className="text-muted-foreground text-[10px] font-normal line-through">
-                  ৳{book.originalPrice}
-                </span>
-              )}
+              {book.originalPrice &&
+                book.price !== undefined &&
+                book.originalPrice > book.price && (
+                  <span className="text-muted-foreground text-[10px] font-normal line-through">
+                    ৳{book.originalPrice}
+                  </span>
+                )}
             </div>
           )}
 

@@ -27,6 +27,7 @@ import { BookQA } from "@/components/shared/book-qa";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 import { BookBuyActions } from "@/components/shared/book-buy-actions";
+import { BookBorrowActions } from "@/components/shared/book-borrow-actions";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -59,10 +60,10 @@ const MOCK_BOOK = {
       alt: "Back cover",
     },
   ],
-  tags: ["swap"],
+  tags: ["swap", "borrow"],
   availability: {
     sell: 0,
-    borrow: 0,
+    borrow: 1,
     swap: 1,
   },
   location: "মিরপুর ১০, ঢাকা",
@@ -396,8 +397,8 @@ export default async function BookDetailsPage({
 
   const currentBook = {
     ...MOCK_BOOK,
-    tags: [currentTag],
-    availability,
+    tags: slug === "book-123" ? MOCK_BOOK.tags : [currentTag],
+    availability: slug === "book-123" ? MOCK_BOOK.availability : availability,
     ...(foundBook
       ? {
           id: foundBook.id,
@@ -724,12 +725,19 @@ export default async function BookDetailsPage({
                       Swap Request
                     </Button>
                   )}
-                  {currentBook.tags.includes("borrow") && (
-                    <Button className="h-12 w-full gap-2 text-base">
-                      <BookOpen className="size-5" />
-                      Borrow Book
-                    </Button>
-                  )}
+                  <BookBorrowActions
+                    book={{
+                      id: currentBook.id,
+                      title: currentBook.title,
+                      author: currentBook.author,
+                      images: currentBook.images,
+                      ownerName: MOCK_OWNER.name,
+                      ownerId: MOCK_OWNER.id,
+                      borrowFee: currentBook.borrowFee,
+                      maxBorrowDays: currentBook.maxBorrowDays,
+                      tags: currentBook.tags,
+                    }}
+                  />
                 </div>
               </div>
             </div>

@@ -6,12 +6,14 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/use-cart-store";
+import { useBorrowCartStore } from "@/lib/store/use-borrow-cart-store";
 import { cn } from "@/lib/utils";
 
 export function CartButton({ className }: { className?: string }) {
   const [mounted, setMounted] = useState(false);
-  const items = useCartStore((state) => state.items);
-  const totalItems = items.length;
+  const buyItemsCount = useCartStore((state) => state.items.length);
+  const borrowItemsCount = useBorrowCartStore((state) => state.items.length);
+  const totalItems = buyItemsCount + borrowItemsCount;
 
   useEffect(() => {
     setTimeout(() => setMounted(true), 0);

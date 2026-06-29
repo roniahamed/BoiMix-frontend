@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { BookOpen, Repeat2, ShoppingCart, CreditCard } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/store/use-cart-store";
+import { useBorrowCartStore } from "@/lib/store/use-borrow-cart-store";
 
 type BookDetailsMobileActionsProps = {
   book: {
@@ -19,6 +21,8 @@ type BookDetailsMobileActionsProps = {
     sellerName: string;
     sellerId: string;
     tags: string[];
+    borrowFee?: number;
+    maxBorrowDays?: number;
   };
 };
 
@@ -126,6 +130,47 @@ export function BookDetailsMobileActions({
     router.push(`/cart/checkout?items=${book.id}`);
   };
 
+  const addBorrowItem = useBorrowCartStore((state) => state.addItem);
+  const borrowItems = useBorrowCartStore((state) => state.items);
+  const isInBorrowCart = borrowItems.some((item) => item.id === book.id);
+  const [isAddingBorrow, setIsAddingBorrow] = useState(false);
+
+  const handleAddToBorrowCart = async () => {
+    if (isInBorrowCart) {
+      toast.info("Already in Cart");
+      return;
+    }
+
+    setIsAddingBorrow(true);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    addBorrowItem({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      coverUrl: book.images[0]?.src || "",
+      ownerId: book.sellerId,
+      ownerName: book.sellerName,
+      borrowFee: book.borrowFee || 0,
+      depositRequired: 300,
+      maxBorrowDays: book.maxBorrowDays || 14,
+    });
+
+    toast.success("Added to Borrow Cart", {
+      description: `${book.title} has been added to your borrow cart.`,
+      action: {
+        label: "View Cart",
+        onClick: () => router.push("/cart?tab=borrow"),
+      },
+    });
+    setIsAddingBorrow(false);
+  };
+
+  const handleBorrowNow = async () => {
+    await handleAddToBorrowCart();
+    router.push("/borrow/checkout");
+  };
+
   return (
     <>
       <div
@@ -180,10 +225,35 @@ export function BookDetailsMobileActions({
             </Button>
           )}
           {book.tags.includes("borrow") && (
-            <Button className="h-11 flex-1 gap-2 text-base font-semibold shadow-sm">
-              <BookOpen className="size-5" />
-              <span>Borrow</span>
-            </Button>
+            <>
+              <Button
+                className="h-11 flex-1 gap-2 bg-blue-600 px-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 active:scale-[0.98]"
+                onClick={handleBorrowNow}
+                disabled={isAddingBorrow}
+              >
+                <BookOpen className="size-4" />
+                <span>Borrow Now</span>
+              </Button>
+              <Button
+                variant={isInBorrowCart ? "outline" : "default"}
+                className={`h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm transition-all ${
+                  isInBorrowCart
+                    ? "border-primary text-primary hover:bg-primary/10 hover:text-primary"
+                    : ""
+                }`}
+                onClick={handleAddToBorrowCart}
+                disabled={isAddingBorrow || isInBorrowCart}
+              >
+                <ShoppingCart className="size-4" />
+                <span>
+                  {isAddingBorrow
+                    ? "Adding..."
+                    : isInBorrowCart
+                      ? "In Cart"
+                      : "Add"}
+                </span>
+              </Button>
+            </>
           )}
         </div>
       </nav>
