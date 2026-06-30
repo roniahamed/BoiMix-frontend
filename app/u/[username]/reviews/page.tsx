@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export const metadata: Metadata = {
   title: "Reader Reviews - BoiMix",
@@ -24,7 +25,7 @@ export default async function UserReviewsPage({
   params: Promise<{ username: string }>;
 }) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileReviews } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  const { mockProfiles, profileReviews } = await fetchLocal('/api/profile');
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   const getUserProfile = (username: string) => mockProfiles.find((p: any) => p.username === username);
 

@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/book-card";
+import profileData from "@/lib/data/profileData.json";
 
 export default async function CartPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileLibraryBooks } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  const { profileLibraryBooks } = profileData;
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   
   const cartBooks = profileLibraryBooks.slice(1, 3);

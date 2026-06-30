@@ -1,10 +1,11 @@
 import { StatsWidget } from "@/components/shared/stats-widget";
 import { NotificationItem } from "@/components/shared/notification-item";
 import { BookCard } from "@/components/shared/book-card";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export default async function OverviewPage() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileLibraryBooks } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  const { mockProfiles, profileLibraryBooks } = await fetchLocal('/api/profile');
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   
   const recentBooks = profileLibraryBooks.slice(0, 4);

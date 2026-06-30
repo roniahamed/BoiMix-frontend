@@ -27,6 +27,7 @@ import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 import { BookBuyActions } from "@/components/shared/book-buy-actions";
 import { BookBorrowActions } from "@/components/shared/book-borrow-actions";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -43,8 +44,8 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
   const slug = resolvedParams.slug;
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const BASE_MOCK_BOOKS = await fetch(`${baseUrl}/api/books`).then(r => r.json());
-  const { book: MOCK_BOOK, owner: MOCK_OWNER, reviews: MOCK_REVIEWS, qa: MOCK_QA, recommended: MOCK_RECOMMENDED_BOOKS } = await fetch(`${baseUrl}/api/books/${slug}`).then(r => r.json());
+  const BASE_MOCK_BOOKS = await fetchLocal('/api/books');
+  const { book: MOCK_BOOK, owner: MOCK_OWNER, reviews: MOCK_REVIEWS, qa: MOCK_QA, recommended: MOCK_RECOMMENDED_BOOKS } = await fetchLocal('/api/books/${slug}');
 
   // Find the book in recommendations to see if it has specific tags,
   // or use test slugs, or default to "sell"

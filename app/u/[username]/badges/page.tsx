@@ -4,6 +4,7 @@ import { ProfileBadgeCollection } from "@/components/profile/profile-badge-colle
 import { ProfileBadgeSidebar } from "@/components/profile/profile-badge-sidebar";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export const metadata: Metadata = {
   title: "Reader Badges - BoiMix",
@@ -16,7 +17,7 @@ export default async function UserBadgesPage({
   params: Promise<{ username: string }>;
 }) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  const { mockProfiles } = await fetchLocal('/api/profile');
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   const getUserProfile = (username: string) => mockProfiles.find((p: any) => p.username === username);
 

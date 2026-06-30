@@ -1,8 +1,9 @@
 import { ReviewCard } from "@/components/shared/review-card";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export default async function ReviewsPage() {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileReviews } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  const { mockProfiles, profileReviews } = await fetchLocal('/api/profile');
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   
   return (

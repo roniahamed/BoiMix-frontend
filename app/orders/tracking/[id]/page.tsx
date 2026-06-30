@@ -10,6 +10,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Timeline } from "@/components/shared/timeline";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export default async function OrderTrackingPage({
   params,
@@ -20,7 +21,7 @@ export default async function OrderTrackingPage({
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const trackingEvents: any[] = await fetch(`${baseUrl}/api/orders/tracking`).then(r => r.json());
+  const trackingEvents: any[] = await fetchLocal('/api/orders/tracking');
 
   return (
     <div className="boimix-container-wide py-8 md:py-12">

@@ -4,6 +4,7 @@ import { ProfileShell } from "@/components/profile/profile-shell";
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
+import { fetchLocal } from "@/lib/fetchLocal";
 
 export const metadata: Metadata = {
   title: "Reader Profile - BoiMix",
@@ -16,7 +17,7 @@ export default async function UserProfilePage({
   params: Promise<{ username: string }>;
 }) {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileLibraryBooks, profileReviews } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  const { mockProfiles, profileLibraryBooks, profileReviews } = await fetchLocal('/api/profile');
   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
   const getUserProfile = (username: string) => mockProfiles.find((p: any) => p.username === username);
 
