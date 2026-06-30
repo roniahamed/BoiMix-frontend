@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { BookCardBook } from "@/types/book";
 import { useCartStore } from "@/lib/store/use-cart-store";
+import { useBorrowCartStore } from "@/lib/store/use-borrow-cart-store";
 import { useWishlistStore } from "@/lib/store/use-wishlist-store";
 
 const tagLabels: Record<string, string> = {
@@ -57,6 +58,49 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
   const items = useCartStore((state) => state.items);
   const isInCart = mounted ? items.some((item) => item.id === book.id) : false;
   const [isAdding, setIsAdding] = useState(false);
+
+  const addBorrowItem = useBorrowCartStore((state) => state.addItem);
+  const borrowItems = useBorrowCartStore((state) => state.items);
+  const isInBorrowCart = mounted
+    ? borrowItems.some((item) => item.id === book.id)
+    : false;
+  const [isAddingBorrow, setIsAddingBorrow] = useState(false);
+
+  const handleAddToBorrowCart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isInBorrowCart) {
+      router.push("/cart?tab=borrow");
+      return;
+    }
+    setIsAddingBorrow(true);
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    addBorrowItem({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      coverUrl: book.coverUrl || "",
+      ownerId: book.providerType === "library" ? "lib_1" : "usr_1",
+      ownerName:
+        book.providerType === "library" ? "Central Library" : "User Seller",
+      borrowFee: book.price ? Math.floor(book.price * 0.1) : 0,
+      depositRequired: book.price || 300,
+      maxBorrowDays: 14,
+      isPro: (book.tags as string[]).includes("pro"),
+      isPremium: (book.tags as string[]).includes("premium"),
+      minTrustScoreRequired: 80,
+      minRatingRequired: 4.0,
+    });
+
+    toast.success("Added to Borrow Cart", {
+      description: `${book.title} has been added to your borrow cart.`,
+      action: {
+        label: "Go to Cart",
+        onClick: () => router.push("/cart?tab=borrow"),
+      },
+    });
+    setIsAddingBorrow(false);
+  };
 
   const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
   const inWishlist = mounted ? isInWishlist(book.id) : false;
@@ -146,7 +190,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             />
           </button>
 
-          {/* Add to Cart - Bottom Right (Mobile Only) */}
+          {/* Action Button - Bottom Right (Mobile Only) */}
           {hasSell && (
             <button
               onClick={handleAddToCart}
@@ -163,6 +207,36 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                   isInCart && "fill-current",
                 )}
               />
+            </button>
+          )}
+          {hasBorrow && (
+            <button
+              onClick={handleAddToBorrowCart}
+              disabled={isAddingBorrow}
+              className={cn(
+                "absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
+                isInBorrowCart && "bg-white/70 text-[#f57224] dark:bg-black/40",
+              )}
+              aria-label={isInBorrowCart ? "View borrow cart" : "Add to borrow"}
+            >
+              <BookOpenIcon
+                className={cn(
+                  "size-4.5 drop-shadow-sm",
+                  isInBorrowCart && "fill-current",
+                )}
+              />
+            </button>
+          )}
+          {hasSwap && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                router.push(`/books/${book.slug}`);
+              }}
+              className="absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300"
+              aria-label="Swap book"
+            >
+              <Repeat2Icon className="size-4.5 drop-shadow-sm" />
             </button>
           )}
 
@@ -320,16 +394,28 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               <Button
                 size="sm"
                 variant="default"
+                onClick={handleAddToBorrowCart}
+                disabled={isAddingBorrow}
                 className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#f57224] px-3 text-[15px] font-bold text-white transition-all hover:scale-105 hover:bg-[#d65e1c] active:scale-95"
               >
                 <BookOpenIcon className="size-4" />
-                <span>Borrow Now</span>
+                <span>
+                  {isAddingBorrow
+                    ? "Adding..."
+                    : isInBorrowCart
+                      ? "Go to Cart"
+                      : "Borrow"}
+                </span>
               </Button>
             )}
             {hasSwap && (
               <Button
                 size="sm"
                 variant="default"
+                onClick={(e) => {
+                  e.preventDefault();
+                  router.push(`/books/${book.slug}`);
+                }}
                 className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#f57224] px-3 text-[15px] font-bold text-white transition-all hover:scale-105 hover:bg-[#d65e1c] active:scale-95"
               >
                 <Repeat2Icon className="size-4" />
