@@ -53,6 +53,10 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
       borrowFee: book.borrowFee || 0,
       depositRequired: 300, // Mock fixed deposit for now
       maxBorrowDays: book.maxBorrowDays || 14,
+      isPro: book.tags.includes("pro"),
+      isPremium: book.tags.includes("premium"),
+      minTrustScoreRequired: 80, // Mock requirement: borrower needs 80+
+      minRatingRequired: 4.0, // Mock requirement: borrower needs 4.0+
     });
 
     toast.success("Added to Borrow Cart", {
@@ -76,6 +80,10 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
       borrowFee: book.borrowFee || 0,
       depositRequired: 300,
       maxBorrowDays: book.maxBorrowDays || 14,
+      isPro: book.tags.includes("pro"),
+      isPremium: book.tags.includes("premium"),
+      minTrustScoreRequired: 80,
+      minRatingRequired: 4.0,
     });
     router.push("/borrow/checkout?direct=true");
   };

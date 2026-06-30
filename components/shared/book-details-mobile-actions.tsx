@@ -157,6 +157,10 @@ export function BookDetailsMobileActions({
       borrowFee: book.borrowFee || 0,
       depositRequired: 300,
       maxBorrowDays: book.maxBorrowDays || 14,
+      isPro: book.tags.includes("pro"),
+      isPremium: book.tags.includes("premium"),
+      minTrustScoreRequired: 80,
+      minRatingRequired: 4.0,
     });
 
     toast.success("Added to Borrow Cart", {
@@ -180,6 +184,10 @@ export function BookDetailsMobileActions({
       borrowFee: book.borrowFee || 0,
       depositRequired: 300,
       maxBorrowDays: book.maxBorrowDays || 14,
+      isPro: book.tags.includes("pro"),
+      isPremium: book.tags.includes("premium"),
+      minTrustScoreRequired: 80,
+      minRatingRequired: 4.0,
     });
     router.push("/borrow/checkout?direct=true");
   };

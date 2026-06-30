@@ -11,6 +11,10 @@ export type BorrowCartItem = {
   borrowFee: number;
   depositRequired: number;
   maxBorrowDays: number;
+  isPro?: boolean;
+  isPremium?: boolean;
+  minTrustScoreRequired?: number;
+  minRatingRequired?: number;
 };
 
 type BorrowCartState = {

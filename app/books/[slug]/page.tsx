@@ -397,7 +397,12 @@ export default async function BookDetailsPage({
 
   const currentBook = {
     ...MOCK_BOOK,
-    tags: slug === "book-123" ? MOCK_BOOK.tags : [currentTag],
+    tags:
+      slug === "book-123"
+        ? MOCK_BOOK.tags
+        : foundBook
+          ? foundBook.tags
+          : [currentTag],
     availability: slug === "book-123" ? MOCK_BOOK.availability : availability,
     ...(foundBook
       ? {

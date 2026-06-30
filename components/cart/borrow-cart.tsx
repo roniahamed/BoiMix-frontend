@@ -11,6 +11,7 @@ import {
   BorrowCartItem,
 } from "@/lib/store/use-borrow-cart-store";
 import { useWishlistStore } from "@/lib/store/use-wishlist-store";
+import { useBorrowStore } from "@/lib/store/use-borrow-store";
 import { Button } from "@/components/ui/button";
 
 export function BorrowCart() {
@@ -19,6 +20,7 @@ export function BorrowCart() {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const { items, removeItem, removeItems } = useBorrowCartStore();
   const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
+  const { wallet } = useBorrowStore();
 
   const handleWishlistToggle = (id: string, title: string) => {
     toggleWishlist(id);
@@ -99,6 +101,66 @@ export function BorrowCart() {
     (sum, item) => sum + item.depositRequired,
     0,
   );
+
+  const availableLimit = wallet.availableLimit;
+  const isProUser = false; // Mock
+  const userTrustScore = 75; // Mock borrower trust score
+  const userRating = 3.5; // Mock borrower rating
+
+  const hasProItem = selectedCartItems.some((i) => i.isPro);
+  const hasPremiumItem = selectedCartItems.some((i) => i.isPremium);
+
+  const trustScoreError = selectedCartItems.some(
+    (i) => userTrustScore < (i.minTrustScoreRequired || 0),
+  );
+  const ratingError = selectedCartItems.some(
+    (i) => userRating < (i.minRatingRequired || 0),
+  );
+
+  const limitExceeded = totalDepositRequired > availableLimit;
+  const proError = !isProUser && hasProItem;
+
+  const canProceed =
+    selectedCartItems.length > 0 &&
+    !limitExceeded &&
+    !proError &&
+    !trustScoreError &&
+    !ratingError;
+
+  const getValidationMessage = () => {
+    const messages: string[] = [];
+    if (limitExceeded) {
+      messages.push(
+        `Limit exceeded (Available: ৳${availableLimit}, Selected: ৳${totalDepositRequired})`,
+      );
+    }
+    if (proError) {
+      messages.push("Pro book selected but you are not a Pro user");
+    }
+    if (trustScoreError) {
+      messages.push("Your trust score is too low for a selected book");
+    }
+    if (ratingError) {
+      messages.push("Your user rating is too low for a selected book");
+    }
+    if (
+      hasPremiumItem &&
+      !limitExceeded &&
+      !proError &&
+      !trustScoreError &&
+      !ratingError
+    ) {
+      messages.push(`Premium book selected`);
+    }
+    if (messages.length === 0) {
+      messages.push(
+        `Available Limit: ৳${availableLimit} | Selected: ৳${totalDepositRequired}`,
+      );
+    }
+    return messages.join(" • ");
+  };
+
+  const isError = limitExceeded || proError || trustScoreError || ratingError;
   const selectedCount = selectedCartItems.length;
 
   return (
@@ -123,7 +185,20 @@ export function BorrowCart() {
       ) : (
         <div className="grid gap-2 lg:grid-cols-12 lg:gap-5">
           {/* ── Left: Cart Items ── */}
-          <div className="flex flex-col gap-2 lg:col-span-8">
+          <div className="flex flex-col gap-4 lg:col-span-8">
+            {/* Validation Banner */}
+            <div
+              className={`rounded-md border p-3 text-sm font-medium ${
+                isError
+                  ? "border-red-200 bg-red-50 text-red-700"
+                  : hasPremiumItem
+                    ? "border-amber-200 bg-amber-50 text-amber-700"
+                    : "border-emerald-200 bg-emerald-50 text-emerald-700"
+              }`}
+            >
+              {getValidationMessage()}
+            </div>
+
             {/* Select-all header */}
             <div className="bg-card border-border/30 flex items-center justify-between rounded-[3px] border px-3 py-2.5 shadow-none sm:px-4">
               <label className="flex cursor-pointer items-center gap-2.5 text-sm font-medium select-none">
@@ -335,11 +410,11 @@ export function BorrowCart() {
 
               <div className="mt-2 px-5 pb-5">
                 <Button
+                  disabled={!canProceed}
                   onClick={() => {
                     const ids = Array.from(selectedItems).join(",");
                     router.push(`/borrow/checkout?items=${ids}`);
                   }}
-                  disabled={selectedCount === 0}
                   className="h-11 w-full rounded bg-blue-600 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
                 >
                   REVIEW & CONFIRM ({selectedCount})
