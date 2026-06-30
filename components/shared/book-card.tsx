@@ -319,8 +319,8 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             {hasBorrow && (
               <Button
                 size="sm"
-                variant="success"
-                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
+                variant="default"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#f57224] px-3 text-[15px] font-bold text-white transition-all hover:scale-105 hover:bg-[#d65e1c] active:scale-95"
               >
                 <BookOpenIcon className="size-4" />
                 <span>Borrow Now</span>
@@ -329,8 +329,8 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             {hasSwap && (
               <Button
                 size="sm"
-                variant="outline"
-                className="bg-background text-foreground pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"
+                variant="default"
+                className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#f57224] px-3 text-[15px] font-bold text-white transition-all hover:scale-105 hover:bg-[#d65e1c] active:scale-95"
               >
                 <Repeat2Icon className="size-4" />
                 <span>Swap Now</span>

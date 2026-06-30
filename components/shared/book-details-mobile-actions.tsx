@@ -232,7 +232,7 @@ export function BookDetailsMobileActions({
             </>
           )}
           {book.tags.includes("swap") && (
-            <Button className="h-11 flex-1 gap-2 text-base font-semibold shadow-sm">
+            <Button className="h-11 flex-1 gap-2 bg-[#f57224] text-base font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]">
               <Repeat2 className="size-5" />
               <span>Swap</span>
             </Button>
@@ -240,7 +240,7 @@ export function BookDetailsMobileActions({
           {book.tags.includes("borrow") && (
             <>
               <Button
-                className="h-11 flex-1 gap-2 bg-blue-600 px-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 active:scale-[0.98]"
+                className="h-11 flex-1 gap-2 bg-[#f57224] px-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]"
                 onClick={handleBorrowNow}
                 disabled={isAddingBorrow}
               >

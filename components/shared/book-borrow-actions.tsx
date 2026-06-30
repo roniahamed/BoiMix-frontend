@@ -87,8 +87,12 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
   return (
     <div className="flex w-full gap-2">
       <Button
-        variant="outline"
-        className="h-12 flex-1 gap-2 text-base transition-all"
+        variant={isInCart ? "outline" : "default"}
+        className={`h-12 flex-1 gap-2 text-base transition-all ${
+          isInCart
+            ? "border-primary text-primary hover:text-primary hover:bg-blue-50"
+            : ""
+        }`}
         onClick={handleAddToBorrowCart}
         disabled={isAdding}
       >
@@ -97,7 +101,7 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
       </Button>
       <Button
         variant="default"
-        className="h-12 flex-1 gap-2 bg-blue-600 text-base text-white transition-all hover:bg-blue-700"
+        className="h-12 flex-1 gap-2 bg-[#f57224] text-base text-white transition-all hover:bg-[#d65e1c]"
         onClick={handleBorrowNow}
         disabled={isAdding}
       >
