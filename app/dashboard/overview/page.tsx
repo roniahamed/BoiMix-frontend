@@ -1,9 +1,12 @@
 import { StatsWidget } from "@/components/shared/stats-widget";
 import { NotificationItem } from "@/components/shared/notification-item";
 import { BookCard } from "@/components/shared/book-card";
-import { profileLibraryBooks } from "@/lib/mock/profile";
 
-export default function OverviewPage() {
+export default async function OverviewPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const { mockProfiles, profileLibraryBooks } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  
   const recentBooks = profileLibraryBooks.slice(0, 4);
 
   return (
@@ -55,7 +58,8 @@ export default function OverviewPage() {
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Your Library Highlights</h2>
           <div className="grid grid-cols-2 gap-4">
-            {recentBooks.map((book) => (
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {recentBooks.map((book: any) => (
               <BookCard key={book.id} book={book} />
             ))}
           </div>

@@ -1,7 +1,10 @@
-import { profileLibraryBooks } from "@/lib/mock/profile";
 import { BookCard } from "@/components/shared/book-card";
 
-export default function SalesPage() {
+export default async function SalesPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const { mockProfiles, profileLibraryBooks } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  
   const soldBooks = profileLibraryBooks.slice(8, 10);
 
   return (
@@ -14,7 +17,8 @@ export default function SalesPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {soldBooks.map((book) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {soldBooks.map((book: any) => (
           <BookCard key={book.id} book={book} />
         ))}
       </div>

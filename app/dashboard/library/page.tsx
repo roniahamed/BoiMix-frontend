@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { DashboardLibraryCard } from "@/components/shared/dashboard-library-card";
-import { profileLibraryBooks } from "@/lib/mock/profile";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 
-export default function LibraryPage() {
+export default async function LibraryPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const { mockProfiles, profileLibraryBooks } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -22,7 +25,8 @@ export default function LibraryPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {profileLibraryBooks.map((book) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {profileLibraryBooks.map((book: any) => (
           <DashboardLibraryCard key={book.id} book={book} />
         ))}
       </div>

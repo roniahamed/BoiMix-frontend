@@ -1,0 +1,477 @@
+{
+  "mockProfiles": [
+    {
+      "id": "user-roni",
+      "name": "Roni Ahamed",
+      "username": "roni",
+      "avatarUrl": "https://i.pravatar.cc/240?u=roni",
+      "coverUrl": "/banners/swap-community.png",
+      "location": "Dhaka, Bangladesh",
+      "role": "Backend Engineer",
+      "reputation": 96,
+      "rating": 4.9,
+      "bio": "Love reading. Love sharing. Let's build a community of book lovers.",
+      "joinedAt": "Member since May 2026",
+      "responseRate": 98,
+      "responseTime": "Usually replies within 2 hours",
+      "badges": [
+        {
+          "label": "Trusted Member",
+          "tone": "warning",
+          "icon": "award",
+          "badgeColor": "orange"
+        }
+      ],
+      "profileBadges": [
+        {
+          "label": "Book Lover",
+          "tone": "default",
+          "description": "Has a large library of books.",
+          "earnedAt": "May 2026",
+          "isEarned": true,
+          "icon": "book",
+          "badgeColor": "blue"
+        },
+        {
+          "label": "Swap Master",
+          "tone": "info",
+          "description": "Completed over 50 successful book swaps.",
+          "earnedAt": "June 2026",
+          "isEarned": true,
+          "icon": "repeat",
+          "badgeColor": "purple"
+        },
+        {
+          "label": "Top Reviewer",
+          "tone": "warning",
+          "description": "Consistently provides helpful book reviews.",
+          "earnedAt": "June 2026",
+          "isEarned": true,
+          "icon": "star",
+          "badgeColor": "orange"
+        },
+        {
+          "label": "Community Builder",
+          "tone": "success",
+          "description": "Invite 10 active friends to the platform.",
+          "isEarned": false,
+          "icon": "users",
+          "progress": {
+            "current": 6,
+            "required": 10,
+            "label": "6/10 friends invited"
+          }
+        },
+        {
+          "label": "Reading Challenge 2026",
+          "tone": "default",
+          "description": "Read 100 books in 2026.",
+          "isEarned": false,
+          "icon": "award",
+          "progress": {
+            "current": 45,
+            "required": 100,
+            "label": "45/100 books read"
+          }
+        }
+      ],
+      "stats": {
+        "booksInLibrary": 152,
+        "successfulSwaps": 78,
+        "booksBorrowed": 63,
+        "booksSold": 42,
+        "followers": 482,
+        "following": 120
+      },
+      "verification": {
+        "email": true,
+        "phone": true,
+        "identity": true,
+        "trustedSeller": true,
+        "premium": true
+      },
+      "socialLinks": {
+        "website": "boimix.com/roni",
+        "facebook": "https://facebook.com",
+        "twitter": "https://twitter.com",
+        "instagram": "https://instagram.com"
+      },
+      "readingInterests": [
+        "Self-help",
+        "Psychology",
+        "Business",
+        "Biographies",
+        "Technology"
+      ],
+      "memberHighlights": [
+        {
+          "icon": "star",
+          "title": "Top Reviewer",
+          "subtitle": "Given 235 helpful reviews"
+        },
+        {
+          "icon": "repeat",
+          "title": "Active Swapper",
+          "subtitle": "Completed 78 swaps"
+        },
+        {
+          "icon": "message",
+          "title": "Quick Responder",
+          "subtitle": "Replies within 12 mins (avg)"
+        },
+        {
+          "icon": "clock",
+          "title": "On-time Returner",
+          "subtitle": "100% borrow returns on time"
+        }
+      ],
+      "locationDetails": {
+        "district": "Dhaka",
+        "area": "Dhanmondi",
+        "serviceArea": [
+          "Dhanmondi",
+          "Banani",
+          "Gulshan",
+          "Uttara"
+        ],
+        "meetingPreference": "Prefers public handover points near metro stations or book cafes.",
+        "privacyNote": "Exact address is shared only after a borrow, sale, or swap request is accepted."
+      }
+    }
+  ],
+  "profileLibraryBooks": [
+    {
+      "id": "profile-book-1",
+      "slug": "pather-panchali",
+      "title": "Pather Panchali",
+      "author": "Bibhutibhushan Bandyopadhyay",
+      "coverUrl": "/book-covers/song-of-padma.svg",
+      "tags": [
+        "swap",
+        "borrow"
+      ],
+      "rating": 4.9,
+      "reviewCount": 142,
+      "distance": "1.2 km",
+      "location": "Mirpur",
+      "condition": "good",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-2",
+      "slug": "history-of-bengal",
+      "title": "History of Bengal",
+      "author": "Akbar Ali Khan",
+      "coverUrl": "/book-covers/history-of-bengal.svg",
+      "tags": [
+        "sell",
+        "borrow"
+      ],
+      "rating": 4.8,
+      "reviewCount": 65,
+      "price": 480,
+      "originalPrice": 600,
+      "distance": "1.9 km",
+      "location": "Mirpur",
+      "condition": "excellent",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-3",
+      "slug": "smart-entrepreneur",
+      "title": "Smart Entrepreneur",
+      "author": "Ayman Sadiq",
+      "coverUrl": "/book-covers/smart-entrepreneur.svg",
+      "tags": [
+        "sell"
+      ],
+      "rating": 4.7,
+      "reviewCount": 110,
+      "price": 320,
+      "originalPrice": 400,
+      "location": "Mirpur",
+      "condition": "new",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-4",
+      "slug": "quiet-reviews",
+      "title": "Quiet Reviews",
+      "author": "Raisa Chowdhury",
+      "coverUrl": "/book-covers/quiet-reviews.svg",
+      "tags": [
+        "borrow",
+        "swap"
+      ],
+      "rating": 4.9,
+      "reviewCount": 52,
+      "distance": "1.7 km",
+      "location": "Mirpur",
+      "condition": "excellent",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-5",
+      "slug": "a-golden-age",
+      "title": "A Golden Age",
+      "author": "Tahmima Anam",
+      "coverUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300&h=400&fit=crop",
+      "tags": [
+        "sell"
+      ],
+      "rating": 4.5,
+      "reviewCount": 38,
+      "price": 350,
+      "originalPrice": 450,
+      "distance": "2.1 km",
+      "location": "Dhanmondi",
+      "condition": "good",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-6",
+      "slug": "the-good-earth",
+      "title": "The Good Earth",
+      "author": "Pearl S. Buck",
+      "coverUrl": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=300&h=400&fit=crop",
+      "tags": [
+        "swap"
+      ],
+      "rating": 4.8,
+      "reviewCount": 120,
+      "distance": "3.5 km",
+      "location": "Banani",
+      "condition": "excellent",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-7",
+      "slug": "hajar-bochor-dhore",
+      "title": "Hajar Bochor Dhore",
+      "author": "Zahir Raihan",
+      "coverUrl": "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=300&h=400&fit=crop",
+      "tags": [
+        "borrow"
+      ],
+      "rating": 4.9,
+      "reviewCount": 205,
+      "distance": "1.0 km",
+      "location": "Mirpur",
+      "condition": "fair",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-8",
+      "slug": "shesher-kabita",
+      "title": "Shesher Kabita",
+      "author": "Rabindranath Tagore",
+      "coverUrl": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300&h=400&fit=crop",
+      "tags": [
+        "sell",
+        "swap"
+      ],
+      "rating": 5,
+      "reviewCount": 340,
+      "price": 250,
+      "originalPrice": 300,
+      "distance": "4.2 km",
+      "location": "Gulshan",
+      "condition": "excellent",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-9",
+      "slug": "the-alchemist",
+      "title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "coverUrl": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?q=80&w=300&h=400&fit=crop",
+      "tags": [],
+      "rating": 4.7,
+      "reviewCount": 1500,
+      "distance": "0.8 km",
+      "location": "Mirpur",
+      "condition": "new",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    },
+    {
+      "id": "profile-book-10",
+      "slug": "sapiens",
+      "title": "Sapiens",
+      "author": "Yuval Noah Harari",
+      "coverUrl": "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=300&h=400&fit=crop",
+      "tags": [],
+      "rating": 4.8,
+      "reviewCount": 890,
+      "distance": "5.0 km",
+      "location": "Uttara",
+      "condition": "excellent",
+      "availability": "in-stock",
+      "providerType": "user",
+      "isVerifiedUser": true
+    }
+  ],
+  "profileReviews": [
+    {
+      "id": "review-1",
+      "bookTitle": "Atomic Habits",
+      "bookAuthor": "by James Clear",
+      "bookCover": "/book-covers/atomic-habits.jpg",
+      "bookSlug": "atomic-habits",
+      "rating": 5,
+      "createdAt": "2 days ago",
+      "body": "excellent condition. Very friendly seller. Highly recommended!",
+      "reviewerName": "Hasan Mahmud",
+      "reviewerAvatar": "https://i.pravatar.cc/150?u=hasan",
+      "transactionType": "For Swap",
+      "location": "Dhanmondi, Dhaka"
+    },
+    {
+      "id": "review-2",
+      "bookTitle": "Rich Dad Poor Dad",
+      "bookAuthor": "by Robert Kiyosaki",
+      "bookCover": "/book-covers/rich-dad.jpg",
+      "bookSlug": "rich-dad-poor-dad",
+      "rating": 5,
+      "createdAt": "1 week ago",
+      "body": "Smooth swap experience. Great communication!",
+      "reviewerName": "Nusrat Jahan",
+      "reviewerAvatar": "https://i.pravatar.cc/150?u=nusrat",
+      "transactionType": "For Swap",
+      "location": "Mirpur, Dhaka"
+    },
+    {
+      "id": "review-3",
+      "bookTitle": "The Psychology of Money",
+      "bookAuthor": "by Morgan Housel",
+      "bookCover": "/book-covers/psychology.jpg",
+      "bookSlug": "the-psychology-of-money",
+      "rating": 5,
+      "createdAt": "2 weeks ago",
+      "body": "Delivered on time and book was exactly as described.",
+      "reviewerName": "Fahim Ahmed",
+      "reviewerAvatar": "https://i.pravatar.cc/150?u=fahim",
+      "transactionType": "For Borrow",
+      "location": "Banani, Dhaka"
+    },
+    {
+      "id": "review-4",
+      "bookTitle": "Deep Work",
+      "bookAuthor": "by Cal Newport",
+      "bookCover": "/book-covers/deep-work.jpg",
+      "bookSlug": "deep-work",
+      "rating": 5,
+      "createdAt": "3 weeks ago",
+      "body": "Great book and even better experience. Thank you!",
+      "reviewerName": "Jannatul Ferdaus",
+      "reviewerAvatar": "https://i.pravatar.cc/150?u=jannatul",
+      "transactionType": "For Sale",
+      "location": "Uttara, Dhaka"
+    },
+    {
+      "id": "review-5",
+      "bookTitle": "The Alchemist",
+      "bookAuthor": "by Paulo Coelho",
+      "bookCover": "/book-covers/alchemist.jpg",
+      "bookSlug": "the-alchemist",
+      "rating": 5,
+      "createdAt": "1 month ago",
+      "body": "Book quality was amazing. Packaging was safe.",
+      "reviewerName": "Tanvir Hossain",
+      "reviewerAvatar": "https://i.pravatar.cc/150?u=tanvir",
+      "transactionType": "For Swap",
+      "location": "Gulshan, Dhaka"
+    }
+  ],
+  "profileActivity": [
+    {
+      "id": "activity-1",
+      "type": "listed",
+      "dateLabel": "Today",
+      "time": "10:30 AM",
+      "title": "Added a new book to library",
+      "description": "Added a new book to library",
+      "bookTitle": "Atomic Habits",
+      "bookAuthor": "by James Clear",
+      "bookCover": "/book-covers/atomic-habits.jpg",
+      "createdAt": "Today"
+    },
+    {
+      "id": "activity-2",
+      "type": "swap",
+      "dateLabel": "Yesterday",
+      "time": "8:45 PM",
+      "title": "Completed a swap",
+      "description": "Completed a swap",
+      "bookTitle": "Rich Dad Poor Dad",
+      "bookAuthor": "with Hasan Mahmud",
+      "bookCover": "/book-covers/rich-dad.jpg",
+      "createdAt": "Yesterday"
+    },
+    {
+      "id": "activity-3",
+      "type": "borrow",
+      "dateLabel": "2 days ago",
+      "time": "4:20 PM",
+      "title": "Borrowed a book",
+      "description": "Borrowed a book",
+      "bookTitle": "Deep Work",
+      "bookAuthor": "by Cal Newport",
+      "bookCover": "/book-covers/deep-work.jpg",
+      "createdAt": "2 days ago"
+    },
+    {
+      "id": "activity-4",
+      "type": "review",
+      "dateLabel": "3 days ago",
+      "time": "11:15 AM",
+      "title": "Posted a review",
+      "description": "Posted a review",
+      "bookTitle": "The Psychology of Money",
+      "rating": 5,
+      "bookCover": "/book-covers/psychology.jpg",
+      "createdAt": "3 days ago"
+    },
+    {
+      "id": "activity-5",
+      "type": "sale",
+      "dateLabel": "5 days ago",
+      "time": "6:30 PM",
+      "title": "Sold a book",
+      "description": "Sold a book",
+      "bookTitle": "The Alchemist",
+      "bookAuthor": "to Tanvir Hossain",
+      "bookCover": "/book-covers/alchemist.jpg",
+      "createdAt": "5 days ago"
+    },
+    {
+      "id": "activity-6",
+      "type": "wishlist",
+      "dateLabel": "1 week ago",
+      "time": "9:10 PM",
+      "title": "Added a book to wishlist",
+      "description": "Added a book to wishlist",
+      "bookTitle": "Thinking, Fast and Slow",
+      "bookAuthor": "by Daniel Kahneman",
+      "bookCover": "/book-covers/thinking.jpg",
+      "createdAt": "1 week ago"
+    }
+  ]
+}

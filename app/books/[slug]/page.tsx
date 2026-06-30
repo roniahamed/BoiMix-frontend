@@ -5,7 +5,6 @@ import {
   MessageCircle,
   Repeat2,
   ShoppingCart,
-  BookOpen,
   Star,
   Users,
   ShieldCheck,
@@ -27,7 +26,6 @@ import { BookQA } from "@/components/shared/book-qa";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 import { BookBuyActions } from "@/components/shared/book-buy-actions";
-import { BASE_MOCK_BOOKS } from "@/lib/mock/books";
 import { BookBorrowActions } from "@/components/shared/book-borrow-actions";
 
 export const metadata: Metadata = {
@@ -35,338 +33,25 @@ export const metadata: Metadata = {
   description: "View details of this book.",
 };
 
-const MOCK_BOOK = {
-  id: "book-123",
-  title: "অপরাজিত",
-  author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-  publisher: "মিত্র ও ঘোষ পাবলিশার্স",
-  isbn: "978-9849204481",
-  genre: "Classic Fiction",
-  language: "বাংলা",
-  edition: "১ম সংস্করণ",
-  pages: 350,
-  description:
-    "অপরাজিত বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ ঔপন্যাসিক বিভূতিভূষণ বন্দ্যোপাধ্যায়ের একটি কালজয়ী উপন্যাস। এটি পথের পাঁচালী উপন্যাসের সিক্যুয়েল। এতে অপুর বেড়ে ওঠা, শহরের জীবন, এবং তার আত্মানুসন্ধানের চমৎকার বিবরণ রয়েছে। অপরাজিত বাংলা সাহিত্যের অন্যতম শ্রেষ্ঠ ঔপন্যাসিক বিভূতিভূষণ বন্দ্যোপাধ্যায়ের একটি কালজয়ী উপন্যাস। এটি পথের পাঁচালী উপন্যাসের সিক্যুয়েল। এতে অপুর বেড়ে ওঠা, শহরের জীবন, এবং তার আত্মানুসন্ধানের চমৎকার বিবরণ রয়েছে।",
-  images: [
-    {
-      src: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800",
-      alt: "Cover image",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=800",
-      alt: "Inside page",
-    },
-    {
-      src: "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=800",
-      alt: "Back cover",
-    },
-  ],
-  tags: ["swap"],
-  availability: {
-    sell: 0,
-    borrow: 1,
-    swap: 1,
-  },
-  location: "মিরপুর ১০, ঢাকা",
-  distance: "১.২ কি.মি.",
-  condition: "excellent" as const,
-  price: 250,
-  originalPrice: 350,
-  swapPrice: 300,
-  borrowFee: 50,
-  maxBorrowDays: 14,
-  swapPreferences: ["Fiction", "Self Help", "Any Book"],
-  rating: 4.8,
-  reviewCount: 24,
-  totalBorrow: 15,
-  totalSell: 5,
-  totalSwap: 2,
-  tableOfContents: [
-    "প্রথম অধ্যায়: অপুর শৈশব",
-    "দ্বিতীয় অধ্যায়: শহরে আগমন",
-    "তৃতীয় অধ্যায়: বিশ্ববিদ্যালয়ের দিনগুলো",
-    "চতুর্থ অধ্যায়: জীবন সংগ্রাম",
-    "পঞ্চম অধ্যায়: অপরূপ প্রকৃতি ও অন্তর্দৃষ্টি",
-  ],
-  index: ["ক - কলকাতা, কাশীবাজার", "খ - খুকু", "গ - গঙ্গা"],
-};
 
-const MOCK_OWNER = {
-  id: "user-1",
-  name: "রহিম শেখ",
-  username: "rahim_sheikh",
-  avatarUrl: "https://i.pravatar.cc/150?u=rahim",
-  location: "মিরপুর, ঢাকা",
-  rating: 4.9,
-  followers: 245,
-  badges: [
-    { label: "Top Swapper", variant: "success" as const },
-    { label: "Verified", variant: "info" as const },
-  ],
-};
 
-const MOCK_REVIEWS = [
-  {
-    id: "r1",
-    authorName: "Dipto Hossain",
-    authorAvatar: "",
-    rating: 1,
-    date: "06 Jan 2025",
-    content: "বইটা বিশেষ কিছু নেই খুবই বাজে একটা বই।",
-    helpfulCount: 12,
-  },
-  {
-    id: "r2",
-    authorName: "Azizul Hakim",
-    authorAvatar: "https://i.pravatar.cc/150?u=azizul",
-    rating: 1,
-    date: "14 Feb 2024",
-    content: "faltu boi khube faltu keu kinben na",
-    helpfulCount: 39,
-  },
-  {
-    id: "r3",
-    authorName: "Mahfuz Ahmed Emon",
-    authorAvatar: "https://i.pravatar.cc/150?u=mahfuz",
-    rating: 5,
-    date: "19 Oct 2025",
-    content: "Great book on laws of attractions.",
-    helpfulCount: 3,
-  },
-  {
-    id: "r4",
-    authorName: "Sabbir Hasan",
-    authorAvatar: "",
-    rating: 4,
-    date: "12 Dec 2023",
-    content: "Valoi lagse, kintu ar o details thakle valo hoto.",
-    helpfulCount: 5,
-  },
-  {
-    id: "r5",
-    authorName: "Nusrat Jahan",
-    authorAvatar: "",
-    rating: 5,
-    date: "10 Nov 2023",
-    content: "Excellent read! Highly recommended for everyone.",
-    helpfulCount: 12,
-  },
-  {
-    id: "r6",
-    authorName: "Rakib Uddin",
-    authorAvatar: "",
-    rating: 3,
-    date: "05 Sep 2023",
-    content: "Average book. Not bad but not great either.",
-    helpfulCount: 1,
-  },
-  {
-    id: "r7",
-    authorName: "Tariqul Islam",
-    authorAvatar: "",
-    rating: 2,
-    date: "01 Aug 2023",
-    content: "Didn't meet my expectations. Delivery was late too.",
-    helpfulCount: 0,
-  },
-];
 
-const MOCK_QA = [
-  {
-    id: "qa1",
-    question:
-      "এই বইটা কবে ছাপাবে? মানে এটা তো pdf আকারে পাওয়া যাচ্ছে? বাট প্রকাশনী থেকে কবে প্রকাশ করবে??",
-    asker: "Md Fardin Hossain",
-    askDate: "03 Jan, 2024",
-    answer:
-      "প্রিয় গ্রাহক, দুঃখিত, এটি নির্ভর করে প্রকাশনী কর্তৃক রিপ্রিন্ট করার মাধ্যমে; তাই নিশ্চিতভাবে বলা যাচ্ছে না কবে পাওয়া যাবে। ধন্যবাদ।",
-    answerer: "Zakariya Arif",
-    answerDate: "03 Jan, 2024",
-  },
-  {
-    id: "qa2",
-    question: "Is this the hardcover edition?",
-    asker: "Tanvir Ahmed",
-    askDate: "12 Feb, 2024",
-    answer: "No, this is the paperback edition.",
-    answerer: "BoiMix Support",
-    answerDate: "13 Feb, 2024",
-  },
-  {
-    id: "qa3",
-    question: "Boi tar pages koto gulo?",
-    asker: "Samiya Rahman",
-    askDate: "05 Mar, 2024",
-    answer: "এই বইটিতে মোট ৩২০ টি পৃষ্ঠা রয়েছে।",
-    answerer: "BoiMix Support",
-    answerDate: "06 Mar, 2024",
-  },
-  {
-    id: "qa4",
-    question: "Delivery charge koto nibe outside Dhaka?",
-    asker: "Kamrul Hasan",
-    askDate: "20 Apr, 2024",
-  },
-  {
-    id: "qa5",
-    question: "Boi ta ki English version e ase?",
-    asker: "Rifat Ali",
-    askDate: "15 May, 2024",
-    answer: "দুঃখিত, বর্তমানে শুধু বাংলা সংস্করণটিই আমাদের কাছে আছে।",
-    answerer: "BoiMix Support",
-    answerDate: "16 May, 2024",
-  },
-  {
-    id: "qa6",
-    question: "Order korle kobe pabo?",
-    asker: "Jubayer Hossain",
-    askDate: "22 Jun, 2024",
-  },
-];
 
-const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
-  {
-    id: "rec-1",
-    slug: "pather-panchali",
-    title: "পথের পাঁচালী",
-    author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-    tags: ["borrow"],
-    rating: 4.9,
-    reviewCount: 156,
-    price: 200,
-    originalPrice: 300,
-    condition: "good",
-    availability: "in-stock",
-    location: "মিরপুর ১০, ঢাকা",
-    distance: "১.২ কি.মি.",
-  },
-  {
-    id: "rec-2",
-    slug: "aranyak",
-    title: "আরণ্যক",
-    author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
-    tags: ["borrow"],
-    rating: 4.8,
-    reviewCount: 89,
-    condition: "excellent",
-    availability: "in-stock",
-    location: "ধানমন্ডি, ঢাকা",
-    distance: "৩.৫ কি.মি.",
-  },
-  {
-    id: "rec-3",
-    slug: "chander-pahar",
-    title: "চাঁদের পাহাড়",
-    author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=400",
-    tags: ["borrow"],
-    rating: 4.9,
-    reviewCount: 210,
-    condition: "excellent",
-    availability: "in-stock",
-    location: "বনানী, ঢাকা",
-    distance: "৬ কি.মি.",
-  },
-  {
-    id: "rec-4",
-    slug: "ichamati",
-    title: "ইছামতী",
-    author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-    tags: ["sell"],
-    rating: 4.7,
-    reviewCount: 45,
-    price: 180,
-    originalPrice: 250,
-    condition: "fair",
-    availability: "in-stock",
-    location: "উত্তরা, ঢাকা",
-    distance: "১২ কি.মি.",
-  },
-  {
-    id: "rec-5",
-    slug: "devdas",
-    title: "দেবদাস",
-    author: "শরৎচন্দ্র চট্টোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400",
-    tags: ["borrow"],
-    rating: 4.6,
-    reviewCount: 320,
-    condition: "good",
-    availability: "in-stock",
-    location: "মিরপুর, ঢাকা",
-    distance: "২.০ কি.মি.",
-  },
-  {
-    id: "rec-6",
-    slug: "srikanta",
-    title: "শ্রীকান্ত",
-    author: "শরৎচন্দ্র চট্টোপাধ্যায়",
-    coverUrl:
-      "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
-    tags: ["borrow"],
-    rating: 4.8,
-    reviewCount: 110,
-    price: 250,
-    originalPrice: 350,
-    condition: "excellent",
-    availability: "in-stock",
-    location: "মোহাম্মদপুর, ঢাকা",
-    distance: "৪.২ কি.মি.",
-  },
-  {
-    id: "rec-7",
-    slug: "bela-furabar-age",
-    title: "বেলা ফুরাবার আগে",
-    author: "আরিফ আজাদ",
-    coverUrl:
-      "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-    tags: ["sell"],
-    rating: 4.9,
-    reviewCount: 540,
-    price: 300,
-    originalPrice: 400,
-    condition: "new",
-    availability: "in-stock",
-    location: "উত্তরা, ঢাকা",
-    distance: "৮ কি.মি.",
-  },
-  {
-    id: "rec-8",
-    slug: "paradoxical-sajid",
-    title: "প্যারাডক্সিক্যাল সাজিদ",
-    author: "আরিফ আজাদ",
-    coverUrl:
-      "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=400",
-    tags: ["borrow"],
-    rating: 4.8,
-    reviewCount: 890,
-    condition: "excellent",
-    availability: "out-of-stock",
-    location: "খিলক্ষেত, ঢাকা",
-    distance: "৯.৫ কি.মি.",
-  },
-];
 
-export default async function BookDetailsPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
+export default async function BookDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const BASE_MOCK_BOOKS = await fetch(`${baseUrl}/api/books`).then(r => r.json());
+  const { book: MOCK_BOOK, owner: MOCK_OWNER, reviews: MOCK_REVIEWS, qa: MOCK_QA, recommended: MOCK_RECOMMENDED_BOOKS } = await fetch(`${baseUrl}/api/books/${slug}`).then(r => r.json());
+
   // Find the book in recommendations to see if it has specific tags,
   // or use test slugs, or default to "sell"
-  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find((b) => b.slug === slug);
-  const foundBase = BASE_MOCK_BOOKS.find((b) => b.slug === slug);
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find((b: any) => b.slug === slug);
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const foundBase = BASE_MOCK_BOOKS.find((b: any) => b.slug === slug);
   const foundBook = foundRecommended || foundBase;
 
   const currentTag =
@@ -665,7 +350,8 @@ export default async function BookDetailsPage({
                               Swap Preferences:
                             </p>
                             <div className="flex flex-wrap gap-1.5">
-                              {currentBook.swapPreferences.map((pref) => (
+                              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                              {currentBook.swapPreferences.map((pref: any) => (
                                 <span
                                   key={pref}
                                   className="bg-primary/10 text-primary rounded-md px-2.5 py-1 text-xs font-medium"
@@ -788,7 +474,8 @@ export default async function BookDetailsPage({
                   </div>
                   {!!MOCK_OWNER.badges?.length && (
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {MOCK_OWNER.badges.map((badge) => (
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {MOCK_OWNER.badges.map((badge: any) => (
                         <UserBadge key={badge.label} {...badge} />
                       ))}
                     </div>
@@ -889,7 +576,8 @@ export default async function BookDetailsPage({
           একই ধরনের আরও বই (Similar Books)
         </h2>
         <ScrollContainer>
-          {MOCK_RECOMMENDED_BOOKS.map((book) => (
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {MOCK_RECOMMENDED_BOOKS.map((book: any) => (
             <div
               key={book.id}
               className="w-[140px] shrink-0 snap-start sm:w-[160px]"
@@ -906,9 +594,10 @@ export default async function BookDetailsPage({
           সম্প্রতি দেখা বই (Recently Viewed)
         </h2>
         <ScrollContainer>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {MOCK_RECOMMENDED_BOOKS.slice()
             .reverse()
-            .map((book) => (
+            .map((book: any) => (
               <div
                 key={book.id}
                 className="w-[140px] shrink-0 snap-start sm:w-[160px]"

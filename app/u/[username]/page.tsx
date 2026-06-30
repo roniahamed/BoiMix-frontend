@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
-import {
-  getUserProfile,
-  profileLibraryBooks,
-  profileReviews,
-} from "@/lib/mock/profile";
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
@@ -20,6 +15,11 @@ export default async function UserProfilePage({
 }: {
   params: Promise<{ username: string }>;
 }) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const { mockProfiles, profileLibraryBooks, profileReviews } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const getUserProfile = (username: string) => mockProfiles.find((p: any) => p.username === username);
+
   const { username } = await params;
   const profile = getUserProfile(username);
 
@@ -114,7 +114,8 @@ export default async function UserProfilePage({
 
             {/* Individual Reviews (Columns 2 and 3) */}
             <div className="relative grid flex-1 grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-              {profileReviews.slice(0, 2).map((review) => (
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {profileReviews.slice(0, 2).map((review: any) => (
                 <div key={review.id} className="relative flex flex-col">
                   <div className="mb-2 flex items-center gap-3">
                     <div className="bg-muted relative size-10 shrink-0 overflow-hidden rounded-full">

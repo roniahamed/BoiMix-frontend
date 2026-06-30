@@ -3,14 +3,10 @@ import Link from "next/link";
 import {
   ArrowRightIcon,
   BookMarkedIcon,
-  BookOpenIcon,
-  Building2Icon,
-  GraduationCapIcon,
   LibraryIcon,
   MessageCircleIcon,
   Repeat2Icon,
   ShoppingCartIcon,
-  SparklesIcon,
   StarIcon,
   UserIcon,
   UsersRoundIcon,
@@ -25,667 +21,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
 
-const categories = [
-  {
-    title: "Fiction",
-    href: "/books/category/fiction",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Academic",
-    href: "/books/category/academic",
-    icon: GraduationCapIcon,
-    image: "/categories/academic.png",
-  },
-  {
-    title: "Self Help",
-    href: "/books/category/self-help",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Business",
-    href: "/books/category/business",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Community",
-    href: "/community",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "Biography",
-    href: "/books/category/biography",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "History",
-    href: "/books/category/history",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Science",
-    href: "/books/category/science",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Technology",
-    href: "/books/category/technology",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Poetry",
-    href: "/books/category/poetry",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Drama",
-    href: "/books/category/drama",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "Thriller",
-    href: "/books/category/thriller",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Mystery",
-    href: "/books/category/mystery",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Romance",
-    href: "/books/category/romance",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Sci-Fi",
-    href: "/books/category/sci-fi",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Comics",
-    href: "/books/category/comics",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Children",
-    href: "/books/category/children",
-    icon: GraduationCapIcon,
-    image: "/categories/academic.png",
-  },
-  {
-    title: "Religion",
-    href: "/books/category/religion",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "Philosophy",
-    href: "/books/category/philosophy",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Travel",
-    href: "/books/category/travel",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Cookbooks",
-    href: "/books/category/cookbooks",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Art & Music",
-    href: "/books/category/art-music",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Health",
-    href: "/books/category/health",
-    icon: GraduationCapIcon,
-    image: "/categories/academic.png",
-  },
-  {
-    title: "Sports",
-    href: "/books/category/sports",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "Politics",
-    href: "/books/category/politics",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Novels",
-    href: "/books/category/novels",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Literature",
-    href: "/books/category/literature",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Manga",
-    href: "/books/category/manga",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Dictionary",
-    href: "/books/category/dictionary",
-    icon: GraduationCapIcon,
-    image: "/categories/academic.png",
-  },
-  {
-    title: "Magazines",
-    href: "/books/category/magazines",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-];
 
-const featuredBooks: BookCardBook[] = [
-  {
-    id: "rivers-of-dhaka",
-    slug: "rivers-of-dhaka",
-    title: "Rivers of Dhaka",
-    author: "Nadia Rahman",
-    coverUrl: "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-    tags: ["sell"],
-    rating: 4.8,
-    reviewCount: 42,
-    price: 420,
-    originalPrice: 550,
-    distance: "1.2 km",
-    location: "Dhanmondi",
-    condition: "excellent",
-    availability: "in-stock",
-    providerType: "library",
-  },
-  {
-    id: "borrowed-light",
-    slug: "borrowed-light",
-    title: "Borrowed Light",
-    author: "Arif Hossain",
-    coverUrl: "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-    tags: ["borrow"],
-    rating: 4.6,
-    reviewCount: 31,
-    distance: "0.8 km",
-    location: "Mirpur",
-    condition: "good",
-    availability: "in-stock",
-    isWishlisted: true,
-    providerType: "library",
-  },
-  {
-    id: "swap-stories",
-    slug: "swap-stories",
-    title: "Swap Stories",
-    author: "Maliha Karim",
-    coverUrl: "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-    tags: ["swap"],
-    rating: 4.7,
-    reviewCount: 28,
-    price: 360,
-    originalPrice: 450,
-    distance: "2.4 km",
-    location: "Uttara",
-    condition: "new",
-    availability: "in-stock",
-  },
-  {
-    id: "the-reader-map",
-    slug: "the-reader-map",
-    title: "The Reader Map",
-    author: "Samiul Islam",
-    coverUrl: "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-    tags: ["swap"],
-    rating: 4.5,
-    reviewCount: 19,
-    distance: "3.1 km",
-    location: "Banani",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "market-lanes",
-    slug: "market-lanes",
-    title: "Market Lanes",
-    author: "Tahsin Ahmed",
-    coverUrl: "https://covers.openlibrary.org/b/id/10425026-L.jpg",
-    tags: ["sell"],
-    rating: 4.4,
-    reviewCount: 16,
-    price: 280,
-    originalPrice: 350,
-    location: "Bashundhara",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "quiet-reviews",
-    slug: "quiet-reviews",
-    title: "Quiet Reviews",
-    author: "Raisa Chowdhury",
-    coverUrl: "https://covers.openlibrary.org/b/id/10521271-L.jpg",
-    tags: ["borrow"],
-    rating: 4.9,
-    reviewCount: 52,
-    distance: "1.7 km",
-    location: "Mohammadpur",
-    condition: "excellent",
-    availability: "in-stock",
-    isInCart: true,
-  },
-  {
-    id: "song-of-padma",
-    slug: "song-of-padma",
-    title: "The Song of the Padma",
-    author: "Tasnim Ara",
-    coverUrl: "https://covers.openlibrary.org/b/id/12534525-L.jpg",
-    tags: ["sell"],
-    rating: 4.5,
-    reviewCount: 23,
-    price: 350,
-    distance: "1.5 km",
-    location: "Savar",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "chhaya-bithi",
-    slug: "chhaya-bithi",
-    title: "Chhaya Bithi",
-    author: "Humayun Ahmed",
-    coverUrl: "https://covers.openlibrary.org/b/id/8259444-L.jpg",
-    tags: ["borrow"],
-    rating: 4.9,
-    reviewCount: 120,
-    distance: "3.5 km",
-    location: "Sylhet",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "programming-basics",
-    slug: "programming-basics",
-    title: "Programming Basics",
-    author: "Tamim Shahriar Subeen",
-    coverUrl: "https://covers.openlibrary.org/b/id/12836262-L.jpg",
-    tags: ["sell"],
-    rating: 4.8,
-    reviewCount: 85,
-    price: 250,
-    originalPrice: 320,
-    location: "Chittagong",
-    condition: "new",
-    availability: "in-stock",
-  },
-  {
-    id: "struggles-of-life",
-    slug: "struggles-of-life",
-    title: "Struggles of Life",
-    author: "Kazi Nazrul Islam",
-    coverUrl: "https://covers.openlibrary.org/b/id/10425027-L.jpg",
-    tags: ["swap"],
-    rating: 4.7,
-    reviewCount: 45,
-    price: 180,
-    distance: "4.2 km",
-    location: "Mymensingh",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "lost-sonnet",
-    slug: "lost-sonnet",
-    title: "The Lost Sonnet",
-    author: "Rabindranath Tagore",
-    coverUrl: "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-    tags: ["borrow"],
-    rating: 4.6,
-    reviewCount: 60,
-    distance: "2.8 km",
-    location: "Khulna",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "boi-er-pata",
-    slug: "boi-er-pata",
-    title: "Boi-er Pata",
-    author: "Shamsur Rahman",
-    coverUrl: "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-    tags: ["swap"],
-    rating: 4.3,
-    reviewCount: 14,
-    distance: "5.0 km",
-    location: "Barisal",
-    condition: "fair",
-    availability: "in-stock",
-  },
-  {
-    id: "dhaka-metro",
-    slug: "dhaka-metro",
-    title: "Dhaka Metro Diary",
-    author: "Nayeem Islam",
-    coverUrl: "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-    tags: ["sell"],
-    rating: 4.2,
-    reviewCount: 18,
-    price: 150,
-    distance: "0.5 km",
-    location: "Mirpur",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "sundarbans-adventure",
-    slug: "sundarbans-adventure",
-    title: "Sundarbans Adventure",
-    author: "Muhammed Zafar Iqbal",
-    coverUrl: "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-    tags: ["borrow"],
-    rating: 4.8,
-    reviewCount: 77,
-    distance: "6.2 km",
-    location: "Bagerhat",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "smart-entrepreneur",
-    slug: "smart-entrepreneur",
-    title: "Smart Entrepreneur",
-    author: "Ayman Sadiq",
-    coverUrl: "https://covers.openlibrary.org/b/id/10425026-L.jpg",
-    tags: ["sell"],
-    rating: 4.7,
-    reviewCount: 110,
-    price: 320,
-    originalPrice: 400,
-    providerType: "user",
-    isVerifiedUser: true,
-    location: "Banani",
-    condition: "new",
-    availability: "in-stock",
-  },
-  {
-    id: "history-of-bengal",
-    slug: "history-of-bengal",
-    title: "History of Bengal",
-    author: "Akbar Ali Khan",
-    coverUrl: "https://covers.openlibrary.org/b/id/10521271-L.jpg",
-    tags: ["swap"],
-    rating: 4.9,
-    reviewCount: 65,
-    price: 480,
-    originalPrice: 600,
-    distance: "1.9 km",
-    location: "Dhanmondi",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "silent-whispers",
-    slug: "silent-whispers",
-    title: "Silent Whispers",
-    author: "Tahmima Anam",
-    coverUrl: "https://covers.openlibrary.org/b/id/12534525-L.jpg",
-    tags: ["sell"],
-    rating: 4.4,
-    reviewCount: 21,
-    price: 290,
-    location: "Uttara",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "golden-age",
-    slug: "golden-age",
-    title: "A Golden Age",
-    author: "Tahmima Anam",
-    coverUrl: "https://covers.openlibrary.org/b/id/8259444-L.jpg",
-    tags: ["borrow"],
-    rating: 4.6,
-    reviewCount: 39,
-    distance: "2.1 km",
-    location: "Gulshan",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "lalshalu",
-    slug: "lalshalu",
-    title: "Lalshalu",
-    author: "Syed Waliullah",
-    coverUrl: "https://covers.openlibrary.org/b/id/12836262-L.jpg",
-    tags: ["swap"],
-    rating: 4.8,
-    reviewCount: 94,
-    distance: "3.7 km",
-    location: "Comilla",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "pather-panchali",
-    slug: "pather-panchali",
-    title: "Pather Panchali",
-    author: "Bibhutibhushan Bandyopadhyay",
-    coverUrl: "https://covers.openlibrary.org/b/id/10425027-L.jpg",
-    tags: ["sell"],
-    rating: 4.9,
-    reviewCount: 142,
-    price: 190,
-    distance: "4.5 km",
-    location: "Jessore",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "chokher-bali",
-    slug: "chokher-bali",
-    title: "Chokher Bali",
-    author: "Rabindranath Tagore",
-    coverUrl: "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-    tags: ["swap"],
-    rating: 4.7,
-    reviewCount: 53,
-    price: 220,
-    distance: "2.9 km",
-    location: "Pabna",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "gora-book",
-    slug: "gora-book",
-    title: "Gora",
-    author: "Rabindranath Tagore",
-    coverUrl: "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-    tags: ["borrow"],
-    rating: 4.8,
-    reviewCount: 88,
-    distance: "3.2 km",
-    location: "Rajshahi",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "shesher-kobita",
-    slug: "shesher-kobita",
-    title: "Shesher Kobita",
-    author: "Rabindranath Tagore",
-    coverUrl: "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-    tags: ["sell"],
-    rating: 4.9,
-    reviewCount: 115,
-    price: 160,
-    location: "Bogra",
-    condition: "new",
-    availability: "in-stock",
-  },
-  {
-    id: "devdas-novel",
-    slug: "devdas-novel",
-    title: "Devdas",
-    author: "Sarat Chandra Chattopadhyay",
-    coverUrl: "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-    tags: ["swap"],
-    rating: 4.5,
-    reviewCount: 67,
-    distance: "5.1 km",
-    location: "Rangpur",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "srikanta-novel",
-    slug: "srikanta-novel",
-    title: "Srikanta",
-    author: "Sarat Chandra Chattopadhyay",
-    coverUrl: "https://covers.openlibrary.org/b/id/10425026-L.jpg",
-    tags: ["sell"],
-    rating: 4.6,
-    reviewCount: 41,
-    price: 240,
-    distance: "4.8 km",
-    location: "Dinajpur",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "kopalkundala",
-    slug: "kopalkundala",
-    title: "Kopalkundala",
-    author: "Bankim Chandra Chattopadhyay",
-    coverUrl: "https://covers.openlibrary.org/b/id/10521271-L.jpg",
-    tags: ["borrow"],
-    rating: 4.4,
-    reviewCount: 33,
-    distance: "2.7 km",
-    location: "Kushtia",
-    condition: "good",
-    availability: "in-stock",
-  },
-  {
-    id: "anandamath",
-    slug: "anandamath",
-    title: "Anandamath",
-    author: "Bankim Chandra Chattopadhyay",
-    coverUrl: "https://covers.openlibrary.org/b/id/12534525-L.jpg",
-    tags: ["sell"],
-    rating: 4.7,
-    reviewCount: 59,
-    price: 300,
-    location: "Faridpur",
-    condition: "new",
-    availability: "in-stock",
-  },
-  {
-    id: "byomkesh-samagra",
-    slug: "byomkesh-samagra",
-    title: "Byomkesh Samagra",
-    author: "Sharadindu Bandyopadhyay",
-    coverUrl: "https://covers.openlibrary.org/b/id/8259444-L.jpg",
-    tags: ["swap"],
-    rating: 4.9,
-    reviewCount: 156,
-    price: 650,
-    originalPrice: 800,
-    distance: "3.4 km",
-    location: "Tangail",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "feluda-somogro",
-    slug: "feluda-somogro",
-    title: "Feluda Somogro",
-    author: "Satyajit Ray",
-    coverUrl: "https://covers.openlibrary.org/b/id/12836262-L.jpg",
-    tags: ["sell"],
-    rating: 4.9,
-    reviewCount: 203,
-    price: 750,
-    originalPrice: 950,
-    distance: "1.8 km",
-    location: "Gazipur",
-    condition: "excellent",
-    availability: "in-stock",
-  },
-  {
-    id: "professor-shonku",
-    slug: "professor-shonku",
-    title: "Professor Shonku",
-    author: "Satyajit Ray",
-    coverUrl: "https://covers.openlibrary.org/b/id/10425027-L.jpg",
-    tags: ["borrow"],
-    rating: 4.8,
-    reviewCount: 119,
-    distance: "2.3 km",
-    location: "Narayanganj",
-    condition: "good",
-    availability: "in-stock",
-  },
-];
 
-const newBooks: BookCardBook[] = [...featuredBooks].reverse();
-const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
-const forYouBooks: BookCardBook[] = [...featuredBooks].slice(5, 17);
 
-const communityPosts = [
-  {
-    title: "A week of campus book swaps",
-    author: "Sadia Noor",
-    stat: "18 replies",
-  },
-  {
-    title: "Best Bangla translations this month",
-    author: "Imran Kabir",
-    stat: "34 reactions",
-  },
-  {
-    title: "Reading list for first-year students",
-    author: "Nusrat Jahan",
-    stat: "12 saves",
-  },
-];
 
-const sponsors = [
-  "Pathagar Circle",
-  "Dhaka Readers",
-  "Campus Shelf",
-  "BookBridge",
-];
 
-export default function Home() {
+export default async function Home() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const featuredBooks: BookCardBook[] = await fetch(`${baseUrl}/api/books`).then(r => r.json());
+  const newBooks: BookCardBook[] = [...featuredBooks].reverse();
+  const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
+  const forYouBooks: BookCardBook[] = [...featuredBooks].slice(5, 17);
+
   return (
     <MainLayout>
       <HeroCarousel />
@@ -720,7 +67,10 @@ export default function Home() {
   );
 }
 
-function CategorySection() {
+async function CategorySection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const categories: any[] = await fetch(`${baseUrl}/api/categories`).then(r => r.json());
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -792,7 +142,9 @@ function BookSection({
   );
 }
 
-function CentralLibrarySection() {
+async function CentralLibrarySection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const featuredBooks: BookCardBook[] = await fetch(`${baseUrl}/api/books`).then(r => r.json());
   const books = featuredBooks
     .filter((b) => b.providerType === "library" || b.tags.includes("borrow"))
     .slice(0, 12);
@@ -820,7 +172,9 @@ function CentralLibrarySection() {
   );
 }
 
-function MarketplaceSection() {
+async function MarketplaceSection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const featuredBooks: BookCardBook[] = await fetch(`${baseUrl}/api/books`).then(r => r.json());
   const books = featuredBooks
     .filter((b) => b.tags.includes("sell"))
     .slice(0, 12);
@@ -848,7 +202,9 @@ function MarketplaceSection() {
   );
 }
 
-function SwapBooksSection() {
+async function SwapBooksSection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const featuredBooks: BookCardBook[] = await fetch(`${baseUrl}/api/books`).then(r => r.json());
   const books = featuredBooks
     .filter((b) => b.tags.includes("swap"))
     .slice(0, 12);
@@ -959,37 +315,10 @@ function FeaturePanel({
   );
 }
 
-function CommunityReaderSection() {
-  const readers = [
-    {
-      name: "Sadia Noor",
-      books: 42,
-      swaps: 18,
-      reviews: 9,
-      badge: "Top Swapper",
-    },
-    {
-      name: "Imran Kabir",
-      books: 87,
-      swaps: 31,
-      reviews: 24,
-      badge: "Book Lover",
-    },
-    {
-      name: "Nusrat Jahan",
-      books: 55,
-      swaps: 12,
-      reviews: 16,
-      badge: "Reviewer",
-    },
-    {
-      name: "Tanvir Ahmed",
-      books: 33,
-      swaps: 27,
-      reviews: 5,
-      badge: "Active Reader",
-    },
-  ];
+async function CommunityReaderSection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const readers: any[] = await fetch(`${baseUrl}/api/readers`).then(r => r.json());
 
   return (
     <section className="py-2 md:py-3">
@@ -1109,7 +438,10 @@ function CommunityReaderSection() {
   );
 }
 
-function CommunitySection() {
+async function CommunitySection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const communityPosts: any[] = await fetch(`${baseUrl}/api/community`).then(r => r.json());
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -1138,7 +470,9 @@ function CommunitySection() {
   );
 }
 
-function SponsorsSection() {
+async function SponsorsSection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const sponsors: string[] = await fetch(`${baseUrl}/api/sponsors`).then(r => r.json());
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -1203,7 +537,10 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
   );
 }
 
-function PersonalizationSection() {
+async function PersonalizationSection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const featuredBooks: any[] = await fetch(`${baseUrl}/api/books`).then(r => r.json());
   const recentlyViewed = featuredBooks.slice(0, 3);
   return (
     <section className="py-2 md:py-3">
@@ -1285,67 +622,10 @@ function PersonalizationSection() {
   );
 }
 
-function AuthorSpotlightSection() {
+async function AuthorSpotlightSection() {
   // Mock books by Humayun Ahmed
-  const humayunBooks: BookCardBook[] = [
-    {
-      id: "chhaya-bithi",
-      slug: "chhaya-bithi",
-      title: "Chhaya Bithi",
-      author: "Humayun Ahmed",
-      coverUrl: "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-      tags: ["borrow"],
-      rating: 4.9,
-      reviewCount: 120,
-      distance: "3.5 km",
-      location: "Sylhet",
-      condition: "excellent",
-      availability: "in-stock",
-    },
-    {
-      id: "himu-somogro",
-      slug: "himu-somogro",
-      title: "Himu Somogro",
-      author: "Humayun Ahmed",
-      coverUrl: "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-      tags: ["sell"],
-      rating: 4.8,
-      reviewCount: 95,
-      price: 350,
-      distance: "1.2 km",
-      location: "Dhanmondi",
-      condition: "good",
-      availability: "in-stock",
-    },
-    {
-      id: "misir-ali-unsolved",
-      slug: "misir-ali-unsolved",
-      title: "Misir Ali Somogro",
-      author: "Humayun Ahmed",
-      coverUrl: "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-      tags: ["borrow"],
-      rating: 4.7,
-      reviewCount: 82,
-      distance: "2.1 km",
-      location: "Mirpur",
-      condition: "excellent",
-      availability: "in-stock",
-    },
-    {
-      id: "deyal-novel",
-      slug: "deyal-novel",
-      title: "Deyal",
-      author: "Humayun Ahmed",
-      coverUrl: "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-      tags: ["sell"],
-      rating: 4.9,
-      reviewCount: 154,
-      price: 450,
-      location: "Uttara",
-      condition: "new",
-      availability: "in-stock",
-    },
-  ];
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const humayunBooks: BookCardBook[] = await fetch(`${baseUrl}/api/authors/humayun-ahmed/books`).then(r => r.json());
 
   return (
     <section className="py-2 md:py-3">
@@ -1449,33 +729,10 @@ function AuthorSpotlightSection() {
   );
 }
 
-function TestimonialsSection() {
-  const testimonials = [
-    {
-      name: "তানভীর আহমেদ",
-      role: "Verified Swapper",
-      location: "Dhanmondi, Dhaka",
-      quote:
-        "আমি ধানমন্ডিতে আমার ভার্সিটির পুরোনো টেক্সটবইগুলো ৩টি নতুন গল্পের বইয়ের সাথে বদলেছি! প্রক্রিয়াটি খুবই সহজ এবং ঝামেলাহীন ছিল।",
-      rating: 5,
-    },
-    {
-      name: "সুমাইয়া রহমান",
-      role: "Library Borrower",
-      location: "Mirpur, Dhaka",
-      quote:
-        "BoiMix-এর ভেরিফাইড সেন্ট্রাল লাইব্রেরির বইগুলো দারুণ কাজের। ডেলিভারি খুবই দ্রুত ছিল এবং বইয়ের কন্ডিশনও ছিল চমৎকার।",
-      rating: 5,
-    },
-    {
-      name: "ইমরান কবীর",
-      role: "Store Buyer",
-      location: "Uttara, Dhaka",
-      quote:
-        "দোকানের চেয়ে অনেক কম দামে এখান থেকে আমি বই কিনতে পারছি। সেই সাথে পুরোনো বইগুলো বিক্রি করে নতুন বই কেনার টাকাও উঠে যাচ্ছে।",
-      rating: 5,
-    },
-  ];
+async function TestimonialsSection() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const testimonials: any[] = await fetch(`${baseUrl}/api/testimonials`).then(r => r.json());
 
   return (
     <section className="py-2 md:py-3">

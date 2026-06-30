@@ -3,11 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  BookOpen,
   CreditCard,
   Edit,
   MoreVertical,
-  Repeat2,
   Trash2,
 } from "lucide-react";
 import { toast } from "sonner";

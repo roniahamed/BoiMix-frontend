@@ -3,12 +3,21 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BookCard } from "@/components/shared/book-card";
-import { profileLibraryBooks } from "@/lib/mock/profile";
 import { useWishlistStore } from "@/lib/store/use-wishlist-store";
 import { useCartStore } from "@/lib/store/use-cart-store";
 import type { BookCardBook } from "@/types/book";
 
 export default function WishlistPage() {
+  
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const [profileLibraryBooks, setProfileLibraryBooks] = useState<any[]>([]);
+  useEffect(() => {
+    fetch('/api/profile').then(r => r.json()).then(data => {
+      setProfileLibraryBooks(data.profileLibraryBooks || []);
+    });
+  }, []);
+
+
   const { items } = useWishlistStore();
   const cartItems = useCartStore((state) => state.items);
   const [mounted, setMounted] = useState(false);
@@ -34,7 +43,8 @@ export default function WishlistPage() {
   // To display wishlist items, we try to find them in profileLibraryBooks first.
   // If not found, they might be in cartItems, so we construct a BookCardBook from CartItem.
   const wishlistBooks: BookCardBook[] = items.map((id) => {
-    const fromProfile = profileLibraryBooks.find((b) => b.id === id);
+    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+    const fromProfile = profileLibraryBooks.find((b: any) => b.id === id);
     if (fromProfile) return fromProfile;
 
     const fromCart = cartItems.find((c) => c.id === id);

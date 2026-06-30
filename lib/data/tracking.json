@@ -1,0 +1,30 @@
+[
+  {
+    "title": "Order Placed",
+    "description": "We have received your order.",
+    "time": "Today, 10:00 AM",
+    "completed": true
+  },
+  {
+    "title": "Payment Verified",
+    "description": "Payment has been held securely in escrow.",
+    "time": "Today, 10:05 AM",
+    "completed": true
+  },
+  {
+    "title": "Processing by Seller",
+    "description": "The seller is preparing your package.",
+    "time": "Today, 11:30 AM",
+    "completed": true
+  },
+  {
+    "title": "Shipped",
+    "description": "Package has been handed over to the delivery partner.",
+    "completed": false
+  },
+  {
+    "title": "Delivered",
+    "description": "Package delivered to your address.",
+    "completed": false
+  }
+]

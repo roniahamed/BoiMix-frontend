@@ -1,0 +1,182 @@
+[
+  {
+    "title": "Fiction",
+    "href": "/books/category/fiction",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Academic",
+    "href": "/books/category/academic",
+    "icon": "GraduationCapIcon",
+    "image": "/categories/academic.png"
+  },
+  {
+    "title": "Self Help",
+    "href": "/books/category/self-help",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Business",
+    "href": "/books/category/business",
+    "icon": "Building2Icon",
+    "image": "/categories/business.png"
+  },
+  {
+    "title": "Community",
+    "href": "/community",
+    "icon": "UsersRoundIcon",
+    "image": "/categories/community.png"
+  },
+  {
+    "title": "Biography",
+    "href": "/books/category/biography",
+    "icon": "UsersRoundIcon",
+    "image": "/categories/community.png"
+  },
+  {
+    "title": "History",
+    "href": "/books/category/history",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Science",
+    "href": "/books/category/science",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Technology",
+    "href": "/books/category/technology",
+    "icon": "Building2Icon",
+    "image": "/categories/business.png"
+  },
+  {
+    "title": "Poetry",
+    "href": "/books/category/poetry",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Drama",
+    "href": "/books/category/drama",
+    "icon": "UsersRoundIcon",
+    "image": "/categories/community.png"
+  },
+  {
+    "title": "Thriller",
+    "href": "/books/category/thriller",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Mystery",
+    "href": "/books/category/mystery",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Romance",
+    "href": "/books/category/romance",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Sci-Fi",
+    "href": "/books/category/sci-fi",
+    "icon": "Building2Icon",
+    "image": "/categories/business.png"
+  },
+  {
+    "title": "Comics",
+    "href": "/books/category/comics",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Children",
+    "href": "/books/category/children",
+    "icon": "GraduationCapIcon",
+    "image": "/categories/academic.png"
+  },
+  {
+    "title": "Religion",
+    "href": "/books/category/religion",
+    "icon": "UsersRoundIcon",
+    "image": "/categories/community.png"
+  },
+  {
+    "title": "Philosophy",
+    "href": "/books/category/philosophy",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Travel",
+    "href": "/books/category/travel",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Cookbooks",
+    "href": "/books/category/cookbooks",
+    "icon": "Building2Icon",
+    "image": "/categories/business.png"
+  },
+  {
+    "title": "Art & Music",
+    "href": "/books/category/art-music",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Health",
+    "href": "/books/category/health",
+    "icon": "GraduationCapIcon",
+    "image": "/categories/academic.png"
+  },
+  {
+    "title": "Sports",
+    "href": "/books/category/sports",
+    "icon": "UsersRoundIcon",
+    "image": "/categories/community.png"
+  },
+  {
+    "title": "Politics",
+    "href": "/books/category/politics",
+    "icon": "Building2Icon",
+    "image": "/categories/business.png"
+  },
+  {
+    "title": "Novels",
+    "href": "/books/category/novels",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Literature",
+    "href": "/books/category/literature",
+    "icon": "BookOpenIcon",
+    "image": "/categories/fiction.png"
+  },
+  {
+    "title": "Manga",
+    "href": "/books/category/manga",
+    "icon": "SparklesIcon",
+    "image": "/categories/self-help.png"
+  },
+  {
+    "title": "Dictionary",
+    "href": "/books/category/dictionary",
+    "icon": "GraduationCapIcon",
+    "image": "/categories/academic.png"
+  },
+  {
+    "title": "Magazines",
+    "href": "/books/category/magazines",
+    "icon": "Building2Icon",
+    "image": "/categories/business.png"
+  }
+]

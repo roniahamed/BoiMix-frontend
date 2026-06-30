@@ -1,10 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/book-card";
-import { profileLibraryBooks } from "@/lib/mock/profile";
 
-export default function CartPage() {
+export default async function CartPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const { mockProfiles, profileLibraryBooks } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  
   const cartBooks = profileLibraryBooks.slice(1, 3);
-  const subtotal = cartBooks.reduce((acc, book) => acc + (book.price || 0), 0);
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const subtotal = cartBooks.reduce((acc: number, book: any) => acc + (book.price || 0), 0);
 
   return (
     <div className="space-y-8">
@@ -18,7 +22,8 @@ export default function CartPage() {
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {cartBooks.map((book) => (
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {cartBooks.map((book: any) => (
               <BookCard key={book.id} book={book} />
             ))}
           </div>

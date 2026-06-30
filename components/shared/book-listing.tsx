@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { fetchBooks } from "@/lib/api-client";
 import { SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -24,7 +26,6 @@ import { FilterSidebar } from "@/components/shared/filter-sidebar";
 import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook } from "@/types/book";
 
-import { BASE_MOCK_BOOKS } from "@/lib/mock/books";
 
 type ExtendedBook = BookCardBook & {
   category: string;
@@ -32,86 +33,7 @@ type ExtendedBook = BookCardBook & {
   language: string;
 };
 
-const MOCK_BOOKS = BASE_MOCK_BOOKS.map((b, i) => ({
-  ...b,
-  category: ["Fiction", "Academic", "Business", "Literature", "History"][i % 5],
-  publisher: ["Prothoma", "Batighor", "Oitijjho", "Adarsha", "Anyaprokash"][
-    i % 5
-  ],
-  language: ["Bengali", "English"][i % 2],
-})) as ExtendedBook[];
 
-// Build options from mock data
-const uniqueAuthors = Array.from(
-  new Set(MOCK_BOOKS.map((b) => b.author)),
-).sort();
-const uniquePublishers = Array.from(
-  new Set(MOCK_BOOKS.map((b) => b.publisher)),
-).sort();
-const uniqueCategories = Array.from(
-  new Set(MOCK_BOOKS.map((b) => b.category)),
-).sort();
-const uniqueLanguages = Array.from(
-  new Set(MOCK_BOOKS.map((b) => b.language)),
-).sort();
-
-const FILTER_GROUPS = [
-  {
-    id: "category",
-    title: "Categories",
-    type: "checkbox" as const,
-    searchable: true,
-    options: uniqueCategories.map((c) => ({ label: c, value: c })),
-  },
-  {
-    id: "availability",
-    title: "Book Type",
-    type: "checkbox" as const,
-    options: [
-      { label: "Sale", value: "sell" },
-      { label: "Swap", value: "swap" },
-      { label: "Borrow", value: "borrow" },
-      { label: "In Stock", value: "in-stock" },
-    ],
-  },
-  {
-    id: "author",
-    title: "Author",
-    type: "checkbox" as const,
-    searchable: true,
-    options: uniqueAuthors.map((a) => ({ label: a, value: a })),
-  },
-  {
-    id: "publisher",
-    title: "Publisher",
-    type: "checkbox" as const,
-    searchable: true,
-    options: uniquePublishers.map((p) => ({ label: p, value: p })),
-  },
-  {
-    id: "price",
-    title: "Price",
-    type: "range" as const,
-  },
-  {
-    id: "language",
-    title: "Language",
-    type: "checkbox" as const,
-    options: uniqueLanguages.map((l) => ({ label: l, value: l })),
-  },
-  {
-    id: "rating",
-    title: "Rating",
-    type: "rating" as const,
-    options: [
-      { label: "5", value: "5" },
-      { label: "4", value: "4" },
-      { label: "3", value: "3" },
-      { label: "2", value: "2" },
-      { label: "1", value: "1" },
-    ],
-  },
-];
 
 type BookListingProps = {
   title: string;
@@ -128,8 +50,64 @@ export function BookListing({
   initialFilters = {},
   initialSortBy = "newest",
 }: BookListingProps) {
-  const [books] = useState<BookCardBook[]>(MOCK_BOOKS);
-  const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
+
+  const { data: baseBooks = [] } = useQuery({
+    queryKey: ['books'],
+    queryFn: () => fetchBooks()
+  });
+
+  const MOCK_BOOKS = useMemo(() => {
+    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+    return baseBooks.map((b: any, i: number) => ({
+      ...b,
+      category: ["Fiction", "Academic", "Business", "Literature", "History"][i % 5],
+      publisher: ["Prothoma", "Batighor", "Oitijjho", "Adarsha", "Anyaprokash"][i % 5],
+      language: ["Bengali", "English"][i % 2],
+    })) as ExtendedBook[];
+  }, [baseBooks]);
+
+  const FILTER_GROUPS = useMemo(() => {
+    const uniqueAuthors = Array.from(new Set(MOCK_BOOKS.map((b) => b.author))).sort();
+    const uniquePublishers = Array.from(new Set(MOCK_BOOKS.map((b) => b.publisher))).sort();
+    const uniqueCategories = Array.from(new Set(MOCK_BOOKS.map((b) => b.category))).sort();
+    const uniqueLanguages = Array.from(new Set(MOCK_BOOKS.map((b) => b.language))).sort();
+
+    return [
+      {
+        id: "category", type: "checkbox" as const,
+        title: "Category",
+        options: uniqueCategories.map((c) => ({ label: c, value: c.toLowerCase() })),
+      },
+      {
+        id: "author", type: "checkbox" as const,
+        title: "Author",
+        options: uniqueAuthors.map((a) => ({ label: a, value: a.toLowerCase() })),
+      },
+      {
+        id: "publisher", type: "checkbox" as const,
+        title: "Publisher",
+        options: uniquePublishers.map((p) => ({ label: p, value: p.toLowerCase() })),
+      },
+      {
+        id: "language", type: "checkbox" as const,
+        title: "Language",
+        options: uniqueLanguages.map((l) => ({ label: l, value: l.toLowerCase() })),
+      },
+      {
+        id: "condition", type: "checkbox" as const,
+        title: "Condition",
+        options: [
+          { label: "New", value: "new" },
+          { label: "Like New", value: "excellent" },
+          { label: "Good", value: "good" },
+          { label: "Acceptable", value: "fair" },
+        ],
+      },
+    ];
+  }, [MOCK_BOOKS]);
+
+
+    const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
   const [sortBy, setSortBy] = useState(initialSortBy);
   const [selectedFilters, setSelectedFilters] =
     useState<Record<string, string[]>>(initialFilters);
@@ -176,13 +154,13 @@ export function BookListing({
 
   // Sync defaultSearchQuery from URL params to local state
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
     setSearchQuery(defaultSearchQuery);
     setCurrentPage(1);
   }, [defaultSearchQuery]);
 
   // Derived state for filtering and sorting
-  const filteredBooks = books
+  const filteredBooks = MOCK_BOOKS
     .filter((book) => {
       // 1. Text Search
       if (searchQuery) {

@@ -123,7 +123,7 @@ function CheckoutContent() {
     // Simulate API request
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // eslint-disable-next-line react-hooks/purity
+    {/* eslint-disable-next-line react-hooks/purity */}
     const randomId = Math.floor(Math.random() * 1000000);
 
     const newOrder = {

@@ -1,0 +1,67 @@
+[
+  {
+    "id": "chhaya-bithi",
+    "slug": "chhaya-bithi",
+    "title": "Chhaya Bithi",
+    "author": "Humayun Ahmed",
+    "coverUrl": "https://covers.openlibrary.org/b/id/10521270-L.jpg",
+    "tags": [
+      "borrow"
+    ],
+    "rating": 4.9,
+    "reviewCount": 120,
+    "distance": "3.5 km",
+    "location": "Sylhet",
+    "condition": "excellent",
+    "availability": "in-stock"
+  },
+  {
+    "id": "himu-somogro",
+    "slug": "himu-somogro",
+    "title": "Himu Somogro",
+    "author": "Humayun Ahmed",
+    "coverUrl": "https://covers.openlibrary.org/b/id/12534524-L.jpg",
+    "tags": [
+      "sell"
+    ],
+    "rating": 4.8,
+    "reviewCount": 95,
+    "price": 350,
+    "distance": "1.2 km",
+    "location": "Dhanmondi",
+    "condition": "good",
+    "availability": "in-stock"
+  },
+  {
+    "id": "misir-ali-unsolved",
+    "slug": "misir-ali-unsolved",
+    "title": "Misir Ali Somogro",
+    "author": "Humayun Ahmed",
+    "coverUrl": "https://covers.openlibrary.org/b/id/8259443-L.jpg",
+    "tags": [
+      "borrow"
+    ],
+    "rating": 4.7,
+    "reviewCount": 82,
+    "distance": "2.1 km",
+    "location": "Mirpur",
+    "condition": "excellent",
+    "availability": "in-stock"
+  },
+  {
+    "id": "deyal-novel",
+    "slug": "deyal-novel",
+    "title": "Deyal",
+    "author": "Humayun Ahmed",
+    "coverUrl": "https://covers.openlibrary.org/b/id/12836261-L.jpg",
+    "tags": [
+      "sell"
+    ],
+    "rating": 4.9,
+    "reviewCount": 154,
+    "price": 450,
+    "location": "Uttara",
+    "condition": "new",
+    "availability": "in-stock"
+  }
+]

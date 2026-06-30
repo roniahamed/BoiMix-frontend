@@ -29,7 +29,7 @@ export function TagInput({
         .split(",")
         .map((t) => t.trim())
         .filter(Boolean);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
       setTags(parsedTags);
     } else {
       setTags([]);

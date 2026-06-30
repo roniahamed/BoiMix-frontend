@@ -18,37 +18,9 @@ export default async function OrderTrackingPage({
 }) {
   const { id } = await params;
 
-  // Mock timeline data
-  const trackingEvents = [
-    {
-      title: "Order Placed",
-      description: "We have received your order.",
-      time: "Today, 10:00 AM",
-      completed: true,
-    },
-    {
-      title: "Payment Verified",
-      description: "Payment has been held securely in escrow.",
-      time: "Today, 10:05 AM",
-      completed: true,
-    },
-    {
-      title: "Processing by Seller",
-      description: "The seller is preparing your package.",
-      time: "Today, 11:30 AM",
-      completed: true,
-    },
-    {
-      title: "Shipped",
-      description: "Package has been handed over to the delivery partner.",
-      completed: false,
-    },
-    {
-      title: "Delivered",
-      description: "Package delivered to your address.",
-      completed: false,
-    },
-  ];
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const trackingEvents: any[] = await fetch(`${baseUrl}/api/orders/tracking`).then(r => r.json());
 
   return (
     <div className="boimix-container-wide py-8 md:py-12">

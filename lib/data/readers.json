@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Sadia Noor",
+    "books": 42,
+    "swaps": 18,
+    "reviews": 9,
+    "badge": "Top Swapper"
+  },
+  {
+    "name": "Imran Kabir",
+    "books": 87,
+    "swaps": 31,
+    "reviews": 24,
+    "badge": "Book Lover"
+  },
+  {
+    "name": "Nusrat Jahan",
+    "books": 55,
+    "swaps": 12,
+    "reviews": 16,
+    "badge": "Reviewer"
+  },
+  {
+    "name": "Tanvir Ahmed",
+    "books": 33,
+    "swaps": 27,
+    "reviews": 5,
+    "badge": "Active Reader"
+  }
+]

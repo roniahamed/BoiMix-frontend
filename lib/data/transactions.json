@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "type": "Deposit Locked",
+    "orderId": "BR-000245",
+    "amount": -400,
+    "date": "25 May 2024",
+    "time": "10:30 AM"
+  },
+  {
+    "id": 2,
+    "type": "Payment",
+    "orderId": "BR-000245",
+    "amount": -120,
+    "date": "25 May 2024",
+    "time": "11:20 AM"
+  },
+  {
+    "id": 3,
+    "type": "Deposit Released",
+    "orderId": "BR-000242",
+    "amount": 300,
+    "date": "01 Jun 2024",
+    "time": "04:05 PM"
+  }
+]

@@ -1,91 +1,12 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import {
-  BookOpenIcon,
-  Building2Icon,
-  GraduationCapIcon,
-  SparklesIcon,
-  UsersRoundIcon,
-} from "lucide-react";
 
-// Duplicated from home page for simplicity, normally would sit in a shared constants file
-const categories = [
-  {
-    title: "Fiction",
-    href: "/books/category/fiction",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Academic",
-    href: "/books/category/academic",
-    icon: GraduationCapIcon,
-    image: "/categories/academic.png",
-  },
-  {
-    title: "Self Help",
-    href: "/books/category/self-help",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Business",
-    href: "/books/category/business",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Community",
-    href: "/community",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "Biography",
-    href: "/books/category/biography",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "History",
-    href: "/books/category/history",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Science",
-    href: "/books/category/science",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-  {
-    title: "Technology",
-    href: "/books/category/technology",
-    icon: Building2Icon,
-    image: "/categories/business.png",
-  },
-  {
-    title: "Poetry",
-    href: "/books/category/poetry",
-    icon: BookOpenIcon,
-    image: "/categories/fiction.png",
-  },
-  {
-    title: "Drama",
-    href: "/books/category/drama",
-    icon: UsersRoundIcon,
-    image: "/categories/community.png",
-  },
-  {
-    title: "Thriller",
-    href: "/books/category/thriller",
-    icon: SparklesIcon,
-    image: "/categories/self-help.png",
-  },
-];
 
-export default function CategoryIndexPage() {
+export default async function CategoryIndexPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  const categories: any[] = await fetch(`${baseUrl}/api/categories`).then(r => r.json());
   return (
     <div className="boimix-container py-8 md:py-12">
       <div className="mb-8 text-center">

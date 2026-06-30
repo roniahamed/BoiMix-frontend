@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { fetchBooks } from "@/lib/api-client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,59 +22,6 @@ type SearchBarProps = {
   placeholder?: string;
   autoFocus?: boolean;
 };
-
-// Dummy database for search suggestions
-const dummyBooksSuggestions = [
-  {
-    title: "Rivers of Dhaka",
-    author: "Nadia Rahman",
-    slug: "rivers-of-dhaka",
-    type: "sell",
-    cover: "/book-covers/rivers-of-dhaka.svg",
-  },
-  {
-    title: "Borrowed Light",
-    author: "Arif Hossain",
-    slug: "borrowed-light",
-    type: "borrow",
-    cover: "/book-covers/borrowed-light.svg",
-  },
-  {
-    title: "Swap Stories",
-    author: "Maliha Karim",
-    slug: "swap-stories",
-    type: "swap",
-    cover: "/book-covers/swap-stories.svg",
-  },
-  {
-    title: "The Reader Map",
-    author: "Samiul Islam",
-    slug: "the-reader-map",
-    type: "borrow",
-    cover: "/book-covers/the-reader-map.svg",
-  },
-  {
-    title: "Chhaya Bithi",
-    author: "Humayun Ahmed",
-    slug: "chhaya-bithi",
-    type: "borrow",
-    cover: "/book-covers/borrowed-light.svg",
-  },
-  {
-    title: "Programming Basics",
-    author: "Tamim Shahriar Subeen",
-    slug: "programming-basics",
-    type: "sell",
-    cover: "/book-covers/swap-stories.svg",
-  },
-  {
-    title: "Feluda Somogro",
-    author: "Satyajit Ray",
-    slug: "feluda-somogro",
-    type: "sell",
-    cover: "/book-covers/market-lanes.svg",
-  },
-];
 
 const initialTrending = [
   "হুমায়ূন আহমেদ",
@@ -98,6 +47,11 @@ export function SearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
+  const { data: books = [] } = useQuery({
+    queryKey: ['books'],
+    queryFn: () => fetchBooks(),
+  });
+
   // Focus input when autoFocus prop changes to true
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -113,7 +67,7 @@ export function SearchBar({
   // Sync query if URL changes
   useEffect(() => {
     const q = searchParams?.get("q") || "";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
     setQuery(q);
   }, [searchParams]);
 
@@ -167,13 +121,17 @@ export function SearchBar({
   };
 
   // Filter book suggestions based on user query
-  const filteredSuggestions = query
-    ? dummyBooksSuggestions.filter(
-        (b) =>
-          b.title.toLowerCase().includes(query.toLowerCase()) ||
-          b.author.toLowerCase().includes(query.toLowerCase()),
-      )
-    : dummyBooksSuggestions.slice(0, 3); // default suggestions if empty
+  const suggestions =
+    query.length > 1
+      ? books
+          .filter(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (b: any) =>
+              b.title.toLowerCase().includes(query.toLowerCase()) ||
+              b.author.toLowerCase().includes(query.toLowerCase()),
+          )
+          .slice(0, 5)
+      : books.slice(0, 3);
 
   return (
     <form
@@ -303,29 +261,32 @@ export function SearchBar({
                   Recommended For You
                 </span>
                 <div className="space-y-3">
-                  {filteredSuggestions.map((book) => (
-                    <Link
-                      key={book.slug}
-                      href={`/books/${book.slug}`}
-                      onClick={() => setIsOpen(false)}
-                      className="hover:bg-muted/50 flex items-center gap-2.5 rounded-lg p-1.5 transition-colors"
-                    >
-                      <div className="bg-muted relative h-10 w-7.5 shrink-0 overflow-hidden rounded-sm shadow-xs">
-                        <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-foreground truncate text-xs leading-tight font-bold">
-                          {book.title}
-                        </p>
-                        <p className="text-muted-foreground truncate text-[0.65rem]">
-                          by {book.author}
-                        </p>
-                      </div>
-                      <span className="bg-muted text-muted-foreground border-border rounded-full border px-2 py-0.5 text-[0.6rem] font-bold capitalize">
-                        {book.type}
-                      </span>
-                    </Link>
-                  ))}
+                  {suggestions.length > 0 ? (
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    suggestions.map((book: any) => (
+                      <Link
+                        key={book.slug}
+                        href={`/books/${book.slug}`}
+                        onClick={() => setIsOpen(false)}
+                        className="hover:bg-muted/50 flex items-center gap-2.5 rounded-lg p-1.5 transition-colors"
+                      >
+                        <div className="bg-muted relative h-10 w-7.5 shrink-0 overflow-hidden rounded-sm shadow-xs">
+                          <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-foreground truncate text-xs leading-tight font-bold">
+                            {book.title}
+                          </p>
+                          <p className="text-muted-foreground truncate text-[0.65rem]">
+                            by {book.author}
+                          </p>
+                        </div>
+                        <span className="bg-muted text-muted-foreground border-border rounded-full border px-2 py-0.5 text-[0.6rem] font-bold capitalize">
+                          {book.type}
+                        </span>
+                      </Link>
+                    ))
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -335,9 +296,10 @@ export function SearchBar({
               <span className="text-muted-foreground mb-2 block text-[0.7rem] font-bold tracking-wider uppercase">
                 Matching Suggestions
               </span>
-              {filteredSuggestions.length > 0 ? (
-                <div className="space-y-2">
-                  {filteredSuggestions.map((book) => (
+              {suggestions.length > 0 ? (
+                <div className="flex flex-col">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {suggestions.map((book: any) => (
                     <Link
                       key={book.slug}
                       href={`/books/${book.slug}`}

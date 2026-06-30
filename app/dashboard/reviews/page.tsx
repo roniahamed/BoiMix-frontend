@@ -1,7 +1,10 @@
 import { ReviewCard } from "@/components/shared/review-card";
-import { profileReviews } from "@/lib/mock/profile";
 
-export default function ReviewsPage() {
+export default async function ReviewsPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const { mockProfiles, profileReviews } = await fetch(`${baseUrl}/api/profile`).then(r => r.json());
+  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+  
   return (
     <div className="space-y-8">
       <div>
@@ -12,7 +15,8 @@ export default function ReviewsPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {profileReviews.map((review) => (
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        {profileReviews.map((review: any) => (
           <ReviewCard
             key={review.id}
             reviewerName={review.reviewerName}

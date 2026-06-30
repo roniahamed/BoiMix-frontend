@@ -12,36 +12,16 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { fetchTransactions } from "@/lib/api-client";
 
 export default function WalletPage() {
   const { wallet } = useBorrowStore();
 
-  const transactions = [
-    {
-      id: 1,
-      type: "Deposit Locked",
-      orderId: "BR-000245",
-      amount: -400,
-      date: "25 May 2024",
-      time: "10:30 AM",
-    },
-    {
-      id: 2,
-      type: "Payment",
-      orderId: "BR-000245",
-      amount: -120,
-      date: "25 May 2024",
-      time: "11:20 AM",
-    },
-    {
-      id: 3,
-      type: "Deposit Released",
-      orderId: "BR-000242",
-      amount: +300,
-      date: "01 Jun 2024",
-      time: "04:05 PM",
-    },
-  ];
+  const { data: transactions = [] } = useQuery({
+    queryKey: ['transactions'],
+    queryFn: () => fetchTransactions(),
+  });
 
   const totalDeposit = wallet.availableLimit + wallet.locked;
 
@@ -163,7 +143,8 @@ export default function WalletPage() {
         </div>
 
         <div className="space-y-4">
-          {transactions.map((tx) => (
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {transactions.map((tx: any) => (
             <div
               key={tx.id}
               className="bg-card flex items-center justify-between rounded-xl border p-4"
