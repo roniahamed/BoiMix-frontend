@@ -48,7 +48,7 @@ function CartPageContent() {
           </TabsTrigger>
           <TabsTrigger
             value="borrow"
-            className="gap-2 text-base data-[state=active]:bg-blue-600 data-[state=active]:text-white"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground gap-2 text-base"
           >
             <BookOpen className="size-4" />
             Borrow ({borrowItemsCount})
