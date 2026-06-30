@@ -61,7 +61,7 @@ const MOCK_BOOK = {
       alt: "Back cover",
     },
   ],
-  tags: ["swap", "borrow"],
+  tags: ["swap"],
   availability: {
     sell: 0,
     borrow: 1,
@@ -405,7 +405,7 @@ export default async function BookDetailsPage({
         ? MOCK_BOOK.tags
         : foundBook
           ? foundBook.tags
-          : ["sell", "swap", "borrow"],
+          : ["sell"],
     availability: slug === "book-123" ? MOCK_BOOK.availability : availability,
     ...(foundBook
       ? {
