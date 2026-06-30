@@ -50,7 +50,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -404,7 +404,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                     ? "Adding..."
                     : isInBorrowCart
                       ? "Go to Cart"
-                      : "Borrow"}
+                      : "Add to Borrow"}
                 </span>
               </Button>
             )}
