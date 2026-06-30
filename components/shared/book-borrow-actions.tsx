@@ -25,6 +25,9 @@ type BookBorrowActionsProps = {
 export function BookBorrowActions({ book }: BookBorrowActionsProps) {
   const router = useRouter();
   const addItem = useBorrowCartStore((state) => state.addItem);
+  const setDirectCheckoutItem = useBorrowCartStore(
+    (state) => state.setDirectCheckoutItem,
+  );
   const items = useBorrowCartStore((state) => state.items);
   const isInCart = items.some((item) => item.id === book.id);
 
@@ -32,7 +35,7 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
 
   const handleAddToBorrowCart = async () => {
     if (isInCart) {
-      toast.info("Already in Cart");
+      router.push("/cart?tab=borrow");
       return;
     }
 
@@ -62,9 +65,19 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
     setIsAdding(false);
   };
 
-  const handleBorrowNow = async () => {
-    await handleAddToBorrowCart();
-    router.push("/borrow/checkout");
+  const handleBorrowNow = () => {
+    setDirectCheckoutItem({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      coverUrl: book.images[0]?.src || "",
+      ownerId: book.ownerId,
+      ownerName: book.ownerName,
+      borrowFee: book.borrowFee || 0,
+      depositRequired: 300,
+      maxBorrowDays: book.maxBorrowDays || 14,
+    });
+    router.push("/borrow/checkout?direct=true");
   };
 
   if (!book.tags.includes("borrow")) {
@@ -77,10 +90,10 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
         variant="outline"
         className="h-12 flex-1 gap-2 text-base transition-all"
         onClick={handleAddToBorrowCart}
-        disabled={isAdding || isInCart}
+        disabled={isAdding}
       >
         <BookOpen className="size-5" />
-        {isAdding ? "Adding..." : isInCart ? "In Cart" : "Add to Cart"}
+        {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add to Borrow"}
       </Button>
       <Button
         variant="default"

@@ -18,6 +18,8 @@ type BorrowCartState = {
   addItem: (item: BorrowCartItem) => void;
   removeItem: (id: string) => void;
   clearCart: () => void;
+  directCheckoutItem: BorrowCartItem | null;
+  setDirectCheckoutItem: (item: BorrowCartItem | null) => void;
 };
 
 export const useBorrowCartStore = create<BorrowCartState>()(
@@ -36,6 +38,8 @@ export const useBorrowCartStore = create<BorrowCartState>()(
           items: state.items.filter((i) => i.id !== id),
         })),
       clearCart: () => set({ items: [] }),
+      directCheckoutItem: null,
+      setDirectCheckoutItem: (item) => set({ directCheckoutItem: item }),
     }),
     {
       name: "boimix-borrow-cart-storage",

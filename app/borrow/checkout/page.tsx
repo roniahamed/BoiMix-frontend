@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   useBorrowCartStore,
   BorrowCartItem,
@@ -29,9 +29,19 @@ import { toast } from "sonner";
 import { ProgressStepper } from "@/components/borrow/progress-stepper";
 import { EligibilityCard } from "@/components/borrow/eligibility-card";
 
-export default function BorrowCartPage() {
+function CheckoutForm() {
   const router = useRouter();
-  const { items, removeItem, clearCart } = useBorrowCartStore();
+  const searchParams = useSearchParams();
+  const isDirect = searchParams.get("direct") === "true";
+
+  const {
+    items: cartItems,
+    directCheckoutItem,
+    removeItem,
+    clearCart,
+  } = useBorrowCartStore();
+  const items =
+    isDirect && directCheckoutItem ? [directCheckoutItem] : cartItems;
   const { addOrder, wallet, orders } = useBorrowStore();
 
   const [checkoutStep, setCheckoutStep] = useState<1 | 2 | 3>(1);
@@ -109,7 +119,9 @@ export default function BorrowCartPage() {
         });
       });
 
-      clearCart();
+      if (!isDirect) {
+        clearCart();
+      }
       toast.success("Borrow Requests Sent Successfully!");
       router.push(`/dashboard/borrowed`);
     }, 1500);
@@ -489,5 +501,19 @@ export default function BorrowCartPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function BorrowCartPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container mx-auto p-8 text-center">
+          Loading checkout...
+        </div>
+      }
+    >
+      <CheckoutForm />
+    </Suspense>
   );
 }

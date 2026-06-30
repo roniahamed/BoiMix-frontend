@@ -131,13 +131,16 @@ export function BookDetailsMobileActions({
   };
 
   const addBorrowItem = useBorrowCartStore((state) => state.addItem);
+  const setDirectCheckoutItem = useBorrowCartStore(
+    (state) => state.setDirectCheckoutItem,
+  );
   const borrowItems = useBorrowCartStore((state) => state.items);
   const isInBorrowCart = borrowItems.some((item) => item.id === book.id);
   const [isAddingBorrow, setIsAddingBorrow] = useState(false);
 
   const handleAddToBorrowCart = async () => {
     if (isInBorrowCart) {
-      toast.info("Already in Cart");
+      router.push("/cart?tab=borrow");
       return;
     }
 
@@ -166,9 +169,19 @@ export function BookDetailsMobileActions({
     setIsAddingBorrow(false);
   };
 
-  const handleBorrowNow = async () => {
-    await handleAddToBorrowCart();
-    router.push("/borrow/checkout");
+  const handleBorrowNow = () => {
+    setDirectCheckoutItem({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      coverUrl: book.images[0]?.src || "",
+      ownerId: book.sellerId,
+      ownerName: book.sellerName,
+      borrowFee: book.borrowFee || 0,
+      depositRequired: 300,
+      maxBorrowDays: book.maxBorrowDays || 14,
+    });
+    router.push("/borrow/checkout?direct=true");
   };
 
   return (
@@ -242,15 +255,15 @@ export function BookDetailsMobileActions({
                     : ""
                 }`}
                 onClick={handleAddToBorrowCart}
-                disabled={isAddingBorrow || isInBorrowCart}
+                disabled={isAddingBorrow}
               >
                 <ShoppingCart className="size-4" />
                 <span>
                   {isAddingBorrow
                     ? "Adding..."
                     : isInBorrowCart
-                      ? "In Cart"
-                      : "Add"}
+                      ? "View Cart"
+                      : "Add to Borrow"}
                 </span>
               </Button>
             </>
