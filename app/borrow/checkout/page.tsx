@@ -35,11 +35,22 @@ function CheckoutForm() {
   const isDirect = searchParams.get("direct") === "true";
 
   const {
-    items: cartItems,
+    items: allCartItems,
     directCheckoutItem,
     removeItem,
+    removeItems,
     clearCart,
   } = useBorrowCartStore();
+
+  const selectedIds = searchParams.get("items")
+    ? new Set(searchParams.get("items")?.split(","))
+    : null;
+
+  const cartItems =
+    selectedIds && selectedIds.size > 0
+      ? allCartItems.filter((i) => selectedIds.has(i.id))
+      : allCartItems;
+
   const items =
     isDirect && directCheckoutItem ? [directCheckoutItem] : cartItems;
   const { addOrder, wallet, orders } = useBorrowStore();
@@ -120,7 +131,11 @@ function CheckoutForm() {
       });
 
       if (!isDirect) {
-        clearCart();
+        if (selectedIds && selectedIds.size > 0) {
+          removeItems(Array.from(selectedIds));
+        } else {
+          clearCart();
+        }
       }
       toast.success("Borrow Requests Sent Successfully!");
       router.push(`/dashboard/borrowed`);

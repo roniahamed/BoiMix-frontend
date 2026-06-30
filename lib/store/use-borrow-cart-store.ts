@@ -17,6 +17,7 @@ type BorrowCartState = {
   items: BorrowCartItem[];
   addItem: (item: BorrowCartItem) => void;
   removeItem: (id: string) => void;
+  removeItems: (ids: string[]) => void;
   clearCart: () => void;
   directCheckoutItem: BorrowCartItem | null;
   setDirectCheckoutItem: (item: BorrowCartItem | null) => void;
@@ -37,6 +38,11 @@ export const useBorrowCartStore = create<BorrowCartState>()(
         set((state) => ({
           items: state.items.filter((i) => i.id !== id),
         })),
+      removeItems: (ids) =>
+        set((state) => {
+          const idSet = new Set(ids);
+          return { items: state.items.filter((i) => !idSet.has(i.id)) };
+        }),
       clearCart: () => set({ items: [] }),
       directCheckoutItem: null,
       setDirectCheckoutItem: (item) => set({ directCheckoutItem: item }),
