@@ -1405,8 +1405,8 @@ function AuthorSpotlightSection() {
               </div>
 
               <div className="mt-5 flex gap-2">
-                <Button size="sm" className="flex-1 text-xs">
-                  Follow
+                <Button asChild size="sm" className="flex-1 text-xs">
+                  <Link href="/feature-coming-soon">Follow</Link>
                 </Button>
                 <Button
                   asChild
