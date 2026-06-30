@@ -27,6 +27,7 @@ import { BookQA } from "@/components/shared/book-qa";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 import { BookBuyActions } from "@/components/shared/book-buy-actions";
+import { BASE_MOCK_BOOKS } from "@/lib/mock/books";
 import { BookBorrowActions } from "@/components/shared/book-borrow-actions";
 
 export const metadata: Metadata = {
@@ -231,7 +232,7 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
     author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
     coverUrl:
       "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-    tags: ["sell"],
+    tags: ["borrow"],
     rating: 4.9,
     reviewCount: 156,
     price: 200,
@@ -248,7 +249,7 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
     author: "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
     coverUrl:
       "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
-    tags: ["swap"],
+    tags: ["borrow"],
     rating: 4.8,
     reviewCount: 89,
     condition: "excellent",
@@ -310,7 +311,7 @@ const MOCK_RECOMMENDED_BOOKS: BookCardBook[] = [
     author: "শরৎচন্দ্র চট্টোপাধ্যায়",
     coverUrl:
       "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
-    tags: ["swap", "sell"],
+    tags: ["borrow"],
     rating: 4.8,
     reviewCount: 110,
     price: 250,
@@ -364,7 +365,9 @@ export default async function BookDetailsPage({
 
   // Find the book in recommendations to see if it has specific tags,
   // or use test slugs, or default to "sell"
-  const foundBook = MOCK_RECOMMENDED_BOOKS.find((b) => b.slug === slug);
+  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find((b) => b.slug === slug);
+  const foundBase = BASE_MOCK_BOOKS.find((b) => b.slug === slug);
+  const foundBook = foundRecommended || foundBase;
 
   const currentTag =
     slug === "test-sell"
@@ -402,7 +405,7 @@ export default async function BookDetailsPage({
         ? MOCK_BOOK.tags
         : foundBook
           ? foundBook.tags
-          : [currentTag],
+          : ["sell", "swap", "borrow"],
     availability: slug === "book-123" ? MOCK_BOOK.availability : availability,
     ...(foundBook
       ? {
