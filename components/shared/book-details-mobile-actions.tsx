@@ -105,7 +105,7 @@ export function BookDetailsMobileActions({
     toast.success("Added to cart", {
       description: `${book.title} has been added to your cart.`,
       action: {
-        label: "View Cart",
+        label: "Go to Cart",
         onClick: () => router.push("/cart"),
       },
     });
@@ -162,7 +162,7 @@ export function BookDetailsMobileActions({
     toast.success("Added to Borrow Cart", {
       description: `${book.title} has been added to your borrow cart.`,
       action: {
-        label: "View Cart",
+        label: "Go to Cart",
         onClick: () => router.push("/cart?tab=borrow"),
       },
     });
@@ -226,7 +226,7 @@ export function BookDetailsMobileActions({
               >
                 <ShoppingCart className="size-4" />
                 <span>
-                  {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add"}
+                  {isAdding ? "Adding..." : isInCart ? "Go to Cart" : "Add"}
                 </span>
               </Button>
             </>
@@ -262,7 +262,7 @@ export function BookDetailsMobileActions({
                   {isAddingBorrow
                     ? "Adding..."
                     : isInBorrowCart
-                      ? "View Cart"
+                      ? "Go to Cart"
                       : "Add to Borrow"}
                 </span>
               </Button>

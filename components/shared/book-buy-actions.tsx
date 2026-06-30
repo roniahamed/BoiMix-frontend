@@ -57,7 +57,7 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
     toast.success("Added to cart", {
       description: `${book.title} has been added to your cart.`,
       action: {
-        label: "View Cart",
+        label: "Go to Cart",
         onClick: () => router.push("/cart"),
       },
     });
@@ -101,7 +101,7 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
         disabled={isAdding || isBuying}
       >
         <ShoppingCart className="size-5" />
-        {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add to Cart"}
+        {isAdding ? "Adding..." : isInCart ? "Go to Cart" : "Add to Cart"}
       </Button>
       <Button
         className="h-12 flex-1 gap-2 bg-[#f57224] text-base text-white transition-all hover:bg-[#d65e1c] active:scale-[0.98]"

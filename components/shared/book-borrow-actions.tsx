@@ -58,7 +58,7 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
     toast.success("Added to Borrow Cart", {
       description: `${book.title} has been added to your borrow cart.`,
       action: {
-        label: "View Cart",
+        label: "Go to Cart",
         onClick: () => router.push("/cart?tab=borrow"),
       },
     });
@@ -93,7 +93,7 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
         disabled={isAdding}
       >
         <BookOpen className="size-5" />
-        {isAdding ? "Adding..." : isInCart ? "View Cart" : "Add to Borrow"}
+        {isAdding ? "Adding..." : isInCart ? "Go to Cart" : "Add to Borrow"}
       </Button>
       <Button
         variant="default"

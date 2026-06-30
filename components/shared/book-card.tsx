@@ -90,7 +90,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
     toast.success("Added to cart", {
       description: `${book.title} has been added to your cart.`,
       action: {
-        label: "View Cart",
+        label: "Go to Cart",
         onClick: () => router.push("/cart"),
       },
     });
@@ -311,7 +311,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                   {isAdding
                     ? "Adding..."
                     : isInCart
-                      ? "View Cart"
+                      ? "Go to Cart"
                       : "Add to Cart"}
                 </span>
               </Button>
