@@ -301,7 +301,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
             {hasSell && (
               <Button
                 size="sm"
-                variant={isInCart ? "outline" : "default"}
+                variant="default"
                 onClick={handleAddToCart}
                 disabled={isAdding}
                 className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg px-3 text-[15px] font-bold transition-all hover:scale-105 active:scale-95"

@@ -215,12 +215,8 @@ export function BookDetailsMobileActions({
                 <span>{isBuying ? "Processing..." : "Buy Now"}</span>
               </Button>
               <Button
-                variant={isInCart ? "outline" : "default"}
-                className={`h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm transition-all ${
-                  isInCart
-                    ? "border-[#f57224] text-[#f57224] hover:bg-[#f57224]/10 hover:text-[#f57224]"
-                    : ""
-                }`}
+                variant="default"
+                className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm transition-all"
                 onClick={handleAddToCart}
                 disabled={isAdding || isBuying}
               >
@@ -248,12 +244,8 @@ export function BookDetailsMobileActions({
                 <span>Borrow Now</span>
               </Button>
               <Button
-                variant={isInBorrowCart ? "outline" : "default"}
-                className={`h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm transition-all ${
-                  isInBorrowCart
-                    ? "border-primary text-primary hover:bg-primary/10 hover:text-primary"
-                    : ""
-                }`}
+                variant="default"
+                className="h-11 flex-1 gap-2 px-2 text-sm font-semibold shadow-sm transition-all"
                 onClick={handleAddToBorrowCart}
                 disabled={isAddingBorrow}
               >

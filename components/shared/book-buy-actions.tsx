@@ -91,12 +91,8 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
   return (
     <div className="flex w-full gap-2">
       <Button
-        variant={isInCart ? "outline" : "default"}
-        className={`h-12 flex-1 gap-2 text-base transition-all ${
-          isInCart
-            ? "border-[#f57224] text-[#f57224] hover:bg-[#f57224]/10 hover:text-[#f57224]"
-            : ""
-        }`}
+        variant="default"
+        className="h-12 flex-1 gap-2 text-base transition-all"
         onClick={handleAddToCart}
         disabled={isAdding || isBuying}
       >
