@@ -1,12 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 
-
+import categoriesData from "@/lib/data/categories.json";
 
 export default async function CategoryIndexPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const categories: any[] = await fetch(`${baseUrl}/api/categories`).then(r => r.json());
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const categories: any[] = categoriesData;
   return (
     <div className="boimix-container py-8 md:py-12">
       <div className="mb-8 text-center">
