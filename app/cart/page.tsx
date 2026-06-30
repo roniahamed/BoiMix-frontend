@@ -34,9 +34,9 @@ function CartPageContent() {
         defaultValue={activeTab}
         onValueChange={(val) => {
           setActiveTab(val);
-          router.push(`/cart?tab=${val}`, { scroll: false });
+          window.history.replaceState(null, "", `/cart?tab=${val}`);
         }}
-        className="w-full"
+        className="min-h-[600px] w-full"
       >
         <TabsList className="mb-8 grid h-12 w-full max-w-[400px] grid-cols-2">
           <TabsTrigger
