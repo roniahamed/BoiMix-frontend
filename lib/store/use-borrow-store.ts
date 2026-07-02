@@ -45,7 +45,7 @@ export const useBorrowStore = create<BorrowState>((set, get) => ({
   wallet: {
     totalDeposit: 1000,
     locked: 300,
-    availableLimit: 700,
+    availableLimit: 500000,
   },
   orders: [
     {

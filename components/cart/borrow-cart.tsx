@@ -103,9 +103,9 @@ export function BorrowCart() {
   );
 
   const availableLimit = wallet.availableLimit;
-  const isProUser = false; // Mock
-  const userTrustScore = 75; // Mock borrower trust score
-  const userRating = 3.5; // Mock borrower rating
+  const isProUser = true; // Mock
+  const userTrustScore = 100; // Mock borrower trust score
+  const userRating = 5.0; // Mock borrower rating
 
   const hasProItem = selectedCartItems.some((i) => i.isPro);
   const hasPremiumItem = selectedCartItems.some((i) => i.isPremium);
@@ -415,7 +415,7 @@ export function BorrowCart() {
                     const ids = Array.from(selectedItems).join(",");
                     router.push(`/borrow/checkout?items=${ids}`);
                   }}
-                  className="h-11 w-full rounded bg-blue-600 text-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="h-11 w-full rounded text-sm font-bold disabled:opacity-50"
                 >
                   REVIEW & CONFIRM ({selectedCount})
                 </Button>

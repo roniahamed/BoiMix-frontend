@@ -110,7 +110,7 @@ function CheckoutForm() {
     (o) => o.borrowerId === "current-user" && o.status !== "completed",
   ).length;
   const isEligible =
-    wallet.availableLimit >= totalDepositRequired && activeOrdersCount < 2;
+    wallet.availableLimit >= totalDepositRequired && activeOrdersCount < 100;
 
   const handleSubmit = () => {
     if (items.length === 0) return;
@@ -200,9 +200,10 @@ function CheckoutForm() {
               depositRequired={totalDepositRequired}
               availableLimit={wallet.availableLimit}
               activeOrders={activeOrdersCount}
+              maxActiveOrders={100}
             />
             <Button
-              className="h-12 w-full bg-blue-600 text-lg hover:bg-blue-700"
+              className="h-12 w-full text-lg"
               disabled={!isEligible}
               onClick={() => setCheckoutStep(2)}
             >
@@ -385,7 +386,7 @@ function CheckoutForm() {
             ))}
 
             <Button
-              className="h-12 w-full bg-blue-600 text-lg hover:bg-blue-700"
+              className="h-12 w-full text-lg"
               onClick={() => setCheckoutStep(3)}
             >
               Proceed to Payment
@@ -506,7 +507,7 @@ function CheckoutForm() {
             </Card>
 
             <Button
-              className="h-12 w-full bg-blue-600 text-lg hover:bg-blue-700"
+              className="h-12 w-full text-lg"
               onClick={handleSubmit}
               disabled={isSubmitting}
             >
