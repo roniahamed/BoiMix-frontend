@@ -18,6 +18,7 @@ import { BookGallery } from "@/components/shared/book-gallery";
 import { UserBadge } from "@/components/shared/user-badge";
 import { RatingStars } from "@/components/shared/rating-stars";
 import { BookCard } from "@/components/shared/book-card";
+import type { BookCardBook } from "@/types/book";
 import { ScrollContainer } from "@/components/shared/scroll-container";
 import { BookHeaderActions } from "@/components/shared/book-header-actions";
 import { BookReviews } from "@/components/shared/book-reviews";
@@ -48,12 +49,14 @@ export default async function BookDetailsPage({
     reviews: MOCK_REVIEWS,
     qa: MOCK_QA,
     recommended: MOCK_RECOMMENDED_BOOKS,
-  } = await fetchLocal("/api/books/${slug}");
+  } = await fetchLocal(`/api/books/${slug}`);
 
   // Find the book in recommendations to see if it has specific tags,
   // or use test slugs, or default to "sell"
-  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find((b) => b.slug === slug);
-  const foundBase = BASE_MOCK_BOOKS.find((b) => b.slug === slug);
+  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find(
+    (b: BookCardBook) => b.slug === slug,
+  );
+  const foundBase = BASE_MOCK_BOOKS.find((b: BookCardBook) => b.slug === slug);
   const foundBook = foundRecommended || foundBase;
 
   const currentTag =
@@ -598,7 +601,7 @@ export default async function BookDetailsPage({
         <ScrollContainer>
           {MOCK_RECOMMENDED_BOOKS.slice()
             .reverse()
-            .map((book) => (
+            .map((book: BookCardBook) => (
               <div
                 key={book.id}
                 className="w-[140px] shrink-0 snap-start sm:w-[160px]"
