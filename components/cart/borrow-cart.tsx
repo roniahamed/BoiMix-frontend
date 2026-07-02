@@ -120,12 +120,17 @@ export function BorrowCart() {
   const limitExceeded = totalDepositRequired > availableLimit;
   const proError = !isProUser && hasProItem;
 
+  const selectedOwnersCount = new Set(selectedCartItems.map((i) => i.ownerId))
+    .size;
+  const multipleOwnersError = selectedOwnersCount > 1;
+
   const canProceed =
     selectedCartItems.length > 0 &&
     !limitExceeded &&
     !proError &&
     !trustScoreError &&
-    !ratingError;
+    !ratingError &&
+    !multipleOwnersError;
 
   const getValidationMessage = () => {
     const messages: string[] = [];
@@ -143,12 +148,16 @@ export function BorrowCart() {
     if (ratingError) {
       messages.push("Your user rating is too low for a selected book");
     }
+    if (multipleOwnersError) {
+      messages.push("Please select books from only one store/owner at a time");
+    }
     if (
       hasPremiumItem &&
       !limitExceeded &&
       !proError &&
       !trustScoreError &&
-      !ratingError
+      !ratingError &&
+      !multipleOwnersError
     ) {
       messages.push(`Premium book selected`);
     }
@@ -160,7 +169,12 @@ export function BorrowCart() {
     return messages.join(" • ");
   };
 
-  const isError = limitExceeded || proError || trustScoreError || ratingError;
+  const isError =
+    limitExceeded ||
+    proError ||
+    trustScoreError ||
+    ratingError ||
+    multipleOwnersError;
   const selectedCount = selectedCartItems.length;
 
   return (

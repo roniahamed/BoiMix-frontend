@@ -19,7 +19,6 @@ import { UserBadge } from "@/components/shared/user-badge";
 import { RatingStars } from "@/components/shared/rating-stars";
 import { BookCard } from "@/components/shared/book-card";
 import { ScrollContainer } from "@/components/shared/scroll-container";
-import type { BookCardBook } from "@/types/book";
 import { BookHeaderActions } from "@/components/shared/book-header-actions";
 import { BookReviews } from "@/components/shared/book-reviews";
 import { BookQA } from "@/components/shared/book-qa";
@@ -34,25 +33,27 @@ export const metadata: Metadata = {
   description: "View details of this book.",
 };
 
-
-
-
-
-
-export default async function BookDetailsPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BookDetailsPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const BASE_MOCK_BOOKS = await fetchLocal('/api/books');
-  const { book: MOCK_BOOK, owner: MOCK_OWNER, reviews: MOCK_REVIEWS, qa: MOCK_QA, recommended: MOCK_RECOMMENDED_BOOKS } = await fetchLocal('/api/books/${slug}');
+  const BASE_MOCK_BOOKS = await fetchLocal("/api/books");
+  const {
+    book: MOCK_BOOK,
+    owner: MOCK_OWNER,
+    reviews: MOCK_REVIEWS,
+    qa: MOCK_QA,
+    recommended: MOCK_RECOMMENDED_BOOKS,
+  } = await fetchLocal("/api/books/${slug}");
 
   // Find the book in recommendations to see if it has specific tags,
   // or use test slugs, or default to "sell"
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find((b: any) => b.slug === slug);
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const foundBase = BASE_MOCK_BOOKS.find((b: any) => b.slug === slug);
+  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find((b) => b.slug === slug);
+  const foundBase = BASE_MOCK_BOOKS.find((b) => b.slug === slug);
   const foundBook = foundRecommended || foundBase;
 
   const currentTag =
@@ -595,10 +596,9 @@ export default async function BookDetailsPage({ params }: { params: Promise<{ sl
           সম্প্রতি দেখা বই (Recently Viewed)
         </h2>
         <ScrollContainer>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {MOCK_RECOMMENDED_BOOKS.slice()
             .reverse()
-            .map((book: any) => (
+            .map((book) => (
               <div
                 key={book.id}
                 className="w-[140px] shrink-0 snap-start sm:w-[160px]"
