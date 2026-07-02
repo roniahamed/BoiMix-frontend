@@ -8,7 +8,7 @@ import {
   TriangleAlertIcon,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { Toaster as Sonner, type ToasterProps } from "sonner";
+import { Toaster as Sonner, toast, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
@@ -17,12 +17,45 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       theme={theme as ToasterProps["theme"]}
       className="toaster group"
+      closeButton={true}
       icons={{
-        success: <CircleCheckIcon className="size-4" />,
-        info: <InfoIcon className="size-4" />,
-        warning: <TriangleAlertIcon className="size-4" />,
-        error: <OctagonXIcon className="size-4" />,
-        loading: <Loader2Icon className="size-4 animate-spin" />,
+        success: (
+          <button
+            onClick={() => toast.dismiss()}
+            className="shrink-0 cursor-pointer text-green-500 transition-opacity outline-none hover:opacity-75"
+            aria-label="Close"
+          >
+            <CircleCheckIcon className="size-5" />
+          </button>
+        ),
+        info: (
+          <button
+            onClick={() => toast.dismiss()}
+            className="shrink-0 cursor-pointer text-blue-500 transition-opacity outline-none hover:opacity-75"
+            aria-label="Close"
+          >
+            <InfoIcon className="size-5" />
+          </button>
+        ),
+        warning: (
+          <button
+            onClick={() => toast.dismiss()}
+            className="shrink-0 cursor-pointer text-yellow-500 transition-opacity outline-none hover:opacity-75"
+            aria-label="Close"
+          >
+            <TriangleAlertIcon className="size-5" />
+          </button>
+        ),
+        error: (
+          <button
+            onClick={() => toast.dismiss()}
+            className="shrink-0 cursor-pointer text-red-500 transition-opacity outline-none hover:opacity-75"
+            aria-label="Close"
+          >
+            <OctagonXIcon className="size-5" />
+          </button>
+        ),
+        loading: <Loader2Icon className="size-5 animate-spin" />,
       }}
       style={
         {
