@@ -202,7 +202,7 @@ export default async function CentralLibraryPage() {
   return (
     <MainLayout>
       {/* HERO SECTION */}
-      <section className="boimix-container-wide relative mt-6 mb-16 flex min-h-[400px] overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm lg:h-[400px] dark:border-slate-800 dark:bg-slate-950">
+      <section className="boimix-container-wide relative mt-6 mb-16 flex min-h-[400px] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm lg:h-[400px] lg:max-h-[400px] dark:border-slate-800 dark:bg-slate-950">
         {/* Split Background with Gradient Transition */}
         <div className="absolute inset-0 flex w-full">
           <div className="z-10 w-full bg-white lg:w-[45%] dark:bg-slate-950"></div>
@@ -223,29 +223,29 @@ export default async function CentralLibraryPage() {
         {/* Content Container */}
         <div className="relative z-20 grid w-full items-center px-6 md:px-12 lg:grid-cols-[1.2fr_1fr] lg:px-16">
           {/* Left Content (White Background area) */}
-          <div className="py-10 pr-6 lg:py-12 lg:pr-12">
-            <h3 className="mb-4 text-xs font-bold tracking-[0.2em] text-blue-600 uppercase">
+          <div className="py-8 pr-6 lg:py-10 lg:pr-12">
+            <h3 className="mb-3 text-xs font-bold tracking-[0.2em] text-blue-600 uppercase">
               BoiMix Central Library
             </h3>
-            <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-5xl lg:leading-[1.15] dark:text-white">
+            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl lg:leading-[1.15] dark:text-white">
               Verified Books.
               <br />
               Trusted by Everyone.
             </h1>
-            <p className="mb-8 max-w-xl text-base leading-relaxed text-slate-600 dark:text-slate-400">
+            <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
               Explore 25,000+ verified books. Borrow or buy from the most
               trusted digital library in Bangladesh.
             </p>
 
             {/* Search Bar */}
-            <div className="mb-10 flex max-w-xl flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row">
+            <div className="mb-6 flex max-w-xl flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row">
               <div className="relative flex flex-1 items-center pl-3">
                 <Input
                   placeholder="Search by title, author, ISBN or keyword..."
                   className="h-10 border-0 bg-transparent px-0 text-sm text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:ring-0"
                 />
               </div>
-              <Button className="h-10 rounded-md bg-blue-600 px-6 text-sm font-semibold text-white shadow-none hover:bg-blue-700">
+              <Button className="h-10 rounded-lg bg-blue-600 px-6 text-sm font-semibold text-white shadow-none hover:bg-blue-700">
                 <Search className="mr-2 size-4" />
                 Search
               </Button>
@@ -254,7 +254,7 @@ export default async function CentralLibraryPage() {
             {/* Stats */}
             <div className="flex flex-wrap items-center gap-6 sm:gap-10">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-md bg-blue-50 text-blue-600 dark:bg-blue-900/20">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20">
                   <BookOpen className="size-5" />
                 </div>
                 <div>
@@ -267,7 +267,7 @@ export default async function CentralLibraryPage() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20">
                   <CheckCircle2 className="size-5" />
                 </div>
                 <div>
@@ -280,7 +280,7 @@ export default async function CentralLibraryPage() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-md bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20">
                   <Users className="size-5" />
                 </div>
                 <div>
@@ -293,7 +293,7 @@ export default async function CentralLibraryPage() {
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-md bg-slate-100 text-slate-600 dark:bg-slate-800">
+                <div className="flex size-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800">
                   <MapPin className="size-5" />
                 </div>
                 <div>
@@ -311,28 +311,28 @@ export default async function CentralLibraryPage() {
           {/* Right Content (Floating Card) */}
           <div className="relative hidden h-full items-center justify-end lg:flex">
             {/* Floating Card */}
-            <div className="w-[340px] rounded-2xl border border-slate-700/50 bg-[#0f172a] p-8 shadow-2xl">
-              <div className="mb-5 flex items-center gap-3">
-                <Star className="size-6 fill-yellow-400 text-yellow-400" />
-                <h3 className="text-xl font-bold text-white">
+            <div className="-mt-2.5 w-[340px] rounded-lg border border-white/10 bg-slate-800/90 p-5 shadow-2xl backdrop-blur-xl">
+              <div className="mb-3 flex items-center gap-3">
+                <Star className="size-5 fill-yellow-400 text-yellow-400" />
+                <h3 className="text-lg font-bold text-white">
                   Become a Member
                 </h3>
               </div>
-              <p className="mb-6 text-sm leading-relaxed text-slate-300">
+              <p className="mb-3 text-sm leading-snug text-slate-300">
                 Enjoy unlimited borrowing, exclusive discounts and member
                 benefits.
               </p>
-              <div className="mb-8 space-y-3.5">
-                <div className="flex items-start gap-3">
+              <div className="mb-4 space-y-2">
+                <div className="flex items-start gap-2">
                   <Check
                     className="mt-0.5 size-4 shrink-0 text-yellow-400"
                     strokeWidth={3}
                   />
                   <span className="text-sm text-slate-200">
-                    Borrow books for up to 14 days
+                    Borrow books for up to 21 days
                   </span>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2">
                   <Check
                     className="mt-0.5 size-4 shrink-0 text-yellow-400"
                     strokeWidth={3}
@@ -341,7 +341,7 @@ export default async function CentralLibraryPage() {
                     Priority access to new books
                   </span>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2">
                   <Check
                     className="mt-0.5 size-4 shrink-0 text-yellow-400"
                     strokeWidth={3}
@@ -350,7 +350,7 @@ export default async function CentralLibraryPage() {
                     Special member discounts
                   </span>
                 </div>
-                <div className="flex items-start gap-3">
+                <div className="flex items-start gap-2">
                   <Check
                     className="mt-0.5 size-4 shrink-0 text-yellow-400"
                     strokeWidth={3}
@@ -362,7 +362,7 @@ export default async function CentralLibraryPage() {
               </div>
               <Button
                 asChild
-                className="h-11 w-full rounded-lg bg-white font-bold text-slate-900 shadow-md hover:bg-slate-100"
+                className="h-10 w-full rounded-lg bg-white font-bold text-slate-900 shadow-md hover:bg-slate-100"
               >
                 <Link href="/explore/central-library/memberships">
                   View Membership Plans <ArrowRight className="ml-2 size-4" />
@@ -375,7 +375,7 @@ export default async function CentralLibraryPage() {
 
       {/* BROWSE BY CATEGORIES */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">
             Categories
           </h2>
@@ -384,7 +384,7 @@ export default async function CentralLibraryPage() {
               <Link
                 key={i}
                 href={`/books/categories/${cat.name.toLowerCase()}`}
-                className="group flex w-[160px] shrink-0 items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
+                className="group flex w-[160px] shrink-0 items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
               >
                 <div
                   className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${cat.bg} dark:bg-slate-800`}
@@ -406,7 +406,7 @@ export default async function CentralLibraryPage() {
             ))}
             <Link
               href="/books/categories"
-              className="group flex w-[100px] shrink-0 flex-col items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
+              className="group flex w-[100px] shrink-0 flex-col items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex size-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
                 <LayoutGrid className="size-5" />
@@ -421,7 +421,7 @@ export default async function CentralLibraryPage() {
 
       {/* VERIFIED PICKS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex size-6 items-center justify-center rounded-full bg-blue-600 text-white">
@@ -456,7 +456,7 @@ export default async function CentralLibraryPage() {
       <section className="boimix-container-wide mb-6 md:mb-8">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* New Arrivals */}
-          <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+          <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 New Arrivals
@@ -474,7 +474,7 @@ export default async function CentralLibraryPage() {
                   key={book.id}
                   className="flex w-[140px] shrink-0 flex-col gap-3"
                 >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-md border border-slate-100 bg-slate-100 shadow-sm dark:border-slate-800">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm dark:border-slate-800">
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
@@ -507,7 +507,7 @@ export default async function CentralLibraryPage() {
           </div>
 
           {/* Most Borrowed */}
-          <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+          <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
             <div className="mb-6 flex items-center justify-between">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 Most Borrowed
@@ -525,7 +525,7 @@ export default async function CentralLibraryPage() {
                   key={book.id}
                   className="flex w-[140px] shrink-0 flex-col gap-3"
                 >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-md border border-slate-100 bg-slate-100 shadow-sm dark:border-slate-800">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm dark:border-slate-800">
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
@@ -561,7 +561,7 @@ export default async function CentralLibraryPage() {
 
       {/* POPULAR COLLECTIONS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <div className="mb-6 flex items-center justify-between">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
               Popular Collections
@@ -578,7 +578,7 @@ export default async function CentralLibraryPage() {
               <Link
                 key={i}
                 href={`/explore/central-library/search?collection=${col.name}`}
-                className="group relative flex h-[160px] w-[260px] shrink-0 flex-col justify-end overflow-hidden rounded-2xl shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
+                className="group relative flex h-[160px] w-[260px] shrink-0 flex-col justify-end overflow-hidden rounded-lg shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
               >
                 <Image
                   src={col.image}
@@ -606,7 +606,7 @@ export default async function CentralLibraryPage() {
 
       {/* MEMBERSHIP PLANS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-3xl bg-[#f5f9ff] p-8 md:p-12 dark:bg-slate-900/50">
+        <div className="rounded-lg bg-[#f5f9ff] p-8 md:p-12 dark:bg-slate-900/50">
           <div className="grid items-center gap-12 lg:grid-cols-[1fr_2fr]">
             {/* Left Side */}
             <div className="flex h-full flex-col items-center justify-between text-center lg:items-start lg:text-left">
@@ -637,7 +637,7 @@ export default async function CentralLibraryPage() {
             {/* Right Side - Plans */}
             <div className="grid gap-6 sm:grid-cols-3">
               {/* Basic */}
-              <div className="flex flex-col items-center rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex flex-col items-center rounded-lg border border-slate-100 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <h3 className="mb-4 text-xl font-bold text-slate-900 dark:text-white">
                   Basic
                 </h3>
@@ -681,7 +681,7 @@ export default async function CentralLibraryPage() {
               </div>
 
               {/* Premium */}
-              <div className="relative z-10 flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-xl ring-2 ring-blue-500 sm:scale-105 dark:bg-slate-900">
+              <div className="relative z-10 flex flex-col items-center rounded-lg bg-white p-6 text-center shadow-xl ring-2 ring-blue-500 sm:scale-105 dark:bg-slate-900">
                 <Badge className="absolute -top-3 border-0 bg-blue-500 px-3 py-0.5 font-bold text-white shadow-sm hover:bg-blue-600">
                   Most Popular
                 </Badge>
@@ -732,7 +732,7 @@ export default async function CentralLibraryPage() {
               </div>
 
               {/* Elite */}
-              <div className="flex flex-col items-center rounded-2xl border border-slate-100 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+              <div className="flex flex-col items-center rounded-lg border border-slate-100 bg-white p-6 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <h3 className="mb-4 text-xl font-bold text-slate-900 dark:text-white">
                   Elite
                 </h3>
@@ -790,7 +790,7 @@ export default async function CentralLibraryPage() {
       <section className="boimix-container-wide mb-6 md:mb-8">
         <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr]">
           {/* Left Box */}
-          <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-sm md:p-10 dark:border-slate-800 dark:bg-slate-900">
+          <div className="relative flex flex-col justify-between overflow-hidden rounded-lg border border-slate-100 bg-white p-8 shadow-sm md:p-10 dark:border-slate-800 dark:bg-slate-900">
             <div className="relative z-10">
               <h2 className="mb-6 text-2xl font-bold text-slate-900 lg:text-3xl lg:leading-tight dark:text-white">
                 Why Choose BoiMix
@@ -829,7 +829,7 @@ export default async function CentralLibraryPage() {
                   </span>
                 </div>
               </div>
-              <Button className="h-10 rounded-md bg-[#0f449e] px-6 font-bold text-white shadow-none hover:bg-[#0a3175]">
+              <Button className="h-10 rounded-lg bg-[#0f449e] px-6 font-bold text-white shadow-none hover:bg-[#0a3175]">
                 Learn More <ArrowRight className="ml-2 size-4" />
               </Button>
             </div>
@@ -848,7 +848,7 @@ export default async function CentralLibraryPage() {
 
           {/* Right Grid (Stats) */}
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <div className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-500 dark:bg-blue-900/20">
                 <BookOpen className="size-5" />
               </div>
@@ -862,7 +862,7 @@ export default async function CentralLibraryPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-500 dark:bg-purple-900/20">
                 <Users className="size-5" />
               </div>
@@ -876,7 +876,7 @@ export default async function CentralLibraryPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-600 dark:bg-slate-800">
                 <MapPin className="size-5" />
               </div>
@@ -890,7 +890,7 @@ export default async function CentralLibraryPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500 dark:bg-amber-900/20">
                 <Star className="size-5" />
               </div>
@@ -904,7 +904,7 @@ export default async function CentralLibraryPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 dark:bg-emerald-900/20">
                 <CheckCircle2 className="size-5" />
               </div>
@@ -918,7 +918,7 @@ export default async function CentralLibraryPage() {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-500 dark:bg-rose-900/20">
                 <Heart className="size-5" />
               </div>
@@ -937,7 +937,7 @@ export default async function CentralLibraryPage() {
 
       {/* FREQUENTLY ASKED QUESTIONS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
+        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <div className="mb-8 flex items-center justify-between">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
               Frequently Asked Questions
@@ -953,7 +953,7 @@ export default async function CentralLibraryPage() {
             {FAQS.map((faq, i) => (
               <details
                 key={i}
-                className="group rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
+                className="group rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
               >
                 <summary className="flex cursor-pointer list-none items-center justify-between p-5 font-semibold text-slate-800 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
                   {faq.q}
@@ -970,7 +970,7 @@ export default async function CentralLibraryPage() {
 
       {/* BOTTOM BANNER */}
       <section className="boimix-container-wide mb-16">
-        <div className="relative flex flex-col items-center justify-between gap-8 overflow-hidden rounded-2xl bg-[#0f172a] px-8 py-10 shadow-xl md:flex-row md:px-12">
+        <div className="relative flex flex-col items-center justify-between gap-8 overflow-hidden rounded-lg border border-white/10 bg-slate-800/90 px-8 py-10 shadow-xl backdrop-blur-xl md:flex-row md:px-12">
           {/* Background design elements */}
           <div
             className="absolute top-0 right-0 hidden h-full w-1/3 bg-blue-900/20 md:block"
