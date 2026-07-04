@@ -419,9 +419,11 @@ export default async function BookDetailsPage({
                     }}
                   />
                   {currentBook.tags.includes("swap") && (
-                    <Button className="h-12 w-full gap-2 text-base">
-                      <Repeat2 className="size-5" />
-                      Swap Request
+                    <Button asChild className="h-12 w-full gap-2 text-base">
+                      <Link href={`/swap/offer/${currentBook.id}`}>
+                        <Repeat2 className="size-5" />
+                        Swap Request
+                      </Link>
                     </Button>
                   )}
                   <BookBorrowActions

@@ -87,6 +87,7 @@ export const dashboardNavItems: NavItem[] = [
   { title: "Wishlist", href: "/wishlist", icon: HeartIcon },
   { title: "Cart", href: "/dashboard/cart", icon: ShoppingCartIcon },
   { title: "Borrowed", href: "/dashboard/borrowed", icon: BookOpenIcon },
+  { title: "Swaps", href: "/dashboard/swaps", icon: Repeat2Icon },
   { title: "Purchases", href: "/dashboard/purchases", icon: PackageIcon },
   { title: "Sales", href: "/dashboard/sales", icon: BarChart3Icon },
   { title: "Reviews", href: "/dashboard/reviews", icon: StarIcon },
