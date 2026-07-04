@@ -64,7 +64,7 @@ function CheckoutForm() {
     isDirect && directCheckoutItem ? [directCheckoutItem] : cartItems;
   const { addOrder, wallet, orders } = useBorrowStore();
 
-  const [checkoutStep, setCheckoutStep] = useState<1 | 2 | 3>(1);
+  const [checkoutStep, setCheckoutStep] = useState<1 | 2>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Group items by ownerId
@@ -98,6 +98,9 @@ function CheckoutForm() {
     {},
   );
   const [meetupLocation, setMeetupLocation] = useState<Record<string, string>>(
+    {},
+  );
+  const [meetupDateTime, setMeetupDateTime] = useState<Record<string, string>>(
     {},
   );
   const [courierDistrict, setCourierDistrict] = useState<
@@ -154,7 +157,11 @@ function CheckoutForm() {
   const isStep2Valid = Object.keys(itemsByOwner).every((ownerId) => {
     const method = ownerMethods[ownerId] || "meetup";
     if (method === "meetup") {
-      return !!meetupLocation[ownerId] && phone.trim().length >= 11;
+      return (
+        !!meetupLocation[ownerId] &&
+        !!meetupDateTime[ownerId] &&
+        phone.trim().length >= 11
+      );
     } else {
       return (
         !!courierDistrict[ownerId] &&
@@ -166,10 +173,10 @@ function CheckoutForm() {
     }
   });
 
-  const handleProceedToPayment = () => {
+  const handleSubmitRequest = () => {
     if (isStep2Valid) {
       setErrors({});
-      setCheckoutStep(3);
+      handleSubmit();
       return;
     }
 
@@ -181,6 +188,10 @@ function CheckoutForm() {
         if (!meetupLocation[ownerId]) {
           newErrors[`meetupLocation-${ownerId}`] = "Location is required";
           missing.push("Meetup Location");
+        }
+        if (!meetupDateTime[ownerId]) {
+          newErrors[`meetupDateTime-${ownerId}`] = "Date & Time is required";
+          missing.push("Preferred Date & Time");
         }
         if (phone.trim().length < 11) {
           newErrors.phone = "11-digit phone required";
@@ -278,14 +289,14 @@ function CheckoutForm() {
   }
 
   return (
-    <div className="container mx-auto max-w-md px-4 py-8 md:max-w-3xl">
-      <div className="mb-6 flex items-center">
+    <div className="container mx-auto max-w-md px-4 py-6 md:max-w-3xl">
+      <div className="mb-4 flex items-center">
         <Button
           variant="ghost"
           size="icon"
           onClick={() =>
             checkoutStep > 1
-              ? setCheckoutStep((prev) => (prev - 1) as 1 | 2 | 3)
+              ? setCheckoutStep((prev) => (prev - 1) as 1 | 2)
               : router.back()
           }
         >
@@ -294,28 +305,13 @@ function CheckoutForm() {
         <h1 className="ml-2 text-lg font-semibold">
           {checkoutStep === 1 && "Eligibility Check"}
           {checkoutStep === 2 && "Request to Borrow"}
-          {checkoutStep === 3 && "Payment"}
         </h1>
       </div>
 
-      <ProgressStepper
-        currentStep={checkoutStep}
-        totalSteps={6}
-        className="mb-8 hidden sm:block"
-        labels={[
-          "Request",
-          "Review",
-          "Payment",
-          "Active",
-          "Returning",
-          "Completed",
-        ]}
-      />
-
-      <div className="mb-6">
+      <div className="mb-4">
         {/* STEP 1: ELIGIBILITY */}
         {checkoutStep === 1 && (
-          <div className="animate-in slide-in-from-bottom-4 space-y-6">
+          <div className="animate-in slide-in-from-bottom-4 space-y-4">
             <EligibilityCard
               depositRequired={totalDepositRequired}
               availableLimit={wallet.availableLimit}
@@ -334,69 +330,14 @@ function CheckoutForm() {
 
         {/* STEP 2: REQUEST DETAILS */}
         {checkoutStep === 2 && (
-          <div className="animate-in slide-in-from-bottom-4 space-y-6">
-            {Object.entries(itemsByOwner).map(([ownerId, group]) => (
+          <div className="animate-in slide-in-from-bottom-4 space-y-4">
+            {Object.entries(itemsByOwner).map(([ownerId, group], index) => (
               <Card
                 key={ownerId}
                 className="overflow-hidden rounded-xl border shadow-sm"
               >
                 <CardContent className="p-0">
-                  <div className="bg-muted/30 border-b p-4">
-                    <div className="mb-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="bg-primary/10 text-primary flex h-10 w-10 items-center justify-center rounded-full font-bold">
-                          {group.ownerName.charAt(0)}
-                        </div>
-                        <div>
-                          <p className="text-muted-foreground text-xs">Owner</p>
-                          <p className="text-sm font-semibold">
-                            {group.ownerName}
-                          </p>
-                        </div>
-                      </div>
-                      <span className="rounded-md bg-amber-100 px-2 py-1 text-xs font-medium text-amber-600">
-                        {group.items.length} Books
-                      </span>
-                    </div>
-
-                    <div className="space-y-3">
-                      {group.items.map((item) => (
-                        <div
-                          key={item.id}
-                          className="bg-background flex gap-3 rounded-lg border p-3"
-                        >
-                          <div className="relative aspect-[3/4] w-12 shrink-0 overflow-hidden rounded">
-                            <Image
-                              src={
-                                item.coverUrl || "/images/books/placeholder.jpg"
-                              }
-                              fill
-                              alt={item.title}
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <h4 className="line-clamp-1 text-sm font-semibold">
-                              {item.title}
-                            </h4>
-                            <p className="text-muted-foreground text-xs">
-                              {item.author}
-                            </p>
-                          </div>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-muted-foreground hover:text-destructive h-8 w-8"
-                            onClick={() => removeItem(item.id)}
-                          >
-                            <Trash2 className="size-4" />
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="space-y-5 p-5">
+                  <div className="space-y-3 px-4 pt-2 pb-2">
                     <div>
                       <Label className="mb-3 block text-sm font-semibold">
                         Choose Delivery Method
@@ -409,7 +350,7 @@ function CheckoutForm() {
                             val as "meetup" | "courier",
                           )
                         }
-                        className="grid gap-3"
+                        className="grid gap-2 sm:grid-cols-2"
                       >
                         <Label
                           htmlFor={`meetup-${ownerId}`}
@@ -456,7 +397,7 @@ function CheckoutForm() {
                       </RadioGroup>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                       {ownerMethods[ownerId] === "meetup" ||
                       !ownerMethods[ownerId] ? (
                         <>
@@ -500,18 +441,48 @@ function CheckoutForm() {
                             </Select>
                           </div>
                           <div className="space-y-2">
-                            <Label className="text-muted-foreground text-xs font-semibold">
-                              Preferred Date & Time
-                            </Label>
+                            <div className="flex items-center justify-between">
+                              <Label className="text-muted-foreground text-xs font-semibold">
+                                Preferred Date & Time{" "}
+                                <span className="text-red-500">*</span>
+                              </Label>
+                              {errors[`meetupDateTime-${ownerId}`] && (
+                                <span className="text-xs font-medium text-red-500">
+                                  {errors[`meetupDateTime-${ownerId}`]}
+                                </span>
+                              )}
+                            </div>
                             <div className="relative">
-                              <Calendar className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                              <Calendar
+                                className={`absolute top-1/2 left-3 size-4 -translate-y-1/2 ${errors[`meetupDateTime-${ownerId}`] ? "text-red-500" : "text-muted-foreground"}`}
+                              />
                               <Input
                                 type="datetime-local"
-                                className="pl-9 text-sm"
+                                className={`pl-9 text-sm ${errors[`meetupDateTime-${ownerId}`] ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                                value={meetupDateTime[ownerId] || ""}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setMeetupDateTime((prev) => ({
+                                    ...prev,
+                                    [ownerId]: val,
+                                  }));
+                                  if (!val.trim()) {
+                                    setErrors((prev) => ({
+                                      ...prev,
+                                      [`meetupDateTime-${ownerId}`]:
+                                        "Date & Time is required",
+                                    }));
+                                  } else {
+                                    setErrors((prev) => ({
+                                      ...prev,
+                                      [`meetupDateTime-${ownerId}`]: "",
+                                    }));
+                                  }
+                                }}
                               />
                             </div>
                           </div>
-                          <div className="border-border/50 space-y-2 border-t pt-2">
+                          <div className="space-y-2">
                             <div className="flex items-center justify-between">
                               <Label className="text-muted-foreground text-xs font-semibold">
                                 Phone Number{" "}
@@ -545,7 +516,7 @@ function CheckoutForm() {
                         </>
                       ) : (
                         <>
-                          <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="grid gap-3 sm:grid-cols-2">
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <Label className="text-muted-foreground text-xs font-semibold">
@@ -676,7 +647,7 @@ function CheckoutForm() {
                               />
                             </div>
                           </div>
-                          <div className="border-border/50 grid gap-4 border-t pt-2 sm:grid-cols-2">
+                          <div className="grid gap-3 sm:grid-cols-2">
                             <div className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <Label className="text-muted-foreground text-xs font-semibold">
@@ -766,155 +737,62 @@ function CheckoutForm() {
                       </div>
                     </div>
                   </div>
+
+                  <div className="bg-muted/10 border-t px-4 py-2">
+                    {(() => {
+                      const groupBorrowFee = group.items.reduce(
+                        (s, i) => s + i.borrowFee,
+                        0,
+                      );
+                      const groupCourierFee =
+                        ownerMethods[ownerId] === "courier"
+                          ? courierDistrict[ownerId] === "47"
+                            ? 70
+                            : 120
+                          : 0;
+                      const groupTotal = groupBorrowFee + groupCourierFee;
+
+                      return (
+                        <div className="bg-background rounded-lg border p-4 shadow-sm">
+                          <div className="text-muted-foreground space-y-2 text-sm">
+                            <div className="flex justify-between">
+                              <span>
+                                Borrow Fee ({group.items.length} books)
+                              </span>
+                              <span>৳{groupBorrowFee}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span>Est. Courier Fee</span>
+                              <span>৳{groupCourierFee}</span>
+                            </div>
+                          </div>
+                          <div className="border-border mt-3 flex justify-between border-t pt-3 text-base font-bold text-blue-600">
+                            <span>Total Payable</span>
+                            <span>৳{groupTotal}</span>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 </CardContent>
               </Card>
             ))}
 
-            <div className="mt-8 flex justify-end gap-4">
+            <div className="mt-6 grid grid-cols-2 gap-4">
               <Button
                 variant="outline"
-                className="h-12 px-8 text-lg"
+                className="h-12 w-full text-lg"
                 onClick={() => setCheckoutStep(1)}
-              >
-                Back
-              </Button>
-              <Button
-                className="h-12 px-8 text-lg"
-                onClick={handleProceedToPayment}
-              >
-                Proceed to Payment
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* STEP 3: PAYMENT */}
-        {checkoutStep === 3 && (
-          <div className="animate-in slide-in-from-bottom-4 space-y-6">
-            <Card className="overflow-hidden rounded-xl border shadow-sm">
-              <CardContent className="p-0">
-                <div className="bg-muted/30 border-b p-5">
-                  <h3 className="mb-4 font-bold">Payment Breakdown</h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">
-                        Borrow Fee ({items.length} items)
-                      </span>
-                      <span className="font-medium">৳{totalBorrowFee}</span>
-                    </div>
-                    <div className="flex justify-between font-medium text-amber-600 dark:text-amber-500">
-                      <span>Security Deposit (Locked)</span>
-                      <span>৳{totalDepositRequired}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">
-                        Courier Fee (Est.)
-                      </span>
-                      <span className="font-medium">৳80</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-primary/5 flex items-center justify-between border-b p-5">
-                  <span className="text-primary text-lg font-bold">
-                    Total Payable
-                  </span>
-                  <span className="text-primary text-xl font-bold">
-                    ৳{totalPayable}
-                  </span>
-                </div>
-
-                <div className="p-5">
-                  <h3 className="mb-4 font-bold">Select Payment Method</h3>
-                  <RadioGroup
-                    value={paymentMethod}
-                    onValueChange={(val) =>
-                      setPaymentMethod(
-                        val as "bkash" | "nagad" | "card" | "wallet",
-                      )
-                    }
-                    className="space-y-3"
-                  >
-                    <Label
-                      htmlFor="bkash"
-                      className="hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border-2 p-3 [&:has([data-state=checked])]:border-blue-600 [&:has([data-state=checked])]:bg-blue-50 dark:[&:has([data-state=checked])]:bg-blue-950/20"
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="bkash"
-                          id="bkash"
-                          className="text-blue-600"
-                        />
-                        <span className="font-semibold">bKash</span>
-                      </div>
-                    </Label>
-                    <Label
-                      htmlFor="nagad"
-                      className="hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border-2 p-3 [&:has([data-state=checked])]:border-blue-600 [&:has([data-state=checked])]:bg-blue-50 dark:[&:has([data-state=checked])]:bg-blue-950/20"
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="nagad"
-                          id="nagad"
-                          className="text-blue-600"
-                        />
-                        <span className="font-semibold">Nagad</span>
-                      </div>
-                    </Label>
-                    <Label
-                      htmlFor="card"
-                      className="hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border-2 p-3 [&:has([data-state=checked])]:border-blue-600 [&:has([data-state=checked])]:bg-blue-50 dark:[&:has([data-state=checked])]:bg-blue-950/20"
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="card"
-                          id="card"
-                          className="text-blue-600"
-                        />
-                        <span className="flex items-center gap-2 font-semibold">
-                          <CreditCard className="size-4" /> Card
-                        </span>
-                      </div>
-                    </Label>
-                    <Label
-                      htmlFor="wallet"
-                      className="hover:bg-muted/50 flex cursor-pointer items-center justify-between rounded-lg border-2 p-3 [&:has([data-state=checked])]:border-blue-600 [&:has([data-state=checked])]:bg-blue-50 dark:[&:has([data-state=checked])]:bg-blue-950/20"
-                    >
-                      <div className="flex items-center gap-3">
-                        <RadioGroupItem
-                          value="wallet"
-                          id="wallet"
-                          className="text-blue-600"
-                        />
-                        <div className="flex flex-col">
-                          <span className="flex items-center gap-2 font-semibold">
-                            <Wallet className="size-4" /> Wallet Balance
-                          </span>
-                          <span className="text-muted-foreground ml-6 text-xs">
-                            ৳{wallet.availableLimit} available
-                          </span>
-                        </div>
-                      </div>
-                    </Label>
-                  </RadioGroup>
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="mt-8 flex justify-end gap-4">
-              <Button
-                variant="outline"
-                className="h-12 px-8 text-lg"
-                onClick={() => setCheckoutStep(2)}
                 disabled={isSubmitting}
               >
                 Back
               </Button>
               <Button
-                className="h-12 px-8 text-lg"
-                onClick={handleSubmit}
+                className="h-12 w-full text-lg"
+                onClick={handleSubmitRequest}
                 disabled={isSubmitting}
               >
-                {isSubmitting ? "Processing..." : `Pay ৳${totalPayable}`}
+                {isSubmitting ? "Submitting..." : "Submit Request"}
               </Button>
             </div>
           </div>
