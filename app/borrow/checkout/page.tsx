@@ -337,9 +337,9 @@ function CheckoutForm() {
                 className="overflow-hidden rounded-xl border shadow-sm"
               >
                 <CardContent className="p-0">
-                  <div className="space-y-3 px-4 pt-2 pb-2">
+                  <div className="space-y-3 px-3 pt-1 pb-1">
                     <div>
-                      <Label className="mb-3 block text-sm font-semibold">
+                      <Label className="mb-2 block text-sm font-semibold">
                         Choose Delivery Method
                       </Label>
                       <RadioGroup
@@ -738,7 +738,7 @@ function CheckoutForm() {
                     </div>
                   </div>
 
-                  <div className="bg-muted/10 border-t px-4 py-2">
+                  <div className="bg-muted/10 border-t p-2">
                     {(() => {
                       const groupBorrowFee = group.items.reduce(
                         (s, i) => s + i.borrowFee,
@@ -753,8 +753,8 @@ function CheckoutForm() {
                       const groupTotal = groupBorrowFee + groupCourierFee;
 
                       return (
-                        <div className="bg-background rounded-lg border p-4 shadow-sm">
-                          <div className="text-muted-foreground space-y-2 text-sm">
+                        <div className="bg-background rounded-lg border p-3 shadow-sm">
+                          <div className="text-muted-foreground space-y-1 text-sm">
                             <div className="flex justify-between">
                               <span>
                                 Borrow Fee ({group.items.length} books)
@@ -766,7 +766,7 @@ function CheckoutForm() {
                               <span>৳{groupCourierFee}</span>
                             </div>
                           </div>
-                          <div className="border-border mt-3 flex justify-between border-t pt-3 text-base font-bold text-blue-600">
+                          <div className="border-border mt-2 flex justify-between border-t pt-2 text-base font-bold text-blue-600">
                             <span>Total Payable</span>
                             <span>৳{groupTotal}</span>
                           </div>
