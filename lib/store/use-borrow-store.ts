@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 export type BorrowStatus =
   | "pending_owner_review"
+  | "counter_offered"
   | "accepted"
   | "rejected"
   | "paid"
@@ -26,6 +27,15 @@ export interface BorrowOrder {
   endDate?: string;
   trackingId?: string; // Only for courier return
   disputeReason?: string;
+  counterOfferDetails?: {
+    proposedDate?: string;
+    proposedLocation?: string;
+    message?: string;
+  };
+  review?: {
+    rating: number;
+    comment: string;
+  };
 }
 
 interface BorrowState {
@@ -39,9 +49,20 @@ interface BorrowState {
   updateOrderStatus: (id: string, status: BorrowStatus) => void;
   submitTrackingId: (id: string, trackingId: string) => void;
   openDispute: (id: string, reason: string) => void;
+  counterOffer: (
+    id: string,
+    details: NonNullable<BorrowOrder["counterOfferDetails"]>,
+  ) => void;
+  acceptCounterOffer: (id: string) => void;
+  rejectCounterOffer: (id: string) => void;
+  processPayment: (id: string) => void;
+  submitReview: (
+    id: string,
+    review: NonNullable<BorrowOrder["review"]>,
+  ) => void;
 }
 
-export const useBorrowStore = create<BorrowState>((set, get) => ({
+export const useBorrowStore = create<BorrowState>((set) => ({
   wallet: {
     totalDeposit: 1000,
     locked: 300,
@@ -123,6 +144,64 @@ export const useBorrowStore = create<BorrowState>((set, get) => ({
         order.id === id
           ? { ...order, status: "disputed", disputeReason: reason }
           : order,
+      ),
+    }));
+  },
+  counterOffer: (id, details) => {
+    set((state) => ({
+      orders: state.orders.map((order) =>
+        order.id === id
+          ? {
+              ...order,
+              status: "counter_offered",
+              counterOfferDetails: details,
+            }
+          : order,
+      ),
+    }));
+  },
+  acceptCounterOffer: (id) => {
+    set((state) => ({
+      orders: state.orders.map((order) =>
+        order.id === id ? { ...order, status: "accepted" } : order,
+      ),
+    }));
+  },
+  rejectCounterOffer: (id) => {
+    set((state) => {
+      const orders = state.orders.map((order) =>
+        order.id === id
+          ? { ...order, status: "rejected" as BorrowStatus }
+          : order,
+      );
+      const order = state.orders.find((o) => o.id === id);
+      let wallet = state.wallet;
+      if (order) {
+        wallet = {
+          ...wallet,
+          locked: wallet.locked - order.depositLocked,
+          availableLimit: wallet.availableLimit + order.depositLocked,
+        };
+      }
+      return { orders, wallet };
+    });
+  },
+  processPayment: (id) => {
+    set((state) => {
+      const order = state.orders.find((o) => o.id === id);
+      if (!order) return state;
+      // Normally deduct borrowFee here from real wallet
+      return {
+        orders: state.orders.map((o) =>
+          o.id === id ? { ...o, status: "paid" } : o,
+        ),
+      };
+    });
+  },
+  submitReview: (id, review) => {
+    set((state) => ({
+      orders: state.orders.map((order) =>
+        order.id === id ? { ...order, review } : order,
       ),
     }));
   },

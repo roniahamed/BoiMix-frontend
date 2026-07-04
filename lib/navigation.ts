@@ -8,7 +8,6 @@ import {
   HomeIcon,
   LayoutDashboardIcon,
   LibraryIcon,
-  MenuIcon,
   MessageSquareIcon,
   PackageIcon,
   Repeat2Icon,
@@ -84,6 +83,7 @@ export const mobileBottomNavItems: NavItem[] = [
 export const dashboardNavItems: NavItem[] = [
   { title: "Overview", href: "/dashboard/overview", icon: LayoutDashboardIcon },
   { title: "My Library", href: "/dashboard/library", icon: LibraryIcon },
+  { title: "Requests", href: "/dashboard/requests", icon: ClipboardListIcon },
   { title: "Wishlist", href: "/wishlist", icon: HeartIcon },
   { title: "Cart", href: "/dashboard/cart", icon: ShoppingCartIcon },
   { title: "Borrowed", href: "/dashboard/borrowed", icon: BookOpenIcon },
