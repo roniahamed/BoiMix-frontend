@@ -3,7 +3,8 @@ export type BookAvailabilityMode =
   | "swap"
   | "borrow"
   | "wishlist"
-  | "collection";
+  | "collection"
+  | "library";
 
 export type BookCondition = "new" | "excellent" | "good" | "fair" | "poor";
 
