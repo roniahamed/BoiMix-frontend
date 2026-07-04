@@ -26,14 +26,11 @@ import { FilterSidebar } from "@/components/shared/filter-sidebar";
 import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook } from "@/types/book";
 
-
 type ExtendedBook = BookCardBook & {
   category: string;
   publisher: string;
   language: string;
 };
-
-
 
 type BookListingProps = {
   title: string;
@@ -50,51 +47,88 @@ export function BookListing({
   initialFilters = {},
   initialSortBy = "newest",
 }: BookListingProps) {
-
   const { data: baseBooks = [] } = useQuery({
-    queryKey: ['books'],
-    queryFn: () => fetchBooks()
+    queryKey: ["books"],
+    queryFn: () => fetchBooks(),
   });
 
   const MOCK_BOOKS = useMemo(() => {
-    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-    return baseBooks.map((b: any, i: number) => ({
+    return baseBooks.map((b: BookCardBook, i: number) => ({
       ...b,
-      category: ["Fiction", "Academic", "Business", "Literature", "History"][i % 5],
-      publisher: ["Prothoma", "Batighor", "Oitijjho", "Adarsha", "Anyaprokash"][i % 5],
+      category: ["Fiction", "Academic", "Business", "Literature", "History"][
+        i % 5
+      ],
+      publisher: ["Prothoma", "Batighor", "Oitijjho", "Adarsha", "Anyaprokash"][
+        i % 5
+      ],
       language: ["Bengali", "English"][i % 2],
     })) as ExtendedBook[];
   }, [baseBooks]);
 
   const FILTER_GROUPS = useMemo(() => {
-    const uniqueAuthors = Array.from(new Set(MOCK_BOOKS.map((b) => b.author))).sort();
-    const uniquePublishers = Array.from(new Set(MOCK_BOOKS.map((b) => b.publisher))).sort();
-    const uniqueCategories = Array.from(new Set(MOCK_BOOKS.map((b) => b.category))).sort();
-    const uniqueLanguages = Array.from(new Set(MOCK_BOOKS.map((b) => b.language))).sort();
+    const uniqueAuthors = Array.from(
+      new Set(MOCK_BOOKS.map((b) => b.author)),
+    ).sort();
+    const uniquePublishers = Array.from(
+      new Set(MOCK_BOOKS.map((b) => b.publisher)),
+    ).sort();
+    const uniqueCategories = Array.from(
+      new Set(MOCK_BOOKS.map((b) => b.category)),
+    ).sort();
+    const uniqueLanguages = Array.from(
+      new Set(MOCK_BOOKS.map((b) => b.language)),
+    ).sort();
 
     return [
       {
-        id: "category", type: "checkbox" as const,
+        id: "availability",
+        type: "checkbox" as const,
+        title: "Book Type",
+        options: [
+          { label: "For Sale", value: "sell" },
+          { label: "For Borrow", value: "borrow" },
+          { label: "For Swap", value: "swap" },
+        ],
+      },
+      {
+        id: "category",
+        type: "checkbox" as const,
         title: "Category",
-        options: uniqueCategories.map((c) => ({ label: c, value: c.toLowerCase() })),
+        options: uniqueCategories.map((c) => ({
+          label: c,
+          value: c.toLowerCase(),
+        })),
       },
       {
-        id: "author", type: "checkbox" as const,
+        id: "author",
+        type: "checkbox" as const,
         title: "Author",
-        options: uniqueAuthors.map((a) => ({ label: a, value: a.toLowerCase() })),
+        options: uniqueAuthors.map((a) => ({
+          label: a,
+          value: a.toLowerCase(),
+        })),
       },
       {
-        id: "publisher", type: "checkbox" as const,
+        id: "publisher",
+        type: "checkbox" as const,
         title: "Publisher",
-        options: uniquePublishers.map((p) => ({ label: p, value: p.toLowerCase() })),
+        options: uniquePublishers.map((p) => ({
+          label: p,
+          value: p.toLowerCase(),
+        })),
       },
       {
-        id: "language", type: "checkbox" as const,
+        id: "language",
+        type: "checkbox" as const,
         title: "Language",
-        options: uniqueLanguages.map((l) => ({ label: l, value: l.toLowerCase() })),
+        options: uniqueLanguages.map((l) => ({
+          label: l,
+          value: l.toLowerCase(),
+        })),
       },
       {
-        id: "condition", type: "checkbox" as const,
+        id: "condition",
+        type: "checkbox" as const,
         title: "Condition",
         options: [
           { label: "New", value: "new" },
@@ -106,8 +140,7 @@ export function BookListing({
     ];
   }, [MOCK_BOOKS]);
 
-
-    const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
+  const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
   const [sortBy, setSortBy] = useState(initialSortBy);
   const [selectedFilters, setSelectedFilters] =
     useState<Record<string, string[]>>(initialFilters);
@@ -154,77 +187,74 @@ export function BookListing({
 
   // Sync defaultSearchQuery from URL params to local state
   useEffect(() => {
-    {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearchQuery(defaultSearchQuery);
     setCurrentPage(1);
   }, [defaultSearchQuery]);
 
   // Derived state for filtering and sorting
-  const filteredBooks = MOCK_BOOKS
-    .filter((book) => {
-      // 1. Text Search
-      if (searchQuery) {
-        const lowerQ = searchQuery.toLowerCase();
-        if (
-          !book.title.toLowerCase().includes(lowerQ) &&
-          !book.author.toLowerCase().includes(lowerQ)
-        ) {
-          return false;
-        }
+  const filteredBooks = MOCK_BOOKS.filter((book) => {
+    // 1. Text Search
+    if (searchQuery) {
+      const lowerQ = searchQuery.toLowerCase();
+      if (
+        !book.title.toLowerCase().includes(lowerQ) &&
+        !book.author.toLowerCase().includes(lowerQ)
+      ) {
+        return false;
       }
+    }
 
-      // 2. Sidebar Filters
-      for (const [groupId, values] of Object.entries(selectedFilters)) {
-        if (!values || values.length === 0) continue;
+    // 2. Sidebar Filters
+    for (const [groupId, values] of Object.entries(selectedFilters)) {
+      if (!values || values.length === 0) continue;
 
-        if (groupId === "category") {
-          const hasMatch = values.some(
-            (val) => (book as ExtendedBook).category === val,
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "availability") {
-          const hasMatch = values.some(
-            (val) =>
-              (book.tags as string[])?.includes(val) ||
-              book.availability === val,
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "author") {
-          const hasMatch = values.some((val) => book.author === val);
-          if (!hasMatch) return false;
-        } else if (groupId === "publisher") {
-          const hasMatch = values.some(
-            (val) => (book as ExtendedBook).publisher === val,
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "language") {
-          const hasMatch = values.some(
-            (val) => (book as ExtendedBook).language === val,
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "rating") {
-          const hasMatch = values.some(
-            (val) => Math.floor(book.rating || 0) === Number(val),
-          );
-          if (!hasMatch) return false;
-        }
+      if (groupId === "category") {
+        const hasMatch = values.some(
+          (val) => (book as ExtendedBook).category === val,
+        );
+        if (!hasMatch) return false;
+      } else if (groupId === "availability") {
+        const hasMatch = values.some(
+          (val) =>
+            (book.tags as string[])?.includes(val) || book.availability === val,
+        );
+        if (!hasMatch) return false;
+      } else if (groupId === "author") {
+        const hasMatch = values.some((val) => book.author === val);
+        if (!hasMatch) return false;
+      } else if (groupId === "publisher") {
+        const hasMatch = values.some(
+          (val) => (book as ExtendedBook).publisher === val,
+        );
+        if (!hasMatch) return false;
+      } else if (groupId === "language") {
+        const hasMatch = values.some(
+          (val) => (book as ExtendedBook).language === val,
+        );
+        if (!hasMatch) return false;
+      } else if (groupId === "rating") {
+        const hasMatch = values.some(
+          (val) => Math.floor(book.rating || 0) === Number(val),
+        );
+        if (!hasMatch) return false;
       }
+    }
 
-      // 3. Price Filter
-      if (priceRange) {
-        const p = book.price || 0;
-        if (priceRange.min && p < Number(priceRange.min)) return false;
-        if (priceRange.max && p > Number(priceRange.max)) return false;
-      }
+    // 3. Price Filter
+    if (priceRange) {
+      const p = book.price || 0;
+      if (priceRange.min && p < Number(priceRange.min)) return false;
+      if (priceRange.max && p > Number(priceRange.max)) return false;
+    }
 
-      return true;
-    })
-    .sort((a, b) => {
-      if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
-      if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
-      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
-      return 0; // default / newest / distance mocked
-    });
+    return true;
+  }).sort((a, b) => {
+    if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
+    if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
+    if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
+    return 0; // default / newest / distance mocked
+  });
 
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
   const paginatedBooks = filteredBooks.slice(

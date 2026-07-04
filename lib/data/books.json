@@ -5,9 +5,7 @@
     "title": "Rivers of Dhaka",
     "author": "Nadia Rahman",
     "coverUrl": "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.8,
     "reviewCount": 42,
     "price": 420,
@@ -24,9 +22,7 @@
     "title": "Borrowed Light",
     "author": "Arif Hossain",
     "coverUrl": "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.6,
     "reviewCount": 31,
     "distance": "0.8 km",
@@ -42,9 +38,7 @@
     "title": "Swap Stories",
     "author": "Maliha Karim",
     "coverUrl": "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.7,
     "reviewCount": 28,
     "price": 360,
@@ -52,7 +46,8 @@
     "distance": "2.4 km",
     "location": "Uttara",
     "condition": "new",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "the-reader-map",
@@ -60,15 +55,14 @@
     "title": "The Reader Map",
     "author": "Samiul Islam",
     "coverUrl": "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.5,
     "reviewCount": 19,
     "distance": "3.1 km",
     "location": "Banani",
     "condition": "excellent",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "market-lanes",
@@ -76,16 +70,15 @@
     "title": "Market Lanes",
     "author": "Tahsin Ahmed",
     "coverUrl": "https://covers.openlibrary.org/b/id/10425026-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.4,
     "reviewCount": 16,
     "price": 280,
     "originalPrice": 350,
     "location": "Bashundhara",
     "condition": "good",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "quiet-reviews",
@@ -93,16 +86,15 @@
     "title": "Quiet Reviews",
     "author": "Raisa Chowdhury",
     "coverUrl": "https://covers.openlibrary.org/b/id/10521271-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.9,
     "reviewCount": 52,
     "distance": "1.7 km",
     "location": "Mohammadpur",
     "condition": "excellent",
     "availability": "in-stock",
-    "isInCart": true
+    "isInCart": true,
+    "providerType": "library"
   },
   {
     "id": "song-of-padma",
@@ -110,16 +102,15 @@
     "title": "The Song of the Padma",
     "author": "Tasnim Ara",
     "coverUrl": "https://covers.openlibrary.org/b/id/12534525-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.5,
     "reviewCount": 23,
     "price": 350,
     "distance": "1.5 km",
     "location": "Savar",
     "condition": "good",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "chhaya-bithi",
@@ -127,15 +118,14 @@
     "title": "Chhaya Bithi",
     "author": "Humayun Ahmed",
     "coverUrl": "https://covers.openlibrary.org/b/id/8259444-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.9,
     "reviewCount": 120,
     "distance": "3.5 km",
     "location": "Sylhet",
     "condition": "excellent",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "programming-basics",
@@ -143,16 +133,15 @@
     "title": "Programming Basics",
     "author": "Tamim Shahriar Subeen",
     "coverUrl": "https://covers.openlibrary.org/b/id/12836262-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.8,
     "reviewCount": 85,
     "price": 250,
     "originalPrice": 320,
     "location": "Chittagong",
     "condition": "new",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "struggles-of-life",
@@ -160,16 +149,15 @@
     "title": "Struggles of Life",
     "author": "Kazi Nazrul Islam",
     "coverUrl": "https://covers.openlibrary.org/b/id/10425027-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.7,
     "reviewCount": 45,
     "price": 180,
     "distance": "4.2 km",
     "location": "Mymensingh",
     "condition": "good",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "lost-sonnet",
@@ -177,15 +165,14 @@
     "title": "The Lost Sonnet",
     "author": "Rabindranath Tagore",
     "coverUrl": "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.6,
     "reviewCount": 60,
     "distance": "2.8 km",
     "location": "Khulna",
     "condition": "excellent",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "boi-er-pata",
@@ -193,15 +180,14 @@
     "title": "Boi-er Pata",
     "author": "Shamsur Rahman",
     "coverUrl": "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.3,
     "reviewCount": 14,
     "distance": "5.0 km",
     "location": "Barisal",
     "condition": "fair",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "dhaka-metro",
@@ -209,16 +195,15 @@
     "title": "Dhaka Metro Diary",
     "author": "Nayeem Islam",
     "coverUrl": "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.2,
     "reviewCount": 18,
     "price": 150,
     "distance": "0.5 km",
     "location": "Mirpur",
     "condition": "good",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "sundarbans-adventure",
@@ -226,15 +211,14 @@
     "title": "Sundarbans Adventure",
     "author": "Muhammed Zafar Iqbal",
     "coverUrl": "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.8,
     "reviewCount": 77,
     "distance": "6.2 km",
     "location": "Bagerhat",
     "condition": "excellent",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "smart-entrepreneur",
@@ -242,14 +226,12 @@
     "title": "Smart Entrepreneur",
     "author": "Ayman Sadiq",
     "coverUrl": "https://covers.openlibrary.org/b/id/10425026-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.7,
     "reviewCount": 110,
     "price": 320,
     "originalPrice": 400,
-    "providerType": "user",
+    "providerType": "library",
     "isVerifiedUser": true,
     "location": "Banani",
     "condition": "new",
@@ -261,9 +243,7 @@
     "title": "History of Bengal",
     "author": "Akbar Ali Khan",
     "coverUrl": "https://covers.openlibrary.org/b/id/10521271-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.9,
     "reviewCount": 65,
     "price": 480,
@@ -271,7 +251,8 @@
     "distance": "1.9 km",
     "location": "Dhanmondi",
     "condition": "excellent",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "silent-whispers",
@@ -279,15 +260,14 @@
     "title": "Silent Whispers",
     "author": "Tahmima Anam",
     "coverUrl": "https://covers.openlibrary.org/b/id/12534525-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.4,
     "reviewCount": 21,
     "price": 290,
     "location": "Uttara",
     "condition": "good",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "golden-age",
@@ -295,15 +275,14 @@
     "title": "A Golden Age",
     "author": "Tahmima Anam",
     "coverUrl": "https://covers.openlibrary.org/b/id/8259444-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.6,
     "reviewCount": 39,
     "distance": "2.1 km",
     "location": "Gulshan",
     "condition": "excellent",
-    "availability": "in-stock"
+    "availability": "in-stock",
+    "providerType": "library"
   },
   {
     "id": "lalshalu",
@@ -311,9 +290,7 @@
     "title": "Lalshalu",
     "author": "Syed Waliullah",
     "coverUrl": "https://covers.openlibrary.org/b/id/12836262-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.8,
     "reviewCount": 94,
     "distance": "3.7 km",
@@ -327,9 +304,7 @@
     "title": "Pather Panchali",
     "author": "Bibhutibhushan Bandyopadhyay",
     "coverUrl": "https://covers.openlibrary.org/b/id/10425027-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.9,
     "reviewCount": 142,
     "price": 190,
@@ -344,9 +319,7 @@
     "title": "Chokher Bali",
     "author": "Rabindranath Tagore",
     "coverUrl": "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.7,
     "reviewCount": 53,
     "price": 220,
@@ -361,9 +334,7 @@
     "title": "Gora",
     "author": "Rabindranath Tagore",
     "coverUrl": "https://covers.openlibrary.org/b/id/12534524-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.8,
     "reviewCount": 88,
     "distance": "3.2 km",
@@ -377,9 +348,7 @@
     "title": "Shesher Kobita",
     "author": "Rabindranath Tagore",
     "coverUrl": "https://covers.openlibrary.org/b/id/8259443-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.9,
     "reviewCount": 115,
     "price": 160,
@@ -393,9 +362,7 @@
     "title": "Devdas",
     "author": "Sarat Chandra Chattopadhyay",
     "coverUrl": "https://covers.openlibrary.org/b/id/12836261-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.5,
     "reviewCount": 67,
     "distance": "5.1 km",
@@ -409,9 +376,7 @@
     "title": "Srikanta",
     "author": "Sarat Chandra Chattopadhyay",
     "coverUrl": "https://covers.openlibrary.org/b/id/10425026-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.6,
     "reviewCount": 41,
     "price": 240,
@@ -426,9 +391,7 @@
     "title": "Kopalkundala",
     "author": "Bankim Chandra Chattopadhyay",
     "coverUrl": "https://covers.openlibrary.org/b/id/10521271-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.4,
     "reviewCount": 33,
     "distance": "2.7 km",
@@ -442,9 +405,7 @@
     "title": "Anandamath",
     "author": "Bankim Chandra Chattopadhyay",
     "coverUrl": "https://covers.openlibrary.org/b/id/12534525-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.7,
     "reviewCount": 59,
     "price": 300,
@@ -458,9 +419,7 @@
     "title": "Byomkesh Samagra",
     "author": "Sharadindu Bandyopadhyay",
     "coverUrl": "https://covers.openlibrary.org/b/id/8259444-L.jpg",
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "rating": 4.9,
     "reviewCount": 156,
     "price": 650,
@@ -476,9 +435,7 @@
     "title": "Feluda Somogro",
     "author": "Satyajit Ray",
     "coverUrl": "https://covers.openlibrary.org/b/id/12836262-L.jpg",
-    "tags": [
-      "sell"
-    ],
+    "tags": ["sell"],
     "rating": 4.9,
     "reviewCount": 203,
     "price": 750,
@@ -494,9 +451,7 @@
     "title": "Professor Shonku",
     "author": "Satyajit Ray",
     "coverUrl": "https://covers.openlibrary.org/b/id/10425027-L.jpg",
-    "tags": [
-      "borrow"
-    ],
+    "tags": ["borrow"],
     "rating": 4.8,
     "reviewCount": 119,
     "distance": "2.3 km",
