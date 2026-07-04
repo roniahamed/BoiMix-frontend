@@ -410,16 +410,22 @@ export function BorrowCart() {
                     ৳{totalBorrowFee.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between border-t pt-2 font-bold text-amber-600">
-                  <span>Total Deposit Required</span>
+                <div className="mt-3 flex justify-between border-t pt-3 font-bold text-blue-600">
+                  <span>Total Payable</span>
                   <span className="text-lg">
-                    ৳{totalDepositRequired.toLocaleString()}
+                    ৳{totalBorrowFee.toLocaleString()}
                   </span>
                 </div>
-                <p className="text-muted-foreground mt-2 text-[11px] leading-snug">
-                  * Deposit is fully refundable upon returning the books in good
-                  condition.
-                </p>
+                {limitExceeded && (
+                  <div className="mt-3 rounded-md border border-red-200 bg-red-50 p-3">
+                    <p className="text-sm font-semibold text-red-600">
+                      Insufficient Deposit Limit
+                    </p>
+                    <p className="mt-1 text-xs text-red-500">
+                      Please update your membership to borrow these books.
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="mt-2 px-5 pb-5">
@@ -431,7 +437,7 @@ export function BorrowCart() {
                   }}
                   className="h-11 w-full rounded text-sm font-bold disabled:opacity-50"
                 >
-                  REVIEW & CONFIRM ({selectedCount})
+                  Borrow Checkout ({selectedCount})
                 </Button>
               </div>
 
