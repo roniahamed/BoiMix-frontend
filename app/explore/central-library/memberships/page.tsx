@@ -47,15 +47,15 @@ export default function MembershipsPage() {
             </p>
           </div>
 
-          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl gap-6 lg:grid-cols-3 lg:gap-8">
             {/* Basic Member */}
             <Card className="relative flex flex-col overflow-hidden border-slate-200 bg-gradient-to-b from-slate-100/80 to-white dark:border-slate-800 dark:from-slate-900/80 dark:to-slate-950">
               <div className="absolute top-0 right-0 rounded-bl-lg bg-emerald-500 px-3 py-1 text-xs font-bold text-white">
                 Includes 5 Free Books!
               </div>
-              <CardHeader>
+              <CardHeader className="pb-4">
                 <CardTitle className="text-xl">Basic Member</CardTitle>
-                <CardDescription>Perfect for regular readers</CardDescription>
+                <CardDescription>Perfect for casual readers</CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
                 <div className="mb-6 flex items-end gap-1">
@@ -79,7 +79,7 @@ export default function MembershipsPage() {
                     <Check className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                     <span>
                       <strong>Welcome Gift:</strong> Borrow 5 Books for Free
-                      (valid for 2 months)
+                      (valid for 2 months) for Premium books
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -98,19 +98,17 @@ export default function MembershipsPage() {
               </CardFooter>
             </Card>
 
-            {/* Premium Member */}
-            <Card className="relative flex flex-col overflow-hidden border-blue-200 bg-gradient-to-br from-blue-100/80 via-blue-50/50 to-indigo-100/60 shadow-xl shadow-blue-900/5 dark:border-blue-800/50 dark:from-blue-950/60 dark:via-slate-900 dark:to-indigo-950/40 dark:shadow-blue-900/20">
+            {/* Standard Member */}
+            <Card className="relative z-10 flex flex-col overflow-hidden border-blue-200 bg-gradient-to-br from-blue-100/80 via-blue-50/50 to-indigo-100/60 shadow-xl shadow-blue-900/5 lg:scale-105 dark:border-blue-800/50 dark:from-blue-950/60 dark:via-slate-900 dark:to-indigo-950/40 dark:shadow-blue-900/20">
               <div className="absolute inset-x-0 top-0 h-1 bg-blue-600"></div>
-              <div className="absolute top-3 right-3">
+              <div className="absolute top-4 right-4">
                 <Badge className="bg-blue-600 text-white hover:bg-blue-700">
-                  Premium Choice
+                  Standard Choice
                 </Badge>
               </div>
-              <CardHeader>
-                <CardTitle className="text-xl">Premium Member</CardTitle>
-                <CardDescription>
-                  For avid readers & expensive books
-                </CardDescription>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl">Standard Member</CardTitle>
+                <CardDescription>For avid readers & new books</CardDescription>
               </CardHeader>
               <CardContent className="flex-1">
                 <div className="mb-6 flex items-end gap-1">
@@ -121,7 +119,7 @@ export default function MembershipsPage() {
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
                     <span>
-                      Borrow books priced up to <strong>৳1000</strong> or more
+                      Borrow books priced up to <strong>৳1000</strong>
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -134,7 +132,7 @@ export default function MembershipsPage() {
                     <Check className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
                     <span>
                       <strong>Welcome Gift:</strong> Borrow 5 Books for Free
-                      (valid for 2 months)
+                      (valid for 2 months) for Premium books
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
@@ -148,6 +146,63 @@ export default function MembershipsPage() {
               </CardContent>
               <CardFooter>
                 <Button className="w-full bg-blue-600 text-white hover:bg-blue-700">
+                  Become Standard Member
+                </Button>
+              </CardFooter>
+            </Card>
+
+            {/* Premium Member */}
+            <Card className="relative flex flex-col overflow-hidden border-purple-200 bg-gradient-to-br from-purple-100/80 via-purple-50/50 to-fuchsia-100/60 dark:border-purple-800/50 dark:from-purple-950/40 dark:via-slate-900 dark:to-fuchsia-950/30">
+              <div className="absolute top-4 right-4">
+                <Badge className="bg-purple-600 text-white hover:bg-purple-700">
+                  Premium Choice
+                </Badge>
+              </div>
+              <CardHeader className="pb-4">
+                <CardTitle className="text-xl">Premium Member</CardTitle>
+                <CardDescription>
+                  For very expensive premium books
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1">
+                <div className="mb-6 flex items-end gap-1">
+                  <span className="text-4xl font-bold">৳২০০০</span>
+                  <span className="text-muted-foreground mb-1">/ deposit</span>
+                </div>
+                <ul className="text-muted-foreground space-y-3 text-sm">
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-purple-600 dark:text-purple-400" />
+                    <span>
+                      Borrow books priced up to <strong>৳2000</strong> or more
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-purple-600 dark:text-purple-400" />
+                    <span>
+                      Membership valid for <strong>4 years</strong>
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-purple-600 dark:text-purple-400" />
+                    <span>
+                      <strong>Welcome Gift:</strong> Borrow 5 Books for Free
+                      (valid for 2 months) for Premium books
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-purple-600 dark:text-purple-400" />
+                    <span>
+                      <strong>Bonus:</strong> Borrow 1 donated book completely
+                      free every month!
+                    </span>
+                  </li>
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  variant="outline"
+                  className="w-full text-purple-700 hover:bg-purple-50 hover:text-purple-800 dark:text-purple-400 dark:hover:bg-purple-900/20"
+                >
                   Become Premium Member
                 </Button>
               </CardFooter>
@@ -167,7 +222,7 @@ export default function MembershipsPage() {
             <p className="mt-3 text-slate-600 dark:text-slate-400">
               Borrow passes are <strong>always required</strong> to order
               Premium Books. Once you exhaust your welcome passes, simply top up
-              with a package whenever you want to read more premium books.
+              with a package whenever you want to read more and premium books.
             </p>
           </div>
 
