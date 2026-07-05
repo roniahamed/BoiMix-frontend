@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { BookCard } from "@/components/shared/book-card";
 import profileData from "@/lib/data/profileData.json";
+import type { BookCardBook } from "@/types/book";
 
 export default async function CartPage() {
   const { profileLibraryBooks } = profileData;
@@ -23,9 +24,11 @@ export default async function CartPage() {
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {cartBooks.map((book: any) => (
-              <BookCard key={book.id} book={book} />
+            {cartBooks.map((book: Record<string, unknown>) => (
+              <BookCard
+                key={book.id as string}
+                book={book as unknown as BookCardBook}
+              />
             ))}
           </div>
         </div>

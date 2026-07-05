@@ -22,6 +22,34 @@ import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
 import { fetchLocal } from "@/lib/fetchLocal";
 
+interface CategoryItem {
+  href: string;
+  image: string;
+  title: string;
+}
+
+interface ReaderItem {
+  name: string;
+  badge: string;
+  books: number;
+  swaps: number;
+  reviews: number;
+}
+
+interface CommunityPostItem {
+  title: string;
+  author: string;
+  stat: string;
+}
+
+interface TestimonialItem {
+  name: string;
+  rating: number;
+  quote: string;
+  role: string;
+  location: string;
+}
+
 export default async function Home() {
   const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const newBooks: BookCardBook[] = [...featuredBooks].reverse();
@@ -63,8 +91,7 @@ export default async function Home() {
 }
 
 async function CategorySection() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const categories: any[] = await fetchLocal("/api/categories");
+  const categories: CategoryItem[] = await fetchLocal("/api/categories");
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -307,8 +334,7 @@ function FeaturePanel({
 }
 
 async function CommunityReaderSection() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const readers: any[] = await fetchLocal("/api/readers");
+  const readers: ReaderItem[] = await fetchLocal("/api/readers");
 
   return (
     <section className="py-2 md:py-3">
@@ -429,8 +455,8 @@ async function CommunityReaderSection() {
 }
 
 async function CommunitySection() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const communityPosts: any[] = await fetchLocal("/api/community");
+  const communityPosts: CommunityPostItem[] =
+    await fetchLocal("/api/community");
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -526,8 +552,7 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
 }
 
 async function PersonalizationSection() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const featuredBooks: any[] = await fetchLocal("/api/books");
+  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const recentlyViewed = featuredBooks.slice(0, 3);
   return (
     <section className="py-2 md:py-3">
@@ -719,8 +744,7 @@ async function AuthorSpotlightSection() {
 }
 
 async function TestimonialsSection() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const testimonials: any[] = await fetchLocal("/api/testimonials");
+  const testimonials: TestimonialItem[] = await fetchLocal("/api/testimonials");
 
   return (
     <section className="py-2 md:py-3">

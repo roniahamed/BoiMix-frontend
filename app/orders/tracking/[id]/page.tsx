@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Timeline } from "@/components/shared/timeline";
+import { Timeline, TimelineItem } from "@/components/shared/timeline";
 import { fetchLocal } from "@/lib/fetchLocal";
 
 export default async function OrderTrackingPage({
@@ -19,8 +19,9 @@ export default async function OrderTrackingPage({
 }) {
   const { id } = await params;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const trackingEvents: any[] = await fetchLocal("/api/orders/tracking");
+  const trackingEvents: TimelineItem[] = await fetchLocal(
+    "/api/orders/tracking",
+  );
 
   return (
     <div className="boimix-container-wide py-8 md:py-12">

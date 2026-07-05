@@ -14,19 +14,29 @@ export default async function ReviewsPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {profileReviews.map((review: any) => (
-          <ReviewCard
-            key={review.id}
-            reviewerName={review.reviewerName}
-            reviewerAvatarUrl={review.reviewerAvatar}
-            rating={review.rating}
-            body={review.body}
-            createdAt={review.createdAt}
-            bookCover={review.bookCover}
-            transactionType={review.transactionType}
-          />
-        ))}
+        {profileReviews.map(
+          (review: {
+            id: string;
+            reviewerName: string;
+            reviewerAvatar?: string;
+            rating: number;
+            body: string;
+            createdAt: string;
+            bookCover?: string;
+            transactionType?: string;
+          }) => (
+            <ReviewCard
+              key={review.id}
+              reviewerName={review.reviewerName}
+              reviewerAvatarUrl={review.reviewerAvatar}
+              rating={review.rating}
+              body={review.body}
+              createdAt={review.createdAt}
+              bookCover={review.bookCover}
+              transactionType={review.transactionType}
+            />
+          ),
+        )}
       </div>
     </div>
   );

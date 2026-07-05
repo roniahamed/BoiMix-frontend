@@ -1,5 +1,6 @@
 import { BookCard } from "@/components/shared/book-card";
 import { fetchLocal } from "@/lib/fetchLocal";
+import type { BookCardBook } from "@/types/book";
 
 export default async function SalesPage() {
   const { profileLibraryBooks } = await fetchLocal("/api/profile");
@@ -16,9 +17,11 @@ export default async function SalesPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        {soldBooks.map((book: any) => (
-          <BookCard key={book.id} book={book} />
+        {soldBooks.map((book: Record<string, unknown>) => (
+          <BookCard
+            key={book.id as string}
+            book={book as unknown as BookCardBook}
+          />
         ))}
       </div>
     </div>
