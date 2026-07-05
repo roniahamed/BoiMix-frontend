@@ -13,4 +13,3 @@ export { SearchBar } from "@/components/layout/search-bar";
 export { SidebarNavigation } from "@/components/layout/sidebar-navigation";
 export { SiteFooter } from "@/components/layout/site-footer";
 export { SiteHeader } from "@/components/layout/site-header";
-export { MobileFAB } from "@/components/layout/mobile-fab";
