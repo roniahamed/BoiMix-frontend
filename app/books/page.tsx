@@ -6,11 +6,37 @@ export const metadata: Metadata = {
   description: "Browse thousands of books to buy, swap, or borrow.",
 };
 
-export default function BooksPage() {
+type Props = {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export default async function BooksPage(props: Props) {
+  const params = await props.searchParams;
+  const typeParam = params.type;
+
+  let initialFilters: Record<string, string[]> = {};
+  let title = "সব বই";
+  let description = "আপনার পছন্দের বই খুঁজুন, ধার নিন বা সোয়াপ করুন";
+
+  if (typeParam === "borrow") {
+    initialFilters = { listingType: ["borrow"] };
+    title = "Central Library";
+    description = "Browse official BoiMix library inventory.";
+  } else if (typeParam === "sell") {
+    initialFilters = { listingType: ["sell"] };
+    title = "Marketplace";
+    description = "Explore marketplace books from BoiMix and readers.";
+  } else if (typeParam === "swap") {
+    initialFilters = { listingType: ["swap"] };
+    title = "Swaps";
+    description = "Find peer-to-peer exchange opportunities.";
+  }
+
   return (
     <BookListing
-      title="সব বই"
-      description="আপনার পছন্দের বই খুঁজুন, ধার নিন বা সোয়াপ করুন"
+      title={title}
+      description={description}
+      initialFilters={initialFilters}
     />
   );
 }

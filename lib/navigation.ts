@@ -47,10 +47,16 @@ export const primaryNavItems: NavItem[] = [
 
 export const megaMenuItems: NavItem[] = [
   {
-    title: "Borrow Books",
-    href: "/books?type=borrow",
+    title: "Central Library",
+    href: "/explore/central-library",
     description: "Browse official BoiMix library inventory.",
     icon: LibraryIcon,
+  },
+  {
+    title: "Borrow Books",
+    href: "/books?type=borrow",
+    description: "Borrow books from other readers.",
+    icon: BookOpenIcon,
   },
   {
     title: "Buy Books",
@@ -60,15 +66,9 @@ export const megaMenuItems: NavItem[] = [
   },
   {
     title: "Swap Books",
-    href: "/books?type=swap",
+    href: "/explore/swaps",
     description: "Find peer-to-peer exchange opportunities.",
     icon: Repeat2Icon,
-  },
-  {
-    title: "Reader Community",
-    href: "/community",
-    description: "Follow reader activity, reviews, and discussions.",
-    icon: UsersRoundIcon,
   },
 ];
 
