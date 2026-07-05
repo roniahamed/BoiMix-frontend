@@ -203,10 +203,14 @@ export default async function CentralLibraryPage() {
   return (
     <MainLayout>
       {/* HERO SECTION */}
-      <section className="boimix-container-wide relative mt-6 mb-2.5 flex min-h-[400px] rounded-lg border border-slate-200 bg-white shadow-sm lg:h-[400px] lg:max-h-[400px] dark:border-slate-800 dark:bg-slate-950">
+      <section className="boimix-container-wide relative mt-6 mb-2.5 flex min-h-[190px] rounded-lg border border-slate-200 bg-white shadow-sm max-sm:!mx-0 max-sm:mt-0 max-sm:!w-full max-sm:!rounded-none max-sm:!border-x-0 max-sm:!border-t-0 sm:min-h-[350px] lg:h-[400px] lg:max-h-[400px] dark:border-slate-800 dark:bg-slate-950">
         {/* Split Background with Gradient Transition */}
-        <div className="absolute inset-0 flex w-full overflow-hidden rounded-lg">
-          <div className="z-10 w-full bg-white lg:w-[45%] dark:bg-slate-950"></div>
+        <div className="absolute inset-0 flex w-full overflow-hidden rounded-lg max-sm:rounded-none">
+          <div className="relative z-10 w-full bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/80 lg:w-[45%] lg:bg-white lg:bg-none dark:from-blue-950/40 dark:via-slate-950 dark:to-indigo-900/30 dark:lg:bg-slate-950">
+            {/* Mobile Decorative Blobs */}
+            <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-blue-400/20 blur-3xl lg:hidden dark:bg-blue-600/20"></div>
+            <div className="absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-indigo-400/20 blur-3xl lg:hidden dark:bg-indigo-600/20"></div>
+          </div>
           <div className="relative hidden lg:block lg:w-[55%]">
             <Image
               src="https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&q=80"
@@ -222,18 +226,18 @@ export default async function CentralLibraryPage() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-20 grid w-full items-center px-6 md:px-12 lg:grid-cols-[1.2fr_1fr] lg:px-16">
+        <div className="relative z-20 grid w-full items-center px-4 sm:px-6 md:px-12 lg:grid-cols-[1.2fr_1fr] lg:px-16">
           {/* Left Content (White Background area) */}
-          <div className="py-8 lg:py-10 lg:pr-12">
-            <h3 className="mb-3 text-xs font-bold tracking-[0.2em] text-blue-600 uppercase">
+          <div className="py-4 sm:py-8 lg:py-10 lg:pr-12">
+            <h3 className="mb-1 text-[10px] font-bold tracking-[0.2em] text-blue-600 uppercase sm:mb-3 sm:text-xs">
               BoiMix Central Library
             </h3>
-            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl lg:leading-[1.15] dark:text-white">
+            <h1 className="mb-2 text-xl font-extrabold tracking-tight text-slate-900 sm:mb-4 sm:text-4xl lg:text-5xl lg:leading-[1.15] dark:text-white">
               Verified Books.
               <br />
               Trusted by Everyone.
             </h1>
-            <p className="mb-6 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+            <p className="mb-3 line-clamp-2 max-w-xl text-xs leading-relaxed text-slate-600 sm:mb-6 sm:line-clamp-none sm:text-sm dark:text-slate-400">
               Explore 25,000+ verified books. Borrow or buy from the most
               trusted digital library in Bangladesh.
             </p>
@@ -241,11 +245,11 @@ export default async function CentralLibraryPage() {
             {/* Search Bar */}
             <LibrarySearchBar
               variant="hero"
-              className="relative mb-6 flex max-w-xl flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row"
+              className="relative mb-0 flex max-w-xl gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm sm:mb-6 sm:p-1.5"
             />
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6 lg:flex-nowrap lg:gap-5">
+            <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-6 lg:flex-nowrap lg:gap-5">
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20">
                   <BookOpen className="size-5" />
@@ -414,8 +418,8 @@ export default async function CentralLibraryPage() {
 
       {/* FEATURED BOOKS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
-          <div className="mb-6 flex items-center justify-between">
+        <div className="sm:rounded-lg sm:border sm:border-slate-200 sm:bg-white sm:p-6 sm:shadow-sm dark:sm:border-slate-800 dark:sm:bg-slate-900/50">
+          <div className="mb-4 flex items-center justify-between sm:mb-6">
             <div className="flex items-center gap-2">
               <div className="flex size-6 items-center justify-center rounded-full bg-blue-600 text-white">
                 <Star className="size-4 fill-white" />
@@ -428,7 +432,8 @@ export default async function CentralLibraryPage() {
               href="/explore/central-library/search?tag=featured"
               className="flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
             >
-              View All Books <ArrowRight className="ml-1 size-4" />
+              View All <span className="hidden sm:inline">&nbsp;Books</span>{" "}
+              <ArrowRight className="ml-1 size-4" />
             </Link>
           </div>
 
