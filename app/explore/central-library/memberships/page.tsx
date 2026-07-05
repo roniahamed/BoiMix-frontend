@@ -85,8 +85,8 @@ export default function MembershipsPage() {
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                     <span>
-                      <strong>Bonus:</strong> Borrow donated books for
-                      completely free!
+                      <strong>Bonus:</strong> Unlimited free borrowing of 5000+
+                      donated books!
                     </span>
                   </li>
                   <li className="flex items-start gap-2 text-slate-500">
@@ -144,8 +144,8 @@ export default function MembershipsPage() {
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
                     <span>
-                      <strong>Bonus:</strong> Borrow donated books for
-                      completely free!
+                      <strong>Bonus:</strong> Unlimited free borrowing of 5000+
+                      donated books!
                     </span>
                   </li>
                   <li className="flex items-start gap-2 text-slate-500 dark:text-slate-400">
@@ -173,6 +173,7 @@ export default function MembershipsPage() {
               Borrow Passes (Top-Up)
             </h2>
             <p className="mt-3 text-slate-600 dark:text-slate-400">
+              Borrow passes are used to order <strong>Premium Books</strong>.
               Once you exhaust your welcome passes, simply top up with a borrow
               pass package whenever you want to read more.
             </p>
