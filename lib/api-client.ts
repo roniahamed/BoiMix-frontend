@@ -11,7 +11,9 @@ export async function fetchProfile(username: string) {
 }
 
 export async function fetchBooks(type?: string) {
-  const url = type ? `${getBaseUrl()}/api/books?type=${type}` : `${getBaseUrl()}/api/books`;
+  const url = type
+    ? `${getBaseUrl()}/api/books?type=${type}`
+    : `${getBaseUrl()}/api/books`;
   const res = await fetch(url);
   return res.json();
 }

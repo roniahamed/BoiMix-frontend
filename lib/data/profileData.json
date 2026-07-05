@@ -128,12 +128,7 @@
       "locationDetails": {
         "district": "Dhaka",
         "area": "Dhanmondi",
-        "serviceArea": [
-          "Dhanmondi",
-          "Banani",
-          "Gulshan",
-          "Uttara"
-        ],
+        "serviceArea": ["Dhanmondi", "Banani", "Gulshan", "Uttara"],
         "meetingPreference": "Prefers public handover points near metro stations or book cafes.",
         "privacyNote": "Exact address is shared only after a borrow, sale, or swap request is accepted."
       }
@@ -146,10 +141,7 @@
       "title": "Pather Panchali",
       "author": "Bibhutibhushan Bandyopadhyay",
       "coverUrl": "/book-covers/song-of-padma.svg",
-      "tags": [
-        "swap",
-        "borrow"
-      ],
+      "tags": ["swap", "borrow"],
       "rating": 4.9,
       "reviewCount": 142,
       "distance": "1.2 km",
@@ -165,10 +157,7 @@
       "title": "History of Bengal",
       "author": "Akbar Ali Khan",
       "coverUrl": "/book-covers/history-of-bengal.svg",
-      "tags": [
-        "sell",
-        "borrow"
-      ],
+      "tags": ["sell", "borrow"],
       "rating": 4.8,
       "reviewCount": 65,
       "price": 480,
@@ -186,9 +175,7 @@
       "title": "Smart Entrepreneur",
       "author": "Ayman Sadiq",
       "coverUrl": "/book-covers/smart-entrepreneur.svg",
-      "tags": [
-        "sell"
-      ],
+      "tags": ["sell"],
       "rating": 4.7,
       "reviewCount": 110,
       "price": 320,
@@ -205,10 +192,7 @@
       "title": "Quiet Reviews",
       "author": "Raisa Chowdhury",
       "coverUrl": "/book-covers/quiet-reviews.svg",
-      "tags": [
-        "borrow",
-        "swap"
-      ],
+      "tags": ["borrow", "swap"],
       "rating": 4.9,
       "reviewCount": 52,
       "distance": "1.7 km",
@@ -224,9 +208,7 @@
       "title": "A Golden Age",
       "author": "Tahmima Anam",
       "coverUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300&h=400&fit=crop",
-      "tags": [
-        "sell"
-      ],
+      "tags": ["sell"],
       "rating": 4.5,
       "reviewCount": 38,
       "price": 350,
@@ -244,9 +226,7 @@
       "title": "The Good Earth",
       "author": "Pearl S. Buck",
       "coverUrl": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=300&h=400&fit=crop",
-      "tags": [
-        "swap"
-      ],
+      "tags": ["swap"],
       "rating": 4.8,
       "reviewCount": 120,
       "distance": "3.5 km",
@@ -262,9 +242,7 @@
       "title": "Hajar Bochor Dhore",
       "author": "Zahir Raihan",
       "coverUrl": "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=300&h=400&fit=crop",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.9,
       "reviewCount": 205,
       "distance": "1.0 km",
@@ -280,10 +258,7 @@
       "title": "Shesher Kabita",
       "author": "Rabindranath Tagore",
       "coverUrl": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300&h=400&fit=crop",
-      "tags": [
-        "sell",
-        "swap"
-      ],
+      "tags": ["sell", "swap"],
       "rating": 5,
       "reviewCount": 340,
       "price": 250,

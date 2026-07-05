@@ -8,15 +8,16 @@ import { useCartStore } from "@/lib/store/use-cart-store";
 import type { BookCardBook } from "@/types/book";
 
 export default function WishlistPage() {
-  
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const [profileLibraryBooks, setProfileLibraryBooks] = useState<any[]>([]);
+  const [profileLibraryBooks, setProfileLibraryBooks] = useState<
+    { id: string; [key: string]: unknown }[]
+  >([]);
   useEffect(() => {
-    fetch('/api/profile').then(r => r.json()).then(data => {
-      setProfileLibraryBooks(data.profileLibraryBooks || []);
-    });
+    fetch("/api/profile")
+      .then((r) => r.json())
+      .then((data) => {
+        setProfileLibraryBooks(data.profileLibraryBooks || []);
+      });
   }, []);
-
 
   const { items } = useWishlistStore();
   const cartItems = useCartStore((state) => state.items);
@@ -43,9 +44,10 @@ export default function WishlistPage() {
   // To display wishlist items, we try to find them in profileLibraryBooks first.
   // If not found, they might be in cartItems, so we construct a BookCardBook from CartItem.
   const wishlistBooks: BookCardBook[] = items.map((id) => {
-    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-    const fromProfile = profileLibraryBooks.find((b: any) => b.id === id);
-    if (fromProfile) return fromProfile;
+    const fromProfile = profileLibraryBooks.find(
+      (b: { id: string }) => String(b.id) === String(id),
+    );
+    if (fromProfile) return fromProfile as unknown as BookCardBook;
 
     const fromCart = cartItems.find((c) => c.id === id);
     if (fromCart) {

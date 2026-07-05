@@ -7,11 +7,16 @@
 - Completed/background phases: Phase 0 through Phase 7 are treated as already implemented for this frontend pass.
 - Do not build Phase 16 dashboard, Phase 9 marketplace checkout, borrow workflows, swap workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
 
-## Active Phase: Phase 10 — Borrow System
-- Implement Membership rules, Borrow Request flow, visual Borrow Timeline, Handover verification, Return process, Review integration, and Dispute UI.
-- Use `Product engineer/borrow_system_architecture.md` as the core reference.
+## Active Phase: Phase 14 — Messaging
+- Implement Conversation List, Chat Window, Attachments, Typing Indicator, and Seen Status.
+- Build UI for `/dashboard/messages` and `/dashboard/messages/[username]`.
 
 ## Phase History / Previous Plan Log
+Keep this section as the project memory. Do not delete completed phase plans when moving to a new phase.
+
+### Phase 10 — Borrow System (Skipped/Background)
+- Implementation postponed/bypassed to prioritize messaging as per instruction.
+
 Keep this section as the project memory. Do not delete completed phase plans when moving to a new phase.
 
 ### Phase 9 — Marketplace

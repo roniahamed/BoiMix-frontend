@@ -24,9 +24,7 @@
         "alt": "Back cover"
       }
     ],
-    "tags": [
-      "swap"
-    ],
+    "tags": ["swap"],
     "availability": {
       "sell": 0,
       "borrow": 1,
@@ -40,11 +38,7 @@
     "swapPrice": 300,
     "borrowFee": 50,
     "maxBorrowDays": 14,
-    "swapPreferences": [
-      "Fiction",
-      "Self Help",
-      "Any Book"
-    ],
+    "swapPreferences": ["Fiction", "Self Help", "Any Book"],
     "rating": 4.8,
     "reviewCount": 24,
     "totalBorrow": 15,
@@ -57,11 +51,7 @@
       "চতুর্থ অধ্যায়: জীবন সংগ্রাম",
       "পঞ্চম অধ্যায়: অপরূপ প্রকৃতি ও অন্তর্দৃষ্টি"
     ],
-    "index": [
-      "ক - কলকাতা, কাশীবাজার",
-      "খ - খুকু",
-      "গ - গঙ্গা"
-    ]
+    "index": ["ক - কলকাতা, কাশীবাজার", "খ - খুকু", "গ - গঙ্গা"]
   },
   "owner": {
     "id": "user-1",
@@ -204,9 +194,7 @@
       "title": "পথের পাঁচালী",
       "author": "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
       "coverUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.9,
       "reviewCount": 156,
       "price": 200,
@@ -222,9 +210,7 @@
       "title": "আরণ্যক",
       "author": "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
       "coverUrl": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.8,
       "reviewCount": 89,
       "condition": "excellent",
@@ -238,9 +224,7 @@
       "title": "চাঁদের পাহাড়",
       "author": "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
       "coverUrl": "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=400",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.9,
       "reviewCount": 210,
       "condition": "excellent",
@@ -254,9 +238,7 @@
       "title": "ইছামতী",
       "author": "বিভূতিভূষণ বন্দ্যোপাধ্যায়",
       "coverUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-      "tags": [
-        "sell"
-      ],
+      "tags": ["sell"],
       "rating": 4.7,
       "reviewCount": 45,
       "price": 180,
@@ -272,9 +254,7 @@
       "title": "দেবদাস",
       "author": "শরৎচন্দ্র চট্টোপাধ্যায়",
       "coverUrl": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.6,
       "reviewCount": 320,
       "condition": "good",
@@ -288,9 +268,7 @@
       "title": "শ্রীকান্ত",
       "author": "শরৎচন্দ্র চট্টোপাধ্যায়",
       "coverUrl": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.8,
       "reviewCount": 110,
       "price": 250,
@@ -306,9 +284,7 @@
       "title": "বেলা ফুরাবার আগে",
       "author": "আরিফ আজাদ",
       "coverUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400",
-      "tags": [
-        "sell"
-      ],
+      "tags": ["sell"],
       "rating": 4.9,
       "reviewCount": 540,
       "price": 300,
@@ -324,9 +300,7 @@
       "title": "প্যারাডক্সিক্যাল সাজিদ",
       "author": "আরিফ আজাদ",
       "coverUrl": "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=400",
-      "tags": [
-        "borrow"
-      ],
+      "tags": ["borrow"],
       "rating": 4.8,
       "reviewCount": 890,
       "condition": "excellent",

@@ -48,7 +48,7 @@ export function SearchBar({
   const router = useRouter();
 
   const { data: books = [] } = useQuery({
-    queryKey: ['books'],
+    queryKey: ["books"],
     queryFn: () => fetchBooks(),
   });
 
@@ -67,7 +67,7 @@ export function SearchBar({
   // Sync query if URL changes
   useEffect(() => {
     const q = searchParams?.get("q") || "";
-    {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setQuery(q);
   }, [searchParams]);
 
@@ -125,7 +125,7 @@ export function SearchBar({
     query.length > 1
       ? books
           .filter(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             (b: any) =>
               b.title.toLowerCase().includes(query.toLowerCase()) ||
               b.author.toLowerCase().includes(query.toLowerCase()),
@@ -261,32 +261,32 @@ export function SearchBar({
                   Recommended For You
                 </span>
                 <div className="space-y-3">
-                  {suggestions.length > 0 ? (
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    suggestions.map((book: any) => (
-                      <Link
-                        key={book.slug}
-                        href={`/books/${book.slug}`}
-                        onClick={() => setIsOpen(false)}
-                        className="hover:bg-muted/50 flex items-center gap-2.5 rounded-lg p-1.5 transition-colors"
-                      >
-                        <div className="bg-muted relative h-10 w-7.5 shrink-0 overflow-hidden rounded-sm shadow-xs">
-                          <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-foreground truncate text-xs leading-tight font-bold">
-                            {book.title}
-                          </p>
-                          <p className="text-muted-foreground truncate text-[0.65rem]">
-                            by {book.author}
-                          </p>
-                        </div>
-                        <span className="bg-muted text-muted-foreground border-border rounded-full border px-2 py-0.5 text-[0.6rem] font-bold capitalize">
-                          {book.type}
-                        </span>
-                      </Link>
-                    ))
-                  ) : null}
+                  {suggestions.length > 0
+                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      suggestions.map((book: any) => (
+                        <Link
+                          key={book.slug}
+                          href={`/books/${book.slug}`}
+                          onClick={() => setIsOpen(false)}
+                          className="hover:bg-muted/50 flex items-center gap-2.5 rounded-lg p-1.5 transition-colors"
+                        >
+                          <div className="bg-muted relative h-10 w-7.5 shrink-0 overflow-hidden rounded-sm shadow-xs">
+                            <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-foreground truncate text-xs leading-tight font-bold">
+                              {book.title}
+                            </p>
+                            <p className="text-muted-foreground truncate text-[0.65rem]">
+                              by {book.author}
+                            </p>
+                          </div>
+                          <span className="bg-muted text-muted-foreground border-border rounded-full border px-2 py-0.5 text-[0.6rem] font-bold capitalize">
+                            {book.type}
+                          </span>
+                        </Link>
+                      ))
+                    : null}
                 </div>
               </div>
             </div>

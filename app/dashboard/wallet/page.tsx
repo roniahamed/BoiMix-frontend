@@ -19,7 +19,7 @@ export default function WalletPage() {
   const { wallet } = useBorrowStore();
 
   const { data: transactions = [] } = useQuery({
-    queryKey: ['transactions'],
+    queryKey: ["transactions"],
     queryFn: () => fetchTransactions(),
   });
 

@@ -2,12 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  CreditCard,
-  Edit,
-  MoreVertical,
-  Trash2,
-} from "lucide-react";
+import { CreditCard, Edit, MoreVertical, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";

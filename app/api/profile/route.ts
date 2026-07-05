@@ -1,24 +1,26 @@
-import { NextResponse } from 'next/server';
-import data from '@/lib/data/profileData.json';
+import data from "@/lib/data/profileData.json";
+import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const username = searchParams.get('username');
-  
+  const username = searchParams.get("username");
+
   if (username) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const profile = (data.mockProfiles as any[]).find((p: any) => p.username === username);
-      if (!profile) return NextResponse.json({ error: 'Not found' }, { status: 404 });
-      return NextResponse.json({
-          profile,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          books: (data as any).profileLibraryBooks,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          reviews: (data as any).profileReviews,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          activity: (data as any).profileActivity
-      });
+    const profile = (data.mockProfiles as { username: string }[]).find(
+      (p) => p.username === username,
+    );
+
+    if (!profile) {
+      return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      profile,
+      books: (data as { profileLibraryBooks: unknown }).profileLibraryBooks,
+      reviews: (data as { profileReviews: unknown }).profileReviews,
+      activity: (data as { profileActivity: unknown }).profileActivity,
+    });
   }
-  
-  return NextResponse.json(data);
+
+  return NextResponse.json(data.mockProfiles);
 }

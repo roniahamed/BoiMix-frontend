@@ -123,11 +123,8 @@ function CheckoutContent() {
     // Simulate API request
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    {/* eslint-disable-next-line react-hooks/purity */}
-    const randomId = Math.floor(Math.random() * 1000000);
-
     const newOrder = {
-      id: "ORD-" + randomId,
+      id: "ORD-" + generateOrderId(),
       date: new Date().toISOString(),
       items: [...items],
       total,
@@ -397,6 +394,8 @@ function CheckoutContent() {
     </div>
   );
 }
+
+const generateOrderId = () => Math.floor(Math.random() * 1000000);
 
 export default function CheckoutPage() {
   return (

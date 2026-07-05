@@ -72,7 +72,7 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
   );
 
   useEffect(() => {
-    {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
   }, []);
 
@@ -82,7 +82,7 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
       lng !== undefined &&
       (position.lat !== lat || position.lng !== lng)
     ) {
-      {/* eslint-disable-next-line react-hooks/set-state-in-effect */}
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPosition(new L.LatLng(lat, lng));
     }
   }, [lat, lng]); // eslint-disable-line react-hooks/exhaustive-deps
