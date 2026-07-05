@@ -11,10 +11,8 @@ export async function GET(request: Request) {
   let result = data;
 
   if (type) {
-    {
-    }
-    result = (data as { tags?: string[] }[]).filter((item) =>
-      item.tags?.includes(type),
+    result = data.filter((item) =>
+      (item as unknown as { tags?: string[] }).tags?.includes(type),
     );
   }
 
