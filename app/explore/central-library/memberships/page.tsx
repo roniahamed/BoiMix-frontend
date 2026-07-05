@@ -34,7 +34,7 @@ export default function MembershipsPage() {
 
         <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-3 lg:gap-8">
           {/* Pay As You Go */}
-          <Card className="relative flex flex-col overflow-hidden">
+          <Card className="relative flex flex-col overflow-hidden border-slate-200 bg-gradient-to-b from-slate-100/80 to-white dark:border-slate-800 dark:from-slate-900/80 dark:to-slate-950">
             <CardHeader>
               <CardTitle className="text-xl">Basic / Pay As You Go</CardTitle>
               <CardDescription>Perfect for occasional readers</CardDescription>
@@ -73,7 +73,8 @@ export default function MembershipsPage() {
             </CardFooter>
           </Card>
 
-          <Card className="border-primary relative z-10 flex flex-col overflow-hidden shadow-lg lg:scale-105">
+          {/* Regular Pass */}
+          <Card className="relative z-10 flex flex-col overflow-hidden border-blue-200 bg-gradient-to-br from-blue-100/80 via-blue-50/50 to-indigo-100/60 shadow-xl shadow-blue-900/5 lg:scale-105 dark:border-blue-800/50 dark:from-blue-950/60 dark:via-slate-900 dark:to-indigo-950/40 dark:shadow-blue-900/20">
             <div className="bg-primary absolute inset-x-0 top-0 h-1"></div>
             <div className="absolute top-4 right-4">
               <Badge>Most Popular</Badge>
@@ -112,7 +113,7 @@ export default function MembershipsPage() {
           </Card>
 
           {/* Student Pass */}
-          <Card className="relative flex flex-col overflow-hidden">
+          <Card className="relative flex flex-col overflow-hidden border-amber-200/60 bg-gradient-to-br from-amber-100/60 via-orange-50/30 to-white dark:border-amber-900/30 dark:from-amber-950/20 dark:via-slate-900 dark:to-slate-950">
             <CardHeader>
               <CardTitle className="text-xl">Student Pass</CardTitle>
               <CardDescription>Discounted for students</CardDescription>
