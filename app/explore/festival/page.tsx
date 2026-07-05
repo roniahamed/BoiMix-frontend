@@ -453,10 +453,10 @@ export default function ExploreFestivalPage() {
             ].map((cat, i) => (
               <button
                 key={i}
-                className="flex flex-col items-center justify-center gap-2 rounded-xl bg-slate-50 p-4 transition-all hover:bg-slate-100 dark:bg-slate-800/50 dark:hover:bg-slate-800"
+                className="flex items-center justify-center gap-2 rounded-xl bg-slate-50 px-4 py-3 transition-all hover:bg-slate-100 dark:bg-slate-800/50 dark:hover:bg-slate-800"
               >
-                <span className="text-2xl">{cat.icon}</span>
-                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                <span className="text-xl">{cat.icon}</span>
+                <span className="text-[12px] font-bold text-slate-700 dark:text-slate-300">
                   {cat.label}
                 </span>
               </button>
@@ -466,12 +466,12 @@ export default function ExploreFestivalPage() {
       </section>
 
       {/* ══════════════════════════════════════════════
-           MAIN — events grid + sidebar
+           MAIN — events grid
       ══════════════════════════════════════════════ */}
       <section className="boimix-container-wide mb-8">
-        <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
+        <div className="w-full">
           {/* ── Events grid ── */}
-          <div>
+          <div className="w-full">
             <div className="mb-4 flex items-center justify-between">
               <div>
                 <h2 className="text-xl font-black text-slate-900 dark:text-white">
@@ -489,7 +489,7 @@ export default function ExploreFestivalPage() {
               </Link>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {EVENTS.map((ev) => (
                 <div
                   key={ev.id}
@@ -499,28 +499,20 @@ export default function ExploreFestivalPage() {
                   <div
                     className={`relative h-44 bg-gradient-to-br ${ev.gradient} flex items-end p-4`}
                   >
-                    {/* Category badge */}
-                    <div className="absolute top-3 left-3 z-10">
+                    {/* Top badges */}
+                    <div className="absolute top-3 left-3 z-10 flex flex-wrap items-center gap-1.5">
                       <span
-                        className={`rounded-full px-2.5 py-1 text-[10px] font-black text-white ${ev.tagColor}`}
+                        className={`rounded-full px-2 py-1 text-[10px] font-black text-white ${ev.tagColor}`}
                       >
                         {ev.tag}
                       </span>
+                      {ev.id === 1 && (
+                        <span className="flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/20 px-2 py-1 text-[10px] font-black text-emerald-300 backdrop-blur-md">
+                          <span className="size-1.5 animate-pulse rounded-full bg-emerald-400" />
+                          Ongoing
+                        </span>
+                      )}
                     </div>
-
-                    {/* Wishlist button */}
-                    <button
-                      className="absolute top-3 right-3 z-10 flex size-8 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm transition-all hover:bg-white/30"
-                      onClick={() => toggleLike(ev.id)}
-                    >
-                      <Heart
-                        className={`size-4 transition-colors ${
-                          likedEvents.includes(ev.id)
-                            ? "fill-rose-500 text-rose-500"
-                            : "text-white"
-                        }`}
-                      />
-                    </button>
 
                     {/* Date badge */}
                     <div className="relative z-10 overflow-hidden rounded-xl border border-white/20 bg-white/15 px-3 py-1.5 text-center backdrop-blur-md">
@@ -559,27 +551,50 @@ export default function ExploreFestivalPage() {
                       {ev.desc}
                     </p>
 
-                    <div className="flex items-center justify-between border-t border-slate-100 pt-3 dark:border-slate-800">
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`text-xs font-black ${
-                            ev.price === "Free"
-                              ? "text-emerald-600 dark:text-emerald-400"
-                              : "text-slate-900 dark:text-white"
-                          }`}
-                        >
-                          {ev.price}
-                        </span>
-                        <span className="flex items-center gap-1 text-[11px] text-slate-400">
-                          <Users className="size-3" /> {ev.going} যাচ্ছেন
-                        </span>
+                    <div className="flex flex-col gap-3 border-t border-slate-100 pt-3 dark:border-slate-800">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <span
+                            className={`text-xs font-black ${
+                              ev.price === "Free"
+                                ? "text-emerald-600 dark:text-emerald-400"
+                                : "text-slate-900 dark:text-white"
+                            }`}
+                          >
+                            {ev.price}
+                          </span>
+                          <span className="flex items-center gap-1 text-[11px] text-slate-400">
+                            <Users className="size-3" /> {ev.going} যাচ্ছেন
+                          </span>
+                        </div>
                       </div>
-                      <Link
-                        href="#"
-                        className="flex items-center gap-1 text-xs font-black text-rose-500 hover:text-rose-600 dark:text-rose-400"
-                      >
-                        বিস্তারিত <ArrowUpRight className="size-3" />
-                      </Link>
+
+                      <div className="flex gap-2">
+                        <button
+                          className={`flex flex-1 items-center justify-center gap-1.5 rounded-xl py-2 transition-all ${
+                            likedEvents.includes(ev.id)
+                              ? "border border-rose-200 bg-rose-50 text-rose-600 hover:bg-rose-100 dark:border-rose-800/50 dark:bg-rose-900/30 dark:hover:bg-rose-900/50"
+                              : "border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
+                          }`}
+                          onClick={() => toggleLike(ev.id)}
+                        >
+                          <Star
+                            className={`size-3.5 transition-colors ${
+                              likedEvents.includes(ev.id)
+                                ? "fill-rose-500 text-rose-500"
+                                : ""
+                            }`}
+                          />
+                          <span className="text-xs font-bold">Interested</span>
+                        </button>
+
+                        <Link
+                          href="#"
+                          className="flex flex-1 items-center justify-center gap-1 rounded-xl bg-slate-900 py-2 text-xs font-bold text-white transition-all hover:bg-slate-800 dark:bg-white dark:text-slate-900"
+                        >
+                          Details <ArrowUpRight className="size-3" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -594,102 +609,106 @@ export default function ExploreFestivalPage() {
               </button>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* ── Right sidebar ── */}
-          <div className="flex flex-col gap-4">
-            {/* Why join */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="mb-4 font-black text-slate-900 dark:text-white">
-                কেন ইভেন্টে যোগ দেবেন?
-              </h3>
-              <div className="flex flex-col gap-3">
-                {WHY_JOIN.map((w, i) => {
-                  const Icon = w.icon;
-                  return (
-                    <div key={i} className="flex items-start gap-3">
-                      <div
-                        className={`flex size-8 shrink-0 items-center justify-center rounded-xl ${w.color}`}
-                      >
-                        <Icon className="size-4" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-black text-slate-900 dark:text-white">
-                          {w.title}
-                        </p>
-                        <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                          {w.desc}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Nearby events */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="font-black text-slate-900 dark:text-white">
-                  কাছের ইভেন্ট
-                </h3>
-                <Link
-                  href="#"
-                  className="text-[11px] font-bold text-rose-500 hover:text-rose-600 dark:text-rose-400"
-                >
-                  সব দেখুন →
-                </Link>
-              </div>
-              <div className="flex flex-col gap-3">
-                {NEARBY_EVENTS.map((ne, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center gap-3 rounded-xl border border-slate-100 p-3 transition-all hover:border-rose-200 hover:bg-rose-50 dark:border-slate-800 dark:hover:border-rose-800 dark:hover:bg-rose-900/10"
-                  >
+      {/* ══════════════════════════════════════════════
+           BOTTOM INFO CARDS
+      ══════════════════════════════════════════════ */}
+      <section className="boimix-container-wide mb-8">
+        <div className="grid items-start gap-6 md:grid-cols-3">
+          {/* Why join */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <h3 className="mb-4 font-black text-slate-900 dark:text-white">
+              কেন ইভেন্টে যোগ দেবেন?
+            </h3>
+            <div className="flex flex-col gap-3">
+              {WHY_JOIN.map((w, i) => {
+                const Icon = w.icon;
+                return (
+                  <div key={i} className="flex items-start gap-3">
                     <div
-                      className="flex size-10 shrink-0 items-center justify-center rounded-xl text-lg"
-                      style={{
-                        background: "linear-gradient(135deg, #1a0a2e, #0f172a)",
-                      }}
+                      className={`flex size-8 shrink-0 items-center justify-center rounded-xl ${w.color}`}
                     >
-                      📚
+                      <Icon className="size-4" />
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-xs font-black text-slate-900 dark:text-white">
-                        {ne.title}
+                    <div>
+                      <p className="text-xs font-black text-slate-900 dark:text-white">
+                        {w.title}
                       </p>
                       <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                        {ne.date} · {ne.location}
+                        {w.desc}
                       </p>
                     </div>
-                    <span className={`text-xs font-black ${ne.accent}`}>
-                      {ne.price}
-                    </span>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
+          </div>
 
-            {/* Submit event CTA */}
-            <div
-              className="relative overflow-hidden rounded-2xl p-5 text-white"
-              style={{
-                background: "linear-gradient(145deg, #7C3AED, #4F46E5)",
-              }}
-            >
-              <div className="pointer-events-none absolute -top-6 -right-6 size-24 rounded-full bg-white/10" />
-              <Bookmark className="mb-3 size-8 text-violet-200" />
-              <h3 className="mb-1 font-black">আপনার ইভেন্ট যোগ করুন?</h3>
-              <p className="mb-4 text-xs leading-relaxed text-violet-200">
-                আপনার বইমেলা, উৎসব বা ওয়ার্কশপ হাজার পাঠকের কাছে পৌঁছে দিন।
-              </p>
-              <Button
-                asChild
-                size="sm"
-                className="w-full rounded-xl bg-white text-xs font-black text-violet-700 hover:bg-violet-50"
+          {/* Nearby events */}
+          <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="font-black text-slate-900 dark:text-white">
+                কাছের ইভেন্ট
+              </h3>
+              <Link
+                href="#"
+                className="text-[11px] font-bold text-rose-500 hover:text-rose-600 dark:text-rose-400"
               >
-                <Link href="#">ইভেন্ট জমা দিন →</Link>
-              </Button>
+                সব দেখুন →
+              </Link>
             </div>
+            <div className="flex flex-col gap-3">
+              {NEARBY_EVENTS.map((ne, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 rounded-xl border border-slate-100 p-3 transition-all hover:border-rose-200 hover:bg-rose-50 dark:border-slate-800 dark:hover:border-rose-800 dark:hover:bg-rose-900/10"
+                >
+                  <div
+                    className="flex size-10 shrink-0 items-center justify-center rounded-xl text-lg"
+                    style={{
+                      background: "linear-gradient(135deg, #1a0a2e, #0f172a)",
+                    }}
+                  >
+                    📚
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-xs font-black text-slate-900 dark:text-white">
+                      {ne.title}
+                    </p>
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                      {ne.date} · {ne.location}
+                    </p>
+                  </div>
+                  <span className={`text-xs font-black ${ne.accent}`}>
+                    {ne.price}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Submit event CTA */}
+          <div
+            className="relative overflow-hidden rounded-2xl p-5 text-white"
+            style={{
+              background: "linear-gradient(145deg, #7C3AED, #4F46E5)",
+            }}
+          >
+            <div className="pointer-events-none absolute -top-6 -right-6 size-24 rounded-full bg-white/10" />
+            <Bookmark className="mb-3 size-8 text-violet-200" />
+            <h3 className="mb-1 font-black">আপনার ইভেন্ট যোগ করুন?</h3>
+            <p className="mb-4 text-xs leading-relaxed text-violet-200">
+              আপনার বইমেলা, উৎসব বা ওয়ার্কশপ হাজার পাঠকের কাছে পৌঁছে দিন।
+            </p>
+            <Button
+              asChild
+              size="sm"
+              className="w-full rounded-xl bg-white text-xs font-black text-violet-700 hover:bg-violet-50"
+            >
+              <Link href="#">ইভেন্ট জমা দিন →</Link>
+            </Button>
           </div>
         </div>
       </section>
