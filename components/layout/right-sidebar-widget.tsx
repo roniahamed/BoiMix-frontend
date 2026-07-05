@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   BookPlusIcon,
@@ -25,6 +25,16 @@ export function RightSidebarWidget() {
   const [msgOpen, setMsgOpen] = useState(false);
   const [activeConversation, setActiveConversation] =
     useState<Conversation | null>(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 300);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const unreadCount = useMessageStore((s) => s.unreadCount);
   const markAsRead = useMessageStore((s) => s.markAsRead);
@@ -210,16 +220,18 @@ export function RightSidebarWidget() {
         </button>
 
         {/* Back to Top */}
-        <button
-          onClick={scrollToTop}
-          className="hover:bg-muted group flex flex-col items-center gap-1.5 px-4 py-4 transition-colors"
-          aria-label="Back to top"
-        >
-          <ArrowUpIcon className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
-          <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
-            Back to top
-          </span>
-        </button>
+        {showBackToTop && (
+          <button
+            onClick={scrollToTop}
+            className="hover:bg-muted group flex flex-col items-center gap-1.5 px-4 py-4 transition-colors"
+            aria-label="Back to top"
+          >
+            <ArrowUpIcon className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
+            <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
+              Back to top
+            </span>
+          </button>
+        )}
       </div>
     </>
   );
