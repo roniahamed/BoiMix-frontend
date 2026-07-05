@@ -224,11 +224,11 @@ export default async function CentralLibraryPage() {
         {/* Content Container */}
         <div className="relative z-20 grid w-full items-center px-6 md:px-12 lg:grid-cols-[1.2fr_1fr] lg:px-16">
           {/* Left Content (White Background area) */}
-          <div className="py-8 pr-6 lg:py-10 lg:pr-12">
+          <div className="py-8 lg:py-10 lg:pr-12">
             <h3 className="mb-3 text-xs font-bold tracking-[0.2em] text-blue-600 uppercase">
               BoiMix Central Library
             </h3>
-            <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl lg:leading-[1.15] dark:text-white">
+            <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl lg:text-5xl lg:leading-[1.15] dark:text-white">
               Verified Books.
               <br />
               Trusted by Everyone.
@@ -245,7 +245,7 @@ export default async function CentralLibraryPage() {
             />
 
             {/* Stats */}
-            <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:flex-nowrap lg:gap-5">
+            <div className="grid grid-cols-2 gap-4 sm:flex sm:flex-wrap sm:items-center sm:gap-6 lg:flex-nowrap lg:gap-5">
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20">
                   <BookOpen className="size-5" />
