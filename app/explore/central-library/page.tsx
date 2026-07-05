@@ -640,10 +640,13 @@ export default async function CentralLibraryPage() {
                   </li>
                 </ul>
                 <Button
+                  asChild
                   variant="outline"
                   className="mt-auto h-11 w-full rounded-lg border-blue-600 bg-transparent font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800"
                 >
-                  Get Started
+                  <Link href="/explore/central-library/memberships?plan=basic">
+                    Get Started
+                  </Link>
                 </Button>
               </div>
 
@@ -693,8 +696,13 @@ export default async function CentralLibraryPage() {
                     Access to new arrivals
                   </li>
                 </ul>
-                <Button className="mt-auto h-11 w-full rounded-lg bg-blue-600 font-bold text-white shadow-md hover:bg-blue-700">
-                  Choose Plan
+                <Button
+                  asChild
+                  className="mt-auto h-11 w-full rounded-lg bg-blue-600 font-bold text-white shadow-md hover:bg-blue-700"
+                >
+                  <Link href="/explore/central-library/memberships?plan=premium">
+                    Choose Plan
+                  </Link>
                 </Button>
               </div>
 
@@ -742,10 +750,13 @@ export default async function CentralLibraryPage() {
                   </li>
                 </ul>
                 <Button
+                  asChild
                   variant="outline"
                   className="mt-auto h-11 w-full rounded-lg border-blue-600 bg-transparent font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-slate-800"
                 >
-                  Choose Plan
+                  <Link href="/explore/central-library/memberships?plan=elite">
+                    Choose Plan
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -796,8 +807,13 @@ export default async function CentralLibraryPage() {
                   </span>
                 </div>
               </div>
-              <Button className="h-10 rounded-lg bg-[#0f449e] px-6 font-bold text-white shadow-none hover:bg-[#0a3175]">
-                Learn More <ArrowRight className="ml-2 size-4" />
+              <Button
+                asChild
+                className="h-10 rounded-lg bg-[#0f449e] px-6 font-bold text-white shadow-none hover:bg-[#0a3175]"
+              >
+                <Link href="/explore/central-library/memberships">
+                  Learn More <ArrowRight className="ml-2 size-4" />
+                </Link>
               </Button>
             </div>
 
