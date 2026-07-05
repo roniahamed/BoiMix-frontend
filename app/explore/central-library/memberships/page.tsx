@@ -1,8 +1,22 @@
-import Link from "next/link";
-import { Check, Info, Sparkles, AlertCircle, BookOpen } from "lucide-react";
+import {
+  Check,
+  Sparkles,
+  AlertCircle,
+  BookOpen,
+  UserPlus,
+  CreditCard,
+  BookOpenCheck,
+  RefreshCcw,
+} from "lucide-react";
 
 import { MainLayout } from "@/components/layout/main-layout";
 import { Button } from "@/components/ui/button";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import {
   Card,
   CardContent,
@@ -371,6 +385,132 @@ export default function MembershipsPage() {
               </CardFooter>
             </Card>
           </div>
+        </div>
+        {/* HOW IT WORKS SECTION */}
+        <div className="mx-auto mt-20 mb-16 max-w-5xl md:mt-32 md:mb-24">
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">
+              How It Works
+            </h2>
+            <p className="mt-3 text-slate-600 dark:text-slate-400">
+              Four simple steps to start your reading journey
+            </p>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400">
+                <UserPlus className="size-8" />
+              </div>
+              <h3 className="mb-2 text-lg font-bold">1. Become a Member</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Pay the one-time fee to set your borrow limit and unlock the
+                library.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400">
+                <CreditCard className="size-8" />
+              </div>
+              <h3 className="mb-2 text-lg font-bold">2. Get Welcome Gift</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Instantly receive 5 free book borrows to use within your first 2
+                months.
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400">
+                <BookOpenCheck className="size-8" />
+              </div>
+              <h3 className="mb-2 text-lg font-bold">3. Borrow & Read</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Order books online and get them delivered. Plus, read 1 donated
+                book free every month!
+              </p>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <div className="mb-4 flex size-16 items-center justify-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400">
+                <RefreshCcw className="size-8" />
+              </div>
+              <h3 className="mb-2 text-lg font-bold">4. Top-Up Passes</h3>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                When your free passes run out, buy top-up packages to keep
+                reading.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* FAQ SECTION */}
+        <div className="mx-auto max-w-3xl pb-12">
+          <div className="mb-10 text-center">
+            <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl dark:text-white">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-3 text-slate-600 dark:text-slate-400">
+              Got questions? We&apos;ve got answers.
+            </p>
+          </div>
+
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="item-1">
+              <AccordionTrigger className="text-left font-semibold">
+                Is the membership fee refundable?
+              </AccordionTrigger>
+              <AccordionContent className="text-slate-600 dark:text-slate-400">
+                No, the membership fee is a one-time, non-refundable payment
+                that gives you library access and establishes your borrow limit
+                for a full 4 years.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-2">
+              <AccordionTrigger className="text-left font-semibold">
+                What happens after 4 years?
+              </AccordionTrigger>
+              <AccordionContent className="text-slate-600 dark:text-slate-400">
+                When your 4-year validity expires, you can easily renew your
+                membership by paying the tier fee again to continue borrowing
+                books.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-3">
+              <AccordionTrigger className="text-left font-semibold">
+                Can I borrow Premium books for free?
+              </AccordionTrigger>
+              <AccordionContent className="text-slate-600 dark:text-slate-400">
+                No, Premium books always require a valid Borrow Pass to order,
+                even if you are a Premium Member. Your membership tier simply
+                unlocks the ability to borrow them.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-4">
+              <AccordionTrigger className="text-left font-semibold">
+                How do the free donated books work?
+              </AccordionTrigger>
+              <AccordionContent className="text-slate-600 dark:text-slate-400">
+                As a bonus for all our members, you are allowed to borrow 1
+                donated book completely free every single month. This does not
+                consume any of your Borrow Passes!
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="item-5">
+              <AccordionTrigger className="text-left font-semibold">
+                How long can I keep a borrowed book?
+              </AccordionTrigger>
+              <AccordionContent className="text-slate-600 dark:text-slate-400">
+                Normally, you can keep a borrowed book for up to 14-21 days. If
+                no one else has requested the book, you can easily extend your
+                borrow period from your dashboard.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </div>
     </MainLayout>
