@@ -5,10 +5,8 @@ import { PlusIcon } from "lucide-react";
 import { fetchLocal } from "@/lib/fetchLocal";
 
 export default async function LibraryPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileLibraryBooks } = await fetchLocal('/api/profile');
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  
+  const { profileLibraryBooks } = await fetchLocal("/api/profile");
+
   return (
     <div className="space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

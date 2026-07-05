@@ -25,7 +25,6 @@ type ExtensionRequestModalProps = {
 export function ExtensionRequestModal({
   isOpen,
   onClose,
-  orderId,
 }: ExtensionRequestModalProps) {
   const [days, setDays] = useState<number>(3);
   const [reason, setReason] = useState("");

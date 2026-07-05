@@ -2,19 +2,10 @@
 
 import { useState } from "react";
 import { useBorrowStore } from "@/lib/store/use-borrow-store";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { AlertCircle, FileText, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 interface ReturnValidationModalProps {
   isOpen: boolean;
@@ -30,7 +21,7 @@ export function ReturnValidationModal({
   handoverMethod,
 }: ReturnValidationModalProps) {
   const { submitTrackingId } = useBorrowStore();
-  const [trackingId, setTrackingId] = useState("");
+  const trackingId = "";
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = () => {

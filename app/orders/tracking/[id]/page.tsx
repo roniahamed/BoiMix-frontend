@@ -19,9 +19,8 @@ export default async function OrderTrackingPage({
 }) {
   const { id } = await params;
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const trackingEvents: any[] = await fetchLocal('/api/orders/tracking');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const trackingEvents: any[] = await fetchLocal("/api/orders/tracking");
 
   return (
     <div className="boimix-container-wide py-8 md:py-12">

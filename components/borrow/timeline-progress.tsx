@@ -59,7 +59,6 @@ export function TimelineProgress({
 
         {STEPS.map((step, i) => {
           const isCompleted = i <= currentIndex;
-          const isActive = i === currentIndex;
 
           return (
             <div

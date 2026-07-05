@@ -22,14 +22,8 @@ import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
 import { fetchLocal } from "@/lib/fetchLocal";
 
-
-
-
-
-
 export default async function Home() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const featuredBooks: BookCardBook[] = await fetchLocal('/api/books');
+  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const newBooks: BookCardBook[] = [...featuredBooks].reverse();
   const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
   const forYouBooks: BookCardBook[] = [...featuredBooks].slice(5, 17);
@@ -69,13 +63,12 @@ export default async function Home() {
 }
 
 async function CategorySection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const categories: any[] = await fetchLocal('/api/categories');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const categories: any[] = await fetchLocal("/api/categories");
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
-        <SectionHeader title="Categories" href="/books" />
+        <SectionHeader title="Categories" href="/books/category" />
         <ScrollContainer autoScroll arrowClassName="top-[35px]">
           {categories.map((category) => {
             return (
@@ -144,8 +137,7 @@ function BookSection({
 }
 
 async function CentralLibrarySection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const featuredBooks: BookCardBook[] = await fetchLocal('/api/books');
+  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const books = featuredBooks
     .filter((b) => b.providerType === "library" || b.tags.includes("borrow"))
     .slice(0, 12);
@@ -174,8 +166,7 @@ async function CentralLibrarySection() {
 }
 
 async function MarketplaceSection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const featuredBooks: BookCardBook[] = await fetchLocal('/api/books');
+  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const books = featuredBooks
     .filter((b) => b.tags.includes("sell"))
     .slice(0, 12);
@@ -204,8 +195,7 @@ async function MarketplaceSection() {
 }
 
 async function SwapBooksSection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const featuredBooks: BookCardBook[] = await fetchLocal('/api/books');
+  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const books = featuredBooks
     .filter((b) => b.tags.includes("swap"))
     .slice(0, 12);
@@ -317,9 +307,8 @@ function FeaturePanel({
 }
 
 async function CommunityReaderSection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const readers: any[] = await fetchLocal('/api/readers');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const readers: any[] = await fetchLocal("/api/readers");
 
   return (
     <section className="py-2 md:py-3">
@@ -440,9 +429,8 @@ async function CommunityReaderSection() {
 }
 
 async function CommunitySection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const communityPosts: any[] = await fetchLocal('/api/community');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const communityPosts: any[] = await fetchLocal("/api/community");
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -472,8 +460,7 @@ async function CommunitySection() {
 }
 
 async function SponsorsSection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const sponsors: string[] = await fetchLocal('/api/sponsors');
+  const sponsors: string[] = await fetchLocal("/api/sponsors");
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -539,9 +526,8 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
 }
 
 async function PersonalizationSection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const featuredBooks: any[] = await fetchLocal('/api/books');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const featuredBooks: any[] = await fetchLocal("/api/books");
   const recentlyViewed = featuredBooks.slice(0, 3);
   return (
     <section className="py-2 md:py-3">
@@ -625,8 +611,10 @@ async function PersonalizationSection() {
 
 async function AuthorSpotlightSection() {
   // Mock books by Humayun Ahmed
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const humayunBooks: BookCardBook[] = await fetchLocal('/api/authors/humayun-ahmed/books');
+
+  const humayunBooks: BookCardBook[] = await fetchLocal(
+    "/api/authors/humayun-ahmed/books",
+  );
 
   return (
     <section className="py-2 md:py-3">
@@ -731,9 +719,8 @@ async function AuthorSpotlightSection() {
 }
 
 async function TestimonialsSection() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const testimonials: any[] = await fetchLocal('/api/testimonials');
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const testimonials: any[] = await fetchLocal("/api/testimonials");
 
   return (
     <section className="py-2 md:py-3">

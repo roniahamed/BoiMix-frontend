@@ -4,11 +4,12 @@ import profileData from "@/lib/data/profileData.json";
 
 export default async function CartPage() {
   const { profileLibraryBooks } = profileData;
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  
+
   const cartBooks = profileLibraryBooks.slice(1, 3);
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const subtotal = cartBooks.reduce((acc: number, book: any) => acc + (book.price || 0), 0);
+  const subtotal = cartBooks.reduce(
+    (acc: number, book: { price?: number }) => acc + (book.price || 0),
+    0,
+  );
 
   return (
     <div className="space-y-8">

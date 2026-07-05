@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   BookOpen,
-  Search,
   CheckCircle2,
   Star,
   Shield,
@@ -23,8 +22,8 @@ import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
 import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { LibrarySearchBar } from "@/components/shared/library-search-bar";
 import { fetchLocal } from "@/lib/fetchLocal";
 import type { BookCardBook } from "@/types/book";
 
@@ -202,9 +201,9 @@ export default async function CentralLibraryPage() {
   return (
     <MainLayout>
       {/* HERO SECTION */}
-      <section className="boimix-container-wide relative mt-6 mb-16 flex min-h-[400px] overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm lg:h-[400px] lg:max-h-[400px] dark:border-slate-800 dark:bg-slate-950">
+      <section className="boimix-container-wide relative mt-6 mb-2.5 flex min-h-[400px] rounded-lg border border-slate-200 bg-white shadow-sm lg:h-[400px] lg:max-h-[400px] dark:border-slate-800 dark:bg-slate-950">
         {/* Split Background with Gradient Transition */}
-        <div className="absolute inset-0 flex w-full">
+        <div className="absolute inset-0 flex w-full overflow-hidden rounded-lg">
           <div className="z-10 w-full bg-white lg:w-[45%] dark:bg-slate-950"></div>
           <div className="relative hidden lg:block lg:w-[55%]">
             <Image
@@ -238,21 +237,13 @@ export default async function CentralLibraryPage() {
             </p>
 
             {/* Search Bar */}
-            <div className="mb-6 flex max-w-xl flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row">
-              <div className="relative flex flex-1 items-center pl-3">
-                <Input
-                  placeholder="Search by title, author, ISBN or keyword..."
-                  className="h-10 border-0 bg-transparent px-0 text-sm text-slate-900 shadow-none placeholder:text-slate-500 focus-visible:ring-0"
-                />
-              </div>
-              <Button className="h-10 rounded-lg bg-blue-600 px-6 text-sm font-semibold text-white shadow-none hover:bg-blue-700">
-                <Search className="mr-2 size-4" />
-                Search
-              </Button>
-            </div>
+            <LibrarySearchBar
+              variant="hero"
+              className="relative mb-6 flex max-w-xl flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row"
+            />
 
             {/* Stats */}
-            <div className="flex flex-wrap items-center gap-6 sm:gap-10">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 lg:flex-nowrap lg:gap-5">
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20">
                   <BookOpen className="size-5" />
@@ -375,15 +366,15 @@ export default async function CentralLibraryPage() {
 
       {/* BROWSE BY CATEGORIES */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
-          <h2 className="mb-6 text-xl font-bold text-slate-900 dark:text-white">
+        <div>
+          <h2 className="mb-0 text-xl font-bold text-slate-900 dark:text-white">
             Categories
           </h2>
-          <ScrollContainer autoScroll={false} className="pb-4">
+          <ScrollContainer autoScroll={false} className="mt-[15px] pb-4">
             {CATEGORIES.map((cat, i) => (
               <Link
                 key={i}
-                href={`/books/categories/${cat.name.toLowerCase()}`}
+                href={`/explore/central-library/search?category=${encodeURIComponent(cat.name)}`}
                 className="group flex w-[160px] shrink-0 items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
               >
                 <div
@@ -405,7 +396,7 @@ export default async function CentralLibraryPage() {
               </Link>
             ))}
             <Link
-              href="/books/categories"
+              href="/books/category"
               className="group flex w-[100px] shrink-0 flex-col items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="flex size-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">

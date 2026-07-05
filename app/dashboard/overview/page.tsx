@@ -4,10 +4,8 @@ import { BookCard } from "@/components/shared/book-card";
 import { fetchLocal } from "@/lib/fetchLocal";
 
 export default async function OverviewPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles, profileLibraryBooks } = await fetchLocal('/api/profile');
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  
+  const { profileLibraryBooks } = await fetchLocal("/api/profile");
+
   const recentBooks = profileLibraryBooks.slice(0, 4);
 
   return (

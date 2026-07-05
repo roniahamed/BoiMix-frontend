@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -26,15 +25,11 @@ import {
   MapPin,
   Truck,
   ArrowLeft,
-  Trash2,
   Calendar,
-  CreditCard,
-  Wallet,
   BookOpen,
   OctagonXIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { ProgressStepper } from "@/components/borrow/progress-stepper";
 import { EligibilityCard } from "@/components/borrow/eligibility-card";
 import { BD_DISTRICTS, BD_THANAS } from "@/lib/data/bd-locations";
 
@@ -46,7 +41,6 @@ function CheckoutForm() {
   const {
     items: allCartItems,
     directCheckoutItem,
-    removeItem,
     removeItems,
     clearCart,
   } = useBorrowCartStore();
@@ -120,10 +114,6 @@ function CheckoutForm() {
     "Gulshan 1, Dhaka",
   ];
 
-  const [paymentMethod, setPaymentMethod] = useState<
-    "bkash" | "nagad" | "card" | "wallet"
-  >("bkash");
-
   const handleMethodChange = (
     ownerId: string,
     method: "meetup" | "courier",
@@ -131,22 +121,10 @@ function CheckoutForm() {
     setOwnerMethods((prev) => ({ ...prev, [ownerId]: method }));
   };
 
-  const totalBorrowFee = items.reduce((sum, item) => sum + item.borrowFee, 0);
   const totalDepositRequired = items.reduce(
     (sum, item) => sum + item.depositRequired,
     0,
   );
-  const totalCourierFee = Object.entries(ownerMethods).reduce(
-    (sum, [ownerId, method]) => {
-      if (method === "courier") {
-        const districtId = courierDistrict[ownerId];
-        return sum + (districtId === "47" ? 70 : 120); // 47 is Dhaka
-      }
-      return sum;
-    },
-    0,
-  );
-  const totalPayable = totalBorrowFee + totalCourierFee;
 
   const activeOrdersCount = orders.filter(
     (o) => o.borrowerId === "current-user" && o.status !== "completed",
@@ -331,7 +309,7 @@ function CheckoutForm() {
         {/* STEP 2: REQUEST DETAILS */}
         {checkoutStep === 2 && (
           <div className="animate-in slide-in-from-bottom-4 space-y-4">
-            {Object.entries(itemsByOwner).map(([ownerId, group], index) => (
+            {Object.entries(itemsByOwner).map(([ownerId, group]) => (
               <Card
                 key={ownerId}
                 className="overflow-hidden rounded-xl border shadow-sm"

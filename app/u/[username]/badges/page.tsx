@@ -16,10 +16,9 @@ export default async function UserBadgesPage({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const { mockProfiles } = await fetchLocal('/api/profile');
-  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-  const getUserProfile = (username: string) => mockProfiles.find((p: any) => p.username === username);
+  const { mockProfiles } = await fetchLocal("/api/profile");
+  const getUserProfile = (username: string) =>
+    mockProfiles.find((p: { username: string }) => p.username === username);
 
   const { username } = await params;
   const profile = getUserProfile(username);

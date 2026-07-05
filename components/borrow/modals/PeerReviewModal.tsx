@@ -1,24 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import {
-  Star,
-  MessageSquareHeart,
-  ArrowLeft,
-  CheckCircle2,
-} from "lucide-react";
+import { Star, ArrowLeft, CheckCircle2 } from "lucide-react";
 
 type PeerReviewModalProps = {
   isOpen: boolean;
@@ -26,11 +13,7 @@ type PeerReviewModalProps = {
   orderId: string;
 };
 
-export function PeerReviewModal({
-  isOpen,
-  onClose,
-  orderId,
-}: PeerReviewModalProps) {
+export function PeerReviewModal({ isOpen, onClose }: PeerReviewModalProps) {
   const [rating, setRating] = useState<number>(0);
   const [hoverRating, setHoverRating] = useState<number>(0);
   const [review, setReview] = useState("");

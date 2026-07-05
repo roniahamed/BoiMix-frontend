@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { ShoppingBag, BookOpen } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BuyCart } from "@/components/cart/buy-cart";
@@ -10,7 +10,6 @@ import { useCartStore } from "@/lib/store/use-cart-store";
 import { useBorrowCartStore } from "@/lib/store/use-borrow-cart-store";
 
 function CartPageContent() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const defaultTab = searchParams.get("tab") === "borrow" ? "borrow" : "buy";
 

@@ -18,6 +18,15 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/books/categories",
+        destination: "/books/category",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

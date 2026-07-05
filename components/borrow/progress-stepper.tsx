@@ -1,4 +1,3 @@
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ProgressStepperProps {
@@ -11,7 +10,6 @@ interface ProgressStepperProps {
 export function ProgressStepper({
   currentStep,
   totalSteps = 6,
-  labels,
   className,
 }: ProgressStepperProps) {
   return (
@@ -32,7 +30,6 @@ export function ProgressStepper({
         {Array.from({ length: totalSteps }).map((_, i) => {
           const stepNumber = i + 1;
           const isCompleted = stepNumber <= currentStep;
-          const isActive = stepNumber === currentStep;
 
           return (
             <div key={i} className="relative z-10 flex flex-col items-center">
