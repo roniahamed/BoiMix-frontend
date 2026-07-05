@@ -16,7 +16,12 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="bg-background text-foreground flex min-h-svh">
       <SidebarNavigation title="Dashboard" items={dashboardNavItems} />
-      <main className="min-w-0 flex-1 pb-20 lg:pb-0">{children}</main>
+      <main className="flex min-w-0 flex-1 flex-col pb-20 lg:pb-0">
+        <div className="block lg:hidden">
+          <SiteHeader />
+        </div>
+        {children}
+      </main>
       <MobileBottomNavigation />
       <RightSidebarWidget />
     </div>
