@@ -13,7 +13,6 @@ import {
   MonitorPlay,
   BriefcaseMedical,
   GraduationCap,
-  ChevronDown,
   LayoutGrid,
   ArrowRight,
 } from "lucide-react";
@@ -24,6 +23,7 @@ import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LibrarySearchBar } from "@/components/shared/library-search-bar";
+import { FaqAccordion } from "@/components/shared/faq-accordion";
 import { fetchLocal } from "@/lib/fetchLocal";
 import type { BookCardBook } from "@/types/book";
 
@@ -151,28 +151,28 @@ const POPULAR_COLLECTIONS = [
 
 const FAQS = [
   {
-    q: "How does borrowing work?",
-    a: "You can borrow books by subscribing to a membership plan. Once subscribed, you can request books from our Central Library and we will deliver them to your address.",
+    q: "বই ধার করার প্রক্রিয়া কী?",
+    a: "মেম্বারশিপ প্ল্যানে সাবস্ক্রাইব করে আপনি বই ধার করতে পারবেন। সাবস্ক্রাইব করার পরে সেন্ট্রাল লাইব্রেরি থেকে বই রিকোয়েস্ট করুন, আমরা আপনার ঠিকানায় ডেলিভারি দেব।",
   },
   {
-    q: "How long can I keep a book?",
-    a: "The duration depends on your membership plan. Basic allows 7 days, Premium allows 14 days, and Elite allows up to 21 days.",
+    q: "একটি বই কতদিন রাখা যাবে?",
+    a: "মেম্বারশিপ প্ল্যান অনুযায়ী সময়সীমা নির্ধারিত হয়। বেসিক প্ল্যানে ৭ দিন, প্রিমিয়ামে ১৪ দিন, এবং এলিটে সর্বোচ্চ ২১ দিন বই রাখা যাবে।",
   },
   {
-    q: "How can I join the membership?",
-    a: "Simply click on 'View Membership Plans' at the top of this page, select the plan that suits you best, and follow the checkout process.",
+    q: "মেম্বারশিপে কীভাবে যোগ দেব?",
+    a: "এই পেজের উপরে 'মেম্বারশিপ প্ল্যান দেখুন'-এ ক্লিক করুন, আপনার পছন্দের প্ল্যান বেছে নিন এবং চেকআউট প্রক্রিয়া সম্পন্ন করুন।",
   },
   {
-    q: "Can I renew a borrowed book?",
-    a: "Yes, subject to availability. If no one else has requested the book, you can renew it from your dashboard before the due date.",
+    q: "ধার করা বই কি নবায়ন করা যাবে?",
+    a: "হ্যাঁ, উপলব্ধতা সাপেক্ষে। অন্য কেউ যদি বইটি রিকোয়েস্ট না করে থাকেন, তাহলে মেয়াদ শেষ হওয়ার আগেই ড্যাশবোর্ড থেকে নবায়ন করতে পারবেন।",
   },
   {
-    q: "Is delivery available?",
-    a: "Yes, we provide nationwide delivery. Premium and Elite members enjoy free or express delivery.",
+    q: "ডেলিভারি সুবিধা আছে কি?",
+    a: "হ্যাঁ, আমরা সারাদেশে ডেলিভারি দিয়ে থাকি। প্রিমিয়াম ও এলিট সদস্যরা বিনামূল্যে বা এক্সপ্রেস ডেলিভারি সুবিধা পাবেন।",
   },
   {
-    q: "Can I cancel the membership?",
-    a: "You can cancel your membership at any time from your account settings. Benefits will continue until the end of your billing cycle.",
+    q: "মেম্বারশিপ বাতিল করা যাবে কি?",
+    a: "হ্যাঁ, যেকোনো সময় আপনার অ্যাকাউন্ট সেটিংস থেকে মেম্বারশিপ বাতিল করতে পারবেন। বিলিং সাইকেল শেষ না হওয়া পর্যন্ত সুবিধা চলমান থাকবে।",
   },
 ];
 
@@ -907,31 +907,16 @@ export default async function CentralLibraryPage() {
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <div className="mb-8 flex items-center justify-between">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Frequently Asked Questions
+              সচরাচর জিজ্ঞাসা
             </h2>
             <Link
               href="/faq"
               className="flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
             >
-              View All <ArrowRight className="ml-1 size-3" />
+              সব দেখুন <ArrowRight className="ml-1 size-3" />
             </Link>
           </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:gap-6">
-            {FAQS.map((faq, i) => (
-              <details
-                key={i}
-                className="group rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between p-5 font-semibold text-slate-800 dark:text-slate-200 [&::-webkit-details-marker]:hidden">
-                  {faq.q}
-                  <ChevronDown className="size-5 text-slate-400 transition-transform group-open:rotate-180" />
-                </summary>
-                <div className="px-5 pb-5 text-sm text-slate-600 dark:text-slate-400">
-                  {faq.a}
-                </div>
-              </details>
-            ))}
-          </div>
+          <FaqAccordion faqs={FAQS} />
         </div>
       </section>
 
