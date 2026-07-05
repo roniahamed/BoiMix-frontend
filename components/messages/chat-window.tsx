@@ -21,12 +21,14 @@ type ChatWindowProps = {
   className?: string;
   /** When true, hides the internal chat header (used in floating widget) */
   compact?: boolean;
+  onBack?: () => void;
 };
 
 export function ChatWindow({
   conversation,
   className,
   compact = false,
+  onBack,
 }: ChatWindowProps) {
   const { user, messages, isTyping } = conversation;
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -42,11 +44,22 @@ export function ChatWindow({
       {!compact && (
         <div className="bg-background flex items-center justify-between border-b px-4 py-3">
           <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="md:hidden" asChild>
-              <Link href="/dashboard/messages">
+            {onBack ? (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={onBack}
+              >
                 <ArrowLeftIcon className="h-5 w-5" />
-              </Link>
-            </Button>
+              </Button>
+            ) : (
+              <Button variant="ghost" size="icon" className="md:hidden" asChild>
+                <Link href="/dashboard/messages">
+                  <ArrowLeftIcon className="h-5 w-5" />
+                </Link>
+              </Button>
+            )}
 
             <Link
               href={`/u/${user.username}`}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, use } from "react";
 import { ConversationList } from "@/components/messages/conversation-list";
 import { ChatWindow } from "@/components/messages/chat-window";
 import { MOCK_CONVERSATIONS } from "@/lib/data/mock-messages";
@@ -10,10 +10,11 @@ import { notFound } from "next/navigation";
 export default function MessageDetailsPage({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }) {
+  const resolvedParams = use(params);
   const conversation = MOCK_CONVERSATIONS.find(
-    (c) => c.user.username === params.username,
+    (c) => c.user.username === resolvedParams.username,
   );
 
   const markAsRead = useMessageStore((s) => s.markAsRead);
@@ -36,7 +37,7 @@ export default function MessageDetailsPage({
       </div>
 
       {/* Chat Window */}
-      <div className="bg-card flex flex-1 flex-col overflow-hidden rounded-lg border">
+      <div className="bg-background md:bg-card fixed inset-0 z-[100] flex flex-col md:static md:z-auto md:flex-1 md:overflow-hidden md:rounded-lg md:border">
         <ChatWindow conversation={conversation} />
       </div>
     </div>

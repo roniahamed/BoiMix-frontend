@@ -74,8 +74,8 @@ export const megaMenuItems: NavItem[] = [
 
 export const mobileBottomNavItems: NavItem[] = [
   { title: "Home", href: "/", icon: HomeIcon },
-  { title: "Wishlist", href: "/wishlist", icon: HeartIcon },
   { title: "Messages", href: "/dashboard/messages", icon: MessageSquareIcon },
+  { title: "Add Book", href: "/books/upload", icon: BookPlusIcon },
   { title: "Alerts", href: "/notifications/all", icon: BellIcon },
   { title: "Profile", href: "/dashboard/overview", icon: UserIcon },
 ];

@@ -31,17 +31,6 @@ export function MobileBottomNavigation() {
 
   return (
     <>
-      {/* Floating Add Book FAB */}
-      <div className="fixed right-4 bottom-[68px] z-50 md:hidden">
-        <Link
-          href="/books/upload"
-          aria-label="Add a book"
-          className="bg-primary text-primary-foreground shadow-primary/30 flex h-12 w-12 items-center justify-center rounded-full shadow-lg transition-transform active:scale-95"
-        >
-          <BookPlusIcon className="size-5" />
-        </Link>
-      </div>
-
       {/* Bottom Navigation */}
       <nav
         className="bg-background/95 fixed inset-x-0 bottom-0 z-40 border-t backdrop-blur md:hidden"
