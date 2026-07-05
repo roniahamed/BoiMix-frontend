@@ -144,7 +144,9 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
   return (
     <article
       className={cn(
-        "group bg-card relative overflow-hidden rounded-lg shadow-none transition-all duration-300 md:bg-transparent md:shadow-none",
+        "group relative overflow-hidden rounded-lg transition-all duration-300",
+        "max-sm:border max-sm:border-slate-200 max-sm:bg-white max-sm:shadow-sm max-sm:dark:border-slate-800 max-sm:dark:bg-slate-900",
+        "md:border-transparent md:bg-transparent md:shadow-none",
         className,
       )}
     >

@@ -437,7 +437,7 @@ export default async function CentralLibraryPage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
             {renderFeat.map((book) => (
               <div key={book.id}>
                 <BookCard book={book} />
@@ -451,8 +451,8 @@ export default async function CentralLibraryPage() {
       <section className="boimix-container-wide mb-6 md:mb-8">
         <div className="grid gap-6 lg:grid-cols-2">
           {/* New Arrivals */}
-          <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
-            <div className="mb-6 flex items-center justify-between">
+          <div className="min-w-0 sm:rounded-lg sm:border sm:border-slate-200 sm:bg-white sm:p-6 sm:shadow-sm dark:sm:border-slate-800 dark:sm:bg-slate-900/50">
+            <div className="mb-4 flex items-center justify-between sm:mb-6">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 New Arrivals
               </h3>
@@ -463,14 +463,14 @@ export default async function CentralLibraryPage() {
                 View All <ArrowRight className="ml-1 size-3" />
               </Link>
             </div>
-            <ScrollContainer className="gap-5 pb-4" autoScroll={false}>
+            <ScrollContainer className="gap-3 pb-4 sm:gap-5" autoScroll={false}>
               {renderNew.map((book) => (
                 <Link
                   key={book.id}
                   href={`/books/${book.slug}`}
-                  className="group flex w-[140px] shrink-0 flex-col gap-2"
+                  className="group flex w-[140px] shrink-0 flex-col gap-2 max-sm:rounded-lg max-sm:border max-sm:border-slate-200 max-sm:bg-white max-sm:p-2 max-sm:shadow-sm max-sm:dark:border-slate-800 max-sm:dark:bg-slate-900"
                 >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm transition-transform group-hover:scale-[1.02] dark:border-slate-800">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm transition-transform group-hover:scale-[1.02] max-sm:rounded-md dark:border-slate-800">
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
@@ -492,8 +492,8 @@ export default async function CentralLibraryPage() {
           </div>
 
           {/* Most Borrowed */}
-          <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
-            <div className="mb-6 flex items-center justify-between">
+          <div className="min-w-0 sm:rounded-lg sm:border sm:border-slate-200 sm:bg-white sm:p-6 sm:shadow-sm dark:sm:border-slate-800 dark:sm:bg-slate-900/50">
+            <div className="mb-4 flex items-center justify-between sm:mb-6">
               <h3 className="text-xl font-bold text-slate-900 dark:text-white">
                 Most Borrowed
               </h3>
@@ -504,14 +504,14 @@ export default async function CentralLibraryPage() {
                 View All <ArrowRight className="ml-1 size-3" />
               </Link>
             </div>
-            <ScrollContainer className="gap-5 pb-4" autoScroll={false}>
+            <ScrollContainer className="gap-3 pb-4 sm:gap-5" autoScroll={false}>
               {renderMost.map((book) => (
                 <Link
                   key={book.id}
                   href={`/books/${book.slug}`}
-                  className="group flex w-[140px] shrink-0 flex-col gap-2"
+                  className="group flex w-[140px] shrink-0 flex-col gap-2 max-sm:rounded-lg max-sm:border max-sm:border-slate-200 max-sm:bg-white max-sm:p-2 max-sm:shadow-sm max-sm:dark:border-slate-800 max-sm:dark:bg-slate-900"
                 >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm transition-transform group-hover:scale-[1.02] dark:border-slate-800">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm transition-transform group-hover:scale-[1.02] max-sm:rounded-md dark:border-slate-800">
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
@@ -536,8 +536,8 @@ export default async function CentralLibraryPage() {
 
       {/* POPULAR COLLECTIONS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
-          <div className="mb-6 flex items-center justify-between">
+        <div className="sm:rounded-lg sm:border sm:border-slate-200 sm:bg-white sm:p-6 sm:shadow-sm dark:sm:border-slate-800 dark:sm:bg-slate-900/50">
+          <div className="mb-4 flex items-center justify-between sm:mb-6">
             <h2 className="text-xl font-bold text-slate-900 dark:text-white">
               Popular Collections
             </h2>
@@ -545,10 +545,12 @@ export default async function CentralLibraryPage() {
               href="/explore/central-library/search?type=collections"
               className="flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
             >
-              View All Collections <ArrowRight className="ml-1 size-4" />
+              <span className="hidden sm:inline">View All Collections</span>
+              <span className="inline sm:hidden">View All</span>{" "}
+              <ArrowRight className="ml-1 size-4" />
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
             {POPULAR_COLLECTIONS.map((col, i) => (
               <Link
                 key={i}
