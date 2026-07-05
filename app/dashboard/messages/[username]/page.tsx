@@ -1,6 +1,10 @@
+"use client";
+
+import { useEffect } from "react";
 import { ConversationList } from "@/components/messages/conversation-list";
 import { ChatWindow } from "@/components/messages/chat-window";
 import { MOCK_CONVERSATIONS } from "@/lib/data/mock-messages";
+import { useMessageStore } from "@/lib/store/use-message-store";
 import { notFound } from "next/navigation";
 
 export default function MessageDetailsPage({
@@ -11,6 +15,14 @@ export default function MessageDetailsPage({
   const conversation = MOCK_CONVERSATIONS.find(
     (c) => c.user.username === params.username,
   );
+
+  const markAsRead = useMessageStore((s) => s.markAsRead);
+
+  useEffect(() => {
+    if (conversation?.id) {
+      markAsRead(conversation.id);
+    }
+  }, [conversation?.id, markAsRead]);
 
   if (!conversation) {
     notFound();
