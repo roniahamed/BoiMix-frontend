@@ -9,6 +9,7 @@ import {
   Heart,
   Users,
   Trophy,
+  ShoppingBag,
   Clock,
   ChevronRight,
   Sparkles,
@@ -385,6 +386,81 @@ export default function ExploreFestivalPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+           STATS ROW
+      ══════════════════════════════════════════════ */}
+      <section className="boimix-container-wide mb-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[
+            { value: "৬০০+", label: "প্রকাশক", icon: BookOpen },
+            { value: "১৫ লাখ+", label: "পাঠক অংশগ্রহণ", icon: Users },
+            { value: "৪০%", label: "ডিসকাউন্ট পর্যন্ত", icon: ShoppingBag },
+            { value: "১২০+", label: "পুরস্কারপ্রাপ্ত বই", icon: Trophy },
+          ].map((stat, i) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={i}
+                className="flex items-center gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+              >
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-rose-50 text-rose-500 dark:bg-rose-900/20 dark:text-rose-400">
+                  <Icon className="size-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg leading-tight font-black text-slate-900 dark:text-white">
+                    {stat.value}
+                  </h3>
+                  <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">
+                    {stat.label}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════
+           SUBJECT-WISE BOOKS
+      ══════════════════════════════════════════════ */}
+      <section className="boimix-container-wide mb-8">
+        <div className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-lg font-black text-slate-900 dark:text-white">
+              বিষয়ভিত্তিক বই
+            </h2>
+            <Link
+              href="/explore/subjects"
+              className="text-xs font-bold text-rose-500 hover:text-rose-600 dark:text-rose-400"
+            >
+              সব দেখুন →
+            </Link>
+          </div>
+          <div className="grid grid-cols-4 gap-3 sm:grid-cols-8">
+            {[
+              { label: "উপন্যাস", icon: "📖" },
+              { label: "কবিতা", icon: "✍️" },
+              { label: "ইতিহাস", icon: "🏛️" },
+              { label: "বিজ্ঞান", icon: "🔬" },
+              { label: "মুক্তিযুদ্ধ", icon: "🇧🇩" },
+              { label: "শিশু", icon: "🧸" },
+              { label: "ইসলামিক", icon: "☪️" },
+              { label: "আত্মজীবনী", icon: "👤" },
+            ].map((cat, i) => (
+              <button
+                key={i}
+                className="flex flex-col items-center justify-center gap-2 rounded-xl bg-slate-50 p-4 transition-all hover:bg-slate-100 dark:bg-slate-800/50 dark:hover:bg-slate-800"
+              >
+                <span className="text-2xl">{cat.icon}</span>
+                <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
+                  {cat.label}
+                </span>
+              </button>
+            ))}
           </div>
         </div>
       </section>
