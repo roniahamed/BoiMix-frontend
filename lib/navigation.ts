@@ -37,11 +37,11 @@ export const primaryNavItems: NavItem[] = [
   { title: "Books", href: "/books", icon: BookOpenIcon },
   {
     title: "Central Library",
-    href: "/books?type=borrow",
+    href: "/explore/central-library",
     icon: LibraryIcon,
   },
   { title: "Marketplace", href: "/books?type=sell", icon: ShoppingCartIcon },
-  { title: "Swaps", href: "/books?type=swap", icon: Repeat2Icon },
+  { title: "Swaps", href: "/explore/swaps", icon: Repeat2Icon },
   { title: "Community", href: "/community", icon: UsersRoundIcon },
 ];
 
