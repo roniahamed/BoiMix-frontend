@@ -185,14 +185,16 @@ export default async function CentralLibraryPage() {
   );
 
   // Create splits
-  const featuredBooks = libraryBooks.slice(0, 5);
-  const newArrivals = libraryBooks.slice(5, 9);
-  const mostBorrowed = libraryBooks.slice(9, 13);
+  const featuredBooks = libraryBooks.slice(0, 6);
+  const newArrivals = libraryBooks.slice(6, 10);
+  const mostBorrowed = libraryBooks.slice(10, 14);
 
   // Fillers if empty
-  const fallbackBooks = allBooks.slice(0, 10);
+  const fallbackBooks = allBooks.slice(0, 12);
   const renderFeat =
-    featuredBooks.length > 0 ? featuredBooks : fallbackBooks.slice(0, 5);
+    featuredBooks.length > 0
+      ? featuredBooks.slice(0, 6)
+      : fallbackBooks.slice(0, 6);
   const renderNew =
     newArrivals.length > 0 ? newArrivals : fallbackBooks.slice(5, 9);
   const renderMost =
@@ -410,16 +412,16 @@ export default async function CentralLibraryPage() {
         </div>
       </section>
 
-      {/* VERIFIED PICKS */}
+      {/* FEATURED BOOKS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
         <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/50">
           <div className="mb-6 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="flex size-6 items-center justify-center rounded-full bg-blue-600 text-white">
-                <Check className="size-4" strokeWidth={3} />
+                <Star className="size-4 fill-white" />
               </div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-                Verified Picks
+                Featured Books
               </h2>
             </div>
             <Link
@@ -430,16 +432,13 @@ export default async function CentralLibraryPage() {
             </Link>
           </div>
 
-          <ScrollContainer className="gap-4 pb-4 md:gap-6">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {renderFeat.map((book) => (
-              <div
-                key={book.id}
-                className="w-[180px] shrink-0 sm:w-[200px] md:w-[220px]"
-              >
+              <div key={book.id}>
                 <BookCard book={book} />
               </div>
             ))}
-          </ScrollContainer>
+          </div>
         </div>
       </section>
 
@@ -461,11 +460,12 @@ export default async function CentralLibraryPage() {
             </div>
             <ScrollContainer className="gap-5 pb-4" autoScroll={false}>
               {renderNew.map((book) => (
-                <div
+                <Link
                   key={book.id}
-                  className="flex w-[140px] shrink-0 flex-col gap-3"
+                  href={`/books/${book.slug}`}
+                  className="group flex w-[140px] shrink-0 flex-col gap-2"
                 >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm dark:border-slate-800">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm transition-transform group-hover:scale-[1.02] dark:border-slate-800">
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
@@ -473,26 +473,15 @@ export default async function CentralLibraryPage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex flex-1 flex-col">
-                    <h4 className="mb-1 line-clamp-2 text-sm leading-tight font-bold text-slate-900 dark:text-slate-100">
+                  <div className="flex flex-col">
+                    <h4 className="line-clamp-2 text-sm leading-tight font-bold text-slate-900 group-hover:text-blue-600 dark:text-slate-100">
                       {book.title}
                     </h4>
-                    <p className="mb-1 line-clamp-1 text-xs text-slate-500 dark:text-slate-400">
+                    <p className="mt-0.5 line-clamp-1 text-xs text-slate-500 dark:text-slate-400">
                       {book.author}
                     </p>
-                    <div className="mt-auto mb-3 flex items-center gap-1 text-xs font-semibold">
-                      <Star className="size-3.5 fill-yellow-400 text-yellow-400" />
-                      <span>{book.rating > 0 ? book.rating : "New"}</span>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 w-full rounded-full border-blue-600 bg-transparent text-xs font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                    >
-                      Borrow
-                    </Button>
                   </div>
-                </div>
+                </Link>
               ))}
             </ScrollContainer>
           </div>
@@ -512,11 +501,12 @@ export default async function CentralLibraryPage() {
             </div>
             <ScrollContainer className="gap-5 pb-4" autoScroll={false}>
               {renderMost.map((book) => (
-                <div
+                <Link
                   key={book.id}
-                  className="flex w-[140px] shrink-0 flex-col gap-3"
+                  href={`/books/${book.slug}`}
+                  className="group flex w-[140px] shrink-0 flex-col gap-2"
                 >
-                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm dark:border-slate-800">
+                  <div className="relative aspect-[2/3] w-full overflow-hidden rounded-lg border border-slate-100 bg-slate-100 shadow-sm transition-transform group-hover:scale-[1.02] dark:border-slate-800">
                     <Image
                       src={book.coverUrl}
                       alt={book.title}
@@ -524,26 +514,15 @@ export default async function CentralLibraryPage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="flex flex-1 flex-col">
-                    <h4 className="mb-1 line-clamp-2 text-sm leading-tight font-bold text-slate-900 dark:text-slate-100">
+                  <div className="flex flex-col">
+                    <h4 className="line-clamp-2 text-sm leading-tight font-bold text-slate-900 group-hover:text-blue-600 dark:text-slate-100">
                       {book.title}
                     </h4>
-                    <p className="mb-1 line-clamp-1 text-xs text-slate-500 dark:text-slate-400">
+                    <p className="mt-0.5 line-clamp-1 text-xs text-slate-500 dark:text-slate-400">
                       {book.author}
                     </p>
-                    <div className="mt-auto mb-3 flex items-center gap-1 text-xs font-semibold">
-                      <Star className="size-3.5 fill-yellow-400 text-yellow-400" />
-                      <span>{book.rating > 0 ? book.rating : "4.5"}</span>
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 w-full rounded-full border-blue-600 bg-transparent text-xs font-bold text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
-                    >
-                      Borrow
-                    </Button>
                   </div>
-                </div>
+                </Link>
               ))}
             </ScrollContainer>
           </div>
@@ -564,12 +543,12 @@ export default async function CentralLibraryPage() {
               View All Collections <ArrowRight className="ml-1 size-4" />
             </Link>
           </div>
-          <ScrollContainer className="gap-5 pb-4" autoScroll={false}>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
             {POPULAR_COLLECTIONS.map((col, i) => (
               <Link
                 key={i}
                 href={`/explore/central-library/search?collection=${col.name}`}
-                className="group relative flex h-[160px] w-[260px] shrink-0 flex-col justify-end overflow-hidden rounded-lg shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
+                className="group relative flex h-[160px] w-full flex-col justify-end overflow-hidden rounded-lg shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
               >
                 <Image
                   src={col.image}
@@ -578,20 +557,17 @@ export default async function CentralLibraryPage() {
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/20"></div>
-                <div className="relative z-10 p-5">
-                  <h3 className="mb-1 text-base font-bold text-white">
+                <div className="relative z-10 p-3">
+                  <h3 className="mb-0.5 text-sm font-bold text-white">
                     {col.name}
                   </h3>
-                  <p className="mb-2 line-clamp-2 text-[11px] leading-tight text-slate-200">
-                    {col.desc}
-                  </p>
-                  <p className="text-[11px] font-bold text-white">
+                  <p className="text-[10px] font-bold text-white/80">
                     {col.count}
                   </p>
                 </div>
               </Link>
             ))}
-          </ScrollContainer>
+          </div>
         </div>
       </section>
 
