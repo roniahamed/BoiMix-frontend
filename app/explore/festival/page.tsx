@@ -190,19 +190,19 @@ export default function ExploreFestivalPage() {
   return (
     <MainLayout>
       {/* ══════════════════════════════════════════════
-           HERO — full dark photo-style banner
+           HERO — vibrant banner
       ══════════════════════════════════════════════ */}
       <section className="boimix-container-wide mt-6 mb-6">
         <div
           className="relative overflow-hidden rounded-2xl"
-          style={{ minHeight: 320 }}
+          style={{ minHeight: 380 }}
         >
-          {/* Background — dark festival atmosphere */}
+          {/* Background — vibrant red/pink festival atmosphere */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(135deg, #0a0a1a 0%, #0f1929 30%, #1a0a2e 60%, #0a1520 100%)",
+                "linear-gradient(135deg, #e11d48 0%, #ec4899 50%, #8b5cf6 100%)",
             }}
           />
           {/* Bokeh light effects */}
@@ -272,7 +272,7 @@ export default function ExploreFestivalPage() {
                   className="block text-3xl md:text-4xl lg:text-5xl"
                   style={{
                     background:
-                      "linear-gradient(90deg, #F43F5E 0%, #EC4899 50%, #A78BFA 100%)",
+                      "linear-gradient(90deg, #fef08a 0%, #f59e0b 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -281,42 +281,37 @@ export default function ExploreFestivalPage() {
                 </span>
               </h1>
 
-              <p className="mb-5 max-w-sm text-sm leading-relaxed text-slate-300">
+              <p className="mb-5 max-w-sm text-sm leading-relaxed text-white/90">
                 বইমেলা, সাহিত্য উৎসব, লেখক আলোচনা ও ওয়ার্কশপ — আপনার কাছের সব
                 অনুষ্ঠান।
               </p>
 
               {/* Meta row */}
-              <div className="mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold text-slate-300">
+              <div className="mb-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold text-white/90">
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="size-3.5 text-rose-400" />
+                  <Calendar className="size-3.5 text-white/80" />
                   ১৫–২৮ ফেব্রু, ২০২৫
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <MapPin className="size-3.5 text-violet-400" />
+                  <MapPin className="size-3.5 text-white/80" />
                   বাংলাদেশ
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Users className="size-3.5 text-emerald-400" />
+                  <Users className="size-3.5 text-white/80" />
                   ১.২ হাজার+ যাচ্ছেন
                 </span>
               </div>
 
               {/* Search bar */}
-              <div className="flex max-w-md overflow-hidden rounded-xl border border-white/10 bg-white/10 backdrop-blur-md">
+              <div className="flex max-w-md overflow-hidden rounded-xl border border-white/20 bg-white/15 shadow-lg shadow-rose-900/20 backdrop-blur-md">
                 <div className="flex flex-1 items-center gap-2 px-4">
-                  <Search className="size-4 shrink-0 text-slate-400" />
+                  <Search className="size-4 shrink-0 text-white/70" />
                   <input
-                    className="flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-slate-400"
+                    className="flex-1 bg-transparent py-3 text-sm text-white outline-none placeholder:text-white/70"
                     placeholder="উৎসব, লোকেশন খুঁজুন..."
                   />
                 </div>
-                <button
-                  className="px-5 py-3 text-xs font-black text-white"
-                  style={{
-                    background: "linear-gradient(135deg, #F43F5E, #8B5CF6)",
-                  }}
-                >
+                <button className="bg-white px-6 py-3 text-xs font-black text-rose-600 transition-colors hover:bg-slate-50">
                   খুঁজুন
                 </button>
               </div>
@@ -368,22 +363,22 @@ export default function ExploreFestivalPage() {
                   <h3 className="mb-2 text-sm leading-snug font-black text-white">
                     ঢাকা আন্তর্জাতিক বইমেলা ২০২৫
                   </h3>
-                  <div className="flex flex-col gap-1 text-xs text-slate-300">
+                  <div className="flex flex-col gap-1 text-xs text-white/90">
                     <span className="flex items-center gap-1.5">
-                      <Calendar className="size-3 text-rose-400" />
+                      <Calendar className="size-3 text-white/80" />
                       ১–২৮ ফেব্রুয়ারি ২০২৫
                     </span>
                     <span className="flex items-center gap-1.5">
-                      <MapPin className="size-3 text-violet-400" />
+                      <MapPin className="size-3 text-white/80" />
                       বাংলা একাডেমি, ঢাকা
                     </span>
                   </div>
-                  <p className="mt-2 text-[11px] leading-relaxed text-slate-400">
+                  <p className="mt-2 text-[11px] leading-relaxed text-white/70">
                     বাংলাদেশের সবচেয়ে বড় বইমেলা — হাজার প্রকাশক, লেখক ও পাঠক।
                   </p>
                   <Link
                     href="#"
-                    className="mt-3 flex items-center gap-1 text-xs font-bold text-rose-400 hover:text-rose-300"
+                    className="mt-3 flex items-center gap-1 text-xs font-bold text-yellow-300 transition-colors hover:text-yellow-200"
                   >
                     বিস্তারিত দেখুন <ArrowRight className="size-3" />
                   </Link>
@@ -391,32 +386,6 @@ export default function ExploreFestivalPage() {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════════════
-           FILTER TABS
-      ══════════════════════════════════════════════ */}
-      <section className="boimix-container-wide mb-6">
-        <div className="flex [scrollbar-width:none] gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {FILTER_TABS.map((tab) => {
-            const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-xs font-bold transition-all ${
-                  isActive
-                    ? "border-rose-500 bg-rose-500 text-white shadow-md shadow-rose-200 dark:shadow-rose-900/30"
-                    : "border-slate-200 bg-white text-slate-600 hover:border-rose-200 hover:text-rose-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-rose-700 dark:hover:text-rose-400"
-                }`}
-              >
-                <Icon className="size-3.5" />
-                {tab.label}
-              </button>
-            );
-          })}
         </div>
       </section>
 
