@@ -15,6 +15,8 @@ type LibrarySearchBarProps = {
   variant: "hero" | "minimal";
   className?: string;
   hiddenFields?: Record<string, string>;
+  action?: string;
+  mode?: "library" | "swaps";
 };
 
 export function LibrarySearchBar({
@@ -23,6 +25,8 @@ export function LibrarySearchBar({
   variant,
   className,
   hiddenFields = {},
+  action = "/explore/central-library/search",
+  mode = "library",
 }: LibrarySearchBarProps) {
   const [query, setQuery] = useState(defaultValue);
   const [prevDefaultValue, setPrevDefaultValue] = useState(defaultValue);
@@ -43,15 +47,20 @@ export function LibrarySearchBar({
     queryFn: () => fetchBooks(),
   });
 
-  // Filter only library books
-  const libraryBooks = (books as BookCardBook[]).filter(
-    (book) => book.providerType === "library" || book.tags?.includes("library"),
-  );
+  // Filter books based on mode
+  const filteredSourceBooks = (books as BookCardBook[]).filter((book) => {
+    if (mode === "library") {
+      return book.providerType === "library" || book.tags?.includes("library");
+    } else if (mode === "swaps") {
+      return book.providerType !== "library" || book.tags?.includes("swap");
+    }
+    return true;
+  });
 
   // Filter suggestion results
   const suggestions =
     query.trim().length > 1
-      ? libraryBooks
+      ? filteredSourceBooks
           .filter((book) => {
             const lowerQuery = query.toLowerCase();
             return (
@@ -94,9 +103,7 @@ export function LibrarySearchBar({
       .map(([key, val]) => `${key}=${encodeURIComponent(val!)}`);
 
     const path =
-      queryParts.length > 0
-        ? `/explore/central-library/search?${queryParts.join("&")}`
-        : "/explore/central-library/search";
+      queryParts.length > 0 ? `${action}?${queryParts.join("&")}` : action;
 
     router.push(path);
   };
@@ -111,7 +118,7 @@ export function LibrarySearchBar({
       .filter(([, val]) => val !== undefined && val !== "")
       .map(([key, val]) => `${key}=${encodeURIComponent(val!)}`);
 
-    router.push(`/explore/central-library/search?${queryParts.join("&")}`);
+    router.push(`${action}?${queryParts.join("&")}`);
   };
 
   if (variant === "hero") {

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
+import { LibrarySearchBar } from "@/components/shared/library-search-bar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { fetchLocal } from "@/lib/fetchLocal";
@@ -103,20 +104,13 @@ export default async function ExploreSwapsPage() {
             </p>
 
             {/* Search bar */}
-            <div className="flex gap-2">
-              <div className="flex flex-1 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
-                <Search className="size-4 shrink-0 text-slate-400" />
-                <span className="text-sm text-slate-400">
-                  Search books to swap...
-                </span>
-              </div>
-              <Button
-                asChild
-                className="shrink-0 rounded-lg bg-emerald-600 px-5 font-bold text-white hover:bg-emerald-700"
-              >
-                <Link href="/explore/swaps/search">Search</Link>
-              </Button>
-            </div>
+            <LibrarySearchBar
+              variant="hero"
+              mode="swaps"
+              action="/explore/swaps/search"
+              placeholder="Search books to swap..."
+              className="relative mb-6 flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row"
+            />
 
             <div className="mt-4 flex flex-wrap gap-2">
               {SWAP_CATEGORIES.slice(0, 4).map((cat) => (
