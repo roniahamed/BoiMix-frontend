@@ -19,9 +19,15 @@ import { cn } from "@/lib/utils";
 type ChatWindowProps = {
   conversation: Conversation;
   className?: string;
+  /** When true, hides the internal chat header (used in floating widget) */
+  compact?: boolean;
 };
 
-export function ChatWindow({ conversation, className }: ChatWindowProps) {
+export function ChatWindow({
+  conversation,
+  className,
+  compact = false,
+}: ChatWindowProps) {
   const { user, messages, isTyping } = conversation;
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -32,37 +38,39 @@ export function ChatWindow({ conversation, className }: ChatWindowProps) {
 
   return (
     <div className={cn("flex flex-1 flex-col overflow-hidden", className)}>
-      {/* Chat Header */}
-      <div className="bg-background flex items-center justify-between border-b px-4 py-3">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="md:hidden" asChild>
-            <Link href="/dashboard/messages">
-              <ArrowLeftIcon className="h-5 w-5" />
-            </Link>
-          </Button>
+      {/* Chat Header — hidden in compact/widget mode */}
+      {!compact && (
+        <div className="bg-background flex items-center justify-between border-b px-4 py-3">
+          <div className="flex items-center gap-3">
+            <Button variant="ghost" size="icon" className="md:hidden" asChild>
+              <Link href="/dashboard/messages">
+                <ArrowLeftIcon className="h-5 w-5" />
+              </Link>
+            </Button>
 
-          <Link
-            href={`/u/${user.username}`}
-            className="flex items-center gap-3"
-          >
-            <UserAvatar
-              name={user.name}
-              src={user.avatar}
-              className="h-10 w-10"
-            />
-            <div>
-              <div className="leading-tight font-semibold">{user.name}</div>
-              <div className="text-muted-foreground text-xs">
-                {user.isOnline ? "Online" : user.lastSeen || "Offline"}
+            <Link
+              href={`/u/${user.username}`}
+              className="flex items-center gap-3"
+            >
+              <UserAvatar
+                name={user.name}
+                src={user.avatar}
+                className="h-10 w-10"
+              />
+              <div>
+                <div className="leading-tight font-semibold">{user.name}</div>
+                <div className="text-muted-foreground text-xs">
+                  {user.isOnline ? "Online" : user.lastSeen || "Offline"}
+                </div>
               </div>
-            </div>
-          </Link>
-        </div>
+            </Link>
+          </div>
 
-        <Button variant="ghost" size="icon">
-          <MoreVerticalIcon className="h-5 w-5" />
-        </Button>
-      </div>
+          <Button variant="ghost" size="icon">
+            <MoreVerticalIcon className="h-5 w-5" />
+          </Button>
+        </div>
+      )}
 
       {/* Messages Area */}
       <div className="bg-muted/10 flex flex-1 flex-col gap-4 overflow-y-auto p-4">

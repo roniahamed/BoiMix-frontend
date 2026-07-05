@@ -4,6 +4,7 @@ import { MobileBottomNavigation } from "@/components/layout/mobile-bottom-naviga
 import { ConditionalSiteFooter } from "@/components/layout/conditional-site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MobileFAB } from "@/components/layout/mobile-fab";
+import { FloatingMessageWidget } from "@/components/messages/floating-message-widget";
 
 type MainLayoutProps = {
   children: ReactNode;
@@ -17,6 +18,7 @@ export function MainLayout({ children }: MainLayoutProps) {
       <ConditionalSiteFooter />
       <MobileBottomNavigation />
       <MobileFAB />
+      <FloatingMessageWidget />
     </div>
   );
 }
