@@ -27,7 +27,7 @@ export default function MembershipsPage() {
           </h1>
           <p className="text-muted-foreground mx-auto max-w-2xl text-base sm:text-lg">
             BoiMix Central Library uses a simple two-step system. First, become
-            a member with a one-time refundable deposit. Then, use borrow passes
+            a member with a one-time non-refundable fee. Then, use borrow passes
             to order books whenever you want!
           </p>
         </div>
@@ -85,13 +85,9 @@ export default function MembershipsPage() {
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 size-4 shrink-0 text-emerald-500" />
                     <span>
-                      <strong>Bonus:</strong> Unlimited free borrowing of 5000+
-                      donated books!
+                      <strong>Bonus:</strong> Borrow 1 donated book completely
+                      free every month!
                     </span>
-                  </li>
-                  <li className="flex items-start gap-2 text-slate-500">
-                    <Info className="mt-0.5 size-4 shrink-0" />
-                    Deposit is refundable upon cancellation
                   </li>
                 </ul>
               </CardContent>
@@ -144,13 +140,9 @@ export default function MembershipsPage() {
                   <li className="flex items-start gap-2">
                     <Check className="mt-0.5 size-4 shrink-0 text-blue-600 dark:text-blue-400" />
                     <span>
-                      <strong>Bonus:</strong> Unlimited free borrowing of 5000+
-                      donated books!
+                      <strong>Bonus:</strong> Borrow 1 donated book completely
+                      free every month!
                     </span>
-                  </li>
-                  <li className="flex items-start gap-2 text-slate-500 dark:text-slate-400">
-                    <Info className="mt-0.5 size-4 shrink-0" />
-                    Deposit is refundable upon cancellation
                   </li>
                 </ul>
               </CardContent>
@@ -173,9 +165,9 @@ export default function MembershipsPage() {
               Borrow Passes (Top-Up)
             </h2>
             <p className="mt-3 text-slate-600 dark:text-slate-400">
-              Borrow passes are used to order <strong>Premium Books</strong>.
-              Once you exhaust your welcome passes, simply top up with a borrow
-              pass package whenever you want to read more.
+              Borrow passes are <strong>always required</strong> to order
+              Premium Books. Once you exhaust your welcome passes, simply top up
+              with a package whenever you want to read more premium books.
             </p>
           </div>
 
