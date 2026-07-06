@@ -63,6 +63,21 @@ export function ProfileHeader({
           className="object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+
+        {/* Edit Profile Button - Top Right */}
+        {isOwnProfile && (
+          <div className="absolute top-4 right-4 z-20">
+            <EditProfileDialog profile={profile}>
+              <Button
+                size="sm"
+                variant="secondary"
+                className="gap-2 bg-white/90 font-semibold text-black shadow-sm backdrop-blur-sm hover:bg-white"
+              >
+                <PencilIcon className="h-4 w-4" /> Edit Profile
+              </Button>
+            </EditProfileDialog>
+          </div>
+        )}
       </div>
 
       <div className="relative z-10 px-5 pb-0 sm:px-8 sm:pb-6">
