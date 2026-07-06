@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
 import { BellIcon, UserIcon, MenuIcon } from "lucide-react";
+import { NotificationPopover } from "@/components/notifications/notification-popover";
 
 import { BrandLink } from "@/components/layout/brand-link";
 import { DesktopNavbar } from "@/components/layout/desktop-navbar";
@@ -87,16 +88,9 @@ export function SiteHeader() {
           <WishlistButton className="hidden md:inline-flex" />
           <CartButton className="hidden md:inline-flex" />
           <MessageIconButton className="hidden sm:inline-flex" />
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden sm:inline-flex"
-            asChild
-          >
-            <Link href="/notifications/all" aria-label="Notifications">
-              <BellIcon />
-            </Link>
-          </Button>
+          <div className="hidden sm:inline-flex">
+            <NotificationPopover />
+          </div>
           <Button variant="outline" size="sm" className="inline-flex" asChild>
             <Link href="/auth/login">
               <UserIcon className="mr-2 size-4" />

@@ -7,12 +7,16 @@
 - Completed/background phases: Phase 0 through Phase 7 are treated as already implemented for this frontend pass.
 - Do not build Phase 16 dashboard, Phase 9 marketplace checkout, borrow workflows, swap workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
 
-## Active Phase: Phase 14 — Messaging
-- Implement Conversation List, Chat Window, Attachments, Typing Indicator, and Seen Status.
-- Build UI for `/dashboard/messages` and `/dashboard/messages/[username]`.
+## Active Phase: Phase 15 — Notifications
+- Implement Notification Center, unread state, grouped notifications, and archive.
+- Built highly modular UI for `/dashboard/notifications`.
 
 ## Phase History / Previous Plan Log
 Keep this section as the project memory. Do not delete completed phase plans when moving to a new phase.
+
+### Phase 14 — Messaging
+- Implement Conversation List, Chat Window, Attachments, Typing Indicator, and Seen Status.
+- Build UI for `/dashboard/messages` and `/dashboard/messages/[username]`.
 
 ### Phase 10 — Borrow System (Skipped/Background)
 - Implementation postponed/bypassed to prioritize messaging as per instruction.
