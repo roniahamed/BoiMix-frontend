@@ -131,7 +131,7 @@ export function SiteHeader() {
       </div>
       <div
         className={cn(
-          "w-full",
+          "w-full overflow-hidden",
           (isDetailsPage || isProfilePage) && "max-md:hidden",
         )}
       >

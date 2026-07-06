@@ -32,6 +32,11 @@ export type NavItem = {
   icon?: NavIcon;
 };
 
+export type NavGroup = {
+  title: string;
+  items: NavItem[];
+};
+
 export const primaryNavItems: NavItem[] = [
   { title: "Home", href: "/", icon: HomeIcon },
   { title: "Books", href: "/books", icon: BookOpenIcon },
@@ -77,28 +82,80 @@ export const mobileBottomNavItems: NavItem[] = [
   { title: "Messages", href: "/dashboard/messages", icon: MessageSquareIcon },
   { title: "Add Book", href: "/books/upload", icon: BookPlusIcon },
   { title: "Alerts", href: "/dashboard/notifications", icon: BellIcon },
-  { title: "Profile", href: "/dashboard/overview", icon: UserIcon },
+  { title: "Menu", href: "/dashboard", icon: LayoutDashboardIcon },
 ];
 
-export const dashboardNavItems: NavItem[] = [
-  { title: "Overview", href: "/dashboard/overview", icon: LayoutDashboardIcon },
-  { title: "My Library", href: "/dashboard/library", icon: LibraryIcon },
-  { title: "Requests", href: "/dashboard/requests", icon: ClipboardListIcon },
-  { title: "Wishlist", href: "/wishlist", icon: HeartIcon },
-  { title: "Cart", href: "/dashboard/cart", icon: ShoppingCartIcon },
-  { title: "Borrowed", href: "/dashboard/borrowed", icon: BookOpenIcon },
-  { title: "Swaps", href: "/dashboard/swaps", icon: Repeat2Icon },
-  { title: "Purchases", href: "/dashboard/purchases", icon: PackageIcon },
-  { title: "Sales", href: "/dashboard/sales", icon: BarChart3Icon },
-  { title: "Reviews", href: "/dashboard/reviews", icon: StarIcon },
-  { title: "Messages", href: "/dashboard/messages", icon: MessageSquareIcon },
-  { title: "Notifications", href: "/dashboard/notifications", icon: BellIcon },
-  { title: "Analytics", href: "/dashboard/analytics", icon: ActivityIcon },
-  { title: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
-  { title: "Security", href: "/dashboard/security", icon: ShieldCheckIcon },
-  { title: "Followers", href: "/dashboard/followers", icon: UsersRoundIcon },
-  { title: "Following", href: "/dashboard/following", icon: UserIcon },
+export const dashboardNavGroups: NavGroup[] = [
+  {
+    title: "Overview & Insights",
+    items: [
+      {
+        title: "Overview",
+        href: "/dashboard/overview",
+        icon: LayoutDashboardIcon,
+      },
+      { title: "Analytics", href: "/dashboard/analytics", icon: ActivityIcon },
+    ],
+  },
+  {
+    title: "My Library",
+    items: [
+      { title: "My Library", href: "/dashboard/library", icon: LibraryIcon },
+      { title: "Add New Book", href: "/books/upload", icon: BookPlusIcon },
+    ],
+  },
+  {
+    title: "Transactions",
+    items: [
+      {
+        title: "Borrowed Books",
+        href: "/dashboard/borrowed",
+        icon: BookOpenIcon,
+      },
+      { title: "Lent Books", href: "/dashboard/lent", icon: BookOpenIcon },
+      { title: "Active Swaps", href: "/dashboard/swaps", icon: Repeat2Icon },
+      {
+        title: "Swap Offers",
+        href: "/dashboard/swaps/offers",
+        icon: ClipboardListIcon,
+      },
+    ],
+  },
+  {
+    title: "Engagement",
+    items: [
+      { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
+      { title: "Reviews", href: "/dashboard/reviews", icon: StarIcon },
+      {
+        title: "Messages",
+        href: "/dashboard/messages",
+        icon: MessageSquareIcon,
+      },
+      {
+        title: "Notifications",
+        href: "/dashboard/notifications",
+        icon: BellIcon,
+      },
+    ],
+  },
+  {
+    title: "Account & Security",
+    items: [
+      { title: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
+      { title: "Security", href: "/dashboard/security", icon: ShieldCheckIcon },
+      {
+        title: "Verification",
+        href: "/dashboard/verification",
+        icon: ShieldCheckIcon,
+      },
+      { title: "Reports", href: "/dashboard/reports", icon: TriangleAlertIcon },
+    ],
+  },
 ];
+
+export const dashboardNavItems: NavItem[] = dashboardNavGroups.flatMap(
+  (group) => group.items,
+);
 
 export const adminNavItems: NavItem[] = [
   { title: "Overview", href: "/admin/overview", icon: LayoutDashboardIcon },

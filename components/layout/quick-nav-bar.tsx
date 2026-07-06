@@ -43,11 +43,11 @@ export function QuickNavBar() {
   const pathname = usePathname();
 
   return (
-    <div className="h-[36px]">
+    <div className="h-[36px] overflow-hidden">
       <div className="boimix-container-wide h-full">
         <nav
           aria-label="Quick navigation"
-          className="flex h-full scrollbar-none items-center justify-start gap-1 overflow-x-auto md:justify-center"
+          className="flex h-full scrollbar-none items-center justify-start gap-1 overflow-x-auto overscroll-x-contain md:justify-center"
         >
           {quickLinks.map(({ label, href, icon: Icon }) => {
             const isActive =

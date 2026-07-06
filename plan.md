@@ -7,12 +7,17 @@
 - Completed/background phases: Phase 0 through Phase 7 are treated as already implemented for this frontend pass.
 - Do not build Phase 16 dashboard, Phase 9 marketplace checkout, borrow workflows, swap workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
 
-## Active Phase: Phase 15 — Notifications
-- Implement Notification Center, unread state, grouped notifications, and archive.
-- Built highly modular UI for `/dashboard/notifications`.
+## Active Phase: Phase 16 — Dashboard
+- Build user dashboard foundational structure and layout.
+- Include management for books, transactions, and settings.
 
 ## Phase History / Previous Plan Log
 Keep this section as the project memory. Do not delete completed phase plans when moving to a new phase.
+
+### Phase 15 — Notifications
+- Implemented Notification Center, unread state, grouped notifications.
+- Removed archive functionality as per user request.
+- Built highly modular UI for `/dashboard/notifications` in a Facebook-style compact design.
 
 ### Phase 14 — Messaging
 - Implement Conversation List, Chat Window, Attachments, Typing Indicator, and Seen Status.
@@ -132,8 +137,7 @@ Keep this section as the project memory. Do not delete completed phase plans whe
   Build conversation list, chat window, attachments, typing indicator, and seen status.
 - Phase 15: Notifications  
   Build notification center, unread state, grouped notifications, and archive.
-- Phase 16: Dashboard
-  Build user dashboard foundational structure and layout, manage books, transactions, and settings.
+
 - Phase 17: Moderator Panel  
   Build reports, disputes, verification queue, review moderation, slider, and inventory.
 - Phase 18: Admin Panel  
