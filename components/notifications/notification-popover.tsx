@@ -59,7 +59,7 @@ export function NotificationPopover({
             </span>
           )}
         </div>
-        <div className="max-h-[350px] scrollbar-thin overflow-y-auto p-2">
+        <div className="max-h-[350px] scrollbar-thin overflow-y-auto">
           <NotificationList
             notifications={notifications}
             onMarkAsRead={handleMarkAsRead}

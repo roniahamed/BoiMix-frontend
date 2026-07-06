@@ -5,8 +5,7 @@ export const mockNotifications: Notification[] = [
     id: "notif-1",
     type: "swap_accepted",
     title: "Swap Accepted!",
-    description:
-      "Hasan Mahmud accepted your swap offer for 'Rich Dad Poor Dad'. Click to view agreement details.",
+    description: "accepted your swap offer for 'Rich Dad Poor Dad'.",
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 mins ago
     isRead: false,
     actionUrl: "/swap/agreement/swp-123",
@@ -16,8 +15,7 @@ export const mockNotifications: Notification[] = [
     id: "notif-2",
     type: "message",
     title: "New Message",
-    description:
-      "Rakib sent you a message: 'Hey, is the book still available?'",
+    description: "sent you a message.",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
     isRead: false,
     actionUrl: "/dashboard/messages/rakib_hasan",
@@ -27,7 +25,7 @@ export const mockNotifications: Notification[] = [
     id: "notif-3",
     type: "borrow_request",
     title: "Borrow Request Received",
-    description: "Nusrat Jahan wants to borrow your copy of 'The Alchemist'.",
+    description: "wants to borrow 'The Alchemist'.",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(), // 5 hours ago
     isRead: true,
     actionUrl: "/borrow/request/req-456",
@@ -37,8 +35,7 @@ export const mockNotifications: Notification[] = [
     id: "notif-4",
     type: "review",
     title: "New 5-Star Review!",
-    description:
-      "Fahim Ahmed left a 5-star review on your profile: 'Great experience borrowing...'",
+    description: "left a 5-star review on your profile.",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
     isRead: true,
     actionUrl: "/u/my_username/reviews",
@@ -48,8 +45,7 @@ export const mockNotifications: Notification[] = [
     id: "notif-5",
     type: "system",
     title: "Welcome to BoiMix!",
-    description:
-      "Your account has been successfully verified. Explore your library and join the reading community.",
+    description: "Your account has been successfully verified.",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(), // 1 week ago
     isRead: true,
     actionUrl: "/explore/central-library",
@@ -58,8 +54,7 @@ export const mockNotifications: Notification[] = [
     id: "notif-6",
     type: "borrow_returned",
     title: "Book Returned Successfully",
-    description:
-      "Your book 'Sapiens' has been marked as returned by the borrower. Please confirm.",
+    description: "'Sapiens' has been marked as returned.",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(), // 2 days ago
     isRead: true,
     actionUrl: "/borrow/return/ret-789",
