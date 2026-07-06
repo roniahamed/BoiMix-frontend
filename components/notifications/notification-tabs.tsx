@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { NotificationList } from "./notification-list";
 import { Notification } from "@/types/notification";
-import { Bell, Archive, MessageSquare, Info } from "lucide-react";
+import { Bell, MessageSquare, Info } from "lucide-react";
 
 interface NotificationTabsProps {
   initialNotifications: Notification[];
@@ -24,23 +24,13 @@ export function NotificationTabs({
     );
   };
 
-  const handleArchive = (id: string) => {
-    setNotifications((prev) =>
-      prev.map((notif) =>
-        notif.id === id ? { ...notif, isArchived: true } : notif,
-      ),
-    );
-  };
-
   const markAllAsRead = () => {
     setNotifications((prev) =>
       prev.map((notif) => ({ ...notif, isRead: true })),
     );
   };
 
-  // Derived state for tabs
-  const activeNotifications = notifications.filter((n) => !n.isArchived);
-  const archivedNotifications = notifications.filter((n) => n.isArchived);
+  const activeNotifications = notifications;
 
   const allTab = activeNotifications;
   const messagesTab = activeNotifications.filter((n) => n.type === "message");
@@ -103,22 +93,12 @@ export function NotificationTabs({
               <span>System & Activity</span>
             </div>
           </TabsTrigger>
-          <TabsTrigger
-            value="archive"
-            className="data-[state=active]:border-primary rounded-none px-4 py-2 data-[state=active]:border-b-2 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
-          >
-            <div className="flex items-center gap-2">
-              <Archive className="size-4" />
-              <span>Archive</span>
-            </div>
-          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="all" className="mt-0 outline-none">
           <NotificationList
             notifications={allTab}
             onMarkAsRead={handleMarkAsRead}
-            onArchive={handleArchive}
           />
         </TabsContent>
 
@@ -126,7 +106,6 @@ export function NotificationTabs({
           <NotificationList
             notifications={messagesTab}
             onMarkAsRead={handleMarkAsRead}
-            onArchive={handleArchive}
           />
         </TabsContent>
 
@@ -134,15 +113,6 @@ export function NotificationTabs({
           <NotificationList
             notifications={systemTab}
             onMarkAsRead={handleMarkAsRead}
-            onArchive={handleArchive}
-          />
-        </TabsContent>
-
-        <TabsContent value="archive" className="mt-0 outline-none">
-          <NotificationList
-            notifications={archivedNotifications}
-            onMarkAsRead={handleMarkAsRead}
-            onArchive={handleArchive}
           />
         </TabsContent>
       </Tabs>

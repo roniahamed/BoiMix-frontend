@@ -5,13 +5,11 @@ import { NotificationCard } from "./notification-card";
 interface NotificationListProps {
   notifications: Notification[];
   onMarkAsRead?: (id: string) => void;
-  onArchive?: (id: string) => void;
 }
 
 export function NotificationList({
   notifications,
   onMarkAsRead,
-  onArchive,
 }: NotificationListProps) {
   if (notifications.length === 0) {
     return (
@@ -35,7 +33,6 @@ export function NotificationList({
           key={notification.id}
           notification={notification}
           onMarkAsRead={onMarkAsRead}
-          onArchive={onArchive}
         />
       ))}
     </div>

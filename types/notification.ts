@@ -15,7 +15,6 @@ export interface Notification {
   description: string;
   createdAt: string;
   isRead: boolean;
-  isArchived: boolean;
   actionUrl?: string;
   actorId?: string;
   actorName?: string;

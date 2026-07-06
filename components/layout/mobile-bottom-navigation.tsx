@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { BookPlusIcon } from "lucide-react";
 import { mobileBottomNavItems } from "@/lib/navigation";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
+import { NotificationPopover } from "@/components/notifications/notification-popover";
 import { useMessageStore } from "@/lib/store/use-message-store";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +50,24 @@ export function MobileBottomNavigation() {
               item.href === "/"
                 ? pathname === item.href
                 : pathname.startsWith(item.href);
+
+            if (item.href === "/dashboard/notifications") {
+              return (
+                <NotificationPopover key={item.href}>
+                  <button
+                    className={cn(
+                      "relative flex flex-col items-center justify-center gap-0.5 text-[0.62rem] font-medium transition-colors",
+                      isActive ? "text-primary" : "text-muted-foreground",
+                    )}
+                  >
+                    <span className="relative">
+                      {Icon && <Icon className="size-4.5" aria-hidden="true" />}
+                    </span>
+                    <span>{item.title}</span>
+                  </button>
+                </NotificationPopover>
+              );
+            }
 
             return item.href === "#menu" ? (
               <MobileNavbar key={item.href}>

@@ -76,7 +76,7 @@ export const mobileBottomNavItems: NavItem[] = [
   { title: "Home", href: "/", icon: HomeIcon },
   { title: "Messages", href: "/dashboard/messages", icon: MessageSquareIcon },
   { title: "Add Book", href: "/books/upload", icon: BookPlusIcon },
-  { title: "Alerts", href: "/notifications/all", icon: BellIcon },
+  { title: "Alerts", href: "/dashboard/notifications", icon: BellIcon },
   { title: "Profile", href: "/dashboard/overview", icon: UserIcon },
 ];
 

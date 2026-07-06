@@ -7,7 +7,6 @@ import {
   Star,
   BookOpen,
   CheckCircle2,
-  Archive,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -17,7 +16,6 @@ import { cn } from "@/lib/utils";
 interface NotificationCardProps {
   notification: Notification;
   onMarkAsRead?: (id: string) => void;
-  onArchive?: (id: string) => void;
 }
 
 const getIcon = (type: string) => {
@@ -43,7 +41,6 @@ const getIcon = (type: string) => {
 export function NotificationCard({
   notification,
   onMarkAsRead,
-  onArchive,
 }: NotificationCardProps) {
   const { isRead, actionUrl } = notification;
 
@@ -112,7 +109,7 @@ export function NotificationCard({
       </div>
 
       {/* Actions */}
-      <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 transition-opacity group-hover:opacity-100 sm:relative sm:top-0 sm:right-0 sm:opacity-100">
+      <div className="absolute top-2 right-2 flex flex-col gap-1 transition-opacity group-hover:opacity-100 sm:relative sm:top-0 sm:right-0 sm:opacity-0 sm:opacity-100">
         {!isRead && (
           <Button
             variant="ghost"
@@ -122,17 +119,6 @@ export function NotificationCard({
             onClick={() => onMarkAsRead?.(notification.id)}
           >
             <CheckCircle2 className="size-4" />
-          </Button>
-        )}
-        {!notification.isArchived && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8 text-slate-500 hover:bg-slate-100 hover:text-slate-700"
-            title="Archive"
-            onClick={() => onArchive?.(notification.id)}
-          >
-            <Archive className="size-4" />
           </Button>
         )}
       </div>
