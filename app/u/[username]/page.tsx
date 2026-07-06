@@ -31,7 +31,11 @@ export default async function UserProfilePage({
   const isOwnProfile = true; // TODO: Replace with actual auth check
 
   return (
-    <ProfileShell profile={profile} active="overview">
+    <ProfileShell
+      profile={profile}
+      active="overview"
+      isOwnProfile={isOwnProfile}
+    >
       <div className="space-y-6">
         {/* Interactive Books Viewer */}
         <ProfileBooksViewer

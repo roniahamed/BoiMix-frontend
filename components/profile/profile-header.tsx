@@ -18,6 +18,9 @@ import { Button } from "@/components/ui/button";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import type { UserProfile } from "@/types/user";
+import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
+import { PencilIcon } from "lucide-react";
+import { BackButton } from "@/components/shared/back-button";
 
 const CustomShareArrow = ({ className }: { className?: string }) => (
   <svg
@@ -33,7 +36,13 @@ const CustomShareArrow = ({ className }: { className?: string }) => (
   </svg>
 );
 
-export function ProfileHeader({ profile }: { profile: UserProfile }) {
+export function ProfileHeader({
+  profile,
+  isOwnProfile = false,
+}: {
+  profile: UserProfile;
+  isOwnProfile?: boolean;
+}) {
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);

@@ -30,13 +30,18 @@ export default async function UserReviewsPage({
 
   const { username } = await params;
   const profile = getUserProfile(username);
+  const isOwnProfile = false;
 
   if (!profile) {
     return <ProfileNotFound />;
   }
 
   return (
-    <ProfileShell profile={profile} active="reviews">
+    <ProfileShell
+      profile={profile}
+      active="reviews"
+      isOwnProfile={isOwnProfile}
+    >
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         {/* Left Sidebar: Ratings */}
         <div className="w-full shrink-0 space-y-6 lg:w-[200px]">

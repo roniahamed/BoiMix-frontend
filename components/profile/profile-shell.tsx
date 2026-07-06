@@ -19,6 +19,7 @@ type ProfileShellProps = {
   active: "overview" | "reviews" | "library" | "activity" | "badges";
   children: ReactNode;
   sidebar?: ReactNode;
+  isOwnProfile?: boolean;
 };
 
 export function ProfileShell({
@@ -26,13 +27,14 @@ export function ProfileShell({
   active,
   children,
   sidebar,
+  isOwnProfile = false,
 }: ProfileShellProps) {
   return (
     <div className="relative pb-6 md:pb-8">
       <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top_left,_rgba(3,151,211,0.16),_transparent_50%),radial-gradient(circle_at_top_right,_rgba(255,153,0,0.14),_transparent_42%)]" />
       <div className="relative container mx-auto max-w-7xl px-0 md:px-8">
         <main className="bg-card border-border/50 rounded-none border-y shadow-sm md:rounded-b-[5px] md:border-x md:border-t-0">
-          <ProfileHeader profile={profile} />
+          <ProfileHeader profile={profile} isOwnProfile={isOwnProfile} />
 
           <div
             id="profile-content"

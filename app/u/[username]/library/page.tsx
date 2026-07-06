@@ -30,7 +30,11 @@ export default async function UserLibraryPage({
   const isOwnProfile = true; // TODO: Replace with actual auth check
 
   return (
-    <ProfileShell profile={profile} active="library">
+    <ProfileShell
+      profile={profile}
+      active="library"
+      isOwnProfile={isOwnProfile}
+    >
       <ProfileBooksViewer
         books={profileLibraryBooks}
         isOwnProfile={isOwnProfile}

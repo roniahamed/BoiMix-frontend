@@ -138,6 +138,12 @@
   --info: var(--brand-blue);
   --info-foreground: #ffffff;
   --info-soft: #e8f7fd;
+
+  --chart-1: #0397d3;
+  --chart-2: #33c24d;
+  --chart-3: #ff9900;
+  --chart-4: #e91e63;
+  --chart-5: #0b2a5b;
 }
 
 .dark {
@@ -173,6 +179,12 @@
   --info: #35b6e8;
   --info-foreground: #111827;
   --info-soft: rgb(53 182 232 / 15%);
+
+  --chart-1: #35b6e8;
+  --chart-2: #4ade80;
+  --chart-3: #fbbf24;
+  --chart-4: #f87171;
+  --chart-5: #60a5fa;
 }
 
 @layer base {
