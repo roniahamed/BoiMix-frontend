@@ -71,6 +71,8 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
       : new L.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
   );
 
+  const [mapId] = useState(() => Math.random().toString(36).substr(2, 9));
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
@@ -95,6 +97,7 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
   return (
     <div className="h-full min-h-[300px] w-full overflow-hidden">
       <MapContainer
+        key={mapId}
         center={position || DEFAULT_CENTER}
         zoom={13}
         scrollWheelZoom={true}
