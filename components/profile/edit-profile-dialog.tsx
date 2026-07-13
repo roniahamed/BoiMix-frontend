@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CameraIcon, SaveIcon, MapPin, Search } from "lucide-react";
+import { CameraIcon, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -49,6 +49,41 @@ export function EditProfileDialog({
   );
   const [locationLat, setLocationLat] = useState<number | undefined>(23.8103);
   const [locationLng, setLocationLng] = useState<number | undefined>(90.4125);
+
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [locationSuggestions, setLocationSuggestions] = useState<
+    LocationSuggestion[]
+  >([]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    if (isTyping && locationAddress && locationAddress.length > 2) {
+      const timer = setTimeout(() => {
+        fetch(
+          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddress)}&lat=23.8103&lon=90.4125&limit=15`,
+        )
+          .then((res) => res.json())
+          .then((data) => {
+            if (data && data.features && data.features.length > 0) {
+              setLocationSuggestions(data.features);
+              setShowSuggestions(true);
+            } else {
+              setLocationSuggestions([]);
+            }
+          })
+          .catch((err) => console.error("Geocoding error", err));
+      }, 300);
+      return () => clearTimeout(timer);
+    } else if (!isTyping) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowSuggestions(false);
+    }
+  }, [locationAddress, isTyping]);
+
+  const [readingInterests, setReadingInterests] = useState<string[]>(
+    profile.readingInterests || [],
+  );
+  const [interestInput, setInterestInput] = useState("");
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -131,13 +166,61 @@ export function EditProfileDialog({
                 />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium">
-                  Reading Interests (comma separated)
-                </label>
-                <Input
-                  defaultValue={profile.readingInterests?.join(", ") || ""}
-                  placeholder="Fiction, Thriller, Tech"
-                />
+                <label className="text-sm font-medium">Reading Interests</label>
+                <div className="flex flex-col gap-2">
+                  {readingInterests.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {readingInterests.map((interest, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-primary/10 text-primary flex items-center gap-1 rounded-full py-1 pr-2 pl-3 text-sm font-medium"
+                        >
+                          {interest}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setReadingInterests(
+                                readingInterests.filter((_, i) => i !== idx),
+                              );
+                            }}
+                            className="hover:bg-primary/20 rounded-full p-0.5 transition-colors"
+                          >
+                            <span className="sr-only">Remove {interest}</span>
+                            <span
+                              aria-hidden="true"
+                              className="text-base leading-none"
+                            >
+                              &times;
+                            </span>
+                          </button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <Input
+                    value={interestInput}
+                    onChange={(e) => setInterestInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === ",") {
+                        e.preventDefault();
+                        const newInterest = interestInput
+                          .trim()
+                          .replace(/^,+|,+$/g, "");
+                        if (
+                          newInterest &&
+                          !readingInterests.includes(newInterest)
+                        ) {
+                          setReadingInterests([
+                            ...readingInterests,
+                            newInterest,
+                          ]);
+                        }
+                        setInterestInput("");
+                      }
+                    }}
+                    placeholder="Type an interest and press Enter or comma"
+                  />
+                </div>
               </div>
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium">Bio</label>
@@ -158,10 +241,90 @@ export function EditProfileDialog({
                 <MapPin className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
                 <Input
                   value={locationAddress}
-                  onChange={(e) => setLocationAddress(e.target.value)}
+                  onChange={(e) => {
+                    setLocationAddress(e.target.value);
+                    setIsTyping(true);
+                  }}
                   placeholder="Type your location or select on map"
-                  className="pl-9"
+                  className="pr-9 pl-9"
+                  onFocus={() => {
+                    if (locationSuggestions.length > 0)
+                      setShowSuggestions(true);
+                  }}
+                  onBlur={() =>
+                    setTimeout(() => setShowSuggestions(false), 200)
+                  }
                 />
+
+                {locationAddress && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLocationAddress("");
+                      setShowSuggestions(false);
+                      setLocationSuggestions([]);
+                      setIsTyping(false);
+                    }}
+                    className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
+                  >
+                    <Search className="hidden h-4 w-4" />{" "}
+                    {/* Hidden search just to keep the import used if needed, actually we can just use X */}
+                    <span className="text-xl leading-none">&times;</span>
+                  </button>
+                )}
+
+                {showSuggestions && locationSuggestions.length > 0 && (
+                  <div className="bg-popover text-popover-foreground animate-in fade-in zoom-in-95 absolute top-full z-50 mt-1 flex max-h-64 w-full flex-col overflow-hidden rounded-md border shadow-md">
+                    <div className="border-border bg-muted/30 flex items-center justify-between border-b px-4 py-2 text-xs font-medium">
+                      <span>Suggestions</span>
+                      <button
+                        type="button"
+                        onClick={() => setShowSuggestions(false)}
+                        className="text-muted-foreground hover:bg-muted hover:text-foreground rounded p-1 transition-colors"
+                      >
+                        <span className="sr-only">Close suggestions</span>
+                        <span className="text-base leading-none">&times;</span>
+                      </button>
+                    </div>
+                    <div className="overflow-y-auto">
+                      {locationSuggestions.map((suggestion, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          className="hover:bg-muted border-border/50 flex w-full flex-col items-start border-b px-4 py-2 text-left text-sm transition-colors last:border-b-0"
+                          onClick={() => {
+                            const props = suggestion.properties;
+                            const address = [
+                              props.name,
+                              props.city,
+                              props.country,
+                            ]
+                              .filter(Boolean)
+                              .join(", ");
+
+                            setIsTyping(false);
+                            setLocationAddress(address);
+                            setLocationLat(suggestion.geometry.coordinates[1]);
+                            setLocationLng(suggestion.geometry.coordinates[0]);
+                            setShowSuggestions(false);
+                          }}
+                        >
+                          <span className="font-medium">
+                            {suggestion.properties.name}
+                          </span>
+                          <span className="text-muted-foreground text-xs">
+                            {[
+                              suggestion.properties.city,
+                              suggestion.properties.country,
+                            ]
+                              .filter(Boolean)
+                              .join(", ")}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 

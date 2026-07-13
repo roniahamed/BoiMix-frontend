@@ -71,11 +71,17 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
       : new L.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
   );
 
-  const [mapId] = useState(() => Math.random().toString(36).substr(2, 9));
+  const [mapId, setMapId] = useState(() =>
+    Math.random().toString(36).substr(2, 9),
+  );
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
+    // In React 18 Strict Mode, components mount, unmount, and remount.
+    // By updating the key in useEffect, we force MapContainer to recreate on the final mount,
+    // avoiding the "Map container is being reused" error.
+    setMapId(Math.random().toString(36).substr(2, 9));
   }, []);
 
   useEffect(() => {
