@@ -66,12 +66,13 @@ export function EditProfileDialog({
   >([]);
   const [isTyping, setIsTyping] = useState(false);
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
+  const [locationError, setLocationError] = useState("");
 
   useEffect(() => {
     if (isTyping && locationAddress && locationAddress.length > 2) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingLocation(true);
-       
+
       setShowSuggestions(true);
       const timer = setTimeout(() => {
         fetch(
@@ -94,7 +95,6 @@ export function EditProfileDialog({
         setIsSearchingLocation(false);
       };
     } else if (!isTyping) {
-       
       setShowSuggestions(false);
     }
   }, [locationAddress, isTyping]);
@@ -118,7 +118,11 @@ export function EditProfileDialog({
   });
 
   const onSubmit = async (data: ProfileFormValues) => {
+    setLocationError("");
     if (!locationAddress || !locationLat || !locationLng) {
+      setLocationError(
+        "Please select a valid location from the map or suggestions.",
+      );
       toast.error("Please select a valid location.");
       return;
     }
@@ -307,9 +311,10 @@ export function EditProfileDialog({
                   onChange={(e) => {
                     setLocationAddress(e.target.value);
                     setIsTyping(true);
+                    setLocationError("");
                   }}
                   placeholder="Type your location or select on map"
-                  className="pr-9 pl-9"
+                  className={`pr-9 pl-9 ${locationError ? "border-destructive" : ""}`}
                   onFocus={() => {
                     if (locationSuggestions.length > 0)
                       setShowSuggestions(true);
@@ -409,6 +414,9 @@ export function EditProfileDialog({
                     </div>
                   )}
               </div>
+              {locationError && (
+                <p className="text-destructive text-xs">{locationError}</p>
+              )}
             </div>
 
             <div className="h-[400px] w-full overflow-hidden rounded-xl border">
