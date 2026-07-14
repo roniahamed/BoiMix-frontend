@@ -18,6 +18,16 @@ import type { UserProfile } from "@/types/user";
 import Image from "next/image";
 import { toast } from "sonner";
 import dynamic from "next/dynamic";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const profileSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters."),
+  role: z.string().max(50, "Role cannot exceed 50 characters.").optional(),
+  bio: z.string().max(500, "Bio cannot exceed 500 characters.").optional(),
+});
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
   ssr: false,
@@ -55,9 +65,14 @@ export function EditProfileDialog({
     LocationSuggestion[]
   >([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [isSearchingLocation, setIsSearchingLocation] = useState(false);
 
   useEffect(() => {
     if (isTyping && locationAddress && locationAddress.length > 2) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsSearchingLocation(true);
+       
+      setShowSuggestions(true);
       const timer = setTimeout(() => {
         fetch(
           `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddress)}&lat=23.8103&lon=90.4125&limit=15`,
@@ -71,11 +86,15 @@ export function EditProfileDialog({
               setLocationSuggestions([]);
             }
           })
-          .catch((err) => console.error("Geocoding error", err));
+          .catch((err) => console.error("Geocoding error", err))
+          .finally(() => setIsSearchingLocation(false));
       }, 300);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        setIsSearchingLocation(false);
+      };
     } else if (!isTyping) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+       
       setShowSuggestions(false);
     }
   }, [locationAddress, isTyping]);
@@ -85,10 +104,34 @@ export function EditProfileDialog({
   );
   const [interestInput, setInterestInput] = useState("");
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    defaultValues: {
+      name: profile.name || "",
+      role: profile.role || "",
+      bio: profile.bio || "",
+    },
+  });
+
+  const onSubmit = async (data: ProfileFormValues) => {
+    if (!locationAddress || !locationLat || !locationLng) {
+      toast.error("Please select a valid location.");
+      return;
+    }
+
     setIsSaving(true);
-    // Simulate API call
+    // Simulate API call with all data
+    console.log("Saving profile data:", {
+      ...data,
+      locationAddress,
+      locationLat,
+      locationLng,
+      readingInterests,
+    });
     setTimeout(() => {
       setIsSaving(false);
       setOpen(false);
@@ -107,7 +150,7 @@ export function EditProfileDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSave} className="mt-4 space-y-8">
+        <form onSubmit={handleSubmit(onSubmit)} className="mt-4 space-y-8">
           <div className="space-y-6">
             {/* Cover Photo */}
             <div className="space-y-2">
@@ -156,14 +199,28 @@ export function EditProfileDialog({
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div className="space-y-2">
                 <label className="text-sm font-medium">Name</label>
-                <Input defaultValue={profile.name} required />
+                <Input
+                  {...register("name")}
+                  className={errors.name ? "border-destructive" : ""}
+                />
+                {errors.name && (
+                  <p className="text-destructive text-xs">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">Title / Role</label>
                 <Input
-                  defaultValue={profile.role || ""}
+                  {...register("role")}
                   placeholder="e.g. Avid Reader"
+                  className={errors.role ? "border-destructive" : ""}
                 />
+                {errors.role && (
+                  <p className="text-destructive text-xs">
+                    {errors.role.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium">Reading Interests</label>
@@ -225,10 +282,16 @@ export function EditProfileDialog({
               <div className="space-y-2 md:col-span-2">
                 <label className="text-sm font-medium">Bio</label>
                 <Textarea
-                  defaultValue={profile.bio || ""}
+                  {...register("bio")}
                   rows={3}
                   placeholder="Tell the community about yourself..."
+                  className={errors.bio ? "border-destructive" : ""}
                 />
+                {errors.bio && (
+                  <p className="text-destructive text-xs">
+                    {errors.bio.message}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -273,58 +336,78 @@ export function EditProfileDialog({
                   </button>
                 )}
 
-                {showSuggestions && locationSuggestions.length > 0 && (
-                  <div className="bg-popover text-popover-foreground animate-in fade-in zoom-in-95 absolute top-full z-50 mt-1 flex max-h-64 w-full flex-col overflow-hidden rounded-md border shadow-md">
-                    <div className="border-border bg-muted/30 flex items-center justify-between border-b px-4 py-2 text-xs font-medium">
-                      <span>Suggestions</span>
-                      <button
-                        type="button"
-                        onClick={() => setShowSuggestions(false)}
-                        className="text-muted-foreground hover:bg-muted hover:text-foreground rounded p-1 transition-colors"
-                      >
-                        <span className="sr-only">Close suggestions</span>
-                        <span className="text-base leading-none">&times;</span>
-                      </button>
-                    </div>
-                    <div className="overflow-y-auto">
-                      {locationSuggestions.map((suggestion, idx) => (
+                {showSuggestions &&
+                  (locationSuggestions.length > 0 || isSearchingLocation) && (
+                    <div className="bg-popover text-popover-foreground animate-in fade-in zoom-in-95 absolute top-full z-50 mt-1 flex max-h-64 w-full flex-col overflow-hidden rounded-md border shadow-md">
+                      <div className="border-border bg-muted/30 flex items-center justify-between border-b px-4 py-2 text-xs font-medium">
+                        <span>Suggestions</span>
                         <button
-                          key={idx}
                           type="button"
-                          className="hover:bg-muted border-border/50 flex w-full flex-col items-start border-b px-4 py-2 text-left text-sm transition-colors last:border-b-0"
-                          onClick={() => {
-                            const props = suggestion.properties;
-                            const address = [
-                              props.name,
-                              props.city,
-                              props.country,
-                            ]
-                              .filter(Boolean)
-                              .join(", ");
-
-                            setIsTyping(false);
-                            setLocationAddress(address);
-                            setLocationLat(suggestion.geometry.coordinates[1]);
-                            setLocationLng(suggestion.geometry.coordinates[0]);
-                            setShowSuggestions(false);
-                          }}
+                          onClick={() => setShowSuggestions(false)}
+                          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded p-1 transition-colors"
                         >
-                          <span className="font-medium">
-                            {suggestion.properties.name}
-                          </span>
-                          <span className="text-muted-foreground text-xs">
-                            {[
-                              suggestion.properties.city,
-                              suggestion.properties.country,
-                            ]
-                              .filter(Boolean)
-                              .join(", ")}
+                          <span className="sr-only">Close suggestions</span>
+                          <span className="text-base leading-none">
+                            &times;
                           </span>
                         </button>
-                      ))}
+                      </div>
+                      <div className="overflow-y-auto">
+                        {isSearchingLocation ? (
+                          <div className="text-muted-foreground flex items-center justify-center py-6 text-sm">
+                            <div className="border-primary mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+                            Searching for locations...
+                          </div>
+                        ) : (
+                          locationSuggestions.map((suggestion, idx) => (
+                            <button
+                              key={idx}
+                              type="button"
+                              className="hover:bg-muted border-border/50 flex w-full flex-col items-start border-b px-4 py-2 text-left text-sm transition-colors last:border-b-0"
+                              onClick={() => {
+                                const props = suggestion.properties;
+                                const address = [
+                                  props.name,
+                                  props.city,
+                                  props.country,
+                                ]
+                                  .filter(Boolean)
+                                  .join(", ");
+
+                                setIsTyping(false);
+                                setLocationAddress(address);
+                                setLocationLat(
+                                  suggestion.geometry.coordinates[1],
+                                );
+                                setLocationLng(
+                                  suggestion.geometry.coordinates[0],
+                                );
+                                setShowSuggestions(false);
+                              }}
+                            >
+                              <span className="font-medium">
+                                {suggestion.properties.name}
+                              </span>
+                              <span className="text-muted-foreground text-xs">
+                                {[
+                                  suggestion.properties.city,
+                                  suggestion.properties.country,
+                                ]
+                                  .filter(Boolean)
+                                  .join(", ")}
+                              </span>
+                            </button>
+                          ))
+                        )}
+                        {!isSearchingLocation &&
+                          locationSuggestions.length === 0 && (
+                            <div className="text-muted-foreground py-4 text-center text-sm">
+                              No locations found
+                            </div>
+                          )}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
             </div>
 

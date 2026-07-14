@@ -188,6 +188,7 @@ export default function BookUploadPage() {
   const [locationSuggestions, setLocationSuggestions] = useState<
     LocationSuggestion[]
   >([]);
+  const [isSearchingLocation, setIsSearchingLocation] = useState(false);
 
   const availabilityMode = useWatch({ control, name: "availabilityMode" });
   const forSell = availabilityMode === "sell";
@@ -217,6 +218,10 @@ export default function BookUploadPage() {
       locationAddressWatch &&
       locationAddressWatch.length > 2
     ) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsSearchingLocation(true);
+       
+      setShowSuggestions(true);
       const timer = setTimeout(() => {
         fetch(
           `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddressWatch)}&lat=23.8103&lon=90.4125&limit=5`,
@@ -230,9 +235,13 @@ export default function BookUploadPage() {
               setLocationSuggestions([]);
             }
           })
-          .catch((err) => console.error("Geocoding error", err));
+          .catch((err) => console.error("Geocoding error", err))
+          .finally(() => setIsSearchingLocation(false));
       }, 500);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        setIsSearchingLocation(false);
+      };
     }
   }, [locationAddressWatch, locationType]);
 
@@ -845,7 +854,8 @@ export default function BookUploadPage() {
                                   }}
                                 />
                                 {showSuggestions &&
-                                  locationSuggestions.length > 0 && (
+                                  (locationSuggestions.length > 0 ||
+                                    isSearchingLocation) && (
                                     <div className="bg-popover absolute z-[1000] mt-1 max-h-[250px] w-full overflow-y-auto rounded-md border shadow-md">
                                       <div className="bg-popover/90 sticky top-0 z-10 flex justify-end border-b p-1 backdrop-blur-sm">
                                         <Button
@@ -860,61 +870,75 @@ export default function BookUploadPage() {
                                           <X className="h-4 w-4" />
                                         </Button>
                                       </div>
-                                      {locationSuggestions.map((sug, i) => (
-                                        <div
-                                          key={i}
-                                          className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
-                                          onMouseDown={(e) => {
-                                            e.preventDefault();
-                                            const props = sug.properties || {};
-                                            const rawAddressParts = [
-                                              props.name,
-                                              props.street,
-                                              props.locality,
-                                              props.city,
-                                              props.state,
-                                              props.country,
-                                            ].filter(Boolean);
-                                            const address = Array.from(
-                                              new Set(rawAddressParts),
-                                            ).join(", ");
-                                            setValue(
-                                              "locationAddress",
-                                              address,
-                                              { shouldValidate: true },
-                                            );
-                                            setValue(
-                                              "locationLat",
-                                              sug.geometry.coordinates[1],
-                                            );
-                                            setValue(
-                                              "locationLng",
-                                              sug.geometry.coordinates[0],
-                                            );
-                                            setShowSuggestions(false);
-                                          }}
-                                        >
-                                          <div className="font-medium">
-                                            {sug.properties.name ||
-                                              sug.properties.street ||
-                                              sug.properties.locality ||
-                                              "Unknown Location"}
-                                          </div>
-                                          <div className="text-muted-foreground text-xs">
-                                            {Array.from(
-                                              new Set(
-                                                [
-                                                  sug.properties.street,
-                                                  sug.properties.locality,
-                                                  sug.properties.city,
-                                                  sug.properties.state,
-                                                  sug.properties.country,
-                                                ].filter(Boolean),
-                                              ),
-                                            ).join(", ")}
-                                          </div>
+                                      {isSearchingLocation ? (
+                                        <div className="text-muted-foreground flex items-center justify-center py-6 text-sm">
+                                          <div className="border-primary mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+                                          Searching for locations...
                                         </div>
-                                      ))}
+                                      ) : (
+                                        locationSuggestions.map((sug, i) => (
+                                          <div
+                                            key={i}
+                                            className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
+                                            onMouseDown={(e) => {
+                                              e.preventDefault();
+                                              const props =
+                                                sug.properties || {};
+                                              const rawAddressParts = [
+                                                props.name,
+                                                props.street,
+                                                props.locality,
+                                                props.city,
+                                                props.state,
+                                                props.country,
+                                              ].filter(Boolean);
+                                              const address = Array.from(
+                                                new Set(rawAddressParts),
+                                              ).join(", ");
+                                              setValue(
+                                                "locationAddress",
+                                                address,
+                                                { shouldValidate: true },
+                                              );
+                                              setValue(
+                                                "locationLat",
+                                                sug.geometry.coordinates[1],
+                                              );
+                                              setValue(
+                                                "locationLng",
+                                                sug.geometry.coordinates[0],
+                                              );
+                                              setShowSuggestions(false);
+                                            }}
+                                          >
+                                            <div className="font-medium">
+                                              {sug.properties.name ||
+                                                sug.properties.street ||
+                                                sug.properties.locality ||
+                                                "Unknown Location"}
+                                            </div>
+                                            <div className="text-muted-foreground text-xs">
+                                              {Array.from(
+                                                new Set(
+                                                  [
+                                                    sug.properties.street,
+                                                    sug.properties.locality,
+                                                    sug.properties.city,
+                                                    sug.properties.state,
+                                                    sug.properties.country,
+                                                  ].filter(Boolean),
+                                                ),
+                                              ).join(", ")}
+                                            </div>
+                                          </div>
+                                        ))
+                                      )}
+                                      {!isSearchingLocation &&
+                                        locationSuggestions.length === 0 && (
+                                          <div className="text-muted-foreground py-4 text-center text-sm">
+                                            No locations found
+                                          </div>
+                                        )}
                                     </div>
                                   )}
                               </div>
