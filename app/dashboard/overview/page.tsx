@@ -95,10 +95,13 @@ export default async function OverviewPage() {
               </div>
 
               {/* Borrow Pass Status Pill */}
-              <div className="inline-flex items-center gap-1.5 rounded-2xl border border-emerald-400/30 bg-emerald-400/20 px-3.5 py-1.5 text-xs font-bold text-emerald-200 backdrop-blur-md">
+              <Link
+                href="/dashboard/passes"
+                className="inline-flex items-center gap-1.5 rounded-2xl border border-emerald-400/30 bg-emerald-400/20 px-3.5 py-1.5 text-xs font-bold text-emerald-200 backdrop-blur-md transition-colors hover:bg-emerald-400/30"
+              >
                 <Ticket className="h-4 w-4 text-emerald-300" />
                 <span>2 Borrow Passes Active</span>
-              </div>
+              </Link>
 
               <div className="inline-flex items-center gap-1 rounded-2xl bg-amber-400/20 px-3 py-1.5 text-xs font-bold text-amber-200 backdrop-blur-md">
                 <Coins className="h-3.5 w-3.5" /> 350 Pts
@@ -125,7 +128,7 @@ export default async function OverviewPage() {
                 <Compass className="h-4 w-4" /> Browse
               </Link>
               <Link
-                href="/dashboard/borrowed"
+                href="/dashboard/passes"
                 className="inline-flex min-h-[42px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-2.5 text-xs font-black text-slate-950 shadow-md transition-all hover:bg-amber-300 active:scale-95 lg:flex-none"
               >
                 <Ticket className="h-4 w-4" /> Buy Pass
@@ -246,7 +249,7 @@ export default async function OverviewPage() {
               </div>
             </div>
             <Link
-              href="/dashboard/borrowed"
+              href="/dashboard/passes"
               className="shrink-0 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-extrabold text-white shadow-2xs transition-transform active:scale-95"
             >
               Renew Pass
