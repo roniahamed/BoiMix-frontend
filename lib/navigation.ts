@@ -99,34 +99,43 @@ export const mobileBottomNavItems: NavItem[] = [
 
 export const dashboardNavGroups: NavGroup[] = [
   {
-    title: "Overview & Insights",
+    title: "Dashboard",
     items: [
       {
         title: "Overview",
         href: "/dashboard/overview",
         icon: LayoutDashboardIcon,
       },
-      { title: "Analytics", href: "/dashboard/analytics", icon: ActivityIcon },
+      {
+        title: "Insights & Analytics",
+        href: "/dashboard/analytics",
+        icon: ActivityIcon,
+      },
     ],
   },
   {
-    title: "My Library",
+    title: "Library",
     items: [
-      { title: "My Library", href: "/dashboard/library", icon: LibraryIcon },
+      { title: "My Books", href: "/dashboard/library", icon: LibraryIcon },
       { title: "Add New Book", href: "/books/upload", icon: BookPlusIcon },
+      {
+        title: "Reading Tracker",
+        href: "/dashboard/reading",
+        icon: BookOpenIcon,
+      },
     ],
   },
   {
-    title: "Transactions",
+    title: "Exchange",
     items: [
       {
-        title: "Borrowed Books",
+        title: "Borrowing",
         href: "/dashboard/borrowed",
         icon: BookOpenIcon,
         badge: 2,
         badgeVariant: "brand",
       },
-      { title: "Lent Books", href: "/dashboard/lent", icon: BookOpenIcon },
+      { title: "Lending", href: "/dashboard/lent", icon: BookOpenIcon },
       {
         title: "Active Exchanges",
         href: "/dashboard/exchanges",
@@ -139,8 +148,13 @@ export const dashboardNavGroups: NavGroup[] = [
         badge: 1,
         badgeVariant: "success",
       },
+    ],
+  },
+  {
+    title: "Marketplace",
+    items: [
       {
-        title: "Customer Orders (Sales)",
+        title: "Customer Orders",
         href: "/dashboard/sales",
         icon: ShoppingCartIcon,
         badge: 2,
@@ -154,9 +168,8 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Engagement",
+    title: "Community",
     items: [
-      { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
       { title: "Reviews", href: "/dashboard/reviews", icon: StarIcon },
       {
         title: "Messages",
@@ -175,9 +188,14 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Account & Security",
+    title: "Account",
     items: [
-      { title: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
+      { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
+      {
+        title: "Settings & Profile",
+        href: "/dashboard/settings",
+        icon: SettingsIcon,
+      },
       { title: "Security", href: "/dashboard/security", icon: ShieldCheckIcon },
       {
         title: "Verification",

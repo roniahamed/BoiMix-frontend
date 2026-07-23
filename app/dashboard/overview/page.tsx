@@ -1,607 +1,579 @@
 import { fetchLocal } from "@/lib/fetchLocal";
-import { QuickSummary } from "@/components/dashboard/quick-summary";
-import { SparklineCharts } from "@/components/dashboard/sparkline-charts";
-import { OverviewActivityChart } from "@/components/dashboard/overview-charts";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { BookCard } from "@/components/shared/book-card";
+import type { BookCardBook } from "@/types/book";
 import {
   BadgeCheck,
-  Crown,
   ChevronRight,
-  BookDown,
-  Repeat,
-  Mail,
   Star,
   Plus,
   Flame,
-  Clock,
   ArrowRight,
   Compass,
   Coins,
   Library,
-  Heart,
-  Shield,
-  MessageSquare,
-  Sparkles,
   ShoppingBag,
+  AlertTriangle,
+  Repeat,
+  Bookmark,
+  BookOpen,
 } from "lucide-react";
 import Link from "next/link";
 
 export default async function OverviewPage() {
   const { profileLibraryBooks } = await fetchLocal("/api/profile");
-  const upcomingBook = profileLibraryBooks[0] || null;
-
-  const activeExchanges = [
-    {
-      id: "ex-1",
-      bookTitle: "The Psychology of Money",
-      bookAuthor: "Morgan Housel",
-      coverImage:
-        "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200&fit=crop",
-      type: "Borrow",
-      partnerName: "Ahmed Rahman",
-      partnerAvatar: "https://i.pravatar.cc/150?u=ahmed",
-      status: "Due in 2 days",
-      statusVariant: "danger",
-      dueDate: "25 Jul 2026",
-    },
-    {
-      id: "ex-2",
-      bookTitle: "Atomic Habits",
-      bookAuthor: "James Clear",
-      coverImage:
-        "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop",
-      type: "Exchange Offer",
-      partnerName: "Nusrat Jahan",
-      partnerAvatar: "https://i.pravatar.cc/150?u=nusrat",
-      status: "Pending Accept",
-      statusVariant: "warning",
-      dueDate: "Action Required",
-    },
-    {
-      id: "ex-3",
-      bookTitle: "Deep Work (Sold)",
-      bookAuthor: "Cal Newport",
-      coverImage:
-        "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=200&fit=crop",
-      type: "Book Sale",
-      partnerName: "Jannatul Ferdaus",
-      partnerAvatar: "https://i.pravatar.cc/150?u=jannatul",
-      status: "Sold for ৳ 450",
-      statusVariant: "success",
-      dueDate: "Completed",
-    },
-    {
-      id: "ex-4",
-      bookTitle: "Rich Dad Poor Dad",
-      bookAuthor: "Robert Kiyosaki",
-      coverImage:
-        "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=200&fit=crop",
-      type: "Lent Out",
-      partnerName: "Hasan Mahmud",
-      partnerAvatar: "https://i.pravatar.cc/150?u=hasan",
-      status: "Active Loan",
-      statusVariant: "success",
-      dueDate: "02 Aug 2026",
-    },
-  ];
+  const recommendedBooks = profileLibraryBooks.slice(0, 4);
 
   return (
     <div className="space-y-6 pb-24 sm:space-y-8 lg:pb-8">
-      {/* 1. Mobile-First Hero Welcome & Reading Goal Banner */}
-      <div className="from-brand-blue/90 via-primary to-brand-pink/90 relative overflow-hidden rounded-2xl bg-gradient-to-br p-4 text-white shadow-xl sm:rounded-3xl sm:p-6 md:p-8">
-        {/* Decorative background glow rings */}
-        <div className="pointer-events-none absolute -top-12 -right-12 h-48 w-48 rounded-full bg-white/10 blur-2xl sm:h-64 sm:w-64" />
-        <div className="pointer-events-none absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-black/10 blur-2xl sm:h-64 sm:w-64" />
+      {/* 1. Gamified Welcome & Streak Progress Hero Header */}
+      <div className="from-primary via-primary/95 to-brand-blue/80 text-primary-foreground shadow-primary/10 relative overflow-hidden rounded-3xl bg-gradient-to-br p-5 shadow-lg sm:p-7">
+        <div className="pointer-events-none absolute top-0 right-0 -mt-16 -mr-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
-        <div className="relative z-10 flex flex-col justify-between gap-5 lg:flex-row lg:items-center">
-          {/* User profile & greeting */}
-          <div className="flex items-center gap-3.5 sm:gap-5">
+        <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          {/* User Info & Level */}
+          <div className="flex items-start gap-4">
             <div className="relative shrink-0">
-              <Avatar className="h-16 w-16 border-2 border-white/20 shadow-lg sm:h-20 sm:w-20 sm:border-4">
+              <Avatar className="h-14 w-14 border-2 border-white/30 shadow-md sm:h-16 sm:w-16">
                 <AvatarImage
-                  src="https://i.pravatar.cc/240?u=roni"
+                  src="https://i.pravatar.cc/150?u=roni"
                   alt="Roni Ahamed"
                 />
-                <AvatarFallback className="text-primary bg-white text-lg font-bold sm:text-xl">
+                <AvatarFallback className="text-foreground font-bold">
                   RA
                 </AvatarFallback>
               </Avatar>
-              <span className="bg-success absolute right-0 bottom-0 flex h-5 w-5 items-center justify-center rounded-full ring-2 ring-white sm:right-1 sm:bottom-1 sm:h-6 sm:w-6">
-                <BadgeCheck className="h-3.5 w-3.5 text-white sm:h-4 sm:w-4" />
+              <span className="absolute -right-1 -bottom-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-400 text-[10px] font-extrabold text-slate-950 shadow-sm">
+                L12
               </span>
             </div>
 
-            <div className="min-w-0 space-y-0.5 sm:space-y-1">
-              <div className="flex items-center gap-2">
-                <h1 className="truncate text-xl font-extrabold tracking-tight sm:text-2xl md:text-3xl">
-                  Welcome back, Roni! 👋
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-xl font-black tracking-tight text-white sm:text-2xl">
+                  Good Afternoon, Roni! 👋
                 </h1>
-              </div>
-              <p className="flex flex-wrap items-center gap-1.5 text-xs font-medium text-white/80 sm:gap-2 sm:text-sm">
-                <span>Backend Engineer</span>
-                <span>•</span>
-                <span className="flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[11px] font-semibold backdrop-blur-xs sm:text-xs">
-                  <Crown className="text-warning fill-warning h-3 w-3 sm:h-3.5 sm:w-3.5" />{" "}
-                  Pro Reader
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-bold backdrop-blur-md">
+                  <BadgeCheck className="h-3.5 w-3.5 text-amber-300" /> Level 12
+                  Reader
                 </span>
+              </div>
+              <p className="text-primary-foreground/90 text-xs font-medium sm:text-sm">
+                Backend Engineer • Dhaka Central Reader Community
               </p>
 
-              {/* Badges & streak row */}
-              <div className="flex flex-wrap items-center gap-2 pt-1.5 sm:gap-3 sm:pt-2">
-                <div className="flex items-center gap-1 rounded-full border border-white/20 bg-white/15 px-2.5 py-0.5 text-[11px] font-bold backdrop-blur-md transition-colors hover:bg-white/20 sm:px-3 sm:py-1 sm:text-xs">
-                  <Flame className="h-3.5 w-3.5 animate-pulse fill-amber-300 text-amber-300" />
-                  <span>14d Streak</span>
+              {/* XP Level Progress Bar */}
+              <div className="max-w-xs space-y-1 pt-2">
+                <div className="flex items-center justify-between text-[11px] font-bold text-white/90">
+                  <span>350 / 500 XP to Level 13</span>
+                  <span>70%</span>
                 </div>
-                <div className="flex items-center gap-1 rounded-full border border-white/20 bg-white/15 px-2.5 py-0.5 text-[11px] font-bold backdrop-blur-md transition-colors hover:bg-white/20 sm:px-3 sm:py-1 sm:text-xs">
-                  <Coins className="h-3.5 w-3.5 text-yellow-300" />
-                  <span>350 Points</span>
+                <div className="h-2 w-full overflow-hidden rounded-full bg-black/20">
+                  <div className="h-full w-[70%] rounded-full bg-amber-300 transition-all duration-500" />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Monthly Reading Goal Progress & Quick Actions */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:gap-4 lg:flex-col lg:items-end">
-            {/* Goal card */}
-            <div className="w-full space-y-2 rounded-xl border border-white/15 bg-black/25 p-3 backdrop-blur-md sm:w-auto sm:rounded-2xl sm:p-4 lg:min-w-[260px]">
-              <div className="flex items-center justify-between text-xs font-bold">
-                <span className="flex items-center gap-1 text-[11px] text-white/90 sm:text-xs">
-                  <Sparkles className="h-3.5 w-3.5 text-yellow-300" /> Monthly
-                  Goal
-                </span>
-                <span className="text-[11px] font-extrabold text-white sm:text-xs">
-                  4 / 6 Books (67%)
-                </span>
+          {/* Streak & Today's Summary */}
+          <div className="flex flex-col gap-3 border-t border-white/15 pt-3 sm:items-end sm:border-t-0 sm:pt-0">
+            <div className="flex items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 rounded-2xl bg-white/20 px-3 py-1.5 text-xs font-extrabold shadow-xs backdrop-blur-md">
+                <Flame className="h-4 w-4 animate-pulse fill-amber-300 text-amber-300" />
+                <span>14 Day Streak!</span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-white/20">
-                <div className="h-full w-[67%] rounded-full bg-gradient-to-r from-amber-300 to-emerald-400 transition-all duration-500" />
+
+              <div className="inline-flex items-center gap-1 rounded-2xl bg-amber-400/20 px-3 py-1.5 text-xs font-bold text-amber-200 backdrop-blur-md">
+                <Coins className="h-3.5 w-3.5" /> 350 Pts
               </div>
-              <p className="text-right text-[10px] font-medium text-white/80 sm:text-[11px]">
-                2 more books to unlock July Badge 🏆
-              </p>
             </div>
 
-            {/* CTAs */}
-            <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:items-center">
+            {/* Quick Action CTAs */}
+            <div className="flex w-full items-center gap-2 sm:w-auto">
               <Link
                 href="/books/upload"
-                className="text-primary flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl bg-white px-3.5 py-2.5 text-xs font-bold shadow-md transition-all hover:bg-white/90 active:scale-95 sm:text-sm"
+                className="text-primary inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold shadow-md transition-all hover:bg-white/90 active:scale-95 sm:flex-none"
               >
                 <Plus className="h-4 w-4 stroke-[3]" /> Add Book
               </Link>
               <Link
-                href="/explore/exchanges"
-                className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/15 px-3.5 py-2.5 text-xs font-semibold text-white backdrop-blur-md transition-all hover:bg-white/25 sm:text-sm"
+                href="/books"
+                className="inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/15 px-4 py-2.5 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-white/25 sm:flex-none"
               >
-                <Compass className="h-4 w-4" /> Exchanges
+                <Compass className="h-4 w-4" /> Browse
               </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Key Metrics Summary Cards */}
-      <div className="space-y-2.5 sm:space-y-3">
-        <div className="flex items-center justify-between">
-          <h2 className="text-foreground text-base font-bold sm:text-lg">
-            Platform Overview
-          </h2>
-          <span className="text-muted-foreground text-[11px] font-semibold sm:text-xs">
-            Updated live
-          </span>
-        </div>
-        <QuickSummary />
-      </div>
-
-      {/* 3. Analytics & Sparklines Section */}
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
-          <OverviewActivityChart />
-        </div>
-        <div className="space-y-3 sm:space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold sm:text-base">
-              Engagement Trends
-            </h3>
-            <span className="text-muted-foreground text-xs">7 Days</span>
-          </div>
-          <SparklineCharts />
-        </div>
-      </div>
-
-      {/* 4. Active Exchanges & Exchange Requests */}
-      <div className="bg-card border-border/70 space-y-4 rounded-2xl border p-4 shadow-xs sm:p-5">
-        <div className="border-border/40 flex flex-col gap-2 border-b pb-3 sm:flex-row sm:items-center sm:justify-between sm:pb-4">
-          <div>
-            <h2 className="text-foreground flex items-center gap-2 text-base font-bold sm:text-lg">
-              <Repeat className="text-primary h-4 w-4 sm:h-5 sm:w-5" /> Active
-              Exchanges & Requests
-            </h2>
-            <p className="text-muted-foreground mt-0.5 text-xs">
-              Manage active borrow loans, lending, and pending exchange
-              proposals
-            </p>
+      {/* 2. Action Center ⭐ (Urgent Action Items) */}
+      <div className="bg-card border-border/70 space-y-4 rounded-2xl border p-4 shadow-2xs sm:p-5">
+        <div className="border-border/40 flex items-center justify-between border-b pb-3">
+          <div className="flex items-center gap-2">
+            <span className="bg-warning/15 text-warning flex h-7 w-7 items-center justify-center rounded-lg">
+              <AlertTriangle className="h-4 w-4" />
+            </span>
+            <div>
+              <h2 className="text-foreground text-base font-bold sm:text-lg">
+                Action Center
+              </h2>
+              <p className="text-muted-foreground text-xs">
+                High-priority tasks requiring your attention today
+              </p>
+            </div>
           </div>
           <Link
-            href="/dashboard/exchanges"
-            className="text-primary flex items-center gap-1 self-start text-xs font-bold hover:underline sm:self-auto"
+            href="/dashboard/notifications"
+            className="text-primary flex items-center gap-1 text-xs font-bold hover:underline"
           >
             View All <ChevronRight className="h-3.5 w-3.5" />
           </Link>
         </div>
 
-        {/* MOBILE CARD LIST (block md:hidden) - Touch Friendly Mobile First */}
-        <div className="block space-y-3 md:hidden">
-          {activeExchanges.map((item) => (
-            <div
-              key={item.id}
-              className="bg-muted/30 border-border/50 space-y-3 rounded-xl border p-3.5"
-            >
-              <div className="flex items-start gap-3">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={item.coverImage}
-                  alt={item.bookTitle}
-                  className="border-border h-14 w-10 shrink-0 rounded-md border object-cover shadow-xs"
-                />
-                <div className="min-w-0 flex-1 space-y-1">
-                  <div className="flex items-center justify-between gap-1">
-                    <span className="bg-primary/10 text-primary rounded-full px-2 py-0.5 text-[10px] font-extrabold">
-                      {item.type}
-                    </span>
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                        item.statusVariant === "danger"
-                          ? "bg-danger/15 text-danger"
-                          : item.statusVariant === "warning"
-                            ? "bg-warning/15 text-warning"
-                            : "bg-success/15 text-success"
-                      }`}
-                    >
-                      <Clock className="h-3 w-3" />
-                      {item.status}
-                    </span>
-                  </div>
-                  <h3 className="text-foreground truncate text-sm font-bold">
-                    {item.bookTitle}
-                  </h3>
-                  <p className="text-muted-foreground text-xs">
-                    {item.bookAuthor}
-                  </p>
-                </div>
-              </div>
-
-              <div className="border-border/40 flex items-center justify-between border-t pt-2">
-                <div className="flex items-center gap-2">
-                  <Avatar className="h-6 w-6">
-                    <AvatarImage src={item.partnerAvatar} />
-                    <AvatarFallback className="text-[10px]">P</AvatarFallback>
-                  </Avatar>
-                  <span className="text-foreground text-xs font-semibold">
-                    {item.partnerName}
-                  </span>
-                </div>
-
-                <Link
-                  href="/dashboard/messages"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[36px] items-center justify-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors"
-                >
-                  <Mail className="h-3.5 w-3.5" /> Message
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* DESKTOP TABLE VIEW (hidden md:block) */}
-        <div className="hidden overflow-x-auto md:block">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-border/50 text-muted-foreground border-b text-xs font-semibold uppercase">
-                <th className="pb-3 pl-1 font-bold">Book Title</th>
-                <th className="pb-3 font-bold">Type</th>
-                <th className="pb-3 font-bold">Counterparty</th>
-                <th className="pb-3 font-bold">Status / Due Date</th>
-                <th className="pr-1 pb-3 text-right font-bold">Action</th>
-              </tr>
-            </thead>
-            <tbody className="divide-border/40 divide-y">
-              {activeExchanges.map((item) => (
-                <tr
-                  key={item.id}
-                  className="hover:bg-muted/40 transition-colors"
-                >
-                  <td className="py-3 pl-1">
-                    <div className="flex items-center gap-3">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={item.coverImage}
-                        alt={item.bookTitle}
-                        className="border-border h-11 w-8 rounded-md border object-cover shadow-2xs"
-                      />
-                      <div>
-                        <p className="text-foreground line-clamp-1 font-bold">
-                          {item.bookTitle}
-                        </p>
-                        <p className="text-muted-foreground text-xs">
-                          {item.bookAuthor}
-                        </p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="text-foreground py-3 text-xs font-semibold">
-                    {item.type}
-                  </td>
-                  <td className="py-3">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-6 w-6">
-                        <AvatarImage src={item.partnerAvatar} />
-                        <AvatarFallback className="text-[10px]">
-                          P
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-foreground text-xs font-medium">
-                        {item.partnerName}
-                      </span>
-                    </div>
-                  </td>
-                  <td className="py-3">
-                    <span
-                      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold ${
-                        item.statusVariant === "danger"
-                          ? "bg-danger/15 text-danger"
-                          : item.statusVariant === "warning"
-                            ? "bg-warning/15 text-warning"
-                            : "bg-success/15 text-success"
-                      }`}
-                    >
-                      <Clock className="h-3 w-3" />
-                      {item.status}
-                    </span>
-                  </td>
-                  <td className="py-3 pr-1 text-right">
-                    <Link
-                      href="/dashboard/messages"
-                      className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors"
-                    >
-                      <Mail className="h-3.5 w-3.5" /> Message
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* 5. Two-Column Layout: Currently Reading & Activity */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Currently Borrowed / Spotlight Card */}
-        <div className="bg-card border-border/70 flex flex-col justify-between space-y-4 rounded-2xl border p-4 shadow-xs sm:p-5">
-          <div className="border-border/40 flex items-center justify-between border-b pb-3">
-            <h2 className="text-foreground flex items-center gap-1.5 text-sm font-bold sm:gap-2 sm:text-base">
-              <BookDown className="text-brand-pink h-4 w-4 shrink-0" />{" "}
-              Currently Reading
-            </h2>
-            <span className="bg-danger/15 text-danger rounded-full px-2.5 py-0.5 text-[11px] font-bold sm:text-xs">
-              Due in 2d
-            </span>
-          </div>
-
-          {upcomingBook && (
-            <div className="bg-muted/30 border-border/50 flex items-start gap-3.5 rounded-xl border p-3 sm:gap-4 sm:p-3.5">
-              <div className="border-border h-20 w-14 shrink-0 overflow-hidden rounded-lg border shadow-xs sm:h-24 sm:w-16">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={
-                    upcomingBook.coverImage ||
-                    "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=200&fit=crop"
-                  }
-                  alt={upcomingBook.title}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-
-              <div className="min-w-0 flex-1 space-y-1.5">
-                <h3 className="text-foreground line-clamp-1 text-sm leading-snug font-extrabold sm:text-base">
-                  {upcomingBook.title}
-                </h3>
-                <p className="text-muted-foreground truncate text-xs font-medium">
-                  Author: {upcomingBook.author}
+        {/* Action Grid */}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {/* Action 1: Return Book */}
+          <div className="bg-warning/10 border-warning/30 flex items-center justify-between gap-3 rounded-xl border p-3.5">
+            <div className="flex items-start gap-3">
+              <span className="bg-warning/20 text-warning mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold">
+                ⏰
+              </span>
+              <div className="space-y-0.5">
+                <p className="text-foreground text-xs font-bold">
+                  Return Book Due Tomorrow
                 </p>
-
-                <div className="space-y-1 pt-0.5">
-                  <div className="text-muted-foreground flex justify-between text-[11px] font-semibold">
-                    <span>Reading Progress</span>
-                    <span className="text-primary font-bold">68%</span>
-                  </div>
-                  <div className="bg-muted h-1.5 w-full overflow-hidden rounded-full">
-                    <div className="bg-primary h-full w-[68%] rounded-full" />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between pt-1.5">
-                  <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
-                    <Avatar className="h-5 w-5">
-                      <AvatarImage src="https://i.pravatar.cc/150?u=ahmed" />
-                    </Avatar>
-                    <span className="text-foreground text-xs font-medium">
-                      Ahmed
-                    </span>
-                  </div>
-
-                  <Link
-                    href="/dashboard/borrowed"
-                    className="text-primary flex items-center gap-0.5 text-xs font-bold hover:underline"
-                  >
-                    Extend <ArrowRight className="h-3 w-3" />
-                  </Link>
-                </div>
+                <p className="text-muted-foreground text-[11px]">
+                  Atomic Habits • Owner: Ahmed Rahman
+                </p>
               </div>
             </div>
-          )}
-
-          <div className="flex items-center gap-2 pt-1">
             <Link
               href="/dashboard/borrowed"
-              className="bg-primary/10 hover:bg-primary/20 text-primary flex min-h-[40px] flex-1 items-center justify-center rounded-xl py-2.5 text-center text-xs font-bold transition-colors"
+              className="bg-warning text-warning-foreground shrink-0 rounded-lg px-3 py-1.5 text-xs font-extrabold shadow-2xs transition-transform active:scale-95"
             >
-              Borrow History
-            </Link>
-            <Link
-              href="/explore/central-library"
-              className="bg-muted hover:bg-muted/80 text-foreground flex min-h-[40px] flex-1 items-center justify-center rounded-xl py-2.5 text-center text-xs font-bold transition-colors"
-            >
-              Browse Library
-            </Link>
-          </div>
-        </div>
-
-        {/* Recent Community & Account Activity */}
-        <div className="bg-card border-border/70 space-y-4 rounded-2xl border p-4 shadow-xs sm:p-5">
-          <div className="border-border/40 flex items-center justify-between border-b pb-3">
-            <h2 className="text-foreground text-sm font-bold sm:text-base">
-              Recent Activity
-            </h2>
-            <Link
-              href="/dashboard/notifications"
-              className="text-primary text-xs font-bold hover:underline"
-            >
-              View Feed
+              Return / Extend
             </Link>
           </div>
 
-          <div className="space-y-2.5 sm:space-y-3">
-            {[
-              {
-                icon: BookDown,
-                title: "Ahmed requested to borrow",
-                desc: "The Psychology of Money",
-                time: "10m ago",
-                bg: "bg-success/10",
-                color: "text-success",
-              },
-              {
-                icon: Repeat,
-                title: "Exchange request accepted",
-                desc: "Rich Dad Poor Dad with Nusrat",
-                time: "3h ago",
-                bg: "bg-brand-blue/10",
-                color: "text-brand-blue",
-              },
-              {
-                icon: Star,
-                title: "New 5-star review received",
-                desc: "Fahim praised quick response",
-                time: "5h ago",
-                bg: "bg-warning/10",
-                color: "text-warning",
-              },
-              {
-                icon: Flame,
-                title: "Daily Reading Streak updated",
-                desc: "Completed day 14 streak",
-                time: "1d ago",
-                bg: "bg-brand-pink/10",
-                color: "text-brand-pink",
-              },
-            ].map((activity, i) => (
-              <div
-                key={i}
-                className="bg-muted/30 hover:bg-muted/60 border-border/40 flex items-start gap-3 rounded-xl border p-2.5 transition-colors sm:p-3"
-              >
-                <div className={`shrink-0 rounded-lg p-2 ${activity.bg}`}>
-                  <activity.icon
-                    className={`h-3.5 w-3.5 sm:h-4 sm:w-4 ${activity.color}`}
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-foreground truncate text-xs font-bold">
-                    {activity.title}
-                  </p>
-                  <p className="text-muted-foreground truncate text-[11px]">
-                    {activity.desc}
-                  </p>
-                </div>
-                <span className="text-muted-foreground text-[10px] font-medium whitespace-nowrap">
-                  {activity.time}
-                </span>
+          {/* Action 2: Exchange Request */}
+          <div className="bg-brand-blue/10 border-brand-blue/30 flex items-center justify-between gap-3 rounded-xl border p-3.5">
+            <div className="flex items-start gap-3">
+              <span className="bg-brand-blue/20 text-brand-blue mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold">
+                🔄
+              </span>
+              <div className="space-y-0.5">
+                <p className="text-foreground text-xs font-bold">
+                  Exchange Offer Received
+                </p>
+                <p className="text-muted-foreground text-[11px]">
+                  Nusrat wants Rich Dad Poor Dad
+                </p>
               </div>
-            ))}
+            </div>
+            <Link
+              href="/dashboard/exchanges/offers"
+              className="bg-brand-blue shrink-0 rounded-lg px-3 py-1.5 text-xs font-extrabold text-white shadow-2xs transition-transform active:scale-95"
+            >
+              Accept / View
+            </Link>
+          </div>
+
+          {/* Action 3: Unread Message */}
+          <div className="bg-success/10 border-success/30 flex items-center justify-between gap-3 rounded-xl border p-3.5">
+            <div className="flex items-start gap-3">
+              <span className="bg-success/20 text-success mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold">
+                💬
+              </span>
+              <div className="space-y-0.5">
+                <p className="text-foreground text-xs font-bold">
+                  5 Unread Messages
+                </p>
+                <p className="text-muted-foreground text-[11px]">
+                  Ahmed: &quot;Is the book ready for pickup?&quot;
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/dashboard/messages"
+              className="bg-success text-success-foreground shrink-0 rounded-lg px-3 py-1.5 text-xs font-extrabold shadow-2xs transition-transform active:scale-95"
+            >
+              Reply Now
+            </Link>
+          </div>
+
+          {/* Action 4: Write Review */}
+          <div className="bg-brand-pink/10 border-brand-pink/30 flex items-center justify-between gap-3 rounded-xl border p-3.5">
+            <div className="flex items-start gap-3">
+              <span className="bg-brand-pink/20 text-brand-pink mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold">
+                ⭐
+              </span>
+              <div className="space-y-0.5">
+                <p className="text-foreground text-xs font-bold">
+                  Review Received Transaction
+                </p>
+                <p className="text-muted-foreground text-[11px]">
+                  Rate your deal with Hasan Mahmud
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/dashboard/reviews"
+              className="bg-brand-pink shrink-0 rounded-lg px-3 py-1.5 text-xs font-extrabold text-white shadow-2xs transition-transform active:scale-95"
+            >
+              Write Review
+            </Link>
           </div>
         </div>
       </div>
 
-      {/* 6. Quick Command Center Launcher Grid */}
+      {/* 3. Actionable Quick Stat Cards (With View All) */}
       <div className="space-y-3">
-        <h2 className="text-foreground text-base font-bold sm:text-lg">
-          Command Shortcuts
-        </h2>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
-          {[
-            {
-              title: "My Library",
-              desc: "42 books listed",
-              href: "/dashboard/library",
-              icon: Library,
-              color: "text-brand-blue",
-              bg: "bg-brand-blue/10",
-            },
-            {
-              title: "My Sales",
-              desc: "5 sold • ৳ 2,450",
-              href: "/dashboard/sales",
-              icon: ShoppingBag,
-              color: "text-emerald-500",
-              bg: "bg-emerald-500/10",
-            },
-            {
-              title: "Wishlist",
-              desc: "12 saved books",
-              href: "/dashboard/wishlist",
-              icon: Heart,
-              color: "text-brand-pink",
-              bg: "bg-brand-pink/10",
-            },
-            {
-              title: "Messages",
-              desc: "5 unread chats",
-              href: "/dashboard/messages",
-              icon: MessageSquare,
-              color: "text-success",
-              bg: "bg-success/10",
-            },
-            {
-              title: "Settings",
-              desc: "Profile & address",
-              href: "/dashboard/settings",
-              icon: Shield,
-              color: "text-warning",
-              bg: "bg-warning/10",
-            },
-          ].map((item) => (
+        <div className="flex items-center justify-between">
+          <h2 className="text-foreground text-base font-bold sm:text-lg">
+            Quick Overview & Actions
+          </h2>
+          <Link
+            href="/dashboard/analytics"
+            className="text-primary flex items-center gap-1 text-xs font-bold hover:underline"
+          >
+            View All Insights <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          {/* Card 1: My Books */}
+          <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="bg-brand-pink/10 text-brand-pink flex h-8 w-8 items-center justify-center rounded-xl">
+                <Library className="h-4 w-4" />
+              </div>
+              <span className="bg-muted text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-bold">
+                35 Avail
+              </span>
+            </div>
+            <div>
+              <p className="text-foreground text-xl font-extrabold">42</p>
+              <p className="text-muted-foreground text-[11px] font-semibold">
+                My Books
+              </p>
+            </div>
             <Link
-              key={item.title}
-              href={item.href}
-              className="group bg-card hover:bg-muted/50 border-border/70 hover:border-primary/40 flex min-h-[96px] flex-col justify-between space-y-2.5 rounded-2xl border p-3.5 shadow-2xs transition-all duration-200 hover:-translate-y-0.5 sm:space-y-3 sm:p-4"
+              href="/dashboard/library"
+              className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
             >
-              <div className="flex items-center justify-between">
-                <div className={`rounded-xl p-2 sm:p-2.5 ${item.bg}`}>
-                  <item.icon
-                    className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`}
-                  />
-                </div>
-                <ChevronRight className="text-muted-foreground group-hover:text-primary h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </div>
-              <div>
-                <p className="text-foreground group-hover:text-primary text-xs font-bold transition-colors sm:text-sm">
-                  {item.title}
-                </p>
-                <p className="text-muted-foreground mt-0.5 truncate text-[11px] sm:text-xs">
-                  {item.desc}
-                </p>
-              </div>
+              <span>Manage</span> <ArrowRight className="h-3 w-3" />
             </Link>
+          </div>
+
+          {/* Card 2: Borrowing */}
+          <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="bg-success/10 text-success flex h-8 w-8 items-center justify-center rounded-xl">
+                <Bookmark className="h-4 w-4" />
+              </div>
+              <span className="bg-warning/15 text-warning rounded px-1.5 py-0.5 text-[10px] font-bold">
+                1 Due
+              </span>
+            </div>
+            <div>
+              <p className="text-foreground text-xl font-extrabold">2 Active</p>
+              <p className="text-muted-foreground text-[11px] font-semibold">
+                Borrowing
+              </p>
+            </div>
+            <Link
+              href="/dashboard/borrowed"
+              className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
+            >
+              <span>View Loans</span> <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {/* Card 3: Exchanges */}
+          <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="bg-brand-blue/10 text-brand-blue flex h-8 w-8 items-center justify-center rounded-xl">
+                <Repeat className="h-4 w-4" />
+              </div>
+              <span className="bg-success/15 text-success rounded px-1.5 py-0.5 text-[10px] font-bold">
+                +1 Pending
+              </span>
+            </div>
+            <div>
+              <p className="text-foreground text-xl font-extrabold">5 Deals</p>
+              <p className="text-muted-foreground text-[11px] font-semibold">
+                Exchanges
+              </p>
+            </div>
+            <Link
+              href="/dashboard/exchanges"
+              className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
+            >
+              <span>View Deals</span> <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {/* Card 4: Selling */}
+          <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-500">
+                <ShoppingBag className="h-4 w-4" />
+              </div>
+              <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600">
+                ৳ 2,450
+              </span>
+            </div>
+            <div>
+              <p className="text-foreground text-xl font-extrabold">3 Orders</p>
+              <p className="text-muted-foreground text-[11px] font-semibold">
+                Customer Sales
+              </p>
+            </div>
+            <Link
+              href="/dashboard/sales"
+              className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
+            >
+              <span>Sales Hub</span> <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {/* Card 5: Wallet */}
+          <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500">
+                <Coins className="h-4 w-4" />
+              </div>
+              <span className="bg-success/15 text-success rounded px-1.5 py-0.5 text-[10px] font-bold">
+                Ready
+              </span>
+            </div>
+            <div>
+              <p className="text-foreground text-xl font-extrabold">৳ 1,800</p>
+              <p className="text-muted-foreground text-[11px] font-semibold">
+                Wallet Balance
+              </p>
+            </div>
+            <Link
+              href="/dashboard/wallet"
+              className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
+            >
+              <span>Withdraw</span> <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+
+          {/* Card 6: Reputation */}
+          <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-400/10 text-amber-500">
+                <Star className="h-4 w-4 fill-amber-400" />
+              </div>
+              <span className="bg-brand-blue/15 text-brand-blue rounded px-1.5 py-0.5 text-[10px] font-bold">
+                Top 5%
+              </span>
+            </div>
+            <div>
+              <p className="text-foreground text-xl font-extrabold">4.9 ⭐</p>
+              <p className="text-muted-foreground text-[11px] font-semibold">
+                48 Reviews
+              </p>
+            </div>
+            <Link
+              href="/dashboard/reviews"
+              className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
+            >
+              <span>Reviews</span> <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Active Transactions Timeline (With View All) */}
+      <div className="bg-card border-border/70 space-y-4 rounded-2xl border p-4 shadow-2xs sm:p-5">
+        <div className="border-border/40 flex items-center justify-between border-b pb-3">
+          <div>
+            <h2 className="text-foreground text-base font-bold sm:text-lg">
+              Activity Timeline
+            </h2>
+            <p className="text-muted-foreground text-xs">
+              Real-time chronology of your exchanges, loans, and reviews
+            </p>
+          </div>
+          <Link
+            href="/dashboard/exchanges"
+            className="text-primary flex items-center gap-1 text-xs font-bold hover:underline"
+          >
+            View All <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        {/* Chronological Feed */}
+        <div className="border-primary/20 space-y-4 border-l-2 pl-3">
+          <div className="relative flex items-start gap-3">
+            <span className="bg-primary ring-background absolute top-1 -left-[19px] flex h-3 w-3 rounded-full ring-4" />
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <p className="text-foreground text-xs font-bold">
+                  Ahmed requested{" "}
+                  <span className="text-primary">The Psychology of Money</span>
+                </p>
+                <span className="text-muted-foreground text-[10px] font-semibold">
+                  10 min ago
+                </span>
+              </div>
+              <p className="text-muted-foreground text-[11px]">
+                Borrow request for 14 days • Dhanmondi Pick up point
+              </p>
+            </div>
+          </div>
+
+          <div className="relative flex items-start gap-3">
+            <span className="bg-success ring-background absolute top-1 -left-[19px] flex h-3 w-3 rounded-full ring-4" />
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <p className="text-foreground text-xs font-bold">
+                  Exchange Accepted with Nusrat
+                </p>
+                <span className="text-muted-foreground text-[10px] font-semibold">
+                  1 hour ago
+                </span>
+              </div>
+              <p className="text-muted-foreground text-[11px]">
+                Traded Rich Dad Poor Dad for Deep Work
+              </p>
+            </div>
+          </div>
+
+          <div className="relative flex items-start gap-3">
+            <span className="bg-brand-blue ring-background absolute top-1 -left-[19px] flex h-3 w-3 rounded-full ring-4" />
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <p className="text-foreground text-xs font-bold">
+                  Returned Atomic Habits to Central Library
+                </p>
+                <span className="text-muted-foreground text-[10px] font-semibold">
+                  Yesterday
+                </span>
+              </div>
+              <p className="text-muted-foreground text-[11px]">
+                Loan completed on time (+20 XP Earned)
+              </p>
+            </div>
+          </div>
+
+          <div className="relative flex items-start gap-3">
+            <span className="ring-background absolute top-1 -left-[19px] flex h-3 w-3 rounded-full bg-amber-400 ring-4" />
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <p className="text-foreground text-xs font-bold">
+                  Received 5⭐ Review from Hasan Mahmud
+                </p>
+                <span className="text-muted-foreground text-[10px] font-semibold">
+                  2 days ago
+                </span>
+              </div>
+              <p className="text-muted-foreground text-[11px]">
+                &quot;Great condition book and super fast handover!&quot;
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 5. Continue Reading Card (With View All) */}
+      <div className="bg-card border-border/70 space-y-4 rounded-2xl border p-4 shadow-2xs sm:p-5">
+        <div className="border-border/40 flex items-center justify-between border-b pb-3">
+          <div className="flex items-center gap-2">
+            <BookOpen className="text-primary h-5 w-5" />
+            <h2 className="text-foreground text-base font-bold sm:text-lg">
+              Continue Reading
+            </h2>
+          </div>
+          <Link
+            href="/dashboard/reading"
+            className="text-primary flex items-center gap-1 text-xs font-bold hover:underline"
+          >
+            View All Reading <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="bg-muted/30 border-border/40 flex flex-col items-center gap-4 rounded-xl border p-4 sm:flex-row">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop"
+            alt="Atomic Habits"
+            className="border-border h-24 w-16 shrink-0 rounded-lg border object-cover shadow-xs"
+          />
+
+          <div className="w-full flex-1 space-y-2 text-center sm:text-left">
+            <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
+              <div>
+                <h3 className="text-foreground text-base font-bold">
+                  Atomic Habits
+                </h3>
+                <p className="text-muted-foreground text-xs">
+                  James Clear • Self Development
+                </p>
+              </div>
+
+              <span className="bg-warning/15 text-warning self-center rounded-full px-3 py-1 text-xs font-extrabold sm:self-auto">
+                Due in 2 days
+              </span>
+            </div>
+
+            {/* Reading Progress */}
+            <div className="space-y-1 pt-1">
+              <div className="text-muted-foreground flex items-center justify-between text-xs font-semibold">
+                <span>Reading Progress</span>
+                <span className="text-foreground font-bold">
+                  68% (Page 210 of 320)
+                </span>
+              </div>
+              <div className="bg-muted h-2.5 w-full overflow-hidden rounded-full">
+                <div className="bg-primary h-full w-[68%] rounded-full transition-all duration-300" />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 pt-2 sm:justify-start">
+              <button className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-xs font-bold transition-transform active:scale-95">
+                Continue Reading
+              </button>
+              <Link
+                href="/dashboard/borrowed"
+                className="bg-muted hover:bg-muted/80 text-foreground rounded-xl px-4 py-2 text-xs font-bold transition-colors"
+              >
+                Return / Extend
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 6. Personalized Book Recommendations (Replacing Duplicate Shortcuts, With View All) */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-foreground text-base font-bold sm:text-lg">
+              Recommended For You
+            </h2>
+            <p className="text-muted-foreground text-xs">
+              Based on your recent reading preferences in Self Help & Technology
+            </p>
+          </div>
+          <Link
+            href="/books"
+            className="text-primary flex items-center gap-1 text-xs font-bold hover:underline"
+          >
+            View All Books <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {recommendedBooks.map((book: Record<string, unknown>) => (
+            <BookCard
+              key={book.id as string}
+              book={book as unknown as BookCardBook}
+            />
           ))}
         </div>
       </div>
