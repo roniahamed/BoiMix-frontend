@@ -131,7 +131,7 @@ export default function MembershipWalletDashboardPage() {
 
         <div className="flex items-center gap-2 self-start sm:self-auto">
           <Link
-            href="/memberships"
+            href="/explore/central-library/memberships"
             className="border-border bg-card text-foreground hover:bg-muted inline-flex min-h-[40px] items-center gap-1.5 rounded-xl border px-3.5 py-2 text-xs font-bold transition-colors"
           >
             <Building className="text-primary h-4 w-4" /> How Borrowing Works{" "}
