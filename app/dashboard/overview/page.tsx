@@ -11,7 +11,7 @@ import {
   Coins,
   Library,
   ShoppingBag,
-  AlarmClock,
+  AlertTriangle,
   Repeat,
   Bookmark,
   BookOpen,
@@ -144,7 +144,7 @@ export default async function OverviewPage() {
         <div className="border-border/40 flex items-center justify-between border-b pb-3">
           <div className="flex items-center gap-2">
             <span className="bg-warning/15 text-warning flex h-7 w-7 items-center justify-center rounded-lg">
-              <AlarmClock className="h-4 w-4" />
+              <AlertTriangle className="h-4 w-4" />
             </span>
             <div>
               <h2 className="text-foreground text-base font-bold sm:text-lg">
