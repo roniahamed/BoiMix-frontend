@@ -1,8 +1,8 @@
-# BoiSwap — Complete Product Architecture, UX System & Platform Blueprint
+# BoiExchange — Complete Product Architecture, UX System & Platform Blueprint
 
 ## Product Identity
 
-**BoiSwap** is a Bangladesh-focused community-driven peer-to-peer book lending, swap, and marketplace ecosystem.
+**BoiExchange** is a Bangladesh-focused community-driven peer-to-peer book lending, exchange, and marketplace ecosystem.
 
 This is not a simple CRUD application.
 
@@ -42,7 +42,7 @@ It is a:
 | Authentication pages | 8 |
 | User dashboard pages | 26 |
 | Borrow workflow pages | 12 |
-| Swap workflow pages | 8 |
+| Exchange workflow pages | 8 |
 | Marketplace pages | 18 |
 | Notification pages | 6 |
 | Moderator pages | 11 |
@@ -119,7 +119,7 @@ It is a:
 /books/near-me
 /books/category/[genre]
 /books/location/[district]
-/books/swap
+/books/exchange
 /books/isbn/[isbn]
 ```
 
@@ -148,8 +148,8 @@ It is a:
 /dashboard/books/edit/[id]
 /dashboard/borrowed
 /dashboard/lent
-/dashboard/swap
-/dashboard/swap/offers
+/dashboard/exchange
+/dashboard/exchange/offers
 /dashboard/wishlist
 /dashboard/messages
 /dashboard/notifications
@@ -177,17 +177,17 @@ It is a:
 
 ---
 
-## SWAP FLOW
+## EXCHANGE FLOW
 
 ```txt
-/swap/discover
-/swap/offer/[bookId]
-/swap/proposal/[id]
-/swap/counter-offer/[id]
-/swap/agreement/[id]
-/swap/handover/[id]
-/swap/complete/[id]
-/swap/dispute/[id]
+/exchange/discover
+/exchange/offer/[bookId]
+/exchange/proposal/[id]
+/exchange/counter-offer/[id]
+/exchange/agreement/[id]
+/exchange/handover/[id]
+/exchange/complete/[id]
+/exchange/dispute/[id]
 ```
 
 ---
@@ -229,7 +229,7 @@ It is a:
 /mod/flagged-books
 /mod/review-moderation
 /mod/verification-queue
-/mod/swap-disputes
+/mod/exchange-disputes
 /mod/borrow-disputes
 ```
 
@@ -242,7 +242,7 @@ It is a:
 /admin/users
 /admin/books
 /admin/borrow
-/admin/swap
+/admin/exchange
 /admin/reports
 /admin/disputes
 /admin/reviews
@@ -288,7 +288,7 @@ It is a:
 | Wishlist | Phase 2 |
 | Reading Groups | Phase 2 |
 | Verification Center | Phase 2 |
-| Swap System | Phase 2 |
+| Exchange System | Phase 2 |
 | Seller Dashboard | Phase 3 |
 | Payments | Phase 3 |
 
@@ -333,11 +333,11 @@ It is a:
 | Field | Details |
 |---|---|
 | Route | /books/[slug] |
-| Purpose | Borrow/swap conversion |
+| Purpose | Borrow/exchange conversion |
 | Public/Private | Public |
 | Roles | All |
 | Components | Gallery, Meta, Reviews, OwnerCard, Reputation, TimelinePreview |
-| Main Actions | Borrow, swap, message |
+| Main Actions | Borrow, exchange, message |
 | API Requirements | Book, owner, reviews, availability |
 | Real-time | Medium |
 | SEO Importance | Extremely High |
@@ -467,12 +467,12 @@ Browse Books
 
 ---
 
-## Swap Workflow
+## Exchange Workflow
 
 ```txt
-Browse Swap Books
+Browse Exchange Books
 → Select Offer Book
-→ Send Swap Proposal
+→ Send Exchange Proposal
 → Accept / Counter / Decline
 → Agreement Created
 → Handover
@@ -521,7 +521,7 @@ Overview
 ├── My Library
 ├── Borrowed Books
 ├── Lent Books
-├── Active Swaps
+├── Active Exchanges
 ├── Wishlist
 ├── Reviews
 ├── Messages
@@ -541,7 +541,7 @@ Reports Queue
 ├── Flagged Users
 ├── Verification Queue
 ├── Review Moderation
-├── Swap Conflicts
+├── Exchange Conflicts
 ├── Borrow Conflicts
 ```
 
@@ -616,7 +616,7 @@ BookCard
 BookGallery
 BookConditionBadge
 AvailabilityBadge
-SwapBadge
+ExchangeBadge
 BorrowStatusBadge
 OfficialBoiMixTag
 TrustScoreMeter
@@ -638,7 +638,7 @@ ImageUploader
 ChatWindow
 MessageBubble
 BorrowRequestCard
-SwapOfferCard
+ExchangeOfferCard
 DisputeCard
 AdminTable
 VerificationCard
@@ -688,7 +688,7 @@ Profile
 Critical
 ├── Borrow approved
 ├── Return overdue
-├── Swap accepted
+├── Exchange accepted
 
 Important
 ├── New message
@@ -759,7 +759,7 @@ Everything depends on this workflow being reliable.
 | Area | Complexity |
 |---|---|
 | Notifications | Extreme |
-| Swap negotiation | Extreme |
+| Exchange negotiation | Extreme |
 | Search ranking | High |
 | Real-time sync | High |
 | Reputation system | High |
@@ -785,7 +785,7 @@ Everything depends on this workflow being reliable.
 | Page | Why |
 |---|---|
 | Borrow Timeline | Multi-state workflow |
-| Swap Agreement | Two-party synchronization |
+| Exchange Agreement | Two-party synchronization |
 | Notifications | Read/unread/live states |
 | Dashboard | Many async widgets |
 | Search | Persistent filters |
@@ -831,7 +831,7 @@ app/
 │   └── verification/
 │
 ├── borrow/
-├── swap/
+├── exchange/
 ├── marketplace/
 ├── notifications/
 ├── messages/
@@ -953,7 +953,7 @@ Borrow Book
 
 # 18. FINAL STRATEGIC ASSESSMENT
 
-BoiSwap is realistically a:
+BoiExchange is realistically a:
 
 - Mid-scale startup architecture
 - Real-time event-driven system
@@ -966,7 +966,7 @@ BoiSwap is realistically a:
 
 1. Trust UX
 2. Notification reliability
-3. Borrow/swap state management
+3. Borrow/exchange state management
 4. Search relevance
 5. Marketplace moderation
 6. Mobile-first Bangladesh UX
@@ -1021,8 +1021,8 @@ books
 book_images
 borrow_requests
 borrow_transactions
-swap_requests
-swap_transactions
+exchange_requests
+exchange_transactions
 reviews
 badges
 notifications
@@ -1057,7 +1057,7 @@ payments
 Notifications
 Chat
 Borrow state updates
-Swap negotiation
+Exchange negotiation
 Unread counts
 Admin moderation queues
 ```
@@ -1087,7 +1087,7 @@ On-time returns
 Review ratings
 Response speed
 Dispute history
-Successful swaps
+Successful exchanges
 Successful lends
 Verification status
 ```

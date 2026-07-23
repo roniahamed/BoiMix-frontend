@@ -30,27 +30,27 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import {
-  useSwapStore,
-  SwapOrder,
-  SwapStatus,
-} from "@/lib/store/use-swap-store";
+  useExchangeStore,
+  ExchangeOrder,
+  ExchangeStatus,
+} from "@/lib/store/use-exchange-store";
 import { toast } from "sonner";
 
-export default function SwapsDashboard() {
+export default function ExchangesDashboard() {
   const {
-    swaps,
-    updateSwapStatus,
+    exchanges,
+    updateExchangeStatus,
     counterOffer,
     acceptCounterOffer,
     rejectCounterOffer,
     openDispute,
-  } = useSwapStore();
+  } = useExchangeStore();
   const currentUser = "current-user";
 
-  const incomingOffers = swaps.filter((s) => s.ownerId === currentUser);
-  const myProposals = swaps.filter((s) => s.proposerId === currentUser);
+  const incomingOffers = exchanges.filter((e) => e.ownerId === currentUser);
+  const myProposals = exchanges.filter((e) => e.proposerId === currentUser);
 
-  const getStatusBadge = (status: SwapStatus) => {
+  const getStatusBadge = (status: ExchangeStatus) => {
     switch (status) {
       case "pending_proposal":
         return (
@@ -110,14 +110,15 @@ export default function SwapsDashboard() {
     }
   };
 
-  const renderSwapCard = (swap: SwapOrder, isIncoming: boolean) => {
+  const renderExchangeCard = (exchange: ExchangeOrder, isIncoming: boolean) => {
     return (
-      <Card key={swap.id} className="overflow-hidden">
+      <Card key={exchange.id} className="overflow-hidden">
         <div className="bg-muted/30 flex items-center justify-between border-b px-6 py-3">
           <div className="flex items-center gap-2 text-sm font-medium">
-            <span className="text-muted-foreground">Swap ID:</span> {swap.id}
+            <span className="text-muted-foreground">Exchange ID:</span>{" "}
+            {exchange.id}
           </div>
-          {getStatusBadge(swap.status)}
+          {getStatusBadge(exchange.status)}
         </div>
         <CardContent className="p-6">
           <div className="flex flex-col gap-6 md:flex-row md:items-center">
@@ -129,14 +130,14 @@ export default function SwapsDashboard() {
                 </span>
                 <div className="relative aspect-[3/4] w-20 overflow-hidden rounded-md border shadow-sm">
                   <Image
-                    src={swap.requestedBookImage}
-                    alt={swap.requestedBookTitle}
+                    src={exchange.requestedBookImage}
+                    alt={exchange.requestedBookTitle}
                     fill
                     className="object-cover"
                   />
                 </div>
                 <span className="mt-2 max-w-[80px] truncate text-xs font-semibold">
-                  {swap.requestedBookTitle}
+                  {exchange.requestedBookTitle}
                 </span>
               </div>
 
@@ -148,35 +149,35 @@ export default function SwapsDashboard() {
                 </span>
                 <div className="relative aspect-[3/4] w-20 overflow-hidden rounded-md border shadow-sm">
                   <Image
-                    src={swap.offeredBookImage}
-                    alt={swap.offeredBookTitle}
+                    src={exchange.offeredBookImage}
+                    alt={exchange.offeredBookTitle}
                     fill
                     className="object-cover"
                   />
                 </div>
                 <span className="mt-2 max-w-[80px] truncate text-xs font-semibold">
-                  {swap.offeredBookTitle}
+                  {exchange.offeredBookTitle}
                 </span>
               </div>
             </div>
 
             {/* Meetup Details */}
-            {swap.counterOfferDetails && (
+            {exchange.counterOfferDetails && (
               <div className="bg-muted/30 flex-1 space-y-2 rounded-lg border p-4">
                 <h4 className="text-sm font-semibold">Meetup Details</h4>
                 <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <CalendarDays className="size-4" />
-                  <span>{swap.counterOfferDetails.proposedDate}</span>
+                  <span>{exchange.counterOfferDetails.proposedDate}</span>
                 </div>
                 <div className="text-muted-foreground flex items-center gap-2 text-sm">
                   <MapPin className="size-4" />
-                  <span>{swap.counterOfferDetails.proposedLocation}</span>
+                  <span>{exchange.counterOfferDetails.proposedLocation}</span>
                 </div>
-                {swap.counterOfferDetails.message && (
+                {exchange.counterOfferDetails.message && (
                   <div className="text-muted-foreground mt-2 flex items-start gap-2 text-sm">
                     <MessageSquare className="mt-0.5 size-4 shrink-0" />
                     <span className="italic">
-                      &quot;{swap.counterOfferDetails.message}&quot;
+                      &quot;{exchange.counterOfferDetails.message}&quot;
                     </span>
                   </div>
                 )}
@@ -188,19 +189,24 @@ export default function SwapsDashboard() {
         <CardFooter className="bg-muted/10 border-t p-4 sm:px-6">
           <div className="flex w-full flex-wrap gap-2">
             {/* Actions for Incoming Offers */}
-            {isIncoming && swap.status === "pending_proposal" && (
+            {isIncoming && exchange.status === "pending_proposal" && (
               <>
                 <Button
                   size="sm"
-                  onClick={() => updateSwapStatus(swap.id, "agreement_reached")}
+                  onClick={() =>
+                    updateExchangeStatus(exchange.id, "agreement_reached")
+                  }
                 >
-                  <Check className="mr-2 size-4" /> Accept Swap
+                  <Check className="mr-2 size-4" /> Accept Exchange
                 </Button>
-                <CounterOfferModal swap={swap} onCounterOffer={counterOffer} />
+                <CounterOfferModal
+                  exchange={exchange}
+                  onCounterOffer={counterOffer}
+                />
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => updateSwapStatus(swap.id, "rejected")}
+                  onClick={() => updateExchangeStatus(exchange.id, "rejected")}
                 >
                   <X className="mr-2 size-4" /> Decline
                 </Button>
@@ -208,15 +214,18 @@ export default function SwapsDashboard() {
             )}
 
             {/* Actions for Outgoing Proposals (Counter-Offered state) */}
-            {!isIncoming && swap.status === "counter_offered" && (
+            {!isIncoming && exchange.status === "counter_offered" && (
               <>
-                <Button size="sm" onClick={() => acceptCounterOffer(swap.id)}>
+                <Button
+                  size="sm"
+                  onClick={() => acceptCounterOffer(exchange.id)}
+                >
                   <Check className="mr-2 size-4" /> Accept Counter-Offer
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => rejectCounterOffer(swap.id)}
+                  onClick={() => rejectCounterOffer(exchange.id)}
                 >
                   <X className="mr-2 size-4" /> Decline
                 </Button>
@@ -224,30 +233,30 @@ export default function SwapsDashboard() {
             )}
 
             {/* Post-Agreement Actions (Both) */}
-            {swap.status === "agreement_reached" && (
+            {exchange.status === "agreement_reached" && (
               <Button
                 size="sm"
-                onClick={() => updateSwapStatus(swap.id, "handed_over")}
+                onClick={() => updateExchangeStatus(exchange.id, "handed_over")}
               >
                 <Handshake className="mr-2 size-4" /> Confirm Handover
               </Button>
             )}
 
-            {swap.status === "handed_over" && (
+            {exchange.status === "handed_over" && (
               <Button
                 size="sm"
-                onClick={() => updateSwapStatus(swap.id, "completed")}
+                onClick={() => updateExchangeStatus(exchange.id, "completed")}
               >
-                <Check className="mr-2 size-4" /> Complete Swap
+                <Check className="mr-2 size-4" /> Complete Exchange
               </Button>
             )}
 
-            {["agreement_reached", "handed_over"].includes(swap.status) && (
+            {["agreement_reached", "handed_over"].includes(exchange.status) && (
               <Button
                 size="sm"
                 variant="outline"
                 className="text-destructive hover:bg-destructive/10 hover:text-destructive ml-auto"
-                onClick={() => openDispute(swap.id, "Issue with swap")}
+                onClick={() => openDispute(exchange.id, "Issue with exchange")}
               >
                 <AlertTriangle className="mr-2 size-4" /> Dispute
               </Button>
@@ -263,10 +272,10 @@ export default function SwapsDashboard() {
       <div className="space-y-6">
         <div>
           <h1 className="type-heading text-2xl font-bold tracking-tight">
-            Swap Requests
+            Exchange Requests
           </h1>
           <p className="text-muted-foreground">
-            Manage your incoming swap offers and outgoing proposals.
+            Manage your incoming exchange offers and outgoing proposals.
           </p>
         </div>
 
@@ -274,7 +283,7 @@ export default function SwapsDashboard() {
           <TabsList className="mb-4">
             <TabsTrigger value="incoming">
               Incoming Offers
-              {incomingOffers.filter((s) => s.status === "pending_proposal")
+              {incomingOffers.filter((e) => e.status === "pending_proposal")
                 .length > 0 && (
                 <Badge
                   variant="secondary"
@@ -282,7 +291,7 @@ export default function SwapsDashboard() {
                 >
                   {
                     incomingOffers.filter(
-                      (s) => s.status === "pending_proposal",
+                      (e) => e.status === "pending_proposal",
                     ).length
                   }
                 </Badge>
@@ -300,12 +309,14 @@ export default function SwapsDashboard() {
                   </div>
                   <h3 className="text-lg font-semibold">No incoming offers</h3>
                   <p className="text-muted-foreground">
-                    You don&apos;t have any swap requests yet.
+                    You don&apos;t have any exchange requests yet.
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              incomingOffers.map((swap) => renderSwapCard(swap, true))
+              incomingOffers.map((exchange) =>
+                renderExchangeCard(exchange, true),
+              )
             )}
           </TabsContent>
 
@@ -318,12 +329,12 @@ export default function SwapsDashboard() {
                   </div>
                   <h3 className="text-lg font-semibold">No proposals sent</h3>
                   <p className="text-muted-foreground">
-                    Start exploring to find books you want to swap.
+                    Start exploring to find books you want to exchange.
                   </p>
                 </CardContent>
               </Card>
             ) : (
-              myProposals.map((swap) => renderSwapCard(swap, false))
+              myProposals.map((exchange) => renderExchangeCard(exchange, false))
             )}
           </TabsContent>
         </Tabs>
@@ -333,27 +344,27 @@ export default function SwapsDashboard() {
 }
 
 function CounterOfferModal({
-  swap,
+  exchange,
   onCounterOffer,
 }: {
-  swap: SwapOrder;
+  exchange: ExchangeOrder;
   onCounterOffer: (
     id: string,
-    details: NonNullable<SwapOrder["counterOfferDetails"]>,
+    details: NonNullable<ExchangeOrder["counterOfferDetails"]>,
   ) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(
-    swap.counterOfferDetails?.proposedLocation || "",
+    exchange.counterOfferDetails?.proposedLocation || "",
   );
   const [date, setDate] = useState(
-    swap.counterOfferDetails?.proposedDate || "",
+    exchange.counterOfferDetails?.proposedDate || "",
   );
   const [message, setMessage] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCounterOffer(swap.id, {
+    onCounterOffer(exchange.id, {
       proposedLocation: location,
       proposedDate: date,
       message,

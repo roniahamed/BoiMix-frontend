@@ -3,7 +3,7 @@ import { BookListing } from "@/components/shared/book-listing";
 
 export const metadata: Metadata = {
   title: "Search Books - BoiMix",
-  description: "Search for books to buy, swap, or borrow.",
+  description: "Search for books to buy, exchange, or borrow.",
 };
 
 export default async function SearchPage({

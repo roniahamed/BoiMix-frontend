@@ -21,8 +21,8 @@ const actions = [
       "bg-warning text-warning-foreground hover:bg-warning/80 shadow-warning/30",
   },
   {
-    title: "Swap Book",
-    href: "/books/upload?action=swap",
+    title: "Exchange Book",
+    href: "/books/upload?action=exchange",
     icon: Repeat2Icon,
     color: "bg-info text-info-foreground hover:bg-info/80 shadow-info/30",
   },

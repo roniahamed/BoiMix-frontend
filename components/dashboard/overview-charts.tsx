@@ -23,20 +23,23 @@ import { Activity, BarChart2, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const monthlyData = [
-  { label: "Jan", swaps: 12, lent: 5, views: 110 },
-  { label: "Feb", swaps: 15, lent: 8, views: 145 },
-  { label: "Mar", swaps: 10, lent: 12, views: 130 },
-  { label: "Apr", swaps: 22, lent: 15, views: 210 },
-  { label: "May", swaps: 18, lent: 10, views: 185 },
-  { label: "Jun", swaps: 28, lent: 20, views: 260 },
-  { label: "Jul", swaps: 34, lent: 22, views: 310 },
+  { label: "Jan", exchanges: 12, lent: 5, views: 110 },
+  { label: "Feb", exchanges: 15, lent: 8, views: 145 },
+  { label: "Mar", exchanges: 10, lent: 12, views: 130 },
+  { label: "Apr", exchanges: 22, lent: 15, views: 210 },
+  { label: "May", exchanges: 18, lent: 10, views: 185 },
+  { label: "Jun", exchanges: 28, lent: 20, views: 260 },
+  { label: "Jul", exchanges: 34, lent: 22, views: 310 },
 ];
 
 export function OverviewActivityChart() {
   const [chartType, setChartType] = useState<"area" | "bar">("area");
   const [timeframe, setTimeframe] = useState<"monthly" | "weekly">("monthly");
 
-  const totalSwaps = monthlyData.reduce((acc, curr) => acc + curr.swaps, 0);
+  const totalExchanges = monthlyData.reduce(
+    (acc, curr) => acc + curr.exchanges,
+    0,
+  );
   const totalLent = monthlyData.reduce((acc, curr) => acc + curr.lent, 0);
 
   return (
@@ -52,7 +55,7 @@ export function OverviewActivityChart() {
             </span>
           </div>
           <CardDescription className="text-muted-foreground mt-0.5 text-[11px] sm:text-xs">
-            Book swaps, lending history, and engagement
+            Book exchanges, lending history, and engagement
           </CardDescription>
         </div>
 
@@ -119,8 +122,8 @@ export function OverviewActivityChart() {
         <div className="border-border/40 mb-3 flex items-center gap-4 border-b pb-2.5 text-[11px] sm:mb-4 sm:gap-6 sm:pb-3 sm:text-xs">
           <div className="flex items-center gap-1.5 sm:gap-2">
             <span className="bg-brand-blue h-2.5 w-2.5 rounded-full sm:h-3 sm:w-3" />
-            <span className="text-muted-foreground">Swaps:</span>
-            <span className="text-foreground font-bold">{totalSwaps}</span>
+            <span className="text-muted-foreground">Exchanges:</span>
+            <span className="text-foreground font-bold">{totalExchanges}</span>
           </div>
           <div className="flex items-center gap-1.5 sm:gap-2">
             <span className="bg-brand-pink h-2.5 w-2.5 rounded-full sm:h-3 sm:w-3" />
@@ -137,7 +140,13 @@ export function OverviewActivityChart() {
                 margin={{ top: 10, right: 10, left: -20, bottom: 0 }}
               >
                 <defs>
-                  <linearGradient id="area-swaps" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient
+                    id="area-exchanges"
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="1"
+                  >
                     <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.4} />
                     <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.0} />
                   </linearGradient>
@@ -190,12 +199,12 @@ export function OverviewActivityChart() {
                 />
                 <Area
                   type="monotone"
-                  dataKey="swaps"
-                  name="Swaps"
+                  dataKey="exchanges"
+                  name="Exchanges"
                   stroke="#3b82f6"
                   strokeWidth={2.5}
                   fillOpacity={1}
-                  fill="url(#area-swaps)"
+                  fill="url(#area-exchanges)"
                 />
                 <Area
                   type="monotone"
@@ -239,8 +248,8 @@ export function OverviewActivityChart() {
                   }}
                 />
                 <Bar
-                  dataKey="swaps"
-                  name="Swaps"
+                  dataKey="exchanges"
+                  name="Exchanges"
                   fill="#3b82f6"
                   radius={[6, 6, 0, 0]}
                 />

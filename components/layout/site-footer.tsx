@@ -10,7 +10,7 @@ export function SiteFooter() {
         <div className="mx-auto flex max-w-sm flex-col items-center space-y-4 text-center md:mx-0 md:items-start md:text-left">
           <BrandLink />
           <p className="type-caption text-muted-foreground">
-            Read, share, swap, and grow through a Bangladesh-focused book
+            Read, share, exchange, and grow through a Bangladesh-focused book
             community.
           </p>
         </div>

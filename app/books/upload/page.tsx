@@ -56,8 +56,8 @@ const uploadSchema = z.object({
   description: z.string().optional(),
 
   // Availability
-  availabilityMode: z.enum(["sell", "borrow", "swap"], {
-    error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, সোয়াপ অথবা ধার)",
+  availabilityMode: z.enum(["sell", "borrow", "exchange"], {
+    error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, এক্সচেঞ্জ অথবা ধার)",
   }),
   originalPrice: z.string().optional(),
   sellPrice: z.string().optional(),
@@ -68,9 +68,9 @@ const uploadSchema = z.object({
   deposit: z.string().optional(),
   borrowFee: z.string().optional(),
 
-  swapQuantity: z.string().optional(),
-  swapPreference: z.string().optional(),
-  estimatedSwapValue: z.string().optional(),
+  exchangeQuantity: z.string().optional(),
+  exchangePreference: z.string().optional(),
+  estimatedExchangeValue: z.string().optional(),
 
   // Condition
   condition: z.string().min(1, "বইয়ের অবস্থা নির্বাচন করুন"),
@@ -193,7 +193,7 @@ export default function BookUploadPage() {
   const availabilityMode = useWatch({ control, name: "availabilityMode" });
   const forSell = availabilityMode === "sell";
   const forBorrow = availabilityMode === "borrow";
-  const forSwap = availabilityMode === "swap";
+  const forExchange = availabilityMode === "exchange";
   const condition = useWatch({ control, name: "condition" });
   const locationType = useWatch({ control, name: "locationType" });
   const descriptionValue = useWatch({
@@ -207,7 +207,7 @@ export default function BookUploadPage() {
   const authorWatch = useWatch({ control, name: "author" });
   const sellPriceWatch = useWatch({ control, name: "sellPrice" });
   const borrowQuantityWatch = useWatch({ control, name: "borrowQuantity" });
-  const swapQuantityWatch = useWatch({ control, name: "swapQuantity" });
+  const exchangeQuantityWatch = useWatch({ control, name: "exchangeQuantity" });
   const locationAddressWatch = useWatch({ control, name: "locationAddress" });
   const locationLatWatch = useWatch({ control, name: "locationLat" });
   const locationLngWatch = useWatch({ control, name: "locationLng" });
@@ -220,7 +220,7 @@ export default function BookUploadPage() {
     ) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingLocation(true);
-       
+
       setShowSuggestions(true);
       const timer = setTimeout(() => {
         fetch(
@@ -270,7 +270,7 @@ export default function BookUploadPage() {
           <div>
             <h1 className="text-primary text-2xl font-bold">Add New Book</h1>
             <p className="text-muted-foreground text-sm">
-              List your book for sell, swap or borrow
+              List your book for sell, exchange or borrow
             </p>
           </div>
         </div>
@@ -514,10 +514,10 @@ export default function BookUploadPage() {
                         <span className="font-medium">Borrow</span>
                       </label>
                       <label
-                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "swap" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "exchange" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
                       >
-                        <RadioGroupItem value="swap" className="sr-only" />
-                        <span className="font-medium">Swap</span>
+                        <RadioGroupItem value="exchange" className="sr-only" />
+                        <span className="font-medium">Exchange</span>
                       </label>
                     </RadioGroup>
                   )}
@@ -681,40 +681,40 @@ export default function BookUploadPage() {
                   </div>
                 )}
 
-                {forSwap && (
+                {forExchange && (
                   <div className="animate-in fade-in zoom-in-95 bg-muted/20 w-full rounded-xl border p-5 duration-200">
                     <div className="grid items-start gap-6 md:grid-cols-3">
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
-                          Swap Quantity{" "}
+                          Exchange Quantity{" "}
                           <span className="text-destructive">*</span>
                         </Label>
                         <Input
                           type="number"
                           placeholder="e.g. 1"
-                          {...register("swapQuantity")}
+                          {...register("exchangeQuantity")}
                           className="bg-background"
                         />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
-                          Estimated Swap Value (৳)
+                          Estimated Exchange Value (৳)
                         </Label>
                         <Input
                           type="number"
                           placeholder="e.g. 300"
-                          {...register("estimatedSwapValue")}
+                          {...register("estimatedExchangeValue")}
                           className="bg-background"
                         />
                       </div>
                       <div className="space-y-2">
                         <Label className="text-xs font-semibold">
-                          Swap Preference Categories{" "}
+                          Exchange Preference Categories{" "}
                           <span className="text-destructive">*</span>
                         </Label>
                         <Controller
                           control={control}
-                          name="swapPreference"
+                          name="exchangePreference"
                           render={({ field }) => (
                             <CreatableCombobox
                               options={[
@@ -1074,9 +1074,9 @@ export default function BookUploadPage() {
                           Borrow
                         </span>
                       )}
-                      {forSwap && (
+                      {forExchange && (
                         <span className="border-warning text-warning rounded-full border px-2 py-0.5 text-[10px] font-medium">
-                          Swap
+                          Exchange
                         </span>
                       )}
                     </div>
@@ -1092,10 +1092,10 @@ export default function BookUploadPage() {
                           {borrowQuantityWatch || "3"} available
                         </div>
                       )}
-                      {forSwap && (
+                      {forExchange && (
                         <div className="text-muted-foreground flex items-center gap-1">
                           <Repeat2 className="h-3 w-3" />{" "}
-                          {swapQuantityWatch || "2"} available
+                          {exchangeQuantityWatch || "2"} available
                         </div>
                       )}
                     </div>

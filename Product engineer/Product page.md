@@ -3,7 +3,7 @@
 
 The primary design inspiration for BoiMix is the Rokomari landing page and overall user experience.
 
-I like Rokomari's clean and modern layout, warm color palette, book-focused design, simple navigation, and well-organized content sections. The homepage should feel familiar to book lovers, making it easy to discover, browse, borrow, buy, and swap books.
+I like Rokomari's clean and modern layout, warm color palette, book-focused design, simple navigation, and well-organized content sections. The homepage should feel familiar to book lovers, making it easy to discover, browse, borrow, buy, and exchange books.
 link: https://www.rokomari.com/
 Please take inspiration from the following aspects of Rokomari:
 
@@ -24,7 +24,7 @@ BoiMix combines:
 
 * Central Library (Borrow Books)
 * Book Marketplace (Buy & Sell Books)
-* Peer-to-Peer Book Swap
+* Peer-to-Peer Book Exchange
 * Reader Community (Posts, Reviews, Comments, Reactions)
 
 The overall design should feel like a combination of a modern digital library, book marketplace, and reader community platform.
@@ -78,7 +78,7 @@ Visual quality should be comparable to leading platforms such as Rokomari, Goodr
 
 # BoiMix Vision
 
-BoiMix is a community-driven book platform for Bangladesh that combines a central library, book marketplace, book swapping, and reader engagement in one place.
+BoiMix is a community-driven book platform for Bangladesh that combines a central library, book marketplace, book exchangeping, and reader engagement in one place.
 
 Core Purposes
 1. Central Library
@@ -88,9 +88,9 @@ Core Purposes
 2. Book Marketplace
 * Anyone can list books for sale
 * Anyone can buy books from other users
-3. Peer-to-Peer Book Swap
+3. Peer-to-Peer Book Exchange
 * Users can exchange books directly with each other
-* Safe and structured swapping system
+* Safe and structured exchangeping system
 4. Reading Community
 * Book reviews and ratings
 * Personal thoughts and reading notes
@@ -105,7 +105,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 
 * Borrow books
 * Buy and sell books
-* Swap books
+* Exchange books
 * Share knowledge and reading experiences
 * Build meaningful connections through books
 
@@ -140,7 +140,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 # MARKETING & PUBLIC pages
 /
 /explore/central-library
-/explore/swaps
+/explore/exchanges
 /explore/store
 /about
 /how-it-works
@@ -182,8 +182,8 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /dashboard/books/add
 /dashboard/books/edit/[id]
 /dashboard/borrowed
-/dashboard/swap
-/dashboard/swap/offers
+/dashboard/exchange
+/dashboard/exchange/offers
 /dashboard/purchases
 /dashboard/sales
 /dashboard/wishlist
@@ -207,7 +207,7 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /mod/flagged-books
 /mod/review-moderation
 /mod/verification-queue
-/mod/swap-disputes
+/mod/exchange-disputes
 /mod/sales-disputes
 /mod/borrow-disputes
 /mod/slider
@@ -253,22 +253,22 @@ Create the largest digital book ecosystem in Bangladesh where people can:
 /books/near-me
 /books/category/[genre]
 /books/location/[district]
-/books/swap
+/books/exchange
 /books/isbn/[isbn]
 /books/sell
 /books/borrow
 
 
-# Swap Flow pages
+# Exchange Flow pages
 
-/swap/discover
-/swap/offer/[book-slug]
-/swap/proposal/[id]
-/swap/counter-offer/[id]
-/swap/agreement/[id]
-/swap/handover/[id]
-/swap/complete/[id]
-/swap/dispute/[id]
+/exchange/discover
+/exchange/offer/[book-slug]
+/exchange/proposal/[id]
+/exchange/counter-offer/[id]
+/exchange/agreement/[id]
+/exchange/handover/[id]
+/exchange/complete/[id]
+/exchange/dispute/[id]
 
 
 # Sell flow  pages
@@ -335,11 +335,11 @@ Browse Books
 → Review Unlock
 → Reputation Updated
 
-## Swap Workflow
+## Exchange Workflow
 
-Browse Swap Books
+Browse Exchange Books
 → Select Offer Book
-→ Send Swap Proposal
+→ Send Exchange Proposal
 → Accept / Counter / Decline
 → Agreement Created
 → Handover
@@ -373,7 +373,7 @@ BookCard
 BookGallery
 BookConditionBadge
 AvailabilityBadge
-SwapBadge
+ExchangeBadge
 BorrowStatusBadge
 OfficialBoiMixTag
 TrustScoreMeter
@@ -395,7 +395,7 @@ ImageUploader
 ChatWindow
 MessageBubble
 BorrowRequestCard
-SwapOfferCard
+ExchangeOfferCard
 DisputeCard
 AdminTable
 VerificationCard
@@ -423,7 +423,7 @@ Profile
 ### Critical
 ├── Borrow approved
 ├── Return overdue
-├── Swap accepted
+├── Exchange accepted
 
 ### Important
 ├── New message
@@ -498,7 +498,7 @@ app/
 │   └── verification/
 │
 ├── borrow/
-├── swap/
+├── exchange/
 ├── marketplace/
 ├── notifications/
 ├── messages/
@@ -532,20 +532,20 @@ app/
         1.1.11. Back Cover Image
         1.1.12. Table of Contents
         1.1.13. Index
-        1.1.14. tag ( swap, sell, lent )
+        1.1.14. tag ( exchange, sell, lent )
         1.1.15. availability
                 1.1.15.1. sell (for how much quantity)
                 1.1.15.2. borrow (for how much quantity)
-                1.1.15.3. swap (for how much quantity)
+                1.1.15.3. exchange (for how much quantity)
         1.1.16. location
         1.1.17. distance 
         1.1.18. condition (new, excellent, good, fair, poor)
         1.1.19. price 
-        1.1.20. swap price 
+        1.1.20. exchange price 
         1.1.21. rating (1-5)
         1.1.22. total-borrow 
         1.1.23. total-sell 
-        1.1.24. total-swap 
+        1.1.24. total-exchange 
     1.2. Owner Information
         1.2.1. Owner Name
         1.2.2. Owner Profile Image
@@ -555,40 +555,40 @@ app/
         1.2.6. Owner Badges
     1.3. Action Buttons
         1.3.1. Borrow
-        1.3.2. swap
+        1.3.2. exchange
         1.3.3. Sell
         1.3.4. Message
     1.4. Reviews
         1.4.1. Review List
         1.4.2. Review Details
-        1.4.3. Review Form ( Only for the validated user who borrowed or bought or swapped the book )
+        1.4.3. Review Form ( Only for the validated user who borrowed or bought or exchangeped the book )
 
 
 # 2. Book Card
     2.1. Book Cover Image
     2.2. Book Title
     2.3. Book Author
-    2.4. Book tag ( swap, sell, lent )
+    2.4. Book tag ( exchange, sell, lent )
     2.5. Book rating and review count
     2.6. Book price
     2.7. Wishlist icon 
-    2.8. Book distance (only for borrow and swap)
+    2.8. Book distance (only for borrow and exchange)
     2.9. Book location
     2.10. Book condition (new, excellent, good, fair, poor)
     2.11. Book availability ( stack / not stack )
     2.12. Mart (icon)
     note: ( add to card,
-     swap, 
+     exchange, 
      borrow Button. on the cover image )
 
     Design: (Desktop and Mobile Responsive.)
-    Card design: (cover image top (showing tag(swap, sell, lent)))
+    Card design: (cover image top (showing tag(exchange, sell, lent)))
     Card image bottom: (title, author)
     card bottom: (rating, price, distance, location, condition, availability)
     left rating + review count, right distence 
     left instock right location 
     left condition, right price
-    Hover: ( hover( showing add to card, swap, borrow. on the cover image ) left ( whishlist icon)
+    Hover: ( hover( showing add to card, exchange, borrow. on the cover image ) left ( whishlist icon)
     Card bottom Hover ( details view )(verified icon on only centerl library )
     )
     when a user using hover hover have adding a backgroud color. 
@@ -629,10 +629,10 @@ app/
 * Large book cover image (portrait ratio)
 * Top-left overlay badges:
 
-  * Swap
+  * Exchange
   * Sell
   * Borrow/Lent
-* Multiple badges can appear simultaneously. Examples: * [Swap] * [Sell] * [Borrow] or * [Swap] [Sell] or * [Swap] [Sell] [Borrow]
+* Multiple badges can appear simultaneously. Examples: * [Exchange] * [Sell] * [Borrow] or * [Exchange] [Sell] or * [Exchange] [Sell] [Borrow]
 * 
 
 * Top-right:
@@ -700,7 +700,7 @@ Display action buttons centered on the image:
 
 * **Add to Cart** (Solid Blue `#0397d3` button with white text and cart icon)
 * **Borrow Request** (Solid Green `#33c24d` button with white text and library/book icon)
-* **Swap Request** (Outline button: White background, Blue `#0397d3` border & text, swap icon)
+* **Exchange Request** (Outline button: White background, Blue `#0397d3` border & text, exchange icon)
 
 If the book is already in cart:
 
@@ -741,7 +741,7 @@ For books owned by verified libraries only:
 Support the following states:
 
 1. Sell Book
-2. Swap Book
+2. Exchange Book
 3. Borrow Book
 4. Wishlist Active
 5. Cart Active

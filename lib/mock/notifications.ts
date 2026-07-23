@@ -3,13 +3,13 @@ import { Notification } from "@/types/notification";
 export const mockNotifications: Notification[] = [
   {
     id: "notif-1",
-    type: "swap_accepted",
-    title: "Swap Accepted!",
+    type: "exchange_accepted",
+    title: "Exchange Accepted!",
     description:
-      "accepted your swap offer for 'Rich Dad Poor Dad'. Click to view agreement.",
+      "accepted your exchange offer for 'Rich Dad Poor Dad'. Click to view agreement.",
     createdAt: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 mins ago
     isRead: false,
-    actionUrl: "/swap/agreement/swp-123",
+    actionUrl: "/exchange/agreement/ex-123",
     actorName: "Hasan Mahmud",
   },
   {

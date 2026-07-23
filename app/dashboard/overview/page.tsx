@@ -50,7 +50,7 @@ export default async function OverviewPage() {
       bookAuthor: "James Clear",
       coverImage:
         "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop",
-      type: "Swap Offer",
+      type: "Exchange Offer",
       partnerName: "Nusrat Jahan",
       partnerAvatar: "https://i.pravatar.cc/150?u=nusrat",
       status: "Pending Accept",
@@ -170,10 +170,10 @@ export default async function OverviewPage() {
                 <Plus className="h-4 w-4 stroke-[3]" /> Add Book
               </Link>
               <Link
-                href="/explore/swaps"
+                href="/explore/exchanges"
                 className="flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/15 px-3.5 py-2.5 text-xs font-semibold text-white backdrop-blur-md transition-all hover:bg-white/25 sm:text-sm"
               >
-                <Compass className="h-4 w-4" /> Swaps
+                <Compass className="h-4 w-4" /> Exchanges
               </Link>
             </div>
           </div>
@@ -209,7 +209,7 @@ export default async function OverviewPage() {
         </div>
       </div>
 
-      {/* 4. Active Exchanges & Swap Requests */}
+      {/* 4. Active Exchanges & Exchange Requests */}
       <div className="bg-card border-border/70 space-y-4 rounded-2xl border p-4 shadow-xs sm:p-5">
         <div className="border-border/40 flex flex-col gap-2 border-b pb-3 sm:flex-row sm:items-center sm:justify-between sm:pb-4">
           <div>
@@ -218,11 +218,12 @@ export default async function OverviewPage() {
               Exchanges & Requests
             </h2>
             <p className="text-muted-foreground mt-0.5 text-xs">
-              Manage active borrow loans, lending, and pending swap proposals
+              Manage active borrow loans, lending, and pending exchange
+              proposals
             </p>
           </div>
           <Link
-            href="/dashboard/swaps"
+            href="/dashboard/exchanges"
             className="text-primary flex items-center gap-1 self-start text-xs font-bold hover:underline sm:self-auto"
           >
             View All <ChevronRight className="h-3.5 w-3.5" />
@@ -482,7 +483,7 @@ export default async function OverviewPage() {
               },
               {
                 icon: Repeat,
-                title: "Swap request accepted",
+                title: "Exchange request accepted",
                 desc: "Rich Dad Poor Dad with Nusrat",
                 time: "3h ago",
                 bg: "bg-brand-blue/10",

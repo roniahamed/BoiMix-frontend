@@ -5,14 +5,14 @@
 - Implementation order: `Product engineer/Phase by Phase.md`.
 - Active implementation scope: **Phase 8 — User Profile**.
 - Completed/background phases: Phase 0 through Phase 7 are treated as already implemented for this frontend pass.
-- Do not build Phase 16 dashboard, Phase 9 marketplace checkout, borrow workflows, swap workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
+- Do not build Phase 16 dashboard, Phase 9 marketplace checkout, borrow workflows, exchange workflows, messaging, notifications, moderator, admin, or final-polish features until their roadmap phase is reached.
 
 ## Active Phase: Phase 16 — Dashboard
 - Build user dashboard foundational structure and layout.
 - Include management for books, transactions, and settings.
 
-## Phase History / Previous Plan Log
-Keep this section as the project memory. Do not delete completed phase plans when moving to a new phase.
+### Terminology Refactor — 'Exchange' to 'Exchange'
+- Refactored all UI labels, route URLs (`/exchange/offer`, `/explore/exchanges`, `/dashboard/exchanges`), types (`isExchangeOnly`, `ExchangeOrder`, `ExchangeStatus`), components (`ExchangeBadge`, `ExchangeOfferCard`), and store (`useExchangeStore`) from 'Exchange' to 'Exchange'.
 
 ### Phase 15 — Notifications
 - Implemented Notification Center, unread state, grouped notifications.
@@ -127,7 +127,7 @@ Keep this section as the project memory. Do not delete completed phase plans whe
   Build product listing, product details, cart, checkout, payment, order tracking, and request to buy.
 - Phase 10: Borrow System  
   Build membership, borrow request, timeline, handover, return, review, and dispute.
-- Phase 11: Swap System  
+- Phase 11: Exchange System  
   Build discover, offer, proposal, counter offer, agreement, handover, complete, and dispute.
 - Phase 12: Central Library  
   Build Central Library landing page, BoiMix verified inventory, direct buy, library borrow integration, and featured collections.
@@ -153,7 +153,7 @@ Keep this section as the project memory. Do not delete completed phase plans whe
 - Library uses public listed/shared books only.
 - Follower/following lists are not exposed on public profiles.
 - Location page shows readable service-area details without private address exposure.
-- No Phase 9 dashboard management, checkout, borrow request, swap agreement, real messaging, or notification workflows are implemented.
+- No Phase 9 dashboard management, checkout, borrow request, exchange agreement, real messaging, or notification workflows are implemented.
 - `npm run lint` passes.
 - `npm run typecheck` passes.
 - `npm run format:check` passes.

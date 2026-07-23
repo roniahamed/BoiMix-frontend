@@ -28,7 +28,7 @@ const initialTrending = [
   "Programming Basics",
   "Ayman Sadiq",
   "Feluda",
-  "Academic Book Swap",
+  "Academic Book Exchange",
 ];
 
 const initialRecents = ["Rivers of Dhaka", "English Grammar"];

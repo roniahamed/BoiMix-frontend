@@ -31,7 +31,7 @@ function BooksViewerContent({
   const filters = [
     "All",
     "Selling",
-    "Swapping",
+    "Exchanging",
     "Borrowing",
     ...(isOwnProfile ? ["Wishlist"] : []),
     "Collection",
@@ -58,7 +58,7 @@ function BooksViewerContent({
     const lowerFilter = activeFilter.toLowerCase();
     const tagMap: Record<string, string> = {
       selling: "sell",
-      swapping: "swap",
+      exchanging: "exchange",
       borrowing: "borrow",
       wishlist: "wishlist",
       collection: "collection",

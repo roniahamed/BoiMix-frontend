@@ -16,7 +16,7 @@ type LibrarySearchBarProps = {
   className?: string;
   hiddenFields?: Record<string, string>;
   action?: string;
-  mode?: "library" | "swaps";
+  mode?: "library" | "exchanges";
 };
 
 export function LibrarySearchBar({
@@ -51,8 +51,8 @@ export function LibrarySearchBar({
   const filteredSourceBooks = (books as BookCardBook[]).filter((book) => {
     if (mode === "library") {
       return book.providerType === "library" || book.tags?.includes("library");
-    } else if (mode === "swaps") {
-      return book.providerType !== "library" || book.tags?.includes("swap");
+    } else if (mode === "exchanges") {
+      return book.providerType !== "library" || book.tags?.includes("exchange");
     }
     return true;
   });

@@ -16,12 +16,12 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useSwapStore } from "@/lib/store/use-swap-store";
+import { useExchangeStore } from "@/lib/store/use-exchange-store";
 import { fetchLocal } from "@/lib/fetchLocal";
 import type { BookCardBook } from "@/types/book";
 import Link from "next/link";
 
-export default function SwapOfferPage({
+export default function ExchangeOfferPage({
   params,
 }: {
   params: Promise<{ bookId: string }>;
@@ -33,8 +33,8 @@ export default function SwapOfferPage({
   const [requestedBook, setRequestedBook] = useState<BookCardBook | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const myBooks = useSwapStore((state) => state.myBooks);
-  const createProposal = useSwapStore((state) => state.createProposal);
+  const myBooks = useExchangeStore((state) => state.myBooks);
+  const createProposal = useExchangeStore((state) => state.createProposal);
 
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
   const [proposedLocation, setProposedLocation] = useState("");
@@ -99,8 +99,8 @@ export default function SwapOfferPage({
       },
     });
 
-    toast.success("Swap proposal sent successfully!");
-    router.push("/dashboard/swaps");
+    toast.success("Exchange proposal sent successfully!");
+    router.push("/dashboard/exchanges");
   };
 
   return (
@@ -113,7 +113,7 @@ export default function SwapOfferPage({
       </Button>
 
       <div className="mb-8">
-        <h1 className="type-heading text-3xl">Propose a Swap</h1>
+        <h1 className="type-heading text-3xl">Propose an Exchange</h1>
         <p className="text-muted-foreground mt-2">
           Select a book from your library to offer in exchange for{" "}
           <span className="text-foreground font-semibold">
@@ -124,7 +124,7 @@ export default function SwapOfferPage({
       </div>
 
       <form onSubmit={handleSubmit} className="grid gap-8 md:grid-cols-12">
-        {/* Left Column: The Swap Visualization */}
+        {/* Left Column: The Exchange Visualization */}
         <div className="md:col-span-7">
           <Card className="bg-muted/30 p-6 shadow-sm">
             <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:gap-12">
@@ -285,7 +285,7 @@ export default function SwapOfferPage({
                     Sending Proposal...
                   </>
                 ) : (
-                  "Send Swap Proposal"
+                  "Send Exchange Proposal"
                 )}
               </Button>
             </CardContent>

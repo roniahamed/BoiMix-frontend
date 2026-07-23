@@ -6,7 +6,7 @@ import { LibrarySearchBar } from "@/components/shared/library-search-bar";
 import { fetchLocal } from "@/lib/fetchLocal";
 import type { BookCardBook } from "@/types/book";
 
-const SWAP_CATEGORIES = [
+const EXCHANGE_CATEGORIES = [
   { label: "উপন্যাস", value: "Novel" },
   { label: "একাডেমিক", value: "Academic" },
   { label: "বিজ্ঞান", value: "Science" },
@@ -26,7 +26,7 @@ const SORT_OPTIONS = [
   { label: "A–Z", value: "az" },
 ];
 
-export default async function SwapsSearchPage({
+export default async function ExchangesSearchPage({
   searchParams,
 }: {
   searchParams: Promise<{
@@ -42,16 +42,16 @@ export default async function SwapsSearchPage({
 
   const allBooks: BookCardBook[] = (await fetchLocal("/api/books")) || [];
 
-  // Use all non-library books as swap books (fallback: all books)
-  let swapBooks = allBooks.filter(
-    (b) => b.providerType !== "library" || b.tags?.includes("swap"),
+  // Use all non-library books as exchange books (fallback: all books)
+  let exchangeBooks = allBooks.filter(
+    (b) => b.providerType !== "library" || b.tags?.includes("exchange"),
   );
-  if (swapBooks.length < 6) swapBooks = [...allBooks];
+  if (exchangeBooks.length < 6) exchangeBooks = [...allBooks];
 
   // Apply search query
   if (q) {
     const query = q.toLowerCase().trim();
-    swapBooks = swapBooks.filter(
+    exchangeBooks = exchangeBooks.filter(
       (book) =>
         book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query) ||
@@ -62,7 +62,7 @@ export default async function SwapsSearchPage({
   // Apply category filter
   if (category) {
     const lowercaseCat = category.toLowerCase().trim();
-    swapBooks = swapBooks.filter(
+    exchangeBooks = exchangeBooks.filter(
       (book) =>
         book.tags?.some((t) => t.toLowerCase() === lowercaseCat) ||
         book.title.toLowerCase().includes(lowercaseCat),
@@ -71,14 +71,16 @@ export default async function SwapsSearchPage({
 
   // Apply sorting
   if (sort === "newest") {
-    swapBooks = [...swapBooks].reverse();
+    exchangeBooks = [...exchangeBooks].reverse();
   } else if (sort === "popular") {
-    swapBooks = [...swapBooks].sort((a, b) => {
+    exchangeBooks = [...exchangeBooks].sort((a, b) => {
       if (b.rating !== a.rating) return b.rating - a.rating;
       return (b.reviewCount || 0) - (a.reviewCount || 0);
     });
   } else if (sort === "az") {
-    swapBooks = [...swapBooks].sort((a, b) => a.title.localeCompare(b.title));
+    exchangeBooks = [...exchangeBooks].sort((a, b) =>
+      a.title.localeCompare(b.title),
+    );
   }
 
   // Helper to generate filter URLs
@@ -93,8 +95,8 @@ export default async function SwapsSearchPage({
       .filter(([, v]) => v !== "")
       .map(([k, v]) => `${k}=${encodeURIComponent(v)}`);
     return queryParts.length > 0
-      ? `/explore/swaps/search?${queryParts.join("&")}`
-      : "/explore/swaps/search";
+      ? `/explore/exchanges/search?${queryParts.join("&")}`
+      : "/explore/exchanges/search";
   };
 
   const activeFiltersCount = [q, category, sort].filter(Boolean).length;
@@ -106,26 +108,26 @@ export default async function SwapsSearchPage({
         <div className="mb-6 px-4 md:px-8">
           <div className="mb-2 flex items-center gap-2">
             <Link
-              href="/explore/swaps"
+              href="/explore/exchanges"
               className="text-sm text-slate-500 transition-colors hover:text-emerald-600"
             >
-              Swap Books
+              Exchange Books
             </Link>
             <span className="text-sm text-slate-400">/</span>
             <span className="text-sm font-medium text-slate-900 dark:text-white">
-              Browse Swaps
+              Browse Exchanges
             </span>
           </div>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Browse Swap Books
+              Browse Exchange Books
             </h1>
             <Link
               href="/books/upload"
               className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700"
             >
               <RefreshCw className="size-4" />
-              List Your Book for Swap
+              List Your Book for Exchange
             </Link>
           </div>
         </div>
@@ -134,10 +136,10 @@ export default async function SwapsSearchPage({
         <div className="mb-6 px-4 md:px-8">
           <LibrarySearchBar
             defaultValue={q}
-            placeholder="Search swap books by title, author, or keyword..."
+            placeholder="Search exchange books by title, author, or keyword..."
             variant="minimal"
-            mode="swaps"
-            action="/explore/swaps/search"
+            mode="exchanges"
+            action="/explore/exchanges/search"
             className="relative mb-4 flex flex-col gap-4 sm:flex-row"
             hiddenFields={{
               ...(category ? { category } : {}),
@@ -150,7 +152,7 @@ export default async function SwapsSearchPage({
             {/* Clear All */}
             {activeFiltersCount > 0 && (
               <Link
-                href="/explore/swaps/search"
+                href="/explore/exchanges/search"
                 className="rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-600 hover:border-red-300 hover:text-red-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
               >
                 Clear All ×
@@ -201,7 +203,7 @@ export default async function SwapsSearchPage({
                     All Categories
                   </Link>
                 </li>
-                {SWAP_CATEGORIES.map((cat) => (
+                {EXCHANGE_CATEGORIES.map((cat) => (
                   <li key={cat.value}>
                     <Link
                       href={
@@ -237,7 +239,7 @@ export default async function SwapsSearchPage({
               >
                 All
               </Link>
-              {SWAP_CATEGORIES.map((cat) => (
+              {EXCHANGE_CATEGORIES.map((cat) => (
                 <Link
                   key={cat.value}
                   href={
@@ -258,15 +260,16 @@ export default async function SwapsSearchPage({
 
             {/* Results count */}
             <p className="mb-4 text-sm text-slate-500 dark:text-slate-400">
-              {swapBooks.length} book{swapBooks.length !== 1 ? "s" : ""} found
+              {exchangeBooks.length} book{exchangeBooks.length !== 1 ? "s" : ""}{" "}
+              found
               {q ? ` for "${q}"` : ""}
               {category ? ` in ${category}` : ""}
             </p>
 
             {/* Book Grid */}
-            {swapBooks.length > 0 ? (
+            {exchangeBooks.length > 0 ? (
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5">
-                {swapBooks.map((book) => (
+                {exchangeBooks.map((book) => (
                   <BookCard key={book.id} book={book} />
                 ))}
               </div>
@@ -284,10 +287,10 @@ export default async function SwapsSearchPage({
                   </p>
                 </div>
                 <Link
-                  href="/explore/swaps/search"
+                  href="/explore/exchanges/search"
                   className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-600 hover:text-emerald-700"
                 >
-                  Browse all swaps <ArrowRight className="size-4" />
+                  Browse all exchanges <ArrowRight className="size-4" />
                 </Link>
               </div>
             )}

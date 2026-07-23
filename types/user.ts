@@ -20,7 +20,7 @@ export type UserSummary = {
 
 export type UserProfileStats = {
   booksInLibrary: number;
-  successfulSwaps: number;
+  successfulExchanges: number;
   booksBorrowed: number;
   booksSold: number;
   followers: number;
@@ -50,13 +50,20 @@ export type UserProfileReview = {
   helpfulCount?: number;
   reviewerName?: string;
   reviewerAvatar?: string;
-  transactionType?: "For Swap" | "For Borrow" | "For Sale";
+  transactionType?: "For Exchange" | "For Borrow" | "For Sale";
   location?: string;
 };
 
 export type UserProfileActivity = {
   id: string;
-  type: "review" | "listed" | "swap" | "borrow" | "badge" | "wishlist" | "sale";
+  type:
+    | "review"
+    | "listed"
+    | "exchange"
+    | "borrow"
+    | "badge"
+    | "wishlist"
+    | "sale";
   title: string;
   description: string;
   createdAt: string;

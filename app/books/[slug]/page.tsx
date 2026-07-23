@@ -62,8 +62,8 @@ export default async function BookDetailsPage({
   const currentTag =
     slug === "test-sell"
       ? "sell"
-      : slug === "test-swap"
-        ? "swap"
+      : slug === "test-exchange"
+        ? "exchange"
         : slug === "test-borrow"
           ? "borrow"
           : foundBook
@@ -71,10 +71,10 @@ export default async function BookDetailsPage({
             : "sell";
 
   // Adjust availability based on the tag so it looks realistic
-  const availability = { sell: 0, borrow: 0, swap: 0 };
+  const availability = { sell: 0, borrow: 0, exchange: 0 };
   if (currentTag === "sell") availability.sell = 3;
   else if (currentTag === "borrow") availability.borrow = 2;
-  else if (currentTag === "swap") availability.swap = 1;
+  else if (currentTag === "exchange") availability.exchange = 1;
 
   // Merge foundBook data so the details page reflects the actual clicked book
   const coverImages = foundBook
@@ -179,9 +179,9 @@ export default async function BookDetailsPage({
                       Sell
                     </span>
                   )}
-                  {currentBook.tags.includes("swap") && (
+                  {currentBook.tags.includes("exchange") && (
                     <span className="text-info text-sm font-semibold">
-                      Swap
+                      Exchange
                     </span>
                   )}
                   {currentBook.tags.includes("borrow") && (
@@ -211,21 +211,21 @@ export default async function BookDetailsPage({
                     </div>
                   </div>
                 )}
-                {currentBook.tags.includes("swap") && (
+                {currentBook.tags.includes("exchange") && (
                   <div className="flex flex-col gap-1">
                     <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                      Estimated Swap Value
+                      Estimated Exchange Value
                     </span>
                     <span className="text-foreground text-xl leading-none font-bold">
-                      ৳{currentBook.swapPrice}
+                      ৳{currentBook.exchangePrice || 350}
                     </span>
-                    {currentBook.swapPreferences &&
-                      currentBook.swapPreferences.length > 0 && (
+                    {currentBook.exchangePreferences &&
+                      currentBook.exchangePreferences.length > 0 && (
                         <span className="text-muted-foreground mt-1 text-xs leading-tight">
                           <span className="text-foreground font-semibold">
                             Preferences:
                           </span>{" "}
-                          {currentBook.swapPreferences.join(", ")}
+                          {currentBook.exchangePreferences.join(", ")}
                         </span>
                       )}
                   </div>
@@ -332,14 +332,14 @@ export default async function BookDetailsPage({
                       </p>
                     </div>
                   )}
-                  {currentBook.tags.includes("swap") && (
+                  {currentBook.tags.includes("exchange") && (
                     <div>
                       <p className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
-                        Estimated Swap Value
+                        Estimated Exchange Value
                       </p>
                       <div className="flex items-end gap-2">
                         <p className="text-foreground text-3xl font-bold">
-                          ৳{currentBook.swapPrice}
+                          ৳{currentBook.exchangePrice || 350}
                         </p>
                       </div>
                       <div className="mt-2 space-y-1">
@@ -348,22 +348,23 @@ export default async function BookDetailsPage({
                         </p>
                       </div>
 
-                      {currentBook.swapPreferences &&
-                        currentBook.swapPreferences.length > 0 && (
+                      {currentBook.exchangePreferences &&
+                        currentBook.exchangePreferences.length > 0 && (
                           <div className="mt-4">
                             <p className="text-foreground mb-2 text-sm font-semibold">
-                              Swap Preferences:
+                              Exchange Preferences:
                             </p>
                             <div className="flex flex-wrap gap-1.5">
-                              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                              {currentBook.swapPreferences.map((pref: any) => (
-                                <span
-                                  key={pref}
-                                  className="bg-primary/10 text-primary rounded-md px-2.5 py-1 text-xs font-medium"
-                                >
-                                  {pref}
-                                </span>
-                              ))}
+                              {currentBook.exchangePreferences.map(
+                                (pref: string) => (
+                                  <span
+                                    key={pref}
+                                    className="bg-primary/10 text-primary rounded-md px-2.5 py-1 text-xs font-medium"
+                                  >
+                                    {pref}
+                                  </span>
+                                ),
+                              )}
                             </div>
                           </div>
                         )}
@@ -418,11 +419,11 @@ export default async function BookDetailsPage({
                       tags: currentBook.tags,
                     }}
                   />
-                  {currentBook.tags.includes("swap") && (
+                  {currentBook.tags.includes("exchange") && (
                     <Button asChild className="h-12 w-full gap-2 text-base">
-                      <Link href={`/swap/offer/${currentBook.id}`}>
+                      <Link href={`/exchange/offer/${currentBook.id}`}>
                         <Repeat2 className="size-5" />
-                        Swap Request
+                        Exchange Request
                       </Link>
                     </Button>
                   )}

@@ -25,7 +25,7 @@ const activityIcons = {
     color: "text-green-500",
     bg: "bg-green-100 dark:bg-green-500/10",
   },
-  swap: {
+  exchange: {
     icon: Repeat2Icon,
     color: "text-blue-500",
     bg: "bg-blue-100 dark:bg-blue-500/10",

@@ -37,12 +37,12 @@ const slides = [
     overlayTo: "to-teal-900/40",
   },
   {
-    tag: "Book Swap Community",
-    title: "পড়া শেষ? এখন Swap করুন!",
+    tag: "Book Exchange Community",
+    title: "পড়া শেষ? এখন Exchange করুন!",
     subtitle: "আপনার পাড়া বা ক্যাম্পাসের মানুষদের সাথে বই বিনিময় করুন সহজেই।",
-    image: "/banners/swap-community.png",
-    href: "/explore/swaps",
-    cta: "Start Swapping",
+    image: "/banners/exchange-community.png",
+    href: "/explore/exchanges",
+    cta: "Start Exchanging",
     overlayFrom: "from-violet-950/80",
     overlayTo: "to-purple-800/40",
   },
@@ -51,7 +51,7 @@ const slides = [
 export function HeroCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   // Separate state for displayed text — updates with a delay so text fades
-  // out before swapping content, eliminating the "bleed-through" flicker.
+  // out before transitioning content, eliminating the "bleed-through" flicker.
   const [textIndex, setTextIndex] = useState(0);
   const [textVisible, setTextVisible] = useState(true);
 
@@ -95,13 +95,13 @@ export function HeroCarousel() {
     return () => window.clearInterval(interval);
   }, []);
 
-  // When activeIndex changes: fade out text → swap content → fade in.
+  // When activeIndex changes: fade out text → switch content → fade in.
   // Using only the setTimeout branch avoids calling setState synchronously
   // inside the effect body (which triggers the react-hooks/set-state-in-effect lint rule).
   useEffect(() => {
     // Step 1 – hide text via a near-instant timeout (avoids inline setState in effect)
     const hide = setTimeout(() => setTextVisible(false), 0);
-    // Step 2 – swap content + show after 280 ms so the fade-out completes first
+    // Step 2 – switch content + show after 280 ms so the fade-out completes first
     const show = setTimeout(() => {
       setTextIndex(activeIndex);
       setTextVisible(true);

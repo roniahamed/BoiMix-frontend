@@ -129,7 +129,7 @@ export function QuickSummary() {
       <SummaryCard
         title="Reputation"
         value="4.9"
-        subValue="Top 5% swapper"
+        subValue="Top 5% exchanger"
         trend="48 Reviews"
         trendPositive={true}
         icon={Star}

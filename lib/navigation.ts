@@ -46,7 +46,7 @@ export const primaryNavItems: NavItem[] = [
     icon: LibraryIcon,
   },
   { title: "Marketplace", href: "/books?type=sell", icon: ShoppingCartIcon },
-  { title: "Swaps", href: "/explore/swaps", icon: Repeat2Icon },
+  { title: "Exchanges", href: "/explore/exchanges", icon: Repeat2Icon },
   { title: "Community", href: "/community", icon: UsersRoundIcon },
 ];
 
@@ -70,8 +70,8 @@ export const megaMenuItems: NavItem[] = [
     icon: ShoppingCartIcon,
   },
   {
-    title: "Swap Books",
-    href: "/explore/swaps",
+    title: "Exchange Books",
+    href: "/explore/exchanges",
     description: "Find peer-to-peer exchange opportunities.",
     icon: Repeat2Icon,
   },
@@ -127,10 +127,14 @@ export const dashboardNavGroups: NavGroup[] = [
         badgeVariant: "brand",
       },
       { title: "Lent Books", href: "/dashboard/lent", icon: BookOpenIcon },
-      { title: "Active Swaps", href: "/dashboard/swaps", icon: Repeat2Icon },
       {
-        title: "Swap Offers",
-        href: "/dashboard/swaps/offers",
+        title: "Active Exchanges",
+        href: "/dashboard/exchanges",
+        icon: Repeat2Icon,
+      },
+      {
+        title: "Exchange Offers",
+        href: "/dashboard/exchanges/offers",
         icon: ClipboardListIcon,
         badge: 1,
         badgeVariant: "success",
@@ -223,7 +227,7 @@ export const footerSections = [
     links: [
       { title: "Central Library", href: "/books?type=borrow" },
       { title: "Book Store", href: "/books?type=sell" },
-      { title: "Book Swaps", href: "/books?type=swap" },
+      { title: "Book Exchanges", href: "/books?type=exchange" },
       { title: "Top Readers", href: "/top-readers" },
     ],
   },

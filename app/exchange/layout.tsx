@@ -1,6 +1,6 @@
 import { MainLayout } from "@/components/layout/main-layout";
 
-export default function SwapLayout({
+export default function ExchangeLayout({
   children,
 }: {
   children: React.ReactNode;

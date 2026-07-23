@@ -13,7 +13,8 @@ export default async function LibraryPage() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">My Library</h1>
           <p className="text-muted-foreground mt-2">
-            Manage all the books you&apos;ve uploaded for sell, swap, or borrow.
+            Manage all the books you&apos;ve uploaded for sell, exchange, or
+            borrow.
           </p>
         </div>
         <Button asChild className="gap-2">

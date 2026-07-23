@@ -32,7 +32,7 @@ interface ReaderItem {
   name: string;
   badge: string;
   books: number;
-  swaps: number;
+  exchanges: number;
   reviews: number;
 }
 
@@ -80,7 +80,7 @@ export default async function Home() {
       />
       <CentralLibrarySection />
       <MarketplaceSection />
-      <SwapBooksSection />
+      <ExchangeBooksSection />
       <CommunityReaderSection />
       <CommunitySection />
       <TestimonialsSection />
@@ -221,21 +221,21 @@ async function MarketplaceSection() {
   );
 }
 
-async function SwapBooksSection() {
+async function ExchangeBooksSection() {
   const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
   const books = featuredBooks
-    .filter((b) => b.tags.includes("swap"))
+    .filter((b) => b.tags.includes("exchange"))
     .slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide md:bg-card md:border-border/50 grid gap-6 md:rounded-lg md:border md:p-6 md:shadow-none lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
         <FeaturePanel
-          title="Swap Books"
-          href="/explore/swaps"
+          title="Exchange Books"
+          href="/explore/exchanges"
           icon={Repeat2Icon}
           tone="success"
-          description="Trade books peer to peer with structured swap requests, counters, agreements, and handover paths."
+          description="Trade books peer to peer with structured exchange requests, counters, agreements, and handover paths."
           stats={[
             ["Peer", "To peer"],
             ["Counter", "Offers"],
@@ -243,7 +243,7 @@ async function SwapBooksSection() {
           ]}
         />
         <div className="w-full min-w-0">
-          <HorizontalBookRow books={books} rowKey="swap" />
+          <HorizontalBookRow books={books} rowKey="exchange" />
         </div>
       </div>
     </section>
@@ -419,8 +419,10 @@ async function CommunityReaderSection() {
                     <p className="text-muted-foreground">Books</p>
                   </div>
                   <div>
-                    <p className="text-foreground font-bold">{reader.swaps}</p>
-                    <p className="text-muted-foreground">Swaps</p>
+                    <p className="text-foreground font-bold">
+                      {reader.exchanges}
+                    </p>
+                    <p className="text-muted-foreground">Exchanges</p>
                   </div>
                   <div>
                     <p className="text-foreground font-bold">
@@ -605,14 +607,14 @@ async function PersonalizationSection() {
                 </div>
               </div>
 
-              {/* Active Swaps Card */}
+              {/* Active Exchanges Card */}
               <div className="bg-card/75 border-border flex items-center justify-between rounded-lg border p-3 shadow-xs">
                 <div className="min-w-0">
                   <p className="text-muted-foreground text-[0.7rem] font-bold tracking-wider uppercase">
-                    Active Swaps
+                    Active Exchanges
                   </p>
                   <p className="text-foreground mt-1 text-base font-bold">
-                    2 Pending Swaps
+                    2 Pending Exchanges
                   </p>
                   <p className="text-muted-foreground truncate text-[0.65rem]">
                     1 awaiting handover • 1 check details
@@ -623,7 +625,7 @@ async function PersonalizationSection() {
                   size="sm"
                   className="h-8 shrink-0 px-2.5 text-xs"
                 >
-                  <Link href="/dashboard/swaps">View</Link>
+                  <Link href="/dashboard/exchanges">View</Link>
                 </Button>
               </div>
             </div>

@@ -28,7 +28,7 @@ type DashboardLibraryCardProps = {
     sellerName?: string;
     tags: string[];
     isSold?: boolean;
-    isSwapped?: boolean;
+    isExchanged?: boolean;
   };
 };
 
@@ -99,13 +99,13 @@ export function DashboardLibraryCard({ book }: DashboardLibraryCardProps) {
         />
 
         {/* Status Overlay */}
-        {(book.isSold || book.isSwapped) && (
+        {(book.isSold || book.isExchanged) && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60 backdrop-blur-[2px]">
             <Badge
               variant="secondary"
               className="px-3 py-1 text-sm font-semibold tracking-wider uppercase"
             >
-              {book.isSold ? "Sold Out" : "Swapped"}
+              {book.isSold ? "Sold Out" : "Exchanged"}
             </Badge>
           </div>
         )}
@@ -121,12 +121,12 @@ export function DashboardLibraryCard({ book }: DashboardLibraryCardProps) {
                 Sell
               </Badge>
             )}
-            {book.tags.includes("swap") && (
+            {book.tags.includes("exchange") && (
               <Badge
                 variant="secondary"
                 className="border-none bg-white/20 text-white backdrop-blur-md"
               >
-                Swap
+                Exchange
               </Badge>
             )}
             {book.tags.includes("borrow") && (

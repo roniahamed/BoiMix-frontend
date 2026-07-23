@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { fetchLocal } from "@/lib/fetchLocal";
 import type { BookCardBook } from "@/types/book";
 
-const SWAP_CATEGORIES = [
+const EXCHANGE_CATEGORIES = [
   { label: "উপন্যাস", value: "Novel", icon: "📖" },
   { label: "একাডেমিক", value: "Academic", icon: "🎓" },
   { label: "বিজ্ঞান", value: "Science", icon: "🔬" },
@@ -36,43 +36,44 @@ const HOW_IT_WORKS = [
     icon: Upload,
     step: "01",
     title: "List Your Book",
-    desc: "আপনার পুরনো বই আপলোড করুন এবং সোয়াপের জন্য লিস্ট করুন।",
+    desc: "আপনার পুরনো বই আপলোড করুন এবং এক্সচেঞ্জের জন্য লিস্ট করুন।",
   },
   {
     icon: Search,
     step: "02",
     title: "Find a Match",
-    desc: "অন্যদের বই ব্রাউজ করুন এবং পছন্দের বইয়ে সোয়াপ অফার পাঠান।",
+    desc: "অন্যদের বই ব্রাউজ করুন এবং পছন্দের বইয়ে এক্সচেঞ্জ অফার পাঠান।",
   },
   {
     icon: Handshake,
     step: "03",
-    title: "Agree & Swap",
-    desc: "দুইজন রাজি হলে সোয়াপ কনফার্ম হবে এবং বই পাঠানো শুরু হবে।",
+    title: "Agree & Exchange",
+    desc: "দুইজন রাজি হলে এক্সচেঞ্জ কনফার্ম হবে এবং বই পাঠানো শুরু হবে।",
   },
   {
     icon: PackageCheck,
     step: "04",
     title: "Receive & Enjoy",
-    desc: "বই পেয়ে কনফার্ম করুন। সোয়াপ সম্পন্ন!",
+    desc: "বই পেয়ে কনফার্ম করুন। এক্সচেঞ্জ সম্পন্ন!",
   },
 ];
 
 const STATS = [
-  { label: "Active Swaps", value: "3,200+", icon: ArrowLeftRight },
+  { label: "Active Exchanges", value: "3,200+", icon: ArrowLeftRight },
   { label: "Happy Readers", value: "12,000+", icon: Users },
   { label: "Books Listed", value: "18,000+", icon: BookOpen },
   { label: "Average Rating", value: "4.7/5", icon: Star },
 ];
 
-export default async function ExploreSwapsPage() {
+export default async function ExploreExchangesPage() {
   const allBooks: BookCardBook[] = (await fetchLocal("/api/books")) || [];
 
-  // For swaps, use books that are not library type as "available for swap"
-  const swapBooks = allBooks.filter(
-    (b) => b.providerType !== "library" && b.tags?.includes("swap"),
+  // For exchanges, use books that are not library type as "available for exchange"
+  const exchangeBooks = allBooks.filter(
+    (b) => b.providerType !== "library" && b.tags?.includes("exchange"),
   );
-  const renderBooks = swapBooks.length > 0 ? swapBooks : allBooks.slice(0, 12);
+  const renderBooks =
+    exchangeBooks.length > 0 ? exchangeBooks : allBooks.slice(0, 12);
 
   const recentlyAdded = renderBooks.slice(0, 6);
   const nearYou = renderBooks.slice(6, 12);
@@ -89,11 +90,11 @@ export default async function ExploreSwapsPage() {
                 <RefreshCw className="size-4" />
               </div>
               <Badge className="border-0 bg-emerald-100 font-semibold text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-900/30 dark:text-emerald-400">
-                Swap Books
+                Exchange Books
               </Badge>
             </div>
             <h1 className="mb-3 text-3xl font-extrabold tracking-tight text-slate-900 md:text-4xl dark:text-white">
-              Swap Books,{" "}
+              Exchange Books,{" "}
               <span className="text-emerald-600 dark:text-emerald-400">
                 Discover New Stories
               </span>
@@ -106,17 +107,17 @@ export default async function ExploreSwapsPage() {
             {/* Search bar */}
             <LibrarySearchBar
               variant="hero"
-              mode="swaps"
-              action="/explore/swaps/search"
-              placeholder="Search books to swap..."
+              mode="exchanges"
+              action="/explore/exchanges/search"
+              placeholder="Search books to exchange..."
               className="relative mb-6 flex flex-col gap-2 rounded-lg border border-slate-200 bg-white p-1.5 shadow-sm sm:flex-row"
             />
 
             <div className="mt-4 flex flex-wrap gap-2">
-              {SWAP_CATEGORIES.slice(0, 4).map((cat) => (
+              {EXCHANGE_CATEGORIES.slice(0, 4).map((cat) => (
                 <Link
                   key={cat.value}
-                  href={`/explore/swaps/search?category=${cat.value}`}
+                  href={`/explore/exchanges/search?category=${cat.value}`}
                   className="flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 hover:border-emerald-300 hover:text-emerald-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300"
                 >
                   {cat.icon} {cat.label}
@@ -177,17 +178,17 @@ export default async function ExploreSwapsPage() {
               Browse by Category
             </h2>
             <Link
-              href="/explore/swaps/search"
+              href="/explore/exchanges/search"
               className="flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
             >
               View All <ArrowRight className="ml-1 size-4" />
             </Link>
           </div>
           <div className="grid grid-cols-4 gap-3 md:grid-cols-8">
-            {SWAP_CATEGORIES.map((cat) => (
+            {EXCHANGE_CATEGORIES.map((cat) => (
               <Link
                 key={cat.value}
-                href={`/explore/swaps/search?category=${cat.value}`}
+                href={`/explore/exchanges/search?category=${cat.value}`}
                 className="flex flex-col items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 p-3 text-center transition-colors hover:border-emerald-200 hover:bg-emerald-50 dark:border-slate-800 dark:bg-slate-800/50 dark:hover:border-emerald-800 dark:hover:bg-emerald-900/10"
               >
                 <span className="text-2xl">{cat.icon}</span>
@@ -242,7 +243,7 @@ export default async function ExploreSwapsPage() {
               Recently Added
             </h2>
             <Link
-              href="/explore/swaps/search?sort=newest"
+              href="/explore/exchanges/search?sort=newest"
               className="flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
             >
               View All <ArrowRight className="ml-1 size-4" />
@@ -267,7 +268,7 @@ export default async function ExploreSwapsPage() {
               </h2>
             </div>
             <Link
-              href="/explore/swaps/search?sort=nearby"
+              href="/explore/exchanges/search?sort=nearby"
               className="flex items-center text-sm font-semibold text-emerald-600 hover:text-emerald-700 dark:text-emerald-400"
             >
               View All <ArrowRight className="ml-1 size-4" />
@@ -286,7 +287,7 @@ export default async function ExploreSwapsPage() {
         <div className="flex flex-col items-center justify-between gap-6 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-8 py-10 text-center shadow-xl md:flex-row md:text-left">
           <div>
             <h2 className="mb-2 text-2xl font-extrabold text-white md:text-3xl">
-              Got books to swap?
+              Got books to exchange?
             </h2>
             <p className="text-sm text-emerald-100">
               আপনার পুরনো বই লিস্ট করুন এবং নতুন কিছু পড়ার সুযোগ নিন।
@@ -306,7 +307,7 @@ export default async function ExploreSwapsPage() {
               variant="outline"
               className="h-11 rounded-lg border-white/40 bg-white/10 px-6 font-bold text-white hover:bg-white/20"
             >
-              <Link href="/explore/swaps/search">Browse Swaps</Link>
+              <Link href="/explore/exchanges/search">Browse Exchanges</Link>
             </Button>
           </div>
         </div>

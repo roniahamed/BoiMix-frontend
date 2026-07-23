@@ -20,7 +20,7 @@ export default function MessagesPage() {
         </h3>
         <p className="max-w-md">
           Select a conversation from the list to start chatting about book
-          swaps, purchases, and more.
+          exchanges, purchases, and more.
         </p>
       </div>
     </div>

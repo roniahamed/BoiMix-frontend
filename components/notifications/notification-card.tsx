@@ -30,8 +30,8 @@ const getIcon = (type: string) => {
   switch (type) {
     case "message":
       return <MessageSquare className="size-3 text-white" />;
-    case "swap_offer":
-    case "swap_accepted":
+    case "exchange_offer":
+    case "exchange_accepted":
       return <RefreshCcw className="size-3 text-white" />;
     case "borrow_request":
     case "borrow_approved":
@@ -50,8 +50,8 @@ const getIconBg = (type: string) => {
   switch (type) {
     case "message":
       return "bg-blue-500";
-    case "swap_offer":
-    case "swap_accepted":
+    case "exchange_offer":
+    case "exchange_accepted":
       return "bg-purple-500";
     case "borrow_request":
     case "borrow_approved":

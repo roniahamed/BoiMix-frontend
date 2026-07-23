@@ -139,7 +139,7 @@ export function SparklineCharts() {
         fillColor="#ec4899"
       />
       <SparklineCard
-        title="Successful Swaps"
+        title="Successful Exchanges"
         value="8"
         trend="+33%"
         data={dataDeals}

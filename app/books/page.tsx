@@ -3,7 +3,7 @@ import { BookListing } from "@/components/shared/book-listing";
 
 export const metadata: Metadata = {
   title: "Books - BoiMix",
-  description: "Browse thousands of books to buy, swap, or borrow.",
+  description: "Browse thousands of books to buy, exchange, or borrow.",
 };
 
 type Props = {
@@ -16,7 +16,7 @@ export default async function BooksPage(props: Props) {
 
   let initialFilters: Record<string, string[]> = {};
   let title = "সব বই";
-  let description = "আপনার পছন্দের বই খুঁজুন, ধার নিন বা সোয়াপ করুন";
+  let description = "আপনার পছন্দের বই খুঁজুন, ধার নিন বা এক্সচেঞ্জ করুন";
 
   if (typeParam === "borrow") {
     initialFilters = { listingType: ["borrow"] };
@@ -26,9 +26,9 @@ export default async function BooksPage(props: Props) {
     initialFilters = { listingType: ["sell"] };
     title = "Marketplace";
     description = "Explore marketplace books from BoiMix and readers.";
-  } else if (typeParam === "swap") {
-    initialFilters = { listingType: ["swap"] };
-    title = "Swaps";
+  } else if (typeParam === "exchange") {
+    initialFilters = { listingType: ["exchange"] };
+    title = "Exchanges";
     description = "Find peer-to-peer exchange opportunities.";
   }
 

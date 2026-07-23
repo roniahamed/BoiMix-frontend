@@ -11,7 +11,7 @@ export const mockProfiles: UserProfile[] = [
     name: "Roni Ahamed",
     username: "roni",
     avatarUrl: "https://i.pravatar.cc/240?u=roni",
-    coverUrl: "/banners/swap-community.png", // We'll keep a placeholder or generate an image if needed
+    coverUrl: "/banners/exchange-community.png",
     location: "Dhaka, Bangladesh",
     role: "Backend Engineer",
     reputation: 96,
@@ -39,9 +39,9 @@ export const mockProfiles: UserProfile[] = [
         badgeColor: "blue",
       },
       {
-        label: "Swap Master",
+        label: "Exchange Master",
         tone: "info",
-        description: "Completed over 50 successful book swaps.",
+        description: "Completed over 50 successful book exchanges.",
         earnedAt: "June 2026",
         isEarned: true,
         icon: "repeat",
@@ -83,7 +83,7 @@ export const mockProfiles: UserProfile[] = [
     ],
     stats: {
       booksInLibrary: 152,
-      successfulSwaps: 78,
+      successfulExchanges: 78,
       booksBorrowed: 63,
       booksSold: 42,
       followers: 482,
@@ -117,8 +117,8 @@ export const mockProfiles: UserProfile[] = [
       },
       {
         icon: "repeat",
-        title: "Active Swapper",
-        subtitle: "Completed 78 swaps",
+        title: "Active Exchanger",
+        subtitle: "Completed 78 exchanges",
       },
       {
         icon: "message",
@@ -138,7 +138,7 @@ export const mockProfiles: UserProfile[] = [
       meetingPreference:
         "Prefers public handover points near metro stations or book cafes.",
       privacyNote:
-        "Exact address is shared only after a borrow, sale, or swap request is accepted.",
+        "Exact address is shared only after a borrow, sale, or exchange request is accepted.",
     },
   },
 ];
@@ -150,7 +150,7 @@ export const profileLibraryBooks: BookCardBook[] = [
     title: "Pather Panchali",
     author: "Bibhutibhushan Bandyopadhyay",
     coverUrl: "/book-covers/song-of-padma.svg",
-    tags: ["swap", "borrow"],
+    tags: ["exchange", "borrow"],
     rating: 4.9,
     reviewCount: 142,
     distance: "1.2 km",
@@ -201,7 +201,7 @@ export const profileLibraryBooks: BookCardBook[] = [
     title: "Quiet Reviews",
     author: "Raisa Chowdhury",
     coverUrl: "/book-covers/quiet-reviews.svg",
-    tags: ["borrow", "swap"],
+    tags: ["borrow", "exchange"],
     rating: 4.9,
     reviewCount: 52,
     distance: "1.7 km",
@@ -237,7 +237,7 @@ export const profileLibraryBooks: BookCardBook[] = [
     author: "Pearl S. Buck",
     coverUrl:
       "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=300&h=400&fit=crop",
-    tags: ["swap"],
+    tags: ["exchange"],
     rating: 4.8,
     reviewCount: 120,
     distance: "3.5 km",
@@ -271,7 +271,7 @@ export const profileLibraryBooks: BookCardBook[] = [
     author: "Rabindranath Tagore",
     coverUrl:
       "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300&h=400&fit=crop",
-    tags: ["sell", "swap"],
+    tags: ["sell", "exchange"],
     rating: 5.0,
     reviewCount: 340,
     price: 250,
@@ -331,7 +331,7 @@ export const profileReviews: UserProfileReview[] = [
     body: "excellent condition. Very friendly seller. Highly recommended!",
     reviewerName: "Hasan Mahmud",
     reviewerAvatar: "https://i.pravatar.cc/150?u=hasan",
-    transactionType: "For Swap",
+    transactionType: "For Exchange",
     location: "Dhanmondi, Dhaka",
   },
   {
@@ -342,10 +342,10 @@ export const profileReviews: UserProfileReview[] = [
     bookSlug: "rich-dad-poor-dad",
     rating: 5,
     createdAt: "1 week ago",
-    body: "Smooth swap experience. Great communication!",
+    body: "Smooth exchange experience. Great communication!",
     reviewerName: "Nusrat Jahan",
     reviewerAvatar: "https://i.pravatar.cc/150?u=nusrat",
-    transactionType: "For Swap",
+    transactionType: "For Exchange",
     location: "Mirpur, Dhaka",
   },
   {
@@ -387,7 +387,7 @@ export const profileReviews: UserProfileReview[] = [
     body: "Book quality was amazing. Packaging was safe.",
     reviewerName: "Tanvir Hossain",
     reviewerAvatar: "https://i.pravatar.cc/150?u=tanvir",
-    transactionType: "For Swap",
+    transactionType: "For Exchange",
     location: "Gulshan, Dhaka",
   },
 ];
@@ -407,11 +407,11 @@ export const profileActivity: UserProfileActivity[] = [
   },
   {
     id: "activity-2",
-    type: "swap",
+    type: "exchange",
     dateLabel: "Yesterday",
     time: "8:45 PM",
-    title: "Completed a swap",
-    description: "Completed a swap",
+    title: "Completed an exchange",
+    description: "Completed an exchange",
     bookTitle: "Rich Dad Poor Dad",
     bookAuthor: "with Hasan Mahmud",
     bookCover: "/book-covers/rich-dad.jpg",

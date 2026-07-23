@@ -1,21 +1,21 @@
 import { Repeat2Icon } from "lucide-react";
 
+import { ExchangeBadge } from "@/components/shared/exchange-badge";
 import { RequestCard } from "@/components/shared/request-card";
-import { SwapBadge } from "@/components/shared/swap-badge";
 
-type SwapOfferCardProps = {
+type ExchangeOfferCardProps = {
   offeredBookTitle: string;
   requestedBookTitle: string;
   requesterName: string;
   requesterAvatarUrl?: string;
 };
 
-export function SwapOfferCard({
+export function ExchangeOfferCard({
   offeredBookTitle,
   requestedBookTitle,
   requesterName,
   requesterAvatarUrl,
-}: SwapOfferCardProps) {
+}: ExchangeOfferCardProps) {
   return (
     <RequestCard
       title={requestedBookTitle}
@@ -25,7 +25,7 @@ export function SwapOfferCard({
       meta={
         <div className="flex flex-wrap items-center gap-2">
           <Repeat2Icon className="text-primary size-4" aria-hidden="true" />
-          <SwapBadge label="Swap Offer" />
+          <ExchangeBadge label="Exchange Offer" />
         </div>
       }
       actions={[

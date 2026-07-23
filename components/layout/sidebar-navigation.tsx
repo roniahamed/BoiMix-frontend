@@ -142,7 +142,7 @@ export function SidebarNavigation({
                   <BadgeCheck className="text-brand-blue h-3.5 w-3.5 shrink-0" />
                 </div>
                 <p className="text-muted-foreground truncate text-[11px]">
-                  Pro Swapper • Dhaka
+                  Pro Exchanger • Dhaka
                 </p>
               </div>
             </div>

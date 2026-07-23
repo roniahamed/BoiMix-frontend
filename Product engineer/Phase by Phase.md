@@ -202,7 +202,7 @@ Error Handling
 - [ ] New Books
 - [ ] Central Library
 - [ ] Marketplace
-- [ ] Swap Books
+- [ ] Exchange Books
 - [ ] Community Posts
 - [ ] Sponsors
 - [ ] Newsletter
@@ -294,7 +294,7 @@ book upload
 
 ---
 
-# Phase 11 — Swap System
+# Phase 11 — Exchange System
 
 - [ ] Discover
 - [ ] Offer

@@ -1,6 +1,6 @@
 export type BookAvailabilityMode =
   | "sell"
-  | "swap"
+  | "exchange"
   | "borrow"
   | "wishlist"
   | "collection"
@@ -29,6 +29,8 @@ export type BookCardBook = {
   isInCart?: boolean;
   providerType?: "library" | "user";
   isVerifiedUser?: boolean;
+  exchangePrice?: number;
+  exchangePreferences?: string[];
 };
 
 export type BookGalleryImage = {

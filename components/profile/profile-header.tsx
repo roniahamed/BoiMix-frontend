@@ -179,11 +179,11 @@ export function ProfileHeader({
                 <div className="mb-1 flex items-center gap-1">
                   <ArrowRightLeftIcon className="text-primary size-4" />
                   <span className="text-foreground text-[15px] font-bold">
-                    {profile.stats.successfulSwaps}
+                    {profile.stats.successfulExchanges}
                   </span>
                 </div>
                 <span className="text-muted-foreground text-[11px] leading-tight font-medium">
-                  Swaps
+                  Exchanges
                 </span>
               </div>
 
@@ -348,11 +348,11 @@ export function ProfileHeader({
                 <div className="mb-1 flex items-center gap-1.5">
                   <ArrowRightLeftIcon className="text-primary size-4 sm:size-5" />
                   <span className="text-foreground text-base font-bold sm:text-lg">
-                    {profile.stats.successfulSwaps}
+                    {profile.stats.successfulExchanges}
                   </span>
                 </div>
                 <span className="text-muted-foreground text-[11px] font-medium sm:text-[12px]">
-                  Successful Swaps
+                  Successful Exchanges
                 </span>
               </div>
 

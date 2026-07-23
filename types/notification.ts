@@ -4,8 +4,8 @@ export type NotificationType =
   | "borrow_request"
   | "borrow_approved"
   | "borrow_returned"
-  | "swap_offer"
-  | "swap_accepted"
+  | "exchange_offer"
+  | "exchange_accepted"
   | "review";
 
 export interface Notification {

@@ -475,8 +475,8 @@ export default async function ExploreFestivalPage() {
                 variant="outline"
                 className="h-11 rounded-lg border-white/40 bg-white/10 px-6 font-bold text-white hover:bg-white/20"
               >
-                <Link href="/explore/swaps">
-                  <Heart className="mr-2 size-4" /> বই সোয়াপ করুন
+                <Link href="/explore/exchanges">
+                  <Heart className="mr-2 size-4" /> বই এক্সচেঞ্জ করুন
                 </Link>
               </Button>
             </div>

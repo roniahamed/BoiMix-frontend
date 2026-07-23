@@ -87,7 +87,7 @@ export function BookListing({
         options: [
           { label: "For Sale", value: "sell" },
           { label: "For Borrow", value: "borrow" },
-          { label: "For Swap", value: "swap" },
+          { label: "For Exchange", value: "exchange" },
         ],
       },
       {

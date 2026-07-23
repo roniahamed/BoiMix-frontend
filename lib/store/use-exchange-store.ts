@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type SwapStatus =
+export type ExchangeStatus =
   | "pending_proposal"
   | "counter_offered"
   | "agreement_reached"
@@ -9,7 +9,7 @@ export type SwapStatus =
   | "disputed"
   | "rejected";
 
-export interface SwapOrder {
+export interface ExchangeOrder {
   id: string;
   requestedBookId: string;
   requestedBookTitle: string;
@@ -17,9 +17,9 @@ export interface SwapOrder {
   offeredBookId: string;
   offeredBookTitle: string;
   offeredBookImage: string;
-  proposerId: string; // The user initiating the swap
+  proposerId: string; // The user initiating the exchange
   ownerId: string; // The user who owns the requested book
-  status: SwapStatus;
+  status: ExchangeStatus;
   counterOfferDetails?: {
     proposedDate?: string;
     proposedLocation?: string;
@@ -27,21 +27,21 @@ export interface SwapOrder {
   };
 }
 
-interface SwapState {
-  swaps: SwapOrder[];
+interface ExchangeState {
+  exchanges: ExchangeOrder[];
   myBooks: { id: string; title: string; image: string }[];
-  createProposal: (swap: Omit<SwapOrder, "id" | "status">) => string;
-  updateSwapStatus: (id: string, status: SwapStatus) => void;
+  createProposal: (exchange: Omit<ExchangeOrder, "id" | "status">) => string;
+  updateExchangeStatus: (id: string, status: ExchangeStatus) => void;
   counterOffer: (
     id: string,
-    details: NonNullable<SwapOrder["counterOfferDetails"]>,
+    details: NonNullable<ExchangeOrder["counterOfferDetails"]>,
   ) => void;
   acceptCounterOffer: (id: string) => void;
   rejectCounterOffer: (id: string) => void;
   openDispute: (id: string, reason: string) => void;
 }
 
-export const useSwapStore = create<SwapState>((set) => ({
+export const useExchangeStore = create<ExchangeState>((set) => ({
   // Mock data representing the current user's library
   myBooks: [
     {
@@ -61,10 +61,10 @@ export const useSwapStore = create<SwapState>((set) => ({
     },
   ],
 
-  // Mock data for initial swaps
-  swaps: [
+  // Mock data for initial exchanges
+  exchanges: [
     {
-      id: "SW-000123",
+      id: "EX-000123",
       requestedBookId: "b3",
       requestedBookTitle: "1984",
       requestedBookImage: "/images/books/placeholder.jpg",
@@ -76,7 +76,7 @@ export const useSwapStore = create<SwapState>((set) => ({
       status: "pending_proposal",
     },
     {
-      id: "SW-000456",
+      id: "EX-000456",
       requestedBookId: "my-b1",
       requestedBookTitle: "The Alchemist",
       requestedBookImage: "/images/books/placeholder.jpg",
@@ -89,52 +89,57 @@ export const useSwapStore = create<SwapState>((set) => ({
     },
   ],
 
-  createProposal: (swap) => {
-    const id = `SW-${Math.floor(Math.random() * 1000000)
+  createProposal: (exchange) => {
+    const id = `EX-${Math.floor(Math.random() * 1000000)
       .toString()
       .padStart(6, "0")}`;
     set((state) => ({
-      swaps: [...state.swaps, { ...swap, id, status: "pending_proposal" }],
+      exchanges: [
+        ...state.exchanges,
+        { ...exchange, id, status: "pending_proposal" },
+      ],
     }));
     return id;
   },
 
-  updateSwapStatus: (id, status) => {
+  updateExchangeStatus: (id, status) => {
     set((state) => ({
-      swaps: state.swaps.map((s) => (s.id === id ? { ...s, status } : s)),
+      exchanges: state.exchanges.map((e) =>
+        e.id === id ? { ...e, status } : e,
+      ),
     }));
   },
 
   counterOffer: (id, details) => {
     set((state) => ({
-      swaps: state.swaps.map((s) =>
-        s.id === id
-          ? { ...s, status: "counter_offered", counterOfferDetails: details }
-          : s,
+      exchanges: state.exchanges.map((e) =>
+        e.id === id
+          ? { ...e, status: "counter_offered", counterOfferDetails: details }
+          : e,
       ),
     }));
   },
 
   acceptCounterOffer: (id) => {
     set((state) => ({
-      swaps: state.swaps.map((s) =>
-        s.id === id ? { ...s, status: "agreement_reached" } : s,
+      exchanges: state.exchanges.map((e) =>
+        e.id === id ? { ...e, status: "agreement_reached" } : e,
       ),
     }));
   },
 
   rejectCounterOffer: (id) => {
     set((state) => ({
-      swaps: state.swaps.map((s) =>
-        s.id === id ? { ...s, status: "rejected" } : s,
+      exchanges: state.exchanges.map((e) =>
+        e.id === id ? { ...e, status: "rejected" } : e,
       ),
     }));
   },
 
   openDispute: (id) => {
     set((state) => ({
-      swaps: state.swaps.map((s) =>
-        s.id === id ? { ...s, status: "disputed" } : s,
+      exchanges: state.exchanges.map((e) =>
+        e.id === id ? { ...e, status: "disputed" } : e,
       ),
     }));
   },

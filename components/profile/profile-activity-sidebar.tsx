@@ -33,8 +33,8 @@ const filterOptions: FilterOption[] = [
     iconColor: "text-green-500",
   },
   {
-    id: "swaps",
-    label: "Swaps",
+    id: "exchanges",
+    label: "Exchanges",
     icon: Repeat2Icon,
     iconColor: "text-blue-500",
   },

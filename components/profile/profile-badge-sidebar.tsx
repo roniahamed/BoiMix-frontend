@@ -31,7 +31,7 @@ export function ProfileBadgeSidebar({ profile }: ProfileBadgeSidebarProps) {
           </li>
           <li className="flex items-start gap-3">
             <CheckCircleIcon className="text-primary mt-0.5 size-4 shrink-0" />
-            <span>Complete swaps and returns</span>
+            <span>Complete exchanges and returns</span>
           </li>
           <li className="flex items-start gap-3">
             <CheckCircleIcon className="text-primary mt-0.5 size-4 shrink-0" />

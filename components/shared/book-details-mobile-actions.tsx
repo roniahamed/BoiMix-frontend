@@ -235,13 +235,13 @@ export function BookDetailsMobileActions({
               </Button>
             </>
           )}
-          {book.tags.includes("swap") && (
+          {book.tags.includes("exchange") && (
             <Button
               className="h-11 flex-1 gap-2 bg-[#f57224] text-base font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]"
-              onClick={() => router.push(`/swap/offer/${book.id}`)}
+              onClick={() => router.push(`/exchange/offer/${book.id}`)}
             >
               <Repeat2 className="size-5" />
-              <span>Swap</span>
+              <span>Exchange</span>
             </Button>
           )}
           {book.tags.includes("borrow") && (

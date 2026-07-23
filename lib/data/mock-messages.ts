@@ -43,7 +43,7 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
       {
         id: "m1",
         senderId: "u2",
-        text: "Hi Roni! Are you available to swap 'Rich Dad Poor Dad' today?",
+        text: "Hi Roni! Are you available to exchange 'Rich Dad Poor Dad' today?",
         time: "10:00 AM",
         isRead: true,
       },

@@ -79,7 +79,7 @@ export function ReviewCard({
               <span
                 className={cn(
                   "block w-[88px] rounded px-2.5 py-1 text-center text-[10px] font-bold tracking-wider whitespace-nowrap uppercase",
-                  transactionType === "For Swap"
+                  transactionType === "For Exchange"
                     ? "bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-500"
                     : transactionType === "For Borrow"
                       ? "bg-blue-100 text-blue-700 dark:bg-blue-500/10 dark:text-blue-500"

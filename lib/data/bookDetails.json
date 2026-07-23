@@ -24,26 +24,26 @@
         "alt": "Back cover"
       }
     ],
-    "tags": ["swap"],
+    "tags": ["exchange"],
     "availability": {
       "sell": 0,
       "borrow": 1,
-      "swap": 1
+      "exchange": 1
     },
     "location": "মিরপুর ১০, ঢাকা",
     "distance": "১.২ কি.মি.",
     "condition": "excellent",
     "price": 250,
     "originalPrice": 350,
-    "swapPrice": 300,
+    "exchangePrice": 300,
     "borrowFee": 50,
     "maxBorrowDays": 14,
-    "swapPreferences": ["Fiction", "Self Help", "Any Book"],
+    "exchangePreferences": ["Fiction", "Self Help", "Any Book"],
     "rating": 4.8,
     "reviewCount": 24,
     "totalBorrow": 15,
     "totalSell": 5,
-    "totalSwap": 2,
+    "totalExchange": 2,
     "tableOfContents": [
       "প্রথম অধ্যায়: অপুর শৈশব",
       "দ্বিতীয় অধ্যায়: শহরে আগমন",
@@ -63,7 +63,7 @@
     "followers": 245,
     "badges": [
       {
-        "label": "Top Swapper",
+        "label": "Top Exchanger",
         "variant": "success"
       },
       {

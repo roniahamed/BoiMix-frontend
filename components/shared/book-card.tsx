@@ -25,7 +25,7 @@ import { useWishlistStore } from "@/lib/store/use-wishlist-store";
 
 const tagLabels: Record<string, string> = {
   sell: "Sale",
-  swap: "Swap",
+  exchange: "Exch",
   borrow: "Borrow",
   wishlist: "Wishlist",
   collection: "Collection",
@@ -33,7 +33,7 @@ const tagLabels: Record<string, string> = {
 
 const tagClasses: Record<string, string> = {
   sell: "bg-orange-400/90 backdrop-blur-sm text-white",
-  swap: "bg-emerald-400/90 backdrop-blur-sm text-white",
+  exchange: "bg-emerald-400/90 backdrop-blur-sm text-white",
   borrow: "bg-blue-400/90 backdrop-blur-sm text-white",
   wishlist: "bg-rose-400/90 backdrop-blur-sm text-white",
   collection: "bg-purple-400/90 backdrop-blur-sm text-white",
@@ -106,7 +106,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
   const inWishlist = mounted ? isInWishlist(book.id) : false;
 
   const hasSell = book.tags.includes("sell");
-  const hasSwap = book.tags.includes("swap");
+  const hasExchange = book.tags.includes("exchange");
   const hasBorrow = book.tags.includes("borrow");
 
   const handleAddToCart = async (e: React.MouseEvent) => {
@@ -229,14 +229,14 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               />
             </button>
           )}
-          {hasSwap && (
+          {hasExchange && (
             <button
               onClick={(e) => {
                 e.preventDefault();
                 router.push(`/books/${book.slug}`);
               }}
               className="absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300"
-              aria-label="Swap book"
+              aria-label="Exchange book"
             >
               <Repeat2Icon className="size-4.5 drop-shadow-sm" />
             </button>
@@ -246,7 +246,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
           {book.tags.length > 0 && (
             <div
               className={cn(
-                "absolute top-[10px] -right-[38px] z-20 w-[120px] rotate-45 py-0.5 text-center text-[9px] font-extrabold tracking-widest uppercase shadow-sm",
+                "absolute top-[10px] -right-[38px] z-20 w-[120px] rotate-45 py-0.5 text-center text-[9.5px] font-extrabold tracking-widest uppercase shadow-sm",
                 tagClasses[book.tags[0]] || "bg-gray-500 text-white",
               )}
             >
@@ -410,7 +410,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                 </span>
               </Button>
             )}
-            {hasSwap && (
+            {hasExchange && (
               <Button
                 size="sm"
                 variant="default"
@@ -421,7 +421,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                 className="pointer-events-auto flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-[#f57224] px-3 text-[15px] font-bold text-white transition-all hover:scale-105 hover:bg-[#d65e1c] active:scale-95"
               >
                 <Repeat2Icon className="size-4" />
-                <span>Swap Now</span>
+                <span>Exchange Now</span>
               </Button>
             )}
           </div>
