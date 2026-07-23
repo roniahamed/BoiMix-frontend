@@ -136,7 +136,7 @@ export const dashboardNavGroups: NavGroup[] = [
         badgeVariant: "success",
       },
       {
-        title: "My Sales",
+        title: "Customer Orders (Sales)",
         href: "/dashboard/sales",
         icon: ShoppingCartIcon,
         badge: 2,
