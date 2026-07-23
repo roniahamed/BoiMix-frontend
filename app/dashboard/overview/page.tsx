@@ -11,7 +11,7 @@ import {
   Coins,
   Library,
   ShoppingBag,
-  AlertTriangle,
+  AlarmClock,
   Repeat,
   Bookmark,
   BookOpen,
@@ -19,6 +19,7 @@ import {
   Ticket,
   ShieldCheck,
 } from "lucide-react";
+
 import Link from "next/link";
 
 export default async function OverviewPage() {
@@ -143,7 +144,7 @@ export default async function OverviewPage() {
         <div className="border-border/40 flex items-center justify-between border-b pb-3">
           <div className="flex items-center gap-2">
             <span className="bg-warning/15 text-warning flex h-7 w-7 items-center justify-center rounded-lg">
-              <AlertTriangle className="h-4 w-4" />
+              <AlarmClock className="h-4 w-4" />
             </span>
             <div>
               <h2 className="text-foreground text-base font-bold sm:text-lg">
@@ -177,6 +178,9 @@ export default async function OverviewPage() {
                 <p className="text-muted-foreground text-[11px]">
                   Atomic Habits • Owner: Ahmed Rahman
                 </p>
+                <span className="text-warning bg-warning/15 mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-extrabold">
+                  ⏱ 1 day left
+                </span>
               </div>
             </div>
             <Link
@@ -200,6 +204,9 @@ export default async function OverviewPage() {
                 <p className="text-muted-foreground text-[11px]">
                   Nusrat wants Rich Dad Poor Dad
                 </p>
+                <span className="mt-1 inline-block rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-extrabold text-blue-600 dark:bg-blue-900/40 dark:text-blue-300">
+                  ⏱ 2 hrs ago
+                </span>
               </div>
             </div>
             <Link
@@ -223,6 +230,9 @@ export default async function OverviewPage() {
                 <p className="text-muted-foreground text-[11px]">
                   Ahmed: &quot;Is the book ready for pickup?&quot;
                 </p>
+                <span className="bg-success/15 text-success mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-extrabold">
+                  ⏱ 14 min ago
+                </span>
               </div>
             </div>
             <Link
@@ -246,6 +256,9 @@ export default async function OverviewPage() {
                 <p className="text-muted-foreground text-[11px]">
                   1 Borrow Pass expires in 3 days
                 </p>
+                <span className="mt-1 inline-block rounded-full bg-purple-100 px-2 py-0.5 text-[10px] font-extrabold text-purple-600 dark:bg-purple-900/40 dark:text-purple-300">
+                  ⏱ 3 days left
+                </span>
               </div>
             </div>
             <Link
