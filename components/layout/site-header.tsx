@@ -21,7 +21,6 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [isAtTop, setIsAtTop] = useState(true);
 
-  // Check if we are on a specific book details page (e.g. /books/pather-panchali)
   const nonDetailsRoutes = [
     "upload",
     "search",
