@@ -22,6 +22,7 @@ import {
   Shield,
   MessageSquare,
   Sparkles,
+  ShoppingBag,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -58,6 +59,19 @@ export default async function OverviewPage() {
     },
     {
       id: "ex-3",
+      bookTitle: "Deep Work (Sold)",
+      bookAuthor: "Cal Newport",
+      coverImage:
+        "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=200&fit=crop",
+      type: "Book Sale",
+      partnerName: "Jannatul Ferdaus",
+      partnerAvatar: "https://i.pravatar.cc/150?u=jannatul",
+      status: "Sold for ৳ 450",
+      statusVariant: "success",
+      dueDate: "Completed",
+    },
+    {
+      id: "ex-4",
       bookTitle: "Rich Dad Poor Dad",
       bookAuthor: "Robert Kiyosaki",
       coverImage:
@@ -522,7 +536,7 @@ export default async function OverviewPage() {
         <h2 className="text-foreground text-base font-bold sm:text-lg">
           Command Shortcuts
         </h2>
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
           {[
             {
               title: "My Library",
@@ -531,6 +545,14 @@ export default async function OverviewPage() {
               icon: Library,
               color: "text-brand-blue",
               bg: "bg-brand-blue/10",
+            },
+            {
+              title: "My Sales",
+              desc: "5 sold • ৳ 2,450",
+              href: "/dashboard/sales",
+              icon: ShoppingBag,
+              color: "text-emerald-500",
+              bg: "bg-emerald-500/10",
             },
             {
               title: "Wishlist",
@@ -549,7 +571,7 @@ export default async function OverviewPage() {
               bg: "bg-success/10",
             },
             {
-              title: "Account Settings",
+              title: "Settings",
               desc: "Profile & address",
               href: "/dashboard/settings",
               icon: Shield,

@@ -135,6 +135,18 @@ export const dashboardNavGroups: NavGroup[] = [
         badge: 1,
         badgeVariant: "success",
       },
+      {
+        title: "My Sales",
+        href: "/dashboard/sales",
+        icon: ShoppingCartIcon,
+        badge: 2,
+        badgeVariant: "success",
+      },
+      {
+        title: "My Purchases",
+        href: "/dashboard/purchases",
+        icon: ShoppingCartIcon,
+      },
     ],
   },
   {

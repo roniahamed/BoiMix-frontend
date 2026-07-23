@@ -1,6 +1,14 @@
 "use client";
 
-import { Book, Bookmark, Users, Star, ArrowUpRight, Clock } from "lucide-react";
+import {
+  Book,
+  Bookmark,
+  Users,
+  Star,
+  ArrowUpRight,
+  Clock,
+  ShoppingBag,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SummaryCardProps {
@@ -77,7 +85,7 @@ function SummaryCard({
 
 export function QuickSummary() {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       <SummaryCard
         title="My Books"
         value="42"
@@ -87,6 +95,16 @@ export function QuickSummary() {
         icon={Book}
         colorClass="text-brand-pink"
         bgClass="bg-brand-pink/10 shadow-xs"
+      />
+      <SummaryCard
+        title="Books Sold"
+        value="5"
+        subValue="৳ 2,450 Earned"
+        trend="+2 this wk"
+        trendPositive={true}
+        icon={ShoppingBag}
+        colorClass="text-emerald-500"
+        bgClass="bg-emerald-500/10 shadow-xs"
       />
       <SummaryCard
         title="Borrowing"
