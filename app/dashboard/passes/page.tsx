@@ -155,7 +155,7 @@ export default function MembershipWalletDashboardPage() {
       </div>
 
       {/* 1. HERO CARD VISUAL HIERARCHY */}
-      <div className="via-primary relative space-y-5 overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-purple-950 p-6 text-white shadow-xl sm:p-7">
+      <div className="via-primary relative space-y-5 overflow-hidden rounded-[10px] border border-white/10 bg-gradient-to-br from-slate-950 to-purple-950 p-6 text-white shadow-xl sm:p-7">
         <div className="pointer-events-none absolute top-0 right-0 -mt-16 -mr-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
         {/* Top Tier Header */}

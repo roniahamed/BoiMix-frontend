@@ -83,7 +83,7 @@
 }
 
 :root {
-  --radius: 0.5rem;
+  --radius: 7px;
   --font-roboto: "Roboto";
   --font-lato: "Lato";
   --font-poppins: "Poppins";

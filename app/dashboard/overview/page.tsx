@@ -28,7 +28,7 @@ export default async function OverviewPage() {
   return (
     <div className="space-y-6 pb-24 sm:space-y-8 lg:pb-8">
       {/* 1. Gamified Welcome & Streak Progress Hero Header (Restored Rich Gradient & Subscription Badges) */}
-      <div className="from-brand-blue via-primary text-primary-foreground shadow-primary/15 relative overflow-hidden rounded-3xl bg-gradient-to-br to-purple-900 p-6 shadow-xl sm:p-8">
+      <div className="from-brand-blue via-primary text-primary-foreground shadow-primary/15 relative overflow-hidden rounded-[10px] bg-gradient-to-br to-purple-900 p-6 shadow-xl sm:p-8">
         {/* Glow Effects */}
         <div className="pointer-events-none absolute top-0 right-0 -mt-20 -mr-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-1/3 -mb-20 h-60 w-60 rounded-full bg-amber-400/10 blur-2xl" />
