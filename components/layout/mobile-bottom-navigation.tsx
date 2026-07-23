@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookPlusIcon } from "lucide-react";
 import { mobileBottomNavItems } from "@/lib/navigation";
 import { MobileNavbar } from "@/components/layout/mobile-navbar";
 

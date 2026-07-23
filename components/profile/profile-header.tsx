@@ -20,7 +20,6 @@ import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import type { UserProfile } from "@/types/user";
 import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
 import { PencilIcon } from "lucide-react";
-import { BackButton } from "@/components/shared/back-button";
 
 const CustomShareArrow = ({ className }: { className?: string }) => (
   <svg

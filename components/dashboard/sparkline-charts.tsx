@@ -1,6 +1,6 @@
 "use client";
 
-import { Line, LineChart, ResponsiveContainer, Tooltip } from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowUpRight } from "lucide-react";
 
@@ -14,7 +14,9 @@ interface SparklineCardProps {
   value: string;
   trend: string;
   data: SparklineData[];
-  color: string;
+  gradientId: string;
+  strokeColor: string;
+  fillColor: string;
 }
 
 function SparklineCard({
@@ -22,32 +24,46 @@ function SparklineCard({
   value,
   trend,
   data,
-  color,
+  gradientId,
+  strokeColor,
+  fillColor,
 }: SparklineCardProps) {
   return (
-    <Card>
+    <Card className="border-border/70 overflow-hidden border shadow-xs transition-all duration-200 hover:shadow-md">
       <CardContent className="p-4">
-        <div className="flex items-start justify-between">
-          <div className="flex flex-col">
-            <span className="text-foreground/80 text-sm font-medium">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
               {title}
-            </span>
-            <span className="mt-1 text-2xl font-bold">{value}</span>
+            </p>
+            <p className="text-foreground mt-1 text-2xl font-extrabold">
+              {value}
+            </p>
           </div>
-          <div className="text-success bg-success/10 flex items-center rounded-full px-2 py-0.5 text-xs font-medium">
-            <ArrowUpRight className="mr-0.5 h-3 w-3" />
+          <div className="bg-success/15 text-success flex items-center rounded-full px-2.5 py-1 text-xs font-bold">
+            <ArrowUpRight className="mr-0.5 h-3.5 w-3.5" />
             {trend}
           </div>
         </div>
-        <div className="mt-4 h-[60px] w-full">
+
+        <div className="mt-3 h-[64px] w-full">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <AreaChart
+              data={data}
+              margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor={fillColor} stopOpacity={0.4} />
+                  <stop offset="95%" stopColor={fillColor} stopOpacity={0.0} />
+                </linearGradient>
+              </defs>
               <Tooltip
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-background rounded-md border px-2 py-1 text-xs font-medium shadow-sm">
-                        {payload[0].value}
+                      <div className="bg-card text-card-foreground border-border rounded-lg border px-2.5 py-1 text-xs font-bold shadow-md">
+                        {payload[0].value} views
                       </div>
                     );
                   }
@@ -55,15 +71,15 @@ function SparklineCard({
                 }}
                 cursor={false}
               />
-              <Line
+              <Area
                 type="monotone"
                 dataKey="value"
-                stroke={color}
-                strokeWidth={2}
-                dot={{ r: 3, fill: color, strokeWidth: 0 }}
-                activeDot={{ r: 5, strokeWidth: 0 }}
+                stroke={strokeColor}
+                strokeWidth={2.5}
+                fillOpacity={1}
+                fill={`url(#${gradientId})`}
               />
-            </LineChart>
+            </AreaChart>
           </ResponsiveContainer>
         </div>
       </CardContent>
@@ -71,17 +87,35 @@ function SparklineCard({
   );
 }
 
-// Generate some smooth mock data
-const generateData = (base: number) => {
-  return Array.from({ length: 7 }).map((_, i) => ({
-    day: `Day ${i + 1}`,
-    value: Math.floor(base + Math.random() * (base * 0.5) + i * base * 0.1),
-  }));
-};
+const dataBooks = [
+  { day: "Mon", value: 12 },
+  { day: "Tue", value: 18 },
+  { day: "Wed", value: 15 },
+  { day: "Thu", value: 24 },
+  { day: "Fri", value: 30 },
+  { day: "Sat", value: 28 },
+  { day: "Sun", value: 38 },
+];
 
-const dataBooks = generateData(20);
-const dataProfile = generateData(10);
-const dataDeals = generateData(2);
+const dataProfile = [
+  { day: "Mon", value: 5 },
+  { day: "Tue", value: 9 },
+  { day: "Wed", value: 7 },
+  { day: "Thu", value: 14 },
+  { day: "Fri", value: 12 },
+  { day: "Sat", value: 18 },
+  { day: "Sun", value: 22 },
+];
+
+const dataDeals = [
+  { day: "Mon", value: 1 },
+  { day: "Tue", value: 2 },
+  { day: "Wed", value: 2 },
+  { day: "Thu", value: 4 },
+  { day: "Fri", value: 5 },
+  { day: "Sat", value: 6 },
+  { day: "Sun", value: 8 },
+];
 
 export function SparklineCharts() {
   return (
@@ -89,23 +123,29 @@ export function SparklineCharts() {
       <SparklineCard
         title="Books Viewed"
         value="128"
-        trend="16%"
+        trend="+16%"
         data={dataBooks}
-        color="var(--chart-1)"
+        gradientId="spark-books"
+        strokeColor="#3b82f6"
+        fillColor="#3b82f6"
       />
       <SparklineCard
-        title="Profile Views"
+        title="Profile Visits"
         value="56"
-        trend="12%"
+        trend="+12%"
         data={dataProfile}
-        color="var(--chart-2)"
+        gradientId="spark-profile"
+        strokeColor="#ec4899"
+        fillColor="#ec4899"
       />
       <SparklineCard
-        title="Successful Deals"
+        title="Successful Swaps"
         value="8"
-        trend="33%"
+        trend="+33%"
         data={dataDeals}
-        color="var(--chart-3)"
+        gradientId="spark-deals"
+        strokeColor="#10b981"
+        fillColor="#10b981"
       />
     </div>
   );

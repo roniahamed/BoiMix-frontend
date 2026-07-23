@@ -6,7 +6,6 @@ import {
   BookPlusIcon,
   MessageSquareIcon,
   XIcon,
-  ArrowLeftIcon,
   ExternalLinkIcon,
   ArrowUpIcon,
 } from "lucide-react";

@@ -9,14 +9,12 @@ import {
   LayoutDashboardIcon,
   LibraryIcon,
   MessageSquareIcon,
-  PackageIcon,
   Repeat2Icon,
   SettingsIcon,
   ShieldCheckIcon,
   ShoppingCartIcon,
   SlidersHorizontalIcon,
   TriangleAlertIcon,
-  UserIcon,
   UsersRoundIcon,
   StarIcon,
   ActivityIcon,
@@ -30,6 +28,8 @@ export type NavItem = {
   href: string;
   description?: string;
   icon?: NavIcon;
+  badge?: string | number;
+  badgeVariant?: "default" | "brand" | "warning" | "success" | "danger";
 };
 
 export type NavGroup = {
@@ -79,9 +79,21 @@ export const megaMenuItems: NavItem[] = [
 
 export const mobileBottomNavItems: NavItem[] = [
   { title: "Home", href: "/", icon: HomeIcon },
-  { title: "Messages", href: "/dashboard/messages", icon: MessageSquareIcon },
+  {
+    title: "Messages",
+    href: "/dashboard/messages",
+    icon: MessageSquareIcon,
+    badge: 5,
+    badgeVariant: "brand",
+  },
   { title: "Add Book", href: "/books/upload", icon: BookPlusIcon },
-  { title: "Alerts", href: "/dashboard/notifications", icon: BellIcon },
+  {
+    title: "Alerts",
+    href: "/dashboard/notifications",
+    icon: BellIcon,
+    badge: 3,
+    badgeVariant: "warning",
+  },
   { title: "Menu", href: "/dashboard", icon: LayoutDashboardIcon },
 ];
 
@@ -111,6 +123,8 @@ export const dashboardNavGroups: NavGroup[] = [
         title: "Borrowed Books",
         href: "/dashboard/borrowed",
         icon: BookOpenIcon,
+        badge: 2,
+        badgeVariant: "brand",
       },
       { title: "Lent Books", href: "/dashboard/lent", icon: BookOpenIcon },
       { title: "Active Swaps", href: "/dashboard/swaps", icon: Repeat2Icon },
@@ -118,6 +132,8 @@ export const dashboardNavGroups: NavGroup[] = [
         title: "Swap Offers",
         href: "/dashboard/swaps/offers",
         icon: ClipboardListIcon,
+        badge: 1,
+        badgeVariant: "success",
       },
     ],
   },
@@ -130,11 +146,15 @@ export const dashboardNavGroups: NavGroup[] = [
         title: "Messages",
         href: "/dashboard/messages",
         icon: MessageSquareIcon,
+        badge: 5,
+        badgeVariant: "brand",
       },
       {
         title: "Notifications",
         href: "/dashboard/notifications",
         icon: BellIcon,
+        badge: 3,
+        badgeVariant: "warning",
       },
     ],
   },

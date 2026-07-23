@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { BellIcon, UserIcon, MenuIcon } from "lucide-react";
+import { UserIcon, MenuIcon } from "lucide-react";
 import { NotificationPopover } from "@/components/notifications/notification-popover";
 
 import { BrandLink } from "@/components/layout/brand-link";
