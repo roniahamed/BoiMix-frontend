@@ -3,9 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BookCard } from "@/components/shared/book-card";
 import type { BookCardBook } from "@/types/book";
 import {
-  BadgeCheck,
   ChevronRight,
-  Star,
   Plus,
   Flame,
   ArrowRight,
@@ -17,6 +15,9 @@ import {
   Repeat,
   Bookmark,
   BookOpen,
+  Crown,
+  Ticket,
+  ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -26,15 +27,17 @@ export default async function OverviewPage() {
 
   return (
     <div className="space-y-6 pb-24 sm:space-y-8 lg:pb-8">
-      {/* 1. Gamified Welcome & Streak Progress Hero Header */}
-      <div className="from-primary via-primary/95 to-brand-blue/80 text-primary-foreground shadow-primary/10 relative overflow-hidden rounded-3xl bg-gradient-to-br p-5 shadow-lg sm:p-7">
-        <div className="pointer-events-none absolute top-0 right-0 -mt-16 -mr-16 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+      {/* 1. Gamified Welcome & Streak Progress Hero Header (Restored Rich Gradient & Subscription Badges) */}
+      <div className="from-brand-blue via-primary text-primary-foreground shadow-primary/15 relative overflow-hidden rounded-3xl bg-gradient-to-br to-purple-900 p-6 shadow-xl sm:p-8">
+        {/* Glow Effects */}
+        <div className="pointer-events-none absolute top-0 right-0 -mt-20 -mr-20 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-1/3 -mb-20 h-60 w-60 rounded-full bg-amber-400/10 blur-2xl" />
 
-        <div className="relative z-10 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          {/* User Info & Level */}
-          <div className="flex items-start gap-4">
+        <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          {/* User Info & Subscription Tier Status */}
+          <div className="flex items-start gap-4 sm:gap-5">
             <div className="relative shrink-0">
-              <Avatar className="h-14 w-14 border-2 border-white/30 shadow-md sm:h-16 sm:w-16">
+              <Avatar className="h-16 w-16 border-2 border-white/30 shadow-lg sm:h-20 sm:w-20">
                 <AvatarImage
                   src="https://i.pravatar.cc/150?u=roni"
                   alt="Roni Ahamed"
@@ -43,44 +46,58 @@ export default async function OverviewPage() {
                   RA
                 </AvatarFallback>
               </Avatar>
-              <span className="absolute -right-1 -bottom-1 flex h-6 w-6 items-center justify-center rounded-full bg-amber-400 text-[10px] font-extrabold text-slate-950 shadow-sm">
+              <span className="absolute -right-1 -bottom-1 flex h-7 w-7 items-center justify-center rounded-full bg-amber-400 text-xs font-extrabold text-slate-950 shadow-md">
                 L12
               </span>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl font-black tracking-tight text-white sm:text-2xl">
-                  Good Afternoon, Roni! 👋
+                <h1 className="text-2xl font-black tracking-tight text-white sm:text-3xl">
+                  Good Afternoon 👋 Roni!
                 </h1>
-                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-bold backdrop-blur-md">
-                  <BadgeCheck className="h-3.5 w-3.5 text-amber-300" /> Level 12
-                  Reader
+
+                {/* User Status / Pro Member Tier */}
+                <span className="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-3 py-1 text-xs font-black text-slate-950 shadow-xs">
+                  <Crown className="h-3.5 w-3.5 fill-slate-950" /> Premium Pro
+                  Member
+                </span>
+
+                <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-bold text-white backdrop-blur-md">
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />{" "}
+                  Central Library Verified
                 </span>
               </div>
+
               <p className="text-primary-foreground/90 text-xs font-medium sm:text-sm">
                 Backend Engineer • Dhaka Central Reader Community
               </p>
 
               {/* XP Level Progress Bar */}
-              <div className="max-w-xs space-y-1 pt-2">
+              <div className="max-w-xs space-y-1 pt-2 sm:max-w-sm">
                 <div className="flex items-center justify-between text-[11px] font-bold text-white/90">
                   <span>350 / 500 XP to Level 13</span>
                   <span>70%</span>
                 </div>
-                <div className="h-2 w-full overflow-hidden rounded-full bg-black/20">
+                <div className="h-2.5 w-full overflow-hidden rounded-full border border-white/10 bg-black/30">
                   <div className="h-full w-[70%] rounded-full bg-amber-300 transition-all duration-500" />
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Streak & Today's Summary */}
-          <div className="flex flex-col gap-3 border-t border-white/15 pt-3 sm:items-end sm:border-t-0 sm:pt-0">
-            <div className="flex items-center gap-2">
-              <div className="inline-flex items-center gap-1.5 rounded-2xl bg-white/20 px-3 py-1.5 text-xs font-extrabold shadow-xs backdrop-blur-md">
+          {/* Streak & Today's Summary & Borrow Passes */}
+          <div className="flex flex-col gap-3 border-t border-white/15 pt-4 lg:items-end lg:border-t-0 lg:pt-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 rounded-2xl bg-white/20 px-3.5 py-1.5 text-xs font-extrabold text-white shadow-xs backdrop-blur-md">
                 <Flame className="h-4 w-4 animate-pulse fill-amber-300 text-amber-300" />
                 <span>14 Day Streak!</span>
+              </div>
+
+              {/* Borrow Pass Status Pill */}
+              <div className="inline-flex items-center gap-1.5 rounded-2xl border border-emerald-400/30 bg-emerald-400/20 px-3.5 py-1.5 text-xs font-bold text-emerald-200 backdrop-blur-md">
+                <Ticket className="h-4 w-4 text-emerald-300" />
+                <span>2 Borrow Passes Active</span>
               </div>
 
               <div className="inline-flex items-center gap-1 rounded-2xl bg-amber-400/20 px-3 py-1.5 text-xs font-bold text-amber-200 backdrop-blur-md">
@@ -88,19 +105,30 @@ export default async function OverviewPage() {
               </div>
             </div>
 
+            <p className="text-[11px] font-semibold text-white/80">
+              Today: 1 borrow due tomorrow • 2 exchange offers • 5 unread
+              messages
+            </p>
+
             {/* Quick Action CTAs */}
-            <div className="flex w-full items-center gap-2 sm:w-auto">
+            <div className="flex w-full items-center gap-2 pt-1 lg:w-auto">
               <Link
                 href="/books/upload"
-                className="text-primary inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold shadow-md transition-all hover:bg-white/90 active:scale-95 sm:flex-none"
+                className="text-primary inline-flex min-h-[42px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-xs font-extrabold shadow-md transition-all hover:bg-white/90 active:scale-95 lg:flex-none"
               >
                 <Plus className="h-4 w-4 stroke-[3]" /> Add Book
               </Link>
               <Link
                 href="/books"
-                className="inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/15 px-4 py-2.5 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-white/25 sm:flex-none"
+                className="inline-flex min-h-[42px] flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/15 px-4 py-2.5 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-white/25 lg:flex-none"
               >
                 <Compass className="h-4 w-4" /> Browse
+              </Link>
+              <Link
+                href="/dashboard/borrowed"
+                className="inline-flex min-h-[42px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-amber-400 px-3.5 py-2.5 text-xs font-black text-slate-950 shadow-md transition-all hover:bg-amber-300 active:scale-95 lg:flex-none"
+              >
+                <Ticket className="h-4 w-4" /> Buy Pass
               </Link>
             </div>
           </div>
@@ -202,26 +230,26 @@ export default async function OverviewPage() {
             </Link>
           </div>
 
-          {/* Action 4: Write Review */}
-          <div className="bg-brand-pink/10 border-brand-pink/30 flex items-center justify-between gap-3 rounded-xl border p-3.5">
+          {/* Action 4: Renew Borrow Pass */}
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-purple-500/30 bg-purple-500/10 p-3.5">
             <div className="flex items-start gap-3">
-              <span className="bg-brand-pink/20 text-brand-pink mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-xs font-bold">
-                ⭐
+              <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-purple-500/20 text-xs font-bold text-purple-600">
+                🎫
               </span>
               <div className="space-y-0.5">
                 <p className="text-foreground text-xs font-bold">
-                  Review Received Transaction
+                  Borrow Pass Expiring
                 </p>
                 <p className="text-muted-foreground text-[11px]">
-                  Rate your deal with Hasan Mahmud
+                  1 Borrow Pass expires in 3 days
                 </p>
               </div>
             </div>
             <Link
-              href="/dashboard/reviews"
-              className="bg-brand-pink shrink-0 rounded-lg px-3 py-1.5 text-xs font-extrabold text-white shadow-2xs transition-transform active:scale-95"
+              href="/dashboard/borrowed"
+              className="shrink-0 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-extrabold text-white shadow-2xs transition-transform active:scale-95"
             >
-              Write Review
+              Renew Pass
             </Link>
           </div>
         </div>
@@ -231,7 +259,7 @@ export default async function OverviewPage() {
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-foreground text-base font-bold sm:text-lg">
-            Quick Overview & Actions
+            Account Summary & Status
           </h2>
           <Link
             href="/dashboard/analytics"
@@ -266,14 +294,14 @@ export default async function OverviewPage() {
             </Link>
           </div>
 
-          {/* Card 2: Borrowing */}
+          {/* Card 2: Borrowing & Passes */}
           <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
             <div className="flex items-center justify-between">
               <div className="bg-success/10 text-success flex h-8 w-8 items-center justify-center rounded-xl">
                 <Bookmark className="h-4 w-4" />
               </div>
-              <span className="bg-warning/15 text-warning rounded px-1.5 py-0.5 text-[10px] font-bold">
-                1 Due
+              <span className="rounded bg-emerald-500/15 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600">
+                2 Passes
               </span>
             </div>
             <div>
@@ -362,27 +390,27 @@ export default async function OverviewPage() {
             </Link>
           </div>
 
-          {/* Card 6: Reputation */}
+          {/* Card 6: User Status Tier */}
           <div className="bg-card border-border/70 flex flex-col justify-between space-y-2 rounded-2xl border p-3.5 shadow-2xs">
             <div className="flex items-center justify-between">
               <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-400/10 text-amber-500">
-                <Star className="h-4 w-4 fill-amber-400" />
+                <Crown className="h-4 w-4 fill-amber-400" />
               </div>
-              <span className="bg-brand-blue/15 text-brand-blue rounded px-1.5 py-0.5 text-[10px] font-bold">
-                Top 5%
+              <span className="rounded bg-amber-400/15 px-1.5 py-0.5 text-[10px] font-bold text-amber-600">
+                Pro Tier
               </span>
             </div>
             <div>
               <p className="text-foreground text-xl font-extrabold">4.9 ⭐</p>
               <p className="text-muted-foreground text-[11px] font-semibold">
-                48 Reviews
+                Premium Member
               </p>
             </div>
             <Link
-              href="/dashboard/reviews"
+              href="/dashboard/settings"
               className="text-primary border-border/40 flex items-center justify-between border-t pt-1.5 text-[11px] font-bold hover:underline"
             >
-              <span>Reviews</span> <ArrowRight className="h-3 w-3" />
+              <span>Manage Tier</span> <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         </div>
@@ -422,7 +450,7 @@ export default async function OverviewPage() {
                 </span>
               </div>
               <p className="text-muted-foreground text-[11px]">
-                Borrow request for 14 days • Dhanmondi Pick up point
+                Borrow request for 14 days • Central Library Pickup
               </p>
             </div>
           </div>
