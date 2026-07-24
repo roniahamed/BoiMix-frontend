@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Search,
   Send,
-  FileText,
   Repeat2,
   X,
 } from "lucide-react";
@@ -144,7 +143,15 @@ const EDITION_OPTIONS = [
   "Hardcover",
 ];
 
-export function UploadBookForm({ onSuccess }: { onSuccess?: () => void }) {
+export function UploadBookForm({
+  formId,
+  showActions = true,
+  onSuccess,
+}: {
+  formId?: string;
+  showActions?: boolean;
+  onSuccess?: () => void;
+}) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -279,7 +286,11 @@ export function UploadBookForm({ onSuccess }: { onSuccess?: () => void }) {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 pb-24">
+        <form
+          id={formId}
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6 pb-24"
+        >
           <div className="bg-card space-y-8 rounded-2xl border p-4 shadow-sm md:p-6">
             {/* Upload Photos */}
             <div>
@@ -1146,38 +1157,32 @@ export function UploadBookForm({ onSuccess }: { onSuccess?: () => void }) {
             </div>
           </div>
 
-          {/* Sticky Actions */}
-          <div
-            className="fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
-            style={
-              {
-                "--bottom-offset": "calc(52px + env(safe-area-inset-bottom))",
-              } as React.CSSProperties
-            }
-          >
-            <div className="bg-card md:boimix-container flex w-full flex-row md:justify-end md:gap-4 md:bg-transparent">
-              <Button
-                type="button"
-                variant="outline"
-                className="text-primary border-primary h-14 flex-1 rounded-none border-y-0 border-r border-l-0 md:h-10 md:w-auto md:flex-none md:rounded-md md:border"
-              >
-                <FileText className="mr-2 h-4 w-4" /> Save Draft
-              </Button>
-              <Button
-                type="submit"
-                className="h-14 flex-1 rounded-none md:h-10 md:w-auto md:flex-none md:rounded-md"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  "Publishing..."
-                ) : (
-                  <>
-                    <Send className="mr-2 h-4 w-4" /> Publish Book
-                  </>
-                )}
-              </Button>
+          {showActions && (
+            <div
+              className="fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
+              style={
+                {
+                  "--bottom-offset": "calc(52px + env(safe-area-inset-bottom))",
+                } as React.CSSProperties
+              }
+            >
+              <div className="bg-card md:boimix-container flex w-full flex-row md:justify-end md:gap-4 md:bg-transparent">
+                <Button
+                  type="submit"
+                  className="h-14 flex-1 rounded-none md:h-10 md:w-auto md:flex-none md:rounded-md"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    "Publishing..."
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-4 w-4" /> Publish Book
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </form>
       </div>
     </div>

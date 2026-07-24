@@ -12,7 +12,6 @@ import {
   CheckCircle2,
   Search,
   Send,
-  FileText,
   Repeat2,
   X,
 } from "lucide-react";
@@ -1152,13 +1151,6 @@ export default function BookUploadPage() {
             }
           >
             <div className="bg-card md:boimix-container flex w-full flex-row md:justify-end md:gap-4 md:bg-transparent">
-              <Button
-                type="button"
-                variant="outline"
-                className="text-primary border-primary h-14 flex-1 rounded-none border-y-0 border-r border-l-0 md:h-10 md:w-auto md:flex-none md:rounded-md md:border"
-              >
-                <FileText className="mr-2 h-4 w-4" /> Save Draft
-              </Button>
               <Button
                 type="submit"
                 className="h-14 flex-1 rounded-none md:h-10 md:w-auto md:flex-none md:rounded-md"

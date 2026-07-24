@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { AddBookDialog } from "@/components/shared/add-book-button";
+import { AddBookButton } from "@/components/shared/add-book-button";
 
 export default async function OverviewPage() {
   const { profileLibraryBooks } = await fetchLocal("/api/profile");
@@ -121,11 +121,9 @@ export default async function OverviewPage() {
             </p>
 
             <div className="flex w-full items-center gap-2 lg:w-auto">
-              <AddBookDialog>
-                <button className="inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-white px-5 py-2 text-xs font-extrabold text-[#0397d3] shadow-md transition-all hover:bg-white/90 active:scale-95 lg:flex-none">
-                  <Plus className="h-4 w-4 stroke-[3]" /> Add Book
-                </button>
-              </AddBookDialog>
+              <AddBookButton className="inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl bg-white px-5 py-2 text-xs font-extrabold text-[#0397d3] shadow-md transition-all hover:bg-white/90 active:scale-95 lg:flex-none">
+                <Plus className="h-4 w-4 stroke-[3]" /> Add Book
+              </AddBookButton>
               <Link
                 href="/books"
                 className="inline-flex min-h-[40px] flex-1 items-center justify-center gap-1.5 rounded-xl border border-white/20 bg-white/10 px-5 py-2 text-xs font-bold text-white backdrop-blur-sm transition-all hover:bg-white/20 lg:flex-none"

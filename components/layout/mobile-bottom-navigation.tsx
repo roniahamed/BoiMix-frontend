@@ -7,6 +7,7 @@ import { MobileNavbar } from "@/components/layout/mobile-navbar";
 
 import { useMessageStore } from "@/lib/store/use-message-store";
 import { cn } from "@/lib/utils";
+import { AddBookDialog } from "@/components/shared/add-book-button";
 
 export function MobileBottomNavigation() {
   const pathname = usePathname();
@@ -50,18 +51,22 @@ export function MobileBottomNavigation() {
                 ? pathname === item.href
                 : pathname.startsWith(item.href);
 
-            return item.href === "#menu" ? (
-              <MobileNavbar key={item.href}>
-                <button
-                  className={cn(
-                    "text-muted-foreground flex flex-col items-center justify-center gap-0.5 text-[0.62rem] font-medium transition-colors",
-                  )}
-                >
-                  {Icon && <Icon className="size-4.5" aria-hidden="true" />}
-                  <span>{item.title}</span>
-                </button>
-              </MobileNavbar>
-            ) : (
+            if (item.href === "#menu") {
+              return (
+                <MobileNavbar key={item.href}>
+                  <button
+                    className={cn(
+                      "text-muted-foreground flex flex-col items-center justify-center gap-0.5 text-[0.62rem] font-medium transition-colors",
+                    )}
+                  >
+                    {Icon && <Icon className="size-4.5" aria-hidden="true" />}
+                    <span>{item.title}</span>
+                  </button>
+                </MobileNavbar>
+              );
+            }
+
+            const navLink = (
               <Link
                 key={item.href}
                 href={item.href}
@@ -81,6 +86,12 @@ export function MobileBottomNavigation() {
                 <span>{item.title}</span>
               </Link>
             );
+
+            if (item.href === "/books/upload") {
+              return <AddBookDialog key={item.href}>{navLink}</AddBookDialog>;
+            }
+
+            return navLink;
           })}
         </div>
       </nav>

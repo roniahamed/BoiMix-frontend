@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BadgeCheck, LogOut, Sparkles } from "lucide-react";
 import type { NavItem, NavGroup } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
+import { AddBookDialog } from "@/components/shared/add-book-button";
 
 type SidebarNavigationProps = {
   title: string;
@@ -28,7 +29,7 @@ export function SidebarNavigation({
       pathname === item.href ||
       (item.href !== "/dashboard/overview" && pathname.startsWith(item.href));
 
-    return (
+    const navLink = (
       <Link
         key={item.href}
         href={item.href}
@@ -73,6 +74,12 @@ export function SidebarNavigation({
         )}
       </Link>
     );
+
+    if (item.href === "/books/upload") {
+      return <AddBookDialog key={item.href}>{navLink}</AddBookDialog>;
+    }
+
+    return navLink;
   };
 
   return (

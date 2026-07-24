@@ -16,6 +16,10 @@ import {
 } from "lucide-react";
 import { dashboardNavGroups } from "@/lib/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  AddBookButton,
+  AddBookDialog,
+} from "@/components/shared/add-book-button";
 
 export default function DashboardMenuPage() {
   const router = useRouter();
@@ -101,12 +105,9 @@ export default function DashboardMenuPage() {
       </div>
 
       {/* Quick Action Button - Mobile */}
-      <Link
-        href="/books/upload"
-        className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold shadow-sm transition-transform active:scale-[0.99]"
-      >
+      <AddBookButton className="bg-primary text-primary-foreground hover:bg-primary/90 flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold shadow-sm transition-transform active:scale-[0.99]">
         <Plus className="h-4 w-4 stroke-[3]" /> Add New Book to Library
-      </Link>
+      </AddBookButton>
 
       {/* Dashboard groups */}
       {dashboardNavGroups.map((group) => (
@@ -121,7 +122,7 @@ export default function DashboardMenuPage() {
           <div className="divide-border/40 divide-y">
             {group.items.map((item) => {
               const Icon = item.icon;
-              return (
+              const navLink = (
                 <Link
                   key={item.href}
                   href={item.href}
@@ -150,6 +151,12 @@ export default function DashboardMenuPage() {
                   </div>
                 </Link>
               );
+
+              if (item.href === "/books/upload") {
+                return <AddBookDialog key={item.href}>{navLink}</AddBookDialog>;
+              }
+
+              return navLink;
             })}
           </div>
         </div>

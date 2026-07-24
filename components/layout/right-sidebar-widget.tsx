@@ -15,6 +15,7 @@ import { MOCK_CONVERSATIONS, Conversation } from "@/lib/data/mock-messages";
 import { UserAvatar } from "@/components/shared/user-avatar";
 import { ChatWindow } from "@/components/messages/chat-window";
 import { Button } from "@/components/ui/button";
+import { AddBookDialog } from "@/components/shared/add-book-button";
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -173,16 +174,18 @@ export function RightSidebarWidget() {
       {/* Sidebar Strip */}
       <div className="bg-card border-border fixed top-2/3 right-0 z-50 hidden -translate-y-1/2 flex-col overflow-hidden rounded-l-[5px] border border-r-0 shadow-[0_0_15px_rgba(0,0,0,0.15)] md:flex">
         {/* Add Book */}
-        <Link
-          href="/books/upload"
-          className="hover:bg-muted group flex flex-col items-center gap-1.5 border-b px-4 py-4 transition-colors"
-          aria-label="Add a book"
-        >
-          <BookPlusIcon className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
-          <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
-            Add Book
-          </span>
-        </Link>
+        <AddBookDialog>
+          <Link
+            href="/books/upload"
+            className="hover:bg-muted group flex flex-col items-center gap-1.5 border-b px-4 py-4 transition-colors"
+            aria-label="Add a book"
+          >
+            <BookPlusIcon className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
+            <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
+              Add Book
+            </span>
+          </Link>
+        </AddBookDialog>
 
         {/* Messages */}
         <button
