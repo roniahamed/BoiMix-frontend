@@ -198,55 +198,26 @@ export function DashboardLibraryCard({
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-1 text-[11px] font-medium">
-              <div className="flex items-center gap-1.5">
-                {book.tags.includes("borrow") ? (
-                  <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-                ) : (
-                  <XCircle className="h-3 w-3 text-slate-300" />
-                )}
-                <span
-                  className={
-                    book.tags.includes("borrow")
-                      ? "text-slate-700 dark:text-slate-200"
-                      : "text-slate-400"
-                  }
-                >
-                  Borrow
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                {book.tags.includes("exchange") ? (
-                  <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-                ) : (
-                  <XCircle className="h-3 w-3 text-slate-300" />
-                )}
-                <span
-                  className={
-                    book.tags.includes("exchange")
-                      ? "text-slate-700 dark:text-slate-200"
-                      : "text-slate-400"
-                  }
-                >
-                  Exchange
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                {book.tags.includes("sell") ? (
-                  <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-                ) : (
-                  <XCircle className="h-3 w-3 text-slate-300" />
-                )}
-                <span
-                  className={
-                    book.tags.includes("sell")
-                      ? "text-slate-700 dark:text-slate-200"
-                      : "text-slate-400"
-                  }
-                >
-                  Sale
-                </span>
-              </div>
+            <div className="flex flex-wrap gap-1.5 text-[11px] font-medium">
+              {book.tags.filter((t) =>
+                ["borrow", "exchange", "sell"].includes(t),
+              ).length > 0 ? (
+                book.tags
+                  .filter((t) => ["borrow", "exchange", "sell"].includes(t))
+                  .map((tag) => (
+                    <div
+                      key={tag}
+                      className="flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400"
+                    >
+                      <CheckCircle2 className="h-3 w-3" />
+                      <span className="capitalize">
+                        {tag === "sell" ? "Sale" : tag}
+                      </span>
+                    </div>
+                  ))
+              ) : (
+                <span className="text-slate-400 italic">No actions set</span>
+              )}
             </div>
           )}
         </div>
