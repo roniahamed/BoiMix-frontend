@@ -1,7 +1,6 @@
 import { fetchLocal } from "@/lib/fetchLocal";
 import { LibraryGrid } from "@/components/shared/library-grid";
 import {
-  PlusIcon,
   Library,
   BookOpen,
   Repeat,
@@ -10,7 +9,7 @@ import {
   AlertCircle,
   ArrowRight,
 } from "lucide-react";
-import Link from "next/link";
+import { AddBookButton } from "@/components/shared/add-book-button";
 import { Book } from "@/components/shared/library-grid";
 
 export default async function LibraryPage() {
@@ -109,13 +108,7 @@ export default async function LibraryPage() {
             </div>
           </div>
 
-          <Link
-            href="/books/upload"
-            className="group hidden shrink-0 items-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-extrabold text-[#0397d3] shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl active:scale-95 sm:inline-flex"
-          >
-            <PlusIcon className="h-4 w-4 stroke-[3] transition-transform duration-200 group-hover:rotate-90" />
-            Add New Book
-          </Link>
+          <AddBookButton />
         </div>
 
         {/* ── Row 2: Management Stat cards ── */}
@@ -183,13 +176,7 @@ export default async function LibraryPage() {
         </div>
 
         {/* Mobile CTA */}
-        <Link
-          href="/books/upload"
-          className="relative z-10 mt-4 flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-extrabold text-[#0397d3] shadow-md transition-all hover:bg-white/90 active:scale-95 sm:hidden"
-        >
-          <PlusIcon className="h-4 w-4 stroke-[3]" />
-          Add New Book
-        </Link>
+        <AddBookButton className="relative z-10 mt-4 flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3 text-sm font-extrabold text-[#0397d3] shadow-md transition-all hover:bg-white/90 active:scale-95 sm:hidden" />
       </div>
 
       {/* ══════ BOOK GRID ══════ */}

@@ -10,7 +10,6 @@ import {
   Archive,
   Eye,
   CheckCircle2,
-  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Book } from "@/components/shared/library-grid";
