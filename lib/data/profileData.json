@@ -142,14 +142,17 @@
       "author": "Bibhutibhushan Bandyopadhyay",
       "coverUrl": "/book-covers/song-of-padma.svg",
       "tags": ["exchange", "borrow"],
-      "rating": 4.9,
-      "reviewCount": 142,
-      "distance": "1.2 km",
       "location": "Mirpur",
       "condition": "good",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000000",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "borrowed",
+      "borrower": "Ahmed",
+      "dueDate": "28 July",
+      "shelfLocation": "Shelf A"
     },
     {
       "id": "profile-book-2",
@@ -158,16 +161,17 @@
       "author": "Akbar Ali Khan",
       "coverUrl": "/book-covers/history-of-bengal.svg",
       "tags": ["sell", "borrow"],
-      "rating": 4.8,
-      "reviewCount": 65,
       "price": 480,
       "originalPrice": 600,
-      "distance": "1.9 km",
       "location": "Mirpur",
       "condition": "excellent",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000001",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "sold",
+      "shelfLocation": "Shelf B"
     },
     {
       "id": "profile-book-3",
@@ -176,15 +180,17 @@
       "author": "Ayman Sadiq",
       "coverUrl": "/book-covers/smart-entrepreneur.svg",
       "tags": ["sell"],
-      "rating": 4.7,
-      "reviewCount": 110,
       "price": 320,
       "originalPrice": 400,
       "location": "Mirpur",
       "condition": "new",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000002",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "draft",
+      "shelfLocation": "Shelf A"
     },
     {
       "id": "profile-book-4",
@@ -193,14 +199,15 @@
       "author": "Raisa Chowdhury",
       "coverUrl": "/book-covers/quiet-reviews.svg",
       "tags": ["borrow", "exchange"],
-      "rating": 4.9,
-      "reviewCount": 52,
-      "distance": "1.7 km",
       "location": "Mirpur",
       "condition": "excellent",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000003",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "archived",
+      "shelfLocation": "Shelf B"
     },
     {
       "id": "profile-book-5",
@@ -209,16 +216,17 @@
       "author": "Tahmima Anam",
       "coverUrl": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=300&h=400&fit=crop",
       "tags": ["sell"],
-      "rating": 4.5,
-      "reviewCount": 38,
       "price": 350,
       "originalPrice": 450,
-      "distance": "2.1 km",
       "location": "Dhanmondi",
       "condition": "good",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000004",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "available",
+      "shelfLocation": "Shelf A"
     },
     {
       "id": "profile-book-6",
@@ -227,14 +235,15 @@
       "author": "Pearl S. Buck",
       "coverUrl": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=300&h=400&fit=crop",
       "tags": ["exchange"],
-      "rating": 4.8,
-      "reviewCount": 120,
-      "distance": "3.5 km",
       "location": "Banani",
       "condition": "excellent",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000005",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "available",
+      "shelfLocation": "Shelf B"
     },
     {
       "id": "profile-book-7",
@@ -243,14 +252,15 @@
       "author": "Zahir Raihan",
       "coverUrl": "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=300&h=400&fit=crop",
       "tags": ["borrow"],
-      "rating": 4.9,
-      "reviewCount": 205,
-      "distance": "1.0 km",
       "location": "Mirpur",
       "condition": "fair",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000006",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "available",
+      "shelfLocation": "Shelf A"
     },
     {
       "id": "profile-book-8",
@@ -259,16 +269,17 @@
       "author": "Rabindranath Tagore",
       "coverUrl": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=300&h=400&fit=crop",
       "tags": ["sell", "exchange"],
-      "rating": 5,
-      "reviewCount": 340,
       "price": 250,
       "originalPrice": 300,
-      "distance": "4.2 km",
       "location": "Gulshan",
       "condition": "excellent",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000007",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "available",
+      "shelfLocation": "Shelf B"
     },
     {
       "id": "profile-book-9",
@@ -277,14 +288,15 @@
       "author": "Paulo Coelho",
       "coverUrl": "https://images.unsplash.com/photo-1495640388908-05fa85288e61?q=80&w=300&h=400&fit=crop",
       "tags": [],
-      "rating": 4.7,
-      "reviewCount": 1500,
-      "distance": "0.8 km",
       "location": "Mirpur",
       "condition": "new",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000008",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "available",
+      "shelfLocation": "Shelf A"
     },
     {
       "id": "profile-book-10",
@@ -293,14 +305,15 @@
       "author": "Yuval Noah Harari",
       "coverUrl": "https://images.unsplash.com/photo-1541963463532-d68292c34b19?q=80&w=300&h=400&fit=crop",
       "tags": [],
-      "rating": 4.8,
-      "reviewCount": 890,
-      "distance": "5.0 km",
       "location": "Uttara",
       "condition": "excellent",
       "availability": "in-stock",
       "providerType": "user",
-      "isVerifiedUser": true
+      "isVerifiedUser": true,
+      "isbn": "978-0000000009",
+      "addedAt": "12 Jun",
+      "inventoryStatus": "available",
+      "shelfLocation": "Shelf B"
     }
   ],
   "profileReviews": [

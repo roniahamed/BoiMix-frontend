@@ -22,16 +22,7 @@ import {
   PolarAngleAxis,
   PolarRadiusAxis,
 } from "recharts";
-import {
-  Eye,
-  Users,
-  TrendingUp,
-  BookOpen,
-  Repeat,
-  ShoppingBag,
-  Star,
-  Activity,
-} from "lucide-react";
+import { BookOpen, Repeat, ShoppingBag, Star, Activity } from "lucide-react";
 
 // ─── Mock Data ──────────────────────────────────────────────────────────────
 

@@ -2,9 +2,18 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { DashboardLibraryCard } from "@/components/shared/dashboard-library-card";
-import { Search, Loader2, BookX, SlidersHorizontal } from "lucide-react";
+import {
+  Search,
+  Loader2,
+  BookX,
+  ChevronDown,
+  Archive,
+  Trash2,
+  CheckSquare,
+  Square,
+} from "lucide-react";
 
-type Book = {
+export type Book = {
   id: string;
   title: string;
   author: string;
@@ -14,40 +23,31 @@ type Book = {
   coverUrl: string;
   sellerName?: string;
   tags: string[];
-  isSold?: boolean;
-  isExchanged?: boolean;
+  inventoryStatus?: "available" | "borrowed" | "draft" | "archived" | "sold";
+  isbn?: string;
+  addedAt?: string;
+  shelfLocation?: string;
+  borrower?: string;
+  dueDate?: string;
 };
 
-type FilterType = "All" | "Sell" | "Exchange" | "Borrow" | "Sold";
+type FilterType =
+  | "All"
+  | "Available"
+  | "Borrow"
+  | "Exchange"
+  | "Sell"
+  | "Archived";
 
 const PAGE_SIZE = 10;
 
-const FILTER_CONFIG: {
-  label: FilterType;
-  color: string;
-  activeColor: string;
-}[] = [
-  { label: "All", color: "", activeColor: "bg-[#0397d3] text-white shadow-sm" },
-  {
-    label: "Sell",
-    color: "",
-    activeColor: "bg-emerald-500 text-white shadow-sm",
-  },
-  {
-    label: "Exchange",
-    color: "",
-    activeColor: "bg-[#0397d3] text-white shadow-sm",
-  },
-  {
-    label: "Borrow",
-    color: "",
-    activeColor: "bg-purple-600 text-white shadow-sm",
-  },
-  {
-    label: "Sold",
-    color: "",
-    activeColor: "bg-slate-600 text-white shadow-sm",
-  },
+const FILTER_CONFIG: { label: FilterType; activeClass: string }[] = [
+  { label: "All", activeClass: "bg-[#0397d3] text-white shadow-sm" },
+  { label: "Available", activeClass: "bg-emerald-500 text-white shadow-sm" },
+  { label: "Borrow", activeClass: "bg-purple-600 text-white shadow-sm" },
+  { label: "Exchange", activeClass: "bg-[#0397d3] text-white shadow-sm" },
+  { label: "Sell", activeClass: "bg-orange-500 text-white shadow-sm" },
+  { label: "Archived", activeClass: "bg-slate-600 text-white shadow-sm" },
 ];
 
 export function LibraryGrid({ books }: { books: Book[] }) {
@@ -55,20 +55,57 @@ export function LibraryGrid({ books }: { books: Book[] }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedBooks, setSelectedBooks] = useState<Set<string>>(new Set());
+
   const loaderRef = useRef<HTMLDivElement>(null);
+
+  // We do NOT use useEffect to reset page to avoid cascading renders.
+  // Instead, handle search/filter state directly when user interacts.
+  const handleFilterChange = (label: FilterType) => {
+    setActiveFilter(label);
+    setPage(1);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setPage(1);
+  };
+
+  const toggleSelectBook = (id: string) => {
+    const newSet = new Set(selectedBooks);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      newSet.add(id);
+    }
+    setSelectedBooks(newSet);
+  };
+
+  const selectAll = () => {
+    if (selectedBooks.size === visible.length) {
+      setSelectedBooks(new Set());
+    } else {
+      setSelectedBooks(new Set(visible.map((b) => b.id)));
+    }
+  };
 
   const filtered = books.filter((b) => {
     const matchSearch =
       search === "" ||
       b.title.toLowerCase().includes(search.toLowerCase()) ||
-      b.author.toLowerCase().includes(search.toLowerCase());
+      b.author.toLowerCase().includes(search.toLowerCase()) ||
+      (b.isbn && b.isbn.includes(search));
 
-    const matchFilter =
-      activeFilter === "All"
-        ? true
-        : activeFilter === "Sold"
-          ? b.isSold
-          : b.tags.includes(activeFilter.toLowerCase());
+    let matchFilter = true;
+    if (activeFilter !== "All") {
+      const status = b.inventoryStatus || "available";
+      if (activeFilter === "Available") matchFilter = status === "available";
+      if (activeFilter === "Archived") matchFilter = status === "archived";
+      if (activeFilter === "Borrow") matchFilter = b.tags?.includes("borrow");
+      if (activeFilter === "Exchange")
+        matchFilter = b.tags?.includes("exchange");
+      if (activeFilter === "Sell") matchFilter = b.tags?.includes("sell");
+    }
 
     return matchSearch && matchFilter;
   });
@@ -85,7 +122,6 @@ export function LibraryGrid({ books }: { books: Book[] }) {
     }, 600);
   }, [isLoading, hasMore]);
 
-  // IntersectionObserver for infinite scroll
   useEffect(() => {
     const el = loaderRef.current;
     if (!el) return;
@@ -101,55 +137,91 @@ export function LibraryGrid({ books }: { books: Book[] }) {
 
   return (
     <div className="space-y-4">
-      {/* ── TOOLBAR ── */}
+      {/* ── TOOLBAR ROW 1: Search & Basic Filters ── */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        {/* Search */}
-        <div className="relative flex-1 sm:max-w-xs">
-          <Search className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              setPage(1);
-            }}
-            placeholder="Search title or author..."
-            className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground w-full rounded-xl border py-2.5 pr-4 pl-10 text-sm shadow-sm transition-all focus:ring-2 focus:ring-[#0397d3]/30 focus:outline-none"
-          />
-        </div>
-
-        {/* Filters */}
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          {FILTER_CONFIG.map(({ label, activeColor }) => (
+          {FILTER_CONFIG.map(({ label, activeClass }) => (
             <button
               key={label}
-              onClick={() => {
-                setActiveFilter(label);
-                setPage(1);
-              }}
+              onClick={() => handleFilterChange(label)}
               className={`shrink-0 rounded-full px-4 py-1.5 text-xs font-bold transition-all duration-200 ${
                 activeFilter === label
-                  ? activeColor
+                  ? activeClass
                   : "bg-card border-border/60 text-muted-foreground border hover:border-[#0397d3]/40 hover:text-[#0397d3]"
               }`}
             >
               {label}
             </button>
           ))}
-          <button className="border-border/60 text-muted-foreground hover:bg-muted ml-1 flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-bold transition-colors">
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Filter</span>
+        </div>
+      </div>
+
+      {/* ── TOOLBAR ROW 2: Advanced Search & Sort ── */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div className="relative flex-1 sm:max-w-xs">
+          <Search className="text-muted-foreground absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2" />
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search title, author, or ISBN..."
+            className="bg-card border-border/60 text-foreground placeholder:text-muted-foreground w-full rounded-xl border py-2 pr-4 pl-10 text-sm shadow-sm transition-all focus:ring-2 focus:ring-[#0397d3]/30 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button className="bg-card border-border/60 text-foreground flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800">
+            Status <ChevronDown className="h-4 w-4 text-slate-400" />
+          </button>
+          <button className="bg-card border-border/60 text-foreground flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800">
+            Genre <ChevronDown className="h-4 w-4 text-slate-400" />
+          </button>
+          <button className="bg-card border-border/60 text-foreground flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800">
+            Sort: Recently Added{" "}
+            <ChevronDown className="h-4 w-4 text-slate-400" />
           </button>
         </div>
       </div>
+
+      {/* ── BULK MANAGEMENT ROW ── */}
+      {selectedBooks.size > 0 && (
+        <div className="flex items-center justify-between rounded-xl border border-[#0397d3]/20 bg-[#0397d3]/10 px-4 py-3 dark:bg-[#0397d3]/20">
+          <div className="flex items-center gap-3">
+            <button onClick={selectAll} className="text-[#0397d3]">
+              {selectedBooks.size === visible.length ? (
+                <CheckSquare className="h-5 w-5" />
+              ) : (
+                <Square className="h-5 w-5" />
+              )}
+            </button>
+            <span className="text-sm font-bold text-[#0397d3]">
+              {selectedBooks.size} selected
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200">
+              <Archive className="h-3.5 w-3.5" /> Archive
+            </button>
+            <button className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200">
+              Enable Borrow
+            </button>
+            <button className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200">
+              Enable Exchange
+            </button>
+            <button className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 shadow-sm transition-colors hover:bg-red-100 dark:bg-red-500/20 dark:text-red-400">
+              <Trash2 className="h-3.5 w-3.5" /> Delete
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Result count */}
       {search || activeFilter !== "All" ? (
         <p className="text-muted-foreground text-xs">
           Showing{" "}
           <span className="text-foreground font-bold">{filtered.length}</span>{" "}
-          book
-          {filtered.length !== 1 ? "s" : ""}
+          book{filtered.length !== 1 ? "s" : ""}
           {search && (
             <>
               {" "}
@@ -173,23 +245,17 @@ export function LibraryGrid({ books }: { books: Book[] }) {
               ? `No results for "${search}"`
               : `You have no ${activeFilter.toLowerCase()} listings yet`}
           </p>
-          {search && (
-            <button
-              onClick={() => {
-                setSearch("");
-                setPage(1);
-              }}
-              className="text-primary text-xs font-bold hover:underline"
-            >
-              Clear search
-            </button>
-          )}
         </div>
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
             {visible.map((book) => (
-              <DashboardLibraryCard key={book.id} book={book} />
+              <DashboardLibraryCard
+                key={book.id}
+                book={book}
+                isSelected={selectedBooks.has(book.id)}
+                onToggleSelect={() => toggleSelectBook(book.id)}
+              />
             ))}
           </div>
 
