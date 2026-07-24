@@ -17,8 +17,18 @@ import {
   ShieldCheck,
   Printer,
   User,
+  ChevronRight,
+  XCircle,
+  Filter,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -30,7 +40,7 @@ import {
 interface CustomerOrder {
   id: string;
   orderDate: string;
-  status: "pending" | "shipped" | "completed";
+  status: "pending" | "confirmed" | "shipped" | "completed" | "cancelled";
   paymentStatus: string;
   buyerName: string;
   buyerUsername: string;
@@ -140,16 +150,28 @@ export default function SalesPage() {
   });
 
   const pendingCount = orders.filter((o) => o.status === "pending").length;
+  const confirmedCount = orders.filter((o) => o.status === "confirmed").length;
   const shippedCount = orders.filter((o) => o.status === "shipped").length;
   const completedCount = orders.filter((o) => o.status === "completed").length;
+  const cancelledCount = orders.filter((o) => o.status === "cancelled").length;
 
   const totalRevenue = orders.reduce((sum, o) => sum + o.price, 0);
 
+  const handleConfirmOrder = (orderId: string) => {
+    setOrders(
+      orders.map((o) => (o.id === orderId ? { ...o, status: "confirmed" } : o)),
+    );
+  };
+
   const handleMarkAsShipped = (orderId: string) => {
-    setOrders((prev) =>
-      prev.map((o) =>
-        o.id === orderId ? { ...o, status: "shipped" as const } : o,
-      ),
+    setOrders(
+      orders.map((o) => (o.id === orderId ? { ...o, status: "shipped" } : o)),
+    );
+  };
+
+  const handleCancelOrder = (orderId: string) => {
+    setOrders(
+      orders.map((o) => (o.id === orderId ? { ...o, status: "cancelled" } : o)),
     );
   };
 
@@ -231,41 +253,42 @@ export default function SalesPage() {
         </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div className="border-border/60 flex items-center justify-between border-b pb-3">
-        <div className="flex scrollbar-none items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          {[
-            { key: "all", label: "All Orders", count: orders.length },
-            {
-              key: "pending",
-              label: "Pending Processing",
-              count: pendingCount,
-            },
-            { key: "shipped", label: "In Transit", count: shippedCount },
-            { key: "completed", label: "Completed", count: completedCount },
-          ].map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key as typeof activeTab)}
-              className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 font-bold whitespace-nowrap transition-all ${
-                activeTab === tab.key
-                  ? "bg-primary text-primary-foreground shadow-xs"
-                  : "bg-muted/50 text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-            >
-              <span>{tab.label}</span>
-              <span
-                className={`rounded-full px-1.5 py-0.5 text-[10px] ${
-                  activeTab === tab.key
-                    ? "bg-primary-foreground/20 text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {tab.count}
-              </span>
-            </button>
-          ))}
+      {/* Filter Dropdown */}
+      <div className="border-border/60 flex items-center justify-between border-b pb-4">
+        <div className="flex items-center gap-2">
+          <Filter className="text-muted-foreground h-4 w-4" />
+          <span className="text-sm font-semibold">Filter Orders:</span>
         </div>
+        <Select
+          value={activeTab}
+          onValueChange={(
+            val:
+              | "all"
+              | "pending"
+              | "confirmed"
+              | "shipped"
+              | "completed"
+              | "cancelled",
+          ) => setActiveTab(val)}
+        >
+          <SelectTrigger className="bg-background w-[200px]">
+            <SelectValue placeholder="Select status..." />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Orders ({orders.length})</SelectItem>
+            <SelectItem value="pending">New Orders ({pendingCount})</SelectItem>
+            <SelectItem value="confirmed">
+              Confirmed ({confirmedCount})
+            </SelectItem>
+            <SelectItem value="shipped">Shipped ({shippedCount})</SelectItem>
+            <SelectItem value="completed">
+              Completed ({completedCount})
+            </SelectItem>
+            <SelectItem value="cancelled">
+              Cancelled ({cancelledCount})
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Customer Orders List */}
@@ -283,138 +306,280 @@ export default function SalesPage() {
           </div>
         ) : (
           filteredOrders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-card border-border/70 hover:border-primary/30 space-y-4 rounded-2xl border p-4 shadow-2xs transition-all sm:p-5"
-            >
-              {/* Order Header */}
-              <div className="border-border/40 flex flex-col justify-between gap-2 border-b pb-3 sm:flex-row sm:items-center">
-                <div className="flex items-center gap-3">
-                  <span className="text-foreground bg-muted rounded-lg px-2.5 py-1 font-mono text-sm font-extrabold">
-                    {order.id}
-                  </span>
-                  <span className="text-muted-foreground text-xs font-medium">
-                    {order.orderDate}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-bold text-emerald-600">
-                    <ShieldCheck className="h-3.5 w-3.5" />{" "}
-                    {order.paymentStatus}
-                  </span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-extrabold tracking-wider uppercase ${
-                      order.status === "pending"
-                        ? "bg-warning/15 text-warning"
-                        : order.status === "shipped"
-                          ? "bg-brand-blue/15 text-brand-blue"
-                          : "bg-success/15 text-success"
-                    }`}
-                  >
-                    {order.status === "pending"
-                      ? "Pending Processing"
-                      : order.status === "shipped"
-                        ? "In Transit"
-                        : "Completed"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Body: Buyer & Book Details */}
-              <div className="grid items-center gap-4 md:grid-cols-3">
-                {/* Book Details */}
-                <div className="flex items-center gap-3 md:col-span-1">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={order.bookCover}
-                    alt={order.bookTitle}
-                    className="border-border h-16 w-12 shrink-0 rounded-lg border object-cover shadow-xs"
-                  />
-                  <div className="min-w-0 flex-1 space-y-1">
-                    <h3 className="text-foreground line-clamp-1 text-sm font-bold">
-                      {order.bookTitle}
-                    </h3>
-                    <p className="text-muted-foreground text-xs">
-                      Author: {order.bookAuthor}
-                    </p>
-                    <p className="text-primary text-xs font-extrabold">
-                      ৳ {order.price}{" "}
-                      <span className="text-muted-foreground text-[11px] font-medium">
-                        (+৳{order.shippingFee} shipping)
-                      </span>
-                    </p>
-                  </div>
-                </div>
-
-                {/* Buyer Info */}
-                <div className="bg-muted/30 border-border/40 space-y-1.5 rounded-xl border p-3 md:col-span-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Avatar className="border-border h-7 w-7 border">
-                        <AvatarImage src={order.buyerAvatar} />
-                        <AvatarFallback>
-                          <User className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div>
-                        <p className="text-foreground text-xs leading-tight font-bold">
-                          Buyer: {order.buyerName}
-                        </p>
-                        <p className="text-muted-foreground text-[11px]">
-                          @{order.buyerUsername}
-                        </p>
+            <div key={order.id}>
+              {/* --- MOBILE COMPACT VIEW --- */}
+              <div
+                onClick={() => setSelectedOrder(order)}
+                className="bg-card border-border/70 hover:border-primary/30 flex cursor-pointer flex-col gap-3 rounded-2xl border p-3 shadow-2xs transition-all md:hidden"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={order.bookCover}
+                      alt={order.bookTitle}
+                      className="h-14 w-10 shrink-0 rounded border object-cover shadow-xs"
+                    />
+                    <div className="min-w-0 space-y-1">
+                      <h3 className="text-foreground line-clamp-1 text-sm font-bold">
+                        {order.bookTitle}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <span className="bg-muted text-foreground rounded px-1.5 py-0.5 font-mono text-[10px] font-extrabold">
+                          {order.id}
+                        </span>
+                        <span
+                          className={`text-[10px] font-bold uppercase ${
+                            order.status === "pending"
+                              ? "text-warning"
+                              : order.status === "confirmed"
+                                ? "text-primary"
+                                : order.status === "cancelled"
+                                  ? "text-danger"
+                                  : order.status === "shipped"
+                                    ? "text-brand-blue"
+                                    : "text-success"
+                          }`}
+                        >
+                          {order.status}
+                        </span>
                       </div>
                     </div>
-
-                    <div className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold">
-                      <Phone className="text-primary h-3.5 w-3.5" />
-                      <span>{order.buyerPhone}</span>
-                    </div>
                   </div>
 
-                  <div className="text-muted-foreground border-border/30 flex items-start gap-1.5 border-t pt-1 text-xs">
-                    <MapPin className="text-danger mt-0.5 h-3.5 w-3.5 shrink-0" />
-                    <span className="line-clamp-1 font-medium">
-                      {order.buyerAddress} • ({order.deliveryMethod})
+                  <div className="flex shrink-0 flex-col items-end gap-1.5">
+                    <span className="text-sm font-extrabold text-emerald-600">
+                      ৳ {order.totalAmount}
+                    </span>
+                    <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-bold">
+                      Tap for details <ChevronRight className="h-3 w-3" />
+                    </div>
+                  </div>
+                </div>
+
+                {(order.status === "pending" ||
+                  order.status === "confirmed") && (
+                  <div className="border-border/40 flex flex-wrap items-center gap-2 border-t pt-2">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/dashboard/messages/${order.buyerUsername}?prefill=${encodeURIComponent(`Hi ${order.buyerName}, regarding your order ${order.id} for "${order.bookTitle}":\n`)}`;
+                      }}
+                      className="bg-muted hover:bg-muted/80 text-foreground flex items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-colors"
+                      title="Message Buyer"
+                    >
+                      <MessageSquare className="text-primary h-3.5 w-3.5" />
+                    </button>
+                    {order.status === "pending" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleConfirmOrder(order.id);
+                        }}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-all"
+                      >
+                        Confirm
+                      </button>
+                    )}
+                    {order.status === "confirmed" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkAsShipped(order.id);
+                        }}
+                        className="bg-brand-blue hover:bg-brand-blue/90 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold text-white transition-all"
+                      >
+                        <Truck className="h-3.5 w-3.5" /> Ship
+                      </button>
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCancelOrder(order.id);
+                      }}
+                      className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-colors"
+                    >
+                      <XCircle className="h-3.5 w-3.5" /> Cancel
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* --- DESKTOP FULL VIEW --- */}
+              <div
+                onClick={() => setSelectedOrder(order)}
+                className="bg-card border-border/70 hover:border-primary/30 hidden cursor-pointer space-y-4 rounded-2xl border p-4 shadow-2xs transition-all sm:p-5 md:block"
+              >
+                {/* Order Header */}
+                <div className="border-border/40 flex flex-col justify-between gap-2 border-b pb-3 sm:flex-row sm:items-center">
+                  <div className="flex items-center gap-3">
+                    <span className="text-foreground bg-muted rounded-lg px-2.5 py-1 font-mono text-sm font-extrabold">
+                      {order.id}
+                    </span>
+                    <span className="text-muted-foreground text-xs font-medium">
+                      {order.orderDate}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-bold text-emerald-600">
+                      <ShieldCheck className="h-3.5 w-3.5" />{" "}
+                      {order.paymentStatus}
+                    </span>
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-extrabold tracking-wider uppercase ${
+                        order.status === "pending"
+                          ? "bg-warning/15 text-warning"
+                          : order.status === "confirmed"
+                            ? "bg-primary/15 text-primary"
+                            : order.status === "cancelled"
+                              ? "bg-danger/15 text-danger"
+                              : order.status === "shipped"
+                                ? "bg-brand-blue/15 text-brand-blue"
+                                : "bg-success/15 text-success"
+                      }`}
+                    >
+                      {order.status === "pending"
+                        ? "Pending Processing"
+                        : order.status === "confirmed"
+                          ? "Order Confirmed"
+                          : order.status === "cancelled"
+                            ? "Cancelled"
+                            : order.status === "shipped"
+                              ? "In Transit"
+                              : "Completed"}
                     </span>
                   </div>
                 </div>
-              </div>
 
-              {/* Footer Actions */}
-              <div className="border-border/40 flex flex-wrap items-center justify-between gap-2 border-t pt-2">
-                <div className="text-foreground text-xs font-extrabold">
-                  Total Order Value:{" "}
-                  <span className="text-sm text-emerald-600">
-                    ৳ {order.totalAmount}
-                  </span>
+                {/* Body: Buyer & Book Details */}
+                <div className="grid items-center gap-4 md:grid-cols-3">
+                  {/* Book Details */}
+                  <div className="flex items-center gap-3 md:col-span-1">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={order.bookCover}
+                      alt={order.bookTitle}
+                      className="border-border h-16 w-12 shrink-0 rounded-lg border object-cover shadow-xs"
+                    />
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <h3 className="text-foreground line-clamp-1 text-sm font-bold">
+                        {order.bookTitle}
+                      </h3>
+                      <p className="text-muted-foreground text-xs">
+                        Author: {order.bookAuthor}
+                      </p>
+                      <p className="text-primary text-xs font-extrabold">
+                        ৳ {order.price}{" "}
+                        <span className="text-muted-foreground text-[11px] font-medium">
+                          (+৳{order.shippingFee} shipping)
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Buyer Info */}
+                  <div className="bg-muted/30 border-border/40 space-y-1.5 rounded-xl border p-3 md:col-span-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Avatar className="border-border h-7 w-7 border">
+                          <AvatarImage src={order.buyerAvatar} />
+                          <AvatarFallback>
+                            <User className="h-4 w-4" />
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-foreground text-xs leading-tight font-bold">
+                            Buyer: {order.buyerName}
+                          </p>
+                          <p className="text-muted-foreground text-[11px]">
+                            @{order.buyerUsername}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-muted-foreground flex items-center gap-1.5 text-xs font-semibold">
+                        <Phone className="text-primary h-3.5 w-3.5" />
+                        <span>{order.buyerPhone}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-muted-foreground border-border/30 flex items-start gap-1.5 border-t pt-1 text-xs">
+                      <MapPin className="text-danger mt-0.5 h-3.5 w-3.5 shrink-0" />
+                      <span className="line-clamp-1 font-medium">
+                        {order.buyerAddress} • ({order.deliveryMethod})
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="flex w-full items-center gap-2 sm:w-auto">
-                  {order.status === "pending" && (
+                {/* Footer Actions */}
+                <div className="border-border/40 flex flex-wrap items-center justify-between gap-2 border-t pt-2">
+                  <div className="text-foreground text-xs font-extrabold">
+                    Total Order Value:{" "}
+                    <span className="text-sm text-emerald-600">
+                      ৳ {order.totalAmount}
+                    </span>
+                  </div>
+
+                  <div className="flex w-full items-center gap-2 sm:w-auto">
+                    {(order.status === "pending" ||
+                      order.status === "confirmed") && (
+                      <>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCancelOrder(order.id);
+                          }}
+                          className="bg-danger/10 text-danger hover:bg-danger/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all sm:flex-none"
+                        >
+                          <XCircle className="h-3.5 w-3.5" /> Cancel
+                        </button>
+                        {order.status === "pending" ? (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleConfirmOrder(order.id);
+                            }}
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold shadow-2xs transition-all active:scale-95 sm:flex-none"
+                          >
+                            Confirm
+                          </button>
+                        ) : (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleMarkAsShipped(order.id);
+                            }}
+                            className="bg-brand-blue hover:bg-brand-blue/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold text-white shadow-2xs transition-all active:scale-95 sm:flex-none"
+                          >
+                            <Truck className="h-3.5 w-3.5" /> Mark Shipped
+                          </button>
+                        )}
+                      </>
+                    )}
+
                     <button
-                      onClick={() => handleMarkAsShipped(order.id)}
-                      className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold shadow-2xs transition-all active:scale-95 sm:flex-none"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/dashboard/messages/${order.buyerUsername}?prefill=${encodeURIComponent(`Hi ${order.buyerName}, regarding your order ${order.id} for "${order.bookTitle}":\n`)}`;
+                      }}
+                      className="bg-muted hover:bg-muted/80 text-foreground inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
                     >
-                      <Truck className="h-3.5 w-3.5" /> Mark as Shipped
+                      <MessageSquare className="text-primary h-3.5 w-3.5" />{" "}
+                      Chat
                     </button>
-                  )}
 
-                  <Link
-                    href="/dashboard/messages"
-                    className="bg-muted hover:bg-muted/80 text-foreground inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
-                  >
-                    <MessageSquare className="text-primary h-3.5 w-3.5" /> Chat
-                    Buyer
-                  </Link>
-
-                  <button
-                    onClick={() => setSelectedOrder(order)}
-                    className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
-                  >
-                    <Eye className="h-3.5 w-3.5" /> View Details
-                  </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedOrder(order);
+                      }}
+                      className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
+                    >
+                      <Eye className="h-3.5 w-3.5" /> View Details
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -588,7 +753,7 @@ export default function SalesPage() {
               </div>
             </div>
 
-            <div className="mt-4 flex items-center justify-between border-t pt-4">
+            <div className="mt-4 flex flex-wrap items-center justify-between gap-3 border-t pt-4">
               <button
                 onClick={() => window.print()}
                 className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 text-xs font-bold"
@@ -596,12 +761,67 @@ export default function SalesPage() {
                 <Printer className="h-4 w-4" /> Print Order Slip
               </button>
 
-              <button
-                onClick={() => setSelectedOrder(null)}
-                className="bg-primary text-primary-foreground rounded-xl px-4 py-2 text-xs font-bold"
-              >
-                Close Details
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    window.location.href = `/dashboard/messages/${selectedOrder.buyerUsername}?prefill=${encodeURIComponent(`Hi ${selectedOrder.buyerName}, regarding your order ${selectedOrder.id} for "${selectedOrder.bookTitle}":\n`)}`;
+                  }}
+                  className="bg-muted hover:bg-muted/80 text-foreground rounded-xl px-3 py-2 transition-colors"
+                  title="Message Buyer"
+                >
+                  <MessageSquare className="text-primary h-4 w-4" />
+                </button>
+                {(selectedOrder.status === "pending" ||
+                  selectedOrder.status === "confirmed") && (
+                  <>
+                    <button
+                      onClick={() => {
+                        handleCancelOrder(selectedOrder.id);
+                        setSelectedOrder({
+                          ...selectedOrder,
+                          status: "cancelled",
+                        });
+                      }}
+                      className="bg-danger/10 text-danger hover:bg-danger/20 rounded-xl px-4 py-2 text-xs font-bold transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    {selectedOrder.status === "pending" ? (
+                      <button
+                        onClick={() => {
+                          handleConfirmOrder(selectedOrder.id);
+                          setSelectedOrder({
+                            ...selectedOrder,
+                            status: "confirmed",
+                          });
+                        }}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-xs font-bold transition-all"
+                      >
+                        Confirm Order
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          handleMarkAsShipped(selectedOrder.id);
+                          setSelectedOrder({
+                            ...selectedOrder,
+                            status: "shipped",
+                          });
+                        }}
+                        className="bg-brand-blue hover:bg-brand-blue/90 rounded-xl px-4 py-2 text-xs font-bold text-white transition-all"
+                      >
+                        Mark Shipped
+                      </button>
+                    )}
+                  </>
+                )}
+                <button
+                  onClick={() => setSelectedOrder(null)}
+                  className="bg-muted text-foreground hover:bg-muted/80 rounded-xl px-4 py-2 text-xs font-bold transition-colors"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </DialogContent>
         )}

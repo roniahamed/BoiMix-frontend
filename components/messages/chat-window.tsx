@@ -13,8 +13,9 @@ import {
   SendIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
 
 type ChatWindowProps = {
   conversation: Conversation;
@@ -32,6 +33,11 @@ export function ChatWindow({
 }: ChatWindowProps) {
   const { user, messages, isTyping } = conversation;
   const bottomRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+  const prefill = searchParams.get("prefill");
+  const [inputValue, setInputValue] = useState(
+    prefill ? decodeURIComponent(prefill) : "",
+  );
 
   useEffect(() => {
     // Scroll to bottom on mount and when messages change
@@ -119,6 +125,7 @@ export function ChatWindow({
           onSubmit={(e) => {
             e.preventDefault();
             // Mock send action
+            setInputValue("");
           }}
         >
           <Button
@@ -129,7 +136,12 @@ export function ChatWindow({
           >
             <PaperclipIcon className="h-4 w-4" />
           </Button>
-          <Input placeholder="Type your message..." className="flex-1" />
+          <Input
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Type your message..."
+            className="flex-1"
+          />
           <Button
             type="submit"
             size="icon"

@@ -168,7 +168,7 @@ export const dashboardNavGroups: NavGroup[] = [
       },
       {
         title: "My Purchases",
-        href: "/dashboard/purchases",
+        href: "/dashboard/orders",
         icon: ShoppingCartIcon,
       },
     ],
