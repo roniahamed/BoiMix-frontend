@@ -139,7 +139,7 @@ export function LibraryGrid({ books }: { books: Book[] }) {
     <div className="space-y-4">
       {/* ── TOOLBAR ROW 1: Search & Basic Filters ── */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+        <div className="flex [scrollbar-width:none] items-center gap-1.5 overflow-x-auto pb-1 [-ms-overflow-style:none] sm:pb-0 [&::-webkit-scrollbar]:hidden">
           {FILTER_CONFIG.map(({ label, activeClass }) => (
             <button
               key={label}
@@ -169,15 +169,17 @@ export function LibraryGrid({ books }: { books: Book[] }) {
           />
         </div>
 
-        <div className="flex items-center gap-2">
-          <button className="bg-card border-border/60 text-foreground flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800">
+        <div className="flex flex-wrap items-center gap-2">
+          <button className="bg-card border-border/60 text-foreground flex flex-1 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 sm:flex-none sm:justify-center dark:hover:bg-slate-800">
             Status <ChevronDown className="h-4 w-4 text-slate-400" />
           </button>
-          <button className="bg-card border-border/60 text-foreground flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800">
+          <button className="bg-card border-border/60 text-foreground flex flex-1 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 sm:flex-none sm:justify-center dark:hover:bg-slate-800">
             Genre <ChevronDown className="h-4 w-4 text-slate-400" />
           </button>
-          <button className="bg-card border-border/60 text-foreground flex items-center gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 dark:hover:bg-slate-800">
-            Sort: Recently Added{" "}
+          <button className="bg-card border-border/60 text-foreground flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 sm:w-auto sm:flex-none sm:justify-center dark:hover:bg-slate-800">
+            <span>
+              Sort: <span className="font-medium">Recently Added</span>
+            </span>
             <ChevronDown className="h-4 w-4 text-slate-400" />
           </button>
         </div>

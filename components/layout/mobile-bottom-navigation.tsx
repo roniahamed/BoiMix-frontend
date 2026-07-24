@@ -42,7 +42,7 @@ export function MobileBottomNavigation() {
         }}
         aria-label="Mobile bottom"
       >
-        <div className="grid h-13 grid-cols-5">
+        <div className="grid h-16 grid-cols-5 items-center">
           {mobileBottomNavItems.map((item) => {
             const Icon = item.icon;
             const isMessages = item.href === "/dashboard/messages";
