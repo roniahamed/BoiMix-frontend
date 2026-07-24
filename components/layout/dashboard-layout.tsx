@@ -40,7 +40,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {isSubPage && (
         <div className="border-border/60 bg-background/95 sticky top-14 z-20 flex h-12 items-center justify-between border-b px-4 backdrop-blur-md lg:hidden">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push("/dashboard")}
             className="text-foreground hover:text-primary flex min-h-[36px] cursor-pointer items-center gap-2 text-xs font-bold transition-colors active:scale-95"
           >
             <span className="bg-primary/10 text-primary flex h-7 w-7 items-center justify-center rounded-lg">
