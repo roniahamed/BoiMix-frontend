@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { type ReactNode } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
 import { MobileBottomNavigation } from "@/components/layout/mobile-bottom-navigation";
@@ -17,17 +16,18 @@ type DashboardLayoutProps = {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-  }, [pathname]);
-
-  // Find active nav item title for header badge
-  const activeNavItem = dashboardNavItems.find(
-    (item) =>
-      pathname === item.href ||
-      (item.href !== "/dashboard/overview" && pathname.startsWith(item.href)),
-  );
+  const activeNavItem = dashboardNavItems
+    .slice()
+    .sort((a, b) => b.href.length - a.href.length)
+    .find(
+      (item) =>
+        pathname === item.href ||
+        (item.href !== "/dashboard/overview" &&
+          item.href !== "/dashboard/exchanges" &&
+          pathname.startsWith(`${item.href}/`)),
+    );
 
   const isSubPage = pathname !== "/dashboard";
   const pageTitle = activeNavItem ? activeNavItem.title : "Dashboard";
@@ -38,16 +38,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
       {/* Mobile Sub-Header with Back Button (lg:hidden) */}
       {isSubPage && (
-        <div className="border-border/60 bg-background/95 sticky top-14 z-20 flex items-center justify-between border-b px-4 py-2.5 shadow-2xs backdrop-blur-md lg:hidden">
-          <Link
-            href="/dashboard"
-            className="text-foreground hover:text-primary flex min-h-[36px] items-center gap-2 text-xs font-bold transition-colors active:scale-95"
+        <div className="border-border/60 bg-background/95 sticky top-14 z-20 flex h-12 items-center justify-between border-b px-4 backdrop-blur-md lg:hidden">
+          <button
+            onClick={() => router.back()}
+            className="text-foreground hover:text-primary flex min-h-[36px] cursor-pointer items-center gap-2 text-xs font-bold transition-colors active:scale-95"
           >
             <span className="bg-primary/10 text-primary flex h-7 w-7 items-center justify-center rounded-lg">
               <ArrowLeft className="h-4 w-4" />
             </span>
             <span>Dashboard Menu</span>
-          </Link>
+          </button>
 
           <div className="text-muted-foreground bg-muted/60 flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold">
             <span className="max-w-[140px] truncate">{pageTitle}</span>

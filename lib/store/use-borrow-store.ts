@@ -81,6 +81,19 @@ export const useBorrowStore = create<BorrowState>((set) => ({
       depositLocked: 300,
       borrowFee: 50,
     },
+    {
+      id: "BR-000246",
+      bookId: "b2",
+      bookTitle: "Atomic Habits",
+      bookImage:
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop",
+      borrowerId: "user-99",
+      ownerId: "current-user",
+      status: "pending_owner_review",
+      handoverMethod: "meetup",
+      depositLocked: 500,
+      borrowFee: 80,
+    },
   ],
   addOrder: (order) => {
     const id = `BR-${Math.floor(Math.random() * 1000000)

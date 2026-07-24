@@ -87,6 +87,22 @@ export const useExchangeStore = create<ExchangeState>((set) => ({
       ownerId: "current-user", // We are the owner of the requested book here
       status: "pending_proposal",
     },
+    {
+      id: "EX-000789",
+      requestedBookId: "b9",
+      requestedBookTitle: "Deep Work",
+      requestedBookImage: "/images/books/placeholder.jpg",
+      offeredBookId: "my-b3",
+      offeredBookTitle: "Sapiens",
+      offeredBookImage: "/images/books/placeholder.jpg",
+      proposerId: "current-user",
+      ownerId: "hasan789",
+      status: "agreement_reached",
+      counterOfferDetails: {
+        proposedDate: "Oct 25, 2024",
+        proposedLocation: "TSC, Dhaka University",
+      },
+    },
   ],
 
   createProposal: (exchange) => {

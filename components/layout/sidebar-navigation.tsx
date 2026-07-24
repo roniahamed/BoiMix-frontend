@@ -27,7 +27,9 @@ export function SidebarNavigation({
     const Icon = item.icon;
     const isActive =
       pathname === item.href ||
-      (item.href !== "/dashboard/overview" && pathname.startsWith(item.href));
+      (item.href !== "/dashboard/overview" &&
+        item.href !== "/dashboard/exchanges" &&
+        pathname.startsWith(`${item.href}/`));
 
     const navLink = (
       <Link

@@ -108,6 +108,13 @@ export const dashboardNavGroups: NavGroup[] = [
         icon: LayoutDashboardIcon,
       },
       {
+        title: "Action Center",
+        href: "/dashboard/action-center",
+        icon: BellIcon,
+        badge: 3,
+        badgeVariant: "warning",
+      },
+      {
         title: "Insights & Analytics",
         href: "/dashboard/analytics",
         icon: ActivityIcon,
@@ -133,8 +140,6 @@ export const dashboardNavGroups: NavGroup[] = [
         title: "Borrowing",
         href: "/dashboard/borrowed",
         icon: BookOpenIcon,
-        badge: 2,
-        badgeVariant: "brand",
       },
       { title: "Lending", href: "/dashboard/lent", icon: BookOpenIcon },
       {
