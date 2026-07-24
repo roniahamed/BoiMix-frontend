@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import {
   ShoppingBag,
   TrendingUp,
@@ -22,6 +21,9 @@ import {
   Filter,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AddBookDialog } from "@/components/shared/add-book-button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -48,6 +50,7 @@ interface CustomerOrder {
   buyerPhone: string;
   buyerAddress: string;
   deliveryMethod: string;
+  trackingNumber?: string;
   bookTitle: string;
   bookAuthor: string;
   bookCover: string;
@@ -143,6 +146,10 @@ export default function SalesPage() {
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(
     null,
   );
+  const [shipOrderId, setShipOrderId] = useState<string | null>(null);
+  const [courierName, setCourierName] = useState("");
+  const [customCourier, setCustomCourier] = useState(false);
+  const [trackingNumber, setTrackingNumber] = useState("");
 
   const filteredOrders = orders.filter((o) => {
     if (activeTab === "all") return true;
@@ -164,9 +171,36 @@ export default function SalesPage() {
   };
 
   const handleMarkAsShipped = (orderId: string) => {
+    setShipOrderId(orderId);
+  };
+
+  const submitShipping = () => {
+    if (!shipOrderId) return;
     setOrders(
-      orders.map((o) => (o.id === orderId ? { ...o, status: "shipped" } : o)),
+      orders.map((o) =>
+        o.id === shipOrderId
+          ? {
+              ...o,
+              status: "shipped",
+              deliveryMethod: courierName,
+              trackingNumber: trackingNumber,
+            }
+          : o,
+      ),
     );
+    // If modal is open for this order, update its view too
+    if (selectedOrder?.id === shipOrderId) {
+      setSelectedOrder({
+        ...selectedOrder,
+        status: "shipped",
+        deliveryMethod: courierName,
+        trackingNumber: trackingNumber,
+      });
+    }
+    setShipOrderId(null);
+    setCourierName("");
+    setCustomCourier(false);
+    setTrackingNumber("");
   };
 
   const handleCancelOrder = (orderId: string) => {
@@ -190,12 +224,11 @@ export default function SalesPage() {
           </p>
         </div>
 
-        <Link
-          href="/books/upload"
-          className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[40px] items-center justify-center gap-2 self-start rounded-xl px-4 py-2.5 text-xs font-bold shadow-xs transition-all active:scale-95 sm:self-auto sm:text-sm"
-        >
-          <Plus className="h-4 w-4 stroke-[3]" /> Add Book to Marketplace
-        </Link>
+        <AddBookDialog>
+          <button className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[40px] items-center justify-center gap-2 self-start rounded-xl px-4 py-2.5 text-xs font-bold shadow-xs transition-all active:scale-95 sm:self-auto sm:text-sm">
+            <Plus className="h-4 w-4 stroke-[3]" /> Add Book to Marketplace
+          </button>
+        </AddBookDialog>
       </div>
 
       {/* Revenue Summary KPI Cards */}
@@ -370,6 +403,15 @@ export default function SalesPage() {
                     >
                       <MessageSquare className="text-primary h-3.5 w-3.5" />
                     </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleCancelOrder(order.id);
+                      }}
+                      className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-colors"
+                    >
+                      <XCircle className="h-3.5 w-3.5" /> Cancel
+                    </button>
                     {order.status === "pending" && (
                       <button
                         onClick={(e) => {
@@ -392,15 +434,6 @@ export default function SalesPage() {
                         <Truck className="h-3.5 w-3.5" /> Ship
                       </button>
                     )}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleCancelOrder(order.id);
-                      }}
-                      className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-colors"
-                    >
-                      <XCircle className="h-3.5 w-3.5" /> Cancel
-                    </button>
                   </div>
                 )}
               </div>
@@ -523,6 +556,27 @@ export default function SalesPage() {
                   </div>
 
                   <div className="flex w-full items-center gap-2 sm:w-auto">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedOrder(order);
+                      }}
+                      className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
+                    >
+                      <Eye className="h-3.5 w-3.5" /> View Details
+                    </button>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = `/dashboard/messages/${order.buyerUsername}?prefill=${encodeURIComponent(`Hi ${order.buyerName}, regarding your order ${order.id} for "${order.bookTitle}":\n`)}`;
+                      }}
+                      className="bg-muted hover:bg-muted/80 text-foreground inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
+                    >
+                      <MessageSquare className="text-primary h-3.5 w-3.5" />{" "}
+                      Chat
+                    </button>
+
                     {(order.status === "pending" ||
                       order.status === "confirmed") && (
                       <>
@@ -558,27 +612,6 @@ export default function SalesPage() {
                         )}
                       </>
                     )}
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.location.href = `/dashboard/messages/${order.buyerUsername}?prefill=${encodeURIComponent(`Hi ${order.buyerName}, regarding your order ${order.id} for "${order.bookTitle}":\n`)}`;
-                      }}
-                      className="bg-muted hover:bg-muted/80 text-foreground inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
-                    >
-                      <MessageSquare className="text-primary h-3.5 w-3.5" />{" "}
-                      Chat
-                    </button>
-
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedOrder(order);
-                      }}
-                      className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
-                    >
-                      <Eye className="h-3.5 w-3.5" /> View Details
-                    </button>
                   </div>
                 </div>
               </div>
@@ -803,10 +836,6 @@ export default function SalesPage() {
                       <button
                         onClick={() => {
                           handleMarkAsShipped(selectedOrder.id);
-                          setSelectedOrder({
-                            ...selectedOrder,
-                            status: "shipped",
-                          });
                         }}
                         className="bg-brand-blue hover:bg-brand-blue/90 rounded-xl px-4 py-2 text-xs font-bold text-white transition-all"
                       >
@@ -825,6 +854,88 @@ export default function SalesPage() {
             </div>
           </DialogContent>
         )}
+      </Dialog>
+
+      {/* Shipping Details Dialog */}
+      <Dialog
+        open={!!shipOrderId}
+        onOpenChange={(open) => !open && setShipOrderId(null)}
+      >
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Enter Shipping Details</DialogTitle>
+            <DialogDescription>
+              Please provide the courier name and tracking ID for this shipment.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>Courier / Delivery Method</Label>
+              <Select
+                value={customCourier ? "custom" : courierName || undefined}
+                onValueChange={(val: string) => {
+                  if (val === "custom") {
+                    setCustomCourier(true);
+                    setCourierName("");
+                  } else {
+                    setCustomCourier(false);
+                    setCourierName(val);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Courier" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Steadfast Courier">
+                    Steadfast Courier
+                  </SelectItem>
+                  <SelectItem value="Pathao Courier">Pathao Courier</SelectItem>
+                  <SelectItem value="RedX">RedX</SelectItem>
+                  <SelectItem value="eCourier">eCourier</SelectItem>
+                  <SelectItem value="In-person">
+                    In-person (Hand to Hand)
+                  </SelectItem>
+                  <SelectItem value="custom">
+                    Other (Custom Input)...
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              {customCourier && (
+                <div className="animate-in fade-in slide-in-from-top-2 mt-3 duration-300">
+                  <Input
+                    placeholder="e.g. Sundarban Courier"
+                    value={courierName}
+                    onChange={(e) => setCourierName(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="space-y-2">
+              <Label>Tracking ID (Optional)</Label>
+              <Input
+                placeholder="e.g. STEAD12345"
+                value={trackingNumber}
+                onChange={(e) => setTrackingNumber(e.target.value)}
+              />
+            </div>
+          </div>
+          <div className="flex justify-end gap-2">
+            <button
+              onClick={() => setShipOrderId(null)}
+              className="bg-muted hover:bg-muted/80 text-foreground rounded-xl px-4 py-2 text-sm font-bold transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={submitShipping}
+              disabled={!courierName}
+              className="bg-brand-blue hover:bg-brand-blue/90 rounded-xl px-4 py-2 text-sm font-bold text-white transition-colors disabled:opacity-50"
+            >
+              Confirm Shipment
+            </button>
+          </div>
+        </DialogContent>
       </Dialog>
     </div>
   );
