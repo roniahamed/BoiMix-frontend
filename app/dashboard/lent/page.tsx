@@ -272,65 +272,64 @@ export default function LentPage() {
                   </button>
                 </div>
 
-                {order.status !== "all" &&
-                  (order.status === "pending_owner_review" ||
-                    order.status === "paid" ||
-                    order.status === "return_initiated") && (
-                    <div className="border-border/40 flex flex-wrap items-center gap-2 border-t pt-2">
-                      {order.status === "pending_owner_review" && (
-                        <>
-                          <div className="flex w-full gap-2">
-                            <CounterOfferModal
-                              order={order}
-                              onCounterOffer={counterOffer}
-                              onClick={(e) => e.stopPropagation()}
-                              isMobile={true}
-                            />
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                updateOrderStatus(order.id, "rejected");
-                              }}
-                              className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-all"
-                            >
-                              Decline
-                            </button>
-                          </div>
+                {(order.status === "pending_owner_review" ||
+                  order.status === "paid" ||
+                  order.status === "return_initiated") && (
+                  <div className="border-border/40 flex flex-wrap items-center gap-2 border-t pt-2">
+                    {order.status === "pending_owner_review" && (
+                      <>
+                        <div className="flex w-full gap-2">
+                          <CounterOfferModal
+                            order={order}
+                            onCounterOffer={counterOffer}
+                            onClick={(e) => e.stopPropagation()}
+                            isMobile={true}
+                          />
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              updateOrderStatus(order.id, "accepted");
+                              updateOrderStatus(order.id, "rejected");
                             }}
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 flex w-full items-center justify-center gap-1 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
+                            className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold transition-all"
                           >
-                            <Check className="h-4 w-4" /> Accept Request
+                            Decline
                           </button>
-                        </>
-                      )}
-                      {order.status === "paid" && (
+                        </div>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            updateOrderStatus(order.id, "handed_over_by_owner");
+                            updateOrderStatus(order.id, "accepted");
                           }}
-                          className="bg-brand-blue hover:bg-brand-blue/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold text-white transition-all"
+                          className="bg-primary text-primary-foreground hover:bg-primary/90 flex w-full items-center justify-center gap-1 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
                         >
-                          <Truck className="h-4 w-4" /> Confirm Handover
+                          <Check className="h-4 w-4" /> Accept Request
                         </button>
-                      )}
-                      {order.status === "return_initiated" && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateOrderStatus(order.id, "completed");
-                          }}
-                          className="bg-success text-success-foreground hover:bg-success/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
-                        >
-                          <RotateCcw className="h-4 w-4" /> Return Received
-                        </button>
-                      )}
-                    </div>
-                  )}
+                      </>
+                    )}
+                    {order.status === "paid" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateOrderStatus(order.id, "handed_over_by_owner");
+                        }}
+                        className="bg-brand-blue hover:bg-brand-blue/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold text-white transition-all"
+                      >
+                        <Truck className="h-4 w-4" /> Confirm Handover
+                      </button>
+                    )}
+                    {order.status === "return_initiated" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateOrderStatus(order.id, "completed");
+                        }}
+                        className="bg-success text-success-foreground hover:bg-success/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
+                      >
+                        <RotateCcw className="h-4 w-4" /> Return Received
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* --- DESKTOP FULL VIEW --- */}

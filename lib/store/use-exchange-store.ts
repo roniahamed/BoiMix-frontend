@@ -20,6 +20,8 @@ export interface ExchangeOrder {
   proposerId: string; // The user initiating the exchange
   ownerId: string; // The user who owns the requested book
   status: ExchangeStatus;
+  meetLocation?: string;
+  meetDate?: string;
   counterOfferDetails?: {
     proposedDate?: string;
     proposedLocation?: string;
@@ -74,6 +76,8 @@ export const useExchangeStore = create<ExchangeState>((set) => ({
       proposerId: "current-user",
       ownerId: "kamal123",
       status: "pending_proposal",
+      meetLocation: "Dhanmondi Lake, Gate 3",
+      meetDate: "Oct 28, 2024 at 4:00 PM",
     },
     {
       id: "EX-000456",
@@ -86,6 +90,8 @@ export const useExchangeStore = create<ExchangeState>((set) => ({
       proposerId: "jamal456",
       ownerId: "current-user", // We are the owner of the requested book here
       status: "pending_proposal",
+      meetLocation: "TSC, Dhaka University",
+      meetDate: "Oct 29, 2024 at 3:00 PM",
     },
     {
       id: "EX-000789",
@@ -98,6 +104,8 @@ export const useExchangeStore = create<ExchangeState>((set) => ({
       proposerId: "current-user",
       ownerId: "hasan789",
       status: "agreement_reached",
+      meetLocation: "TSC, Dhaka University",
+      meetDate: "Oct 25, 2024 at 2:00 PM",
       counterOfferDetails: {
         proposedDate: "Oct 25, 2024",
         proposedLocation: "TSC, Dhaka University",

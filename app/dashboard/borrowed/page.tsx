@@ -9,7 +9,6 @@ import {
   Eye,
   MessageSquare,
   Check,
-  Truck,
   RotateCcw,
   Filter,
   CreditCard,
@@ -335,76 +334,75 @@ export default function BorrowedPage() {
                   </button>
                 </div>
 
-                {order.status !== "all" &&
-                  (order.status === "counter_offered" ||
-                    order.status === "accepted" ||
-                    order.status === "handed_over_by_owner" ||
-                    order.status === "borrow_active" ||
-                    (order.status === "completed" && !order.review)) && (
-                    <div className="border-border/40 flex flex-wrap items-center gap-2 border-t pt-2">
-                      {order.status === "counter_offered" && (
-                        <>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              rejectCounterOffer(order.id);
-                            }}
-                            className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
-                          >
-                            Decline
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              acceptCounterOffer(order.id);
-                            }}
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
-                          >
-                            <Check className="h-4 w-4" /> Accept Changes
-                          </button>
-                        </>
-                      )}
-                      {order.status === "accepted" && (
-                        <button
-                          onClick={(e) => handlePayClick(order, e)}
-                          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-2 py-2.5 text-[12px] font-bold text-white shadow-2xs transition-all hover:bg-emerald-700"
-                        >
-                          <CreditCard className="h-4 w-4" /> Pay Fee (৳
-                          {order.borrowFee})
-                        </button>
-                      )}
-                      {order.status === "handed_over_by_owner" && (
+                {(order.status === "counter_offered" ||
+                  order.status === "accepted" ||
+                  order.status === "handed_over_by_owner" ||
+                  order.status === "borrow_active" ||
+                  (order.status === "completed" && !order.review)) && (
+                  <div className="border-border/40 flex flex-wrap items-center gap-2 border-t pt-2">
+                    {order.status === "counter_offered" && (
+                      <>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            updateOrderStatus(order.id, "borrow_active");
+                            rejectCounterOffer(order.id);
                           }}
-                          className="bg-primary text-primary-foreground hover:bg-primary/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
+                          className="bg-danger/10 text-danger hover:bg-danger/20 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
                         >
-                          <CheckCircle2 className="h-4 w-4" /> Confirm Received
+                          Decline
                         </button>
-                      )}
-                      {order.status === "borrow_active" && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            updateOrderStatus(order.id, "return_initiated");
+                            acceptCounterOffer(order.id);
                           }}
-                          className="bg-brand-blue hover:bg-brand-blue/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold text-white shadow-2xs transition-all"
+                          className="bg-primary text-primary-foreground hover:bg-primary/90 flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
                         >
-                          <RotateCcw className="h-4 w-4" /> Initiate Return
+                          <Check className="h-4 w-4" /> Accept Changes
                         </button>
-                      )}
-                      {order.status === "completed" && !order.review && (
-                        <button
-                          onClick={(e) => handleReviewClick(order, e)}
-                          className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-100 px-2 py-2.5 text-[12px] font-bold text-amber-700 transition-all hover:bg-amber-200"
-                        >
-                          <Star className="h-4 w-4" /> Leave Review
-                        </button>
-                      )}
-                    </div>
-                  )}
+                      </>
+                    )}
+                    {order.status === "accepted" && (
+                      <button
+                        onClick={(e) => handlePayClick(order, e)}
+                        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-2 py-2.5 text-[12px] font-bold text-white shadow-2xs transition-all hover:bg-emerald-700"
+                      >
+                        <CreditCard className="h-4 w-4" /> Pay Fee (৳
+                        {order.borrowFee})
+                      </button>
+                    )}
+                    {order.status === "handed_over_by_owner" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateOrderStatus(order.id, "borrow_active");
+                        }}
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold transition-all"
+                      >
+                        <CheckCircle2 className="h-4 w-4" /> Confirm Received
+                      </button>
+                    )}
+                    {order.status === "borrow_active" && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateOrderStatus(order.id, "return_initiated");
+                        }}
+                        className="bg-brand-blue hover:bg-brand-blue/90 flex w-full items-center justify-center gap-1.5 rounded-lg px-2 py-2.5 text-[12px] font-bold text-white shadow-2xs transition-all"
+                      >
+                        <RotateCcw className="h-4 w-4" /> Initiate Return
+                      </button>
+                    )}
+                    {order.status === "completed" && !order.review && (
+                      <button
+                        onClick={(e) => handleReviewClick(order, e)}
+                        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-100 px-2 py-2.5 text-[12px] font-bold text-amber-700 transition-all hover:bg-amber-200"
+                      >
+                        <Star className="h-4 w-4" /> Leave Review
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
 
               {/* --- DESKTOP FULL VIEW --- */}
