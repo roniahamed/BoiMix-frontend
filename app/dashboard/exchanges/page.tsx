@@ -909,35 +909,51 @@ export default function ActiveExchangesDashboard() {
                   {/* Actions */}
                   <div className="bg-card flex flex-col gap-2 rounded-xl border p-4 shadow-sm">
                     <h3 className="mb-1 text-sm font-bold">Actions</h3>
-                    {isOwner &&
-                      selectedExchange.status === "pending_proposal" && (
-                        <button className="bg-brand-blue hover:bg-brand-blue/90 flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold text-white transition-colors">
-                          <Check className="h-4 w-4" /> Accept Request
-                        </button>
-                      )}
+
+                    {/* agreement_reached → Confirm Handover */}
+                    {selectedExchange.status === "agreement_reached" && (
+                      <button
+                        onClick={() => {
+                          updateExchangeStatus(
+                            selectedExchange.id,
+                            "handed_over",
+                          );
+                          setSelectedExchange(null);
+                        }}
+                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-700"
+                      >
+                        <Check className="h-4 w-4" /> Confirm Handover
+                      </button>
+                    )}
+
+                    {/* handed_over → Mark Completed only */}
+                    {selectedExchange.status === "handed_over" && (
+                      <button
+                        onClick={() => {
+                          updateExchangeStatus(
+                            selectedExchange.id,
+                            "completed",
+                          );
+                          setSelectedExchange(null);
+                        }}
+                        className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-700"
+                      >
+                        <Check className="h-4 w-4" /> Mark Completed
+                      </button>
+                    )}
+
+                    {/* completed → all 3 steps done → Review */}
+                    {selectedExchange.status === "completed" && (
+                      <button className="flex w-full items-center justify-center gap-2 rounded-lg border border-amber-300 bg-amber-50 py-2.5 text-sm font-bold text-amber-700 transition-colors hover:bg-amber-100 dark:border-amber-700 dark:bg-amber-950/30 dark:text-amber-400">
+                        <Star className="h-4 w-4 fill-amber-400 text-amber-400" />{" "}
+                        Write a Review
+                      </button>
+                    )}
+
                     <div className="mt-1 flex w-full flex-wrap gap-2">
                       <button className="border-border hover:bg-muted text-brand-blue flex min-w-[100px] flex-1 items-center justify-center gap-2 rounded-lg border py-2 text-sm font-bold whitespace-nowrap transition-colors">
                         <MessageCircle className="h-4 w-4" /> Message
                       </button>
-
-                      {["pending_proposal", "agreement_reached"].includes(
-                        selectedExchange.status,
-                      ) && (
-                        <div className="min-w-[100px] flex-1">
-                          <CounterOfferModal
-                            exchange={selectedExchange}
-                            onCounterOffer={counterOffer}
-                            triggerClassName="w-full border border-border hover:bg-muted text-brand-blue font-bold text-sm py-2 rounded-lg flex items-center justify-center gap-2 transition-colors h-full"
-                          />
-                        </div>
-                      )}
-
-                      {isOwner &&
-                        selectedExchange.status === "pending_proposal" && (
-                          <button className="flex min-w-[100px] flex-1 items-center justify-center gap-2 rounded-lg border border-red-200 py-2 text-sm font-bold whitespace-nowrap text-red-500 transition-colors hover:bg-red-50">
-                            <XCircle className="h-4 w-4" /> Decline
-                          </button>
-                        )}
                     </div>
                   </div>
                 </div>
