@@ -331,7 +331,7 @@ export default function ActiveExchangesDashboard() {
                   </div>
 
                   {/* Bottom: Partner & Location */}
-                  <div className="relative flex w-full flex-col sm:flex-row sm:items-start sm:justify-between sm:gap-2">
+                  <div className="relative flex w-full flex-col sm:flex-row sm:items-start sm:justify-between sm:gap-2 xl:flex-col xl:gap-3">
                     <div className="flex min-w-0 flex-1 items-start gap-2.5">
                       <Image
                         src={partnerInfo.avatar}
@@ -396,7 +396,7 @@ export default function ActiveExchangesDashboard() {
                     </div>
 
                     {exchange.meetLocation && (
-                      <div className="text-muted-foreground border-border/40 hidden min-w-[100px] shrink-0 flex-col gap-1.5 text-[10px] sm:flex sm:border-l sm:pl-3">
+                      <div className="text-muted-foreground border-border/40 hidden min-w-[100px] shrink-0 flex-col gap-1.5 text-[10px] sm:flex sm:border-l sm:pl-3 xl:border-t xl:border-l-0 xl:pt-3 xl:pl-0">
                         <div className="text-foreground flex items-center gap-1.5 font-medium">
                           <MapPin className="h-3 w-3 shrink-0 text-red-500" />
                           <span className="line-clamp-1 break-words">
