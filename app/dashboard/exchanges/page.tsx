@@ -19,6 +19,7 @@ import {
   HelpCircle,
   Clock,
   XCircle,
+  ShieldCheck,
   MoreVertical,
   ChevronLeft,
   Check,
@@ -360,12 +361,18 @@ export default function ActiveExchangesDashboard() {
 
                         <div className="text-muted-foreground mt-1.5 flex items-center gap-3 text-[10px] sm:hidden">
                           {exchange.meetDate && (
-                            <div className="flex items-center gap-1">
-                              <CalendarDays className="h-3 w-3 shrink-0 text-blue-500" />
-                              <span className="truncate">
-                                {exchange.meetDate}, 4:00 PM
-                              </span>
-                            </div>
+                            <>
+                              <div className="flex items-center gap-1">
+                                <CalendarDays className="h-3 w-3 shrink-0 text-blue-500" />
+                                <span className="truncate">
+                                  {exchange.meetDate}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3 shrink-0 text-orange-500" />
+                                <span className="truncate">4:00 PM</span>
+                              </div>
+                            </>
                           )}
                           {exchange.meetLocation && (
                             <div className="flex items-center gap-1">
@@ -397,12 +404,20 @@ export default function ActiveExchangesDashboard() {
                           </span>
                         </div>
                         {exchange.meetDate && (
-                          <div className="flex items-center gap-1.5">
-                            <CalendarDays className="h-3 w-3 shrink-0 text-blue-500" />
-                            <span className="line-clamp-1 break-words">
-                              {exchange.meetDate} at 4:00 PM
-                            </span>
-                          </div>
+                          <>
+                            <div className="flex items-center gap-1.5">
+                              <CalendarDays className="h-3 w-3 shrink-0 text-blue-500" />
+                              <span className="line-clamp-1 break-words">
+                                {exchange.meetDate}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <Clock className="h-3 w-3 shrink-0 text-orange-500" />
+                              <span className="line-clamp-1 break-words">
+                                4:00 PM
+                              </span>
+                            </div>
+                          </>
                         )}
                         <div className="flex items-center gap-1.5">
                           <svg
@@ -642,23 +657,8 @@ export default function ActiveExchangesDashboard() {
         open={!!selectedExchange}
         onOpenChange={(open) => !open && setSelectedExchange(null)}
       >
-        <DialogContent className="dark:bg-background h-[100dvh] max-h-[100dvh] w-full gap-0 overflow-y-auto rounded-none bg-[#F8FAFC] p-0 sm:h-auto sm:max-h-[85vh] sm:max-w-[700px] sm:rounded-2xl sm:p-6">
-          <div className="bg-background/95 sticky top-0 z-50 flex items-center justify-between border-b px-4 py-3 backdrop-blur-md sm:border-none sm:bg-transparent sm:p-0">
-            <div className="flex items-center gap-3">
-              <button
-                className="-ml-2 p-2 sm:hidden"
-                onClick={() => setSelectedExchange(null)}
-              >
-                <ChevronLeft className="h-5 w-5" />
-              </button>
-              <DialogTitle className="text-lg font-bold">
-                Exchange Details
-              </DialogTitle>
-            </div>
-            <button className="-mr-2 p-2">
-              <MoreVertical className="text-muted-foreground h-5 w-5" />
-            </button>
-          </div>
+        <DialogContent className="dark:bg-background h-[100dvh] max-h-[100dvh] w-full gap-0 overflow-hidden rounded-none bg-[#F8FAFC] p-0 sm:h-auto sm:max-h-[85vh] sm:max-w-[700px] sm:rounded-2xl">
+          <DialogTitle className="sr-only">Exchange Details</DialogTitle>
 
           {selectedExchange &&
             (() => {
@@ -726,9 +726,9 @@ export default function ActiveExchangesDashboard() {
                 statusMap.pending_proposal;
 
               return (
-                <div className="space-y-4 p-4 pb-10 sm:p-0">
+                <div className="h-full max-h-[100dvh] overflow-y-auto p-4 pb-20 sm:max-h-[85vh] sm:p-6 sm:pb-10">
                   {/* Status Card */}
-                  <div className="bg-card flex flex-col gap-4 rounded-xl border p-4 shadow-sm">
+                  <div className="flex flex-col gap-4 border-b py-5">
                     <div className="flex items-center justify-between">
                       <span className="text-muted-foreground bg-muted/50 rounded px-2 py-1 font-mono text-[11px] font-bold tracking-wider">
                         {selectedExchange.id.substring(0, 8).toUpperCase()}
@@ -750,9 +750,15 @@ export default function ActiveExchangesDashboard() {
                           className="border-border rounded-full border"
                         />
                         <div className="flex flex-col">
-                          <h4 className="text-sm leading-tight font-bold">
-                            {partnerInfo.name}
-                          </h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-sm leading-tight font-bold">
+                              {partnerInfo.name}
+                            </h4>
+                            <span className="flex items-center gap-1 rounded border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 text-[9px] font-bold text-emerald-600">
+                              <ShieldCheck className="h-3 w-3" /> 98% Trust
+                              Score
+                            </span>
+                          </div>
                           <span className="mt-0.5 flex items-center text-[11px] font-bold text-amber-500">
                             <Star className="mr-0.5 h-3 w-3 fill-current" />{" "}
                             {partnerInfo.rating}{" "}
@@ -769,7 +775,7 @@ export default function ActiveExchangesDashboard() {
                   </div>
 
                   {/* Books Card */}
-                  <div className="bg-card rounded-xl border p-4 shadow-sm">
+                  <div className="border-b py-5">
                     <h3 className="mb-4 text-sm font-bold">Books</h3>
                     <div className="flex items-center justify-between">
                       <div className="flex flex-1 flex-col items-center text-center">
@@ -821,61 +827,65 @@ export default function ActiveExchangesDashboard() {
                   </div>
 
                   {/* Exchange Timeline */}
-                  <div className="bg-card rounded-xl border p-4 shadow-sm">
-                    <h3 className="mb-4 text-sm font-bold">
+                  <div className="overflow-x-auto border-b py-5">
+                    <h3 className="mb-6 text-sm font-bold">
                       Exchange Timeline
                     </h3>
-                    <div className="ml-2 flex flex-col">
-                      <div className="relative flex gap-4 pb-6">
-                        <div className="absolute top-4 bottom-0 left-[7px] w-0.5 bg-emerald-500"></div>
-                        <div className="z-10 mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
-                          <Check className="h-2.5 w-2.5" />
+                    <div className="relative flex w-full min-w-[280px] items-center justify-between px-2 pb-2">
+                      <div className="bg-border absolute top-[11px] left-0 h-0.5 w-full rounded-full" />
+
+                      <div className="relative z-10 flex flex-col items-center gap-2">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-white shadow-sm ring-4 ring-emerald-500/20">
+                          <CheckCircle2 className="h-3 w-3" />
                         </div>
-                        <div className="-mt-0.5 flex flex-col">
-                          <span className="text-[11px] font-bold">
-                            Agreement reached
+                        <span className="text-foreground text-center text-[10px] font-bold">
+                          Agreement
+                          <br />
+                          <span className="text-muted-foreground font-normal">
+                            Oct 25
                           </span>
-                          <span className="text-muted-foreground text-[10px]">
-                            Oct 25, 2024 • 10:30 AM
-                          </span>
-                        </div>
+                        </span>
                       </div>
-                      <div className="relative flex gap-4 pb-6">
-                        <div className="bg-border absolute top-4 bottom-0 left-[7px] w-0.5"></div>
-                        <div className="bg-card border-brand-blue text-brand-blue z-10 mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2">
-                          <Clock className="h-2 w-2" />
+
+                      <div className="relative z-10 flex flex-col items-center gap-2">
+                        <div className="border-brand-blue text-brand-blue flex h-6 w-6 items-center justify-center rounded-full border-2 bg-white shadow-sm ring-4 ring-blue-500/10">
+                          <Clock className="h-3 w-3" />
                         </div>
-                        <div className="-mt-0.5 flex flex-col">
-                          <span className="text-[11px] font-bold">
-                            Meetup scheduled
+                        <span className="text-foreground text-center text-[10px] font-bold">
+                          Meetup
+                          <br />
+                          <span className="text-muted-foreground font-normal">
+                            Oct 28
                           </span>
-                          <span className="text-muted-foreground text-[10px]">
-                            Tomorrow, 4:00 PM
-                          </span>
-                        </div>
+                        </span>
                       </div>
-                      <div className="relative flex gap-4 pb-6">
-                        <div className="bg-border absolute top-4 bottom-0 left-[7px] w-0.5"></div>
-                        <div className="bg-card border-muted z-10 mt-0.5 h-4 w-4 shrink-0 rounded-full border-2"></div>
-                        <div className="-mt-0.5 flex flex-col">
-                          <span className="text-muted-foreground text-[11px] font-medium">
-                            Book handover
-                          </span>
+
+                      <div className="relative z-10 flex flex-col items-center gap-2">
+                        <div className="border-muted bg-muted/30 text-muted-foreground flex h-6 w-6 items-center justify-center rounded-full border-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-current" />
                         </div>
+                        <span className="text-muted-foreground text-center text-[10px] font-medium">
+                          Handover
+                          <br />
+                          <span className="opacity-0">-</span>
+                        </span>
                       </div>
-                      <div className="relative flex gap-4">
-                        <div className="bg-card border-muted z-10 mt-0.5 h-4 w-4 shrink-0 rounded-full border-2"></div>
-                        <div className="-mt-0.5 flex flex-col">
-                          <span className="text-muted-foreground text-[11px] font-medium">
-                            Completed
-                          </span>
+
+                      <div className="relative z-10 flex flex-col items-center gap-2">
+                        <div className="border-muted bg-muted/30 text-muted-foreground flex h-6 w-6 items-center justify-center rounded-full border-2">
+                          <span className="h-1.5 w-1.5 rounded-full bg-current" />
                         </div>
+                        <span className="text-muted-foreground text-center text-[10px] font-medium">
+                          Completed
+                          <br />
+                          <span className="opacity-0">-</span>
+                        </span>
                       </div>
                     </div>
                   </div>
 
                   {/* Meetup Details */}
-                  <div className="bg-card rounded-xl border p-4 shadow-sm">
+                  <div className="border-b py-5">
                     <h3 className="mb-3 text-sm font-bold">Meetup Details</h3>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
