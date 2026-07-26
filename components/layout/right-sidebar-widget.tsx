@@ -198,8 +198,12 @@ export function RightSidebarWidget() {
         >
           <div className="relative">
             <MessageCircle
-              fill="currentColor"
-              className="text-primary h-6 w-6 transition-colors"
+              className={cn(
+                "h-6 w-6 transition-colors",
+                msgOpen
+                  ? "text-primary"
+                  : "text-muted-foreground group-hover:text-primary",
+              )}
             />
             {unreadCount > 0 && (
               <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] leading-none font-bold">
