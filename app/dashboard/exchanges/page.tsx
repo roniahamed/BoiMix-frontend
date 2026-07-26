@@ -19,6 +19,10 @@ import {
   HelpCircle,
   Clock,
   XCircle,
+  MoreVertical,
+  ChevronLeft,
+  Check,
+  MoreHorizontal,
 } from "lucide-react";
 import {
   Dialog,
@@ -295,7 +299,7 @@ export default function ActiveExchangesDashboard() {
             return (
               <div
                 key={exchange.id}
-                className="bg-card border-border/60 relative flex flex-col items-start gap-6 overflow-hidden rounded-xl border px-4 py-5 shadow-xs transition-colors xl:flex-row xl:items-center"
+                className="bg-card border-border/60 relative flex flex-col items-start gap-4 overflow-hidden rounded-xl border p-3 shadow-xs transition-colors sm:gap-6 sm:px-4 sm:py-5 xl:flex-row xl:items-center"
               >
                 {/* Status Color Left Border */}
                 <div
@@ -326,8 +330,8 @@ export default function ActiveExchangesDashboard() {
                   </div>
 
                   {/* Bottom: Partner & Location */}
-                  <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-2">
-                    <div className="flex items-start gap-2.5">
+                  <div className="relative flex w-full flex-col sm:flex-row sm:items-start sm:justify-between sm:gap-2">
+                    <div className="flex min-w-0 flex-1 items-start gap-2.5">
                       <Image
                         src={partnerInfo.avatar}
                         alt={partnerInfo.name}
@@ -335,18 +339,45 @@ export default function ActiveExchangesDashboard() {
                         height={40}
                         className="border-border h-10 w-10 shrink-0 rounded-full border"
                       />
-                      <div className="flex flex-col">
-                        <h4 className="text-sm leading-tight font-bold">
-                          {partnerInfo.name}
-                        </h4>
-                        <span className="mt-0.5 flex items-center text-[11px] font-semibold text-amber-500">
-                          <Star className="mr-0.5 h-3 w-3 fill-current" />{" "}
-                          {partnerInfo.rating}
-                          <span className="text-muted-foreground ml-1 font-normal">
-                            ({partnerInfo.reviews})
-                          </span>
-                        </span>
-                        <div className="text-muted-foreground mt-2 text-[10px] leading-snug">
+                      <div className="flex min-w-0 flex-1 flex-col">
+                        <div className="flex w-full items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <h4 className="truncate text-sm leading-tight font-bold">
+                              {partnerInfo.name}
+                            </h4>
+                            <span className="flex shrink-0 items-center text-[11px] font-semibold text-amber-500">
+                              <Star className="mr-0.5 h-3 w-3 fill-current" />
+                              {partnerInfo.rating}
+                              <span className="text-muted-foreground ml-1 hidden font-normal sm:inline">
+                                ({partnerInfo.reviews})
+                              </span>
+                            </span>
+                          </div>
+                          <button className="text-muted-foreground ml-2 sm:hidden">
+                            <MoreVertical className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        <div className="text-muted-foreground mt-1.5 flex items-center gap-3 text-[10px] sm:hidden">
+                          {exchange.meetDate && (
+                            <div className="flex items-center gap-1">
+                              <CalendarDays className="h-3 w-3 shrink-0 text-blue-500" />
+                              <span className="truncate">
+                                {exchange.meetDate}, 4:00 PM
+                              </span>
+                            </div>
+                          )}
+                          {exchange.meetLocation && (
+                            <div className="flex items-center gap-1">
+                              <MapPin className="h-3 w-3 shrink-0 text-red-500" />
+                              <span className="truncate">
+                                {exchange.meetLocation}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="text-muted-foreground mt-2 hidden text-[10px] leading-snug sm:block">
                           <span className="text-foreground font-bold">
                             {partnerInfo.completedSwaps}
                           </span>{" "}
@@ -358,7 +389,7 @@ export default function ActiveExchangesDashboard() {
                     </div>
 
                     {exchange.meetLocation && (
-                      <div className="text-muted-foreground border-border/40 flex min-w-0 flex-col gap-1.5 text-[10px] sm:border-l sm:pl-3">
+                      <div className="text-muted-foreground border-border/40 hidden min-w-[100px] shrink-0 flex-col gap-1.5 text-[10px] sm:flex sm:border-l sm:pl-3">
                         <div className="text-foreground flex items-center gap-1.5 font-medium">
                           <MapPin className="h-3 w-3 shrink-0 text-red-500" />
                           <span className="line-clamp-1 break-words">
@@ -399,8 +430,8 @@ export default function ActiveExchangesDashboard() {
                   <div className="flex h-full items-center justify-between gap-2">
                     {/* You Give */}
                     <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                      <div className="flex w-full flex-col">
-                        <span className="text-brand-blue mb-1.5 text-[9px] font-extrabold tracking-wider uppercase">
+                      <div className="flex w-full flex-col items-center text-center sm:items-start sm:text-left">
+                        <span className="text-brand-blue mb-1.5 hidden text-[9px] font-extrabold tracking-wider uppercase sm:block">
                           You Give
                         </span>
                         <div className="flex gap-2">
@@ -411,7 +442,7 @@ export default function ActiveExchangesDashboard() {
                             height={64}
                             className="h-16 w-11 shrink-0 rounded object-cover shadow-sm"
                           />
-                          <div className="flex min-w-0 flex-col">
+                          <div className="hidden min-w-0 flex-col sm:flex">
                             <h5 className="line-clamp-2 text-[11px] leading-tight font-bold">
                               {myBookTitle}
                             </h5>
@@ -427,8 +458,8 @@ export default function ActiveExchangesDashboard() {
 
                     {/* You Receive */}
                     <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-                      <div className="flex w-full flex-col">
-                        <span className="mb-1.5 text-[9px] font-extrabold tracking-wider text-emerald-600 uppercase">
+                      <div className="flex w-full flex-col items-center text-center sm:items-start sm:text-left">
+                        <span className="mb-1.5 hidden text-[9px] font-extrabold tracking-wider text-emerald-600 uppercase sm:block">
                           You Receive
                         </span>
                         <div className="flex gap-2">
@@ -439,7 +470,7 @@ export default function ActiveExchangesDashboard() {
                             height={64}
                             className="h-16 w-11 shrink-0 rounded object-cover shadow-sm"
                           />
-                          <div className="flex min-w-0 flex-col">
+                          <div className="hidden min-w-0 flex-col sm:flex">
                             <h5 className="line-clamp-2 text-[11px] leading-tight font-bold">
                               {theirBookTitle}
                             </h5>
@@ -550,7 +581,7 @@ export default function ActiveExchangesDashboard() {
                 </div>
 
                 {/* Col 4: Actions */}
-                <div className="mt-2 grid w-full shrink-0 grid-cols-2 justify-center gap-2 sm:grid-cols-3 xl:mt-0 xl:flex xl:w-[140px] xl:flex-col">
+                <div className="mt-2 flex w-full shrink-0 flex-col gap-2 sm:grid sm:grid-cols-3 xl:mt-0 xl:flex xl:w-[140px] xl:flex-col">
                   {isActionRequiredByMe &&
                     exchange.status === "pending_proposal" && (
                       <button
@@ -585,34 +616,10 @@ export default function ActiveExchangesDashboard() {
 
                   <button
                     onClick={() => setSelectedExchange(exchange)}
-                    className="bg-background border-brand-blue/30 text-brand-blue hover:bg-brand-blue/5 flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all"
+                    className="bg-background border-brand-blue/30 text-brand-blue hover:bg-brand-blue/5 flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all sm:col-span-3 xl:col-span-1"
                   >
                     <Eye className="h-3 w-3" /> Details
                   </button>
-                  <button className="bg-background border-brand-blue/30 text-brand-blue hover:bg-brand-blue/5 flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all">
-                    <MessageSquare className="h-3 w-3" /> Message
-                  </button>
-
-                  {["pending_proposal", "agreement_reached"].includes(
-                    exchange.status,
-                  ) && (
-                    <CounterOfferModal
-                      exchange={exchange}
-                      onCounterOffer={counterOffer}
-                    />
-                  )}
-
-                  {isActionRequiredByMe &&
-                    exchange.status === "pending_proposal" && (
-                      <button
-                        onClick={() =>
-                          updateExchangeStatus(exchange.id, "rejected")
-                        }
-                        className="bg-background border-danger/30 text-danger hover:bg-danger/10 flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all"
-                      >
-                        <XCircle className="h-3 w-3" /> Decline
-                      </button>
-                    )}
                 </div>
               </div>
             );
@@ -635,76 +642,307 @@ export default function ActiveExchangesDashboard() {
         open={!!selectedExchange}
         onOpenChange={(open) => !open && setSelectedExchange(null)}
       >
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Exchange Details</DialogTitle>
-          </DialogHeader>
-          {selectedExchange && (
-            <div className="space-y-4 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="mb-1 text-sm font-bold">Exchange ID</h4>
-                  <p className="text-muted-foreground text-xs">
-                    {selectedExchange.id}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="mb-1 text-sm font-bold">Status</h4>
-                  <p className="text-muted-foreground text-xs capitalize">
-                    {selectedExchange.status.replace("_", " ")}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="mb-1 text-sm font-bold">Meeting Location</h4>
-                  <p className="text-muted-foreground text-xs">
-                    {selectedExchange.meetLocation || "Not set"}
-                  </p>
-                </div>
-                <div>
-                  <h4 className="mb-1 text-sm font-bold">Meeting Time</h4>
-                  <p className="text-muted-foreground text-xs">
-                    {selectedExchange.meetDate
-                      ? `${selectedExchange.meetDate} at 4:00 PM`
-                      : "Not set"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="border-border/50 mt-4 border-t pt-4">
-                <h4 className="mb-3 text-sm font-bold">Books Exchanged</h4>
-                <div className="flex flex-col gap-3">
-                  <div className="bg-muted/30 border-border/50 flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-brand-blue text-xs font-semibold">
-                      You Give:
-                    </span>
-                    <span className="line-clamp-1 max-w-[60%] text-right text-xs font-medium">
-                      {selectedExchange.proposerId === "current-user"
-                        ? selectedExchange.offeredBookTitle
-                        : selectedExchange.requestedBookTitle}
-                    </span>
-                  </div>
-                  <div className="bg-muted/30 border-border/50 flex items-center justify-between rounded-lg border p-3">
-                    <span className="text-xs font-semibold text-emerald-600">
-                      You Receive:
-                    </span>
-                    <span className="line-clamp-1 max-w-[60%] text-right text-xs font-medium">
-                      {selectedExchange.proposerId === "current-user"
-                        ? selectedExchange.requestedBookTitle
-                        : selectedExchange.offeredBookTitle}
-                    </span>
-                  </div>
-                </div>
-              </div>
+        <DialogContent className="dark:bg-background h-[100dvh] max-h-[100dvh] w-full gap-0 overflow-y-auto rounded-none bg-[#F8FAFC] p-0 sm:h-auto sm:max-h-[85vh] sm:max-w-[700px] sm:rounded-2xl sm:p-6">
+          <div className="bg-background/95 sticky top-0 z-50 flex items-center justify-between border-b px-4 py-3 backdrop-blur-md sm:border-none sm:bg-transparent sm:p-0">
+            <div className="flex items-center gap-3">
+              <button
+                className="-ml-2 p-2 sm:hidden"
+                onClick={() => setSelectedExchange(null)}
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <DialogTitle className="text-lg font-bold">
+                Exchange Details
+              </DialogTitle>
             </div>
-          )}
-          <DialogFooter>
-            <button
-              onClick={() => setSelectedExchange(null)}
-              className="bg-secondary text-secondary-foreground hover:bg-secondary/80 w-full rounded-xl px-4 py-2 text-sm font-bold transition-all"
-            >
-              Close
+            <button className="-mr-2 p-2">
+              <MoreVertical className="text-muted-foreground h-5 w-5" />
             </button>
-          </DialogFooter>
+          </div>
+
+          {selectedExchange &&
+            (() => {
+              const isOwner = selectedExchange.ownerId === "current-user";
+              const partnerId = isOwner
+                ? selectedExchange.proposerId
+                : selectedExchange.ownerId;
+              const partnerInfo = MOCK_USERS[partnerId] || {
+                name: "Unknown",
+                avatar: "https://i.pravatar.cc/150",
+                rating: "0.0",
+                reviews: 0,
+              };
+              const myBookTitle = isOwner
+                ? selectedExchange.requestedBookTitle
+                : selectedExchange.offeredBookTitle;
+              const theirBookTitle = isOwner
+                ? selectedExchange.offeredBookTitle
+                : selectedExchange.requestedBookTitle;
+              const myBookImage = isOwner
+                ? selectedExchange.requestedBookImage
+                : selectedExchange.offeredBookImage;
+              const theirBookImage = isOwner
+                ? selectedExchange.offeredBookImage
+                : selectedExchange.requestedBookImage;
+              const myBookMock = myBookTitle.toLowerCase().includes("book")
+                ? MOCK_BOOKS[`book${(myBookTitle.length % 3) + 1}`]
+                : MOCK_BOOKS["book1"];
+              const myBookAuthor = myBookMock?.author || "Unknown Author";
+              const theirBookMock = MOCK_BOOKS["book1"];
+              const theirBookAuthor = theirBookMock?.author || "Unknown Author";
+
+              // Quick status derivation for details
+              const statusMap: Record<
+                string,
+                { label: string; color: string }
+              > = {
+                pending_proposal: {
+                  label: "Waiting for You",
+                  color: "bg-amber-100 text-amber-700 border-amber-200",
+                },
+                counter_offered: {
+                  label: "Waiting for Partner",
+                  color: "bg-blue-100 text-blue-700 border-blue-200",
+                },
+                agreement_reached: {
+                  label: "Ready for Meetup",
+                  color: "bg-emerald-100 text-emerald-700 border-emerald-200",
+                },
+                handed_over: {
+                  label: "Handed Over",
+                  color: "bg-emerald-100 text-emerald-700 border-emerald-200",
+                },
+                completed: {
+                  label: "Completed",
+                  color: "bg-gray-100 text-gray-700 border-gray-200",
+                },
+                cancelled: {
+                  label: "Cancelled",
+                  color: "bg-red-100 text-red-700 border-red-200",
+                },
+              };
+              const sBadge =
+                statusMap[selectedExchange.status] ||
+                statusMap.pending_proposal;
+
+              return (
+                <div className="space-y-4 p-4 pb-10 sm:p-0">
+                  {/* Status Card */}
+                  <div className="bg-card flex flex-col gap-4 rounded-xl border p-4 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground bg-muted/50 rounded px-2 py-1 font-mono text-[11px] font-bold tracking-wider">
+                        {selectedExchange.id.substring(0, 8).toUpperCase()}
+                      </span>
+                      <div
+                        className={`flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold ${sBadge.color}`}
+                      >
+                        <Clock className="h-3 w-3" /> {sBadge.label}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <Image
+                          src={partnerInfo.avatar}
+                          alt={partnerInfo.name}
+                          width={40}
+                          height={40}
+                          className="border-border rounded-full border"
+                        />
+                        <div className="flex flex-col">
+                          <h4 className="text-sm leading-tight font-bold">
+                            {partnerInfo.name}
+                          </h4>
+                          <span className="mt-0.5 flex items-center text-[11px] font-bold text-amber-500">
+                            <Star className="mr-0.5 h-3 w-3 fill-current" />{" "}
+                            {partnerInfo.rating}{" "}
+                            <span className="text-muted-foreground ml-1 font-normal">
+                              ({partnerInfo.reviews} reviews)
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                      <button className="text-brand-blue border-border hover:bg-muted hidden rounded-full border px-3 py-1.5 text-[10px] font-bold sm:block">
+                        View Profile
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Books Card */}
+                  <div className="bg-card rounded-xl border p-4 shadow-sm">
+                    <h3 className="mb-4 text-sm font-bold">Books</h3>
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-1 flex-col items-center text-center">
+                        <span className="text-brand-blue mb-2 text-[10px] font-extrabold tracking-wider uppercase">
+                          You Give
+                        </span>
+                        <Image
+                          src={myBookImage}
+                          alt={myBookTitle}
+                          width={64}
+                          height={96}
+                          className="mb-2 rounded object-cover shadow-sm"
+                        />
+                        <h5 className="line-clamp-2 text-[11px] leading-tight font-bold">
+                          {myBookTitle}
+                        </h5>
+                        <p className="text-muted-foreground mt-0.5 text-[10px]">
+                          {myBookAuthor}
+                        </p>
+                        <span className="mt-1 rounded border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[9px] font-semibold text-emerald-600">
+                          Like New
+                        </span>
+                      </div>
+
+                      <Repeat2 className="text-muted-foreground mx-2 h-5 w-5 shrink-0 opacity-50" />
+
+                      <div className="flex flex-1 flex-col items-center text-center">
+                        <span className="mb-2 text-[10px] font-extrabold tracking-wider text-emerald-600 uppercase">
+                          You Receive
+                        </span>
+                        <Image
+                          src={theirBookImage}
+                          alt={theirBookTitle}
+                          width={64}
+                          height={96}
+                          className="mb-2 rounded object-cover shadow-sm"
+                        />
+                        <h5 className="line-clamp-2 text-[11px] leading-tight font-bold">
+                          {theirBookTitle}
+                        </h5>
+                        <p className="text-muted-foreground mt-0.5 text-[10px]">
+                          {theirBookAuthor}
+                        </p>
+                        <span className="mt-1 rounded border border-blue-100 bg-blue-50 px-2 py-0.5 text-[9px] font-semibold text-blue-600">
+                          Good
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Exchange Timeline */}
+                  <div className="bg-card rounded-xl border p-4 shadow-sm">
+                    <h3 className="mb-4 text-sm font-bold">
+                      Exchange Timeline
+                    </h3>
+                    <div className="ml-2 flex flex-col">
+                      <div className="relative flex gap-4 pb-6">
+                        <div className="absolute top-4 bottom-0 left-[7px] w-0.5 bg-emerald-500"></div>
+                        <div className="z-10 mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
+                          <Check className="h-2.5 w-2.5" />
+                        </div>
+                        <div className="-mt-0.5 flex flex-col">
+                          <span className="text-[11px] font-bold">
+                            Agreement reached
+                          </span>
+                          <span className="text-muted-foreground text-[10px]">
+                            Oct 25, 2024 • 10:30 AM
+                          </span>
+                        </div>
+                      </div>
+                      <div className="relative flex gap-4 pb-6">
+                        <div className="bg-border absolute top-4 bottom-0 left-[7px] w-0.5"></div>
+                        <div className="bg-card border-brand-blue text-brand-blue z-10 mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2">
+                          <Clock className="h-2 w-2" />
+                        </div>
+                        <div className="-mt-0.5 flex flex-col">
+                          <span className="text-[11px] font-bold">
+                            Meetup scheduled
+                          </span>
+                          <span className="text-muted-foreground text-[10px]">
+                            Tomorrow, 4:00 PM
+                          </span>
+                        </div>
+                      </div>
+                      <div className="relative flex gap-4 pb-6">
+                        <div className="bg-border absolute top-4 bottom-0 left-[7px] w-0.5"></div>
+                        <div className="bg-card border-muted z-10 mt-0.5 h-4 w-4 shrink-0 rounded-full border-2"></div>
+                        <div className="-mt-0.5 flex flex-col">
+                          <span className="text-muted-foreground text-[11px] font-medium">
+                            Book handover
+                          </span>
+                        </div>
+                      </div>
+                      <div className="relative flex gap-4">
+                        <div className="bg-card border-muted z-10 mt-0.5 h-4 w-4 shrink-0 rounded-full border-2"></div>
+                        <div className="-mt-0.5 flex flex-col">
+                          <span className="text-muted-foreground text-[11px] font-medium">
+                            Completed
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Meetup Details */}
+                  <div className="bg-card rounded-xl border p-4 shadow-sm">
+                    <h3 className="mb-3 text-sm font-bold">Meetup Details</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="text-muted-foreground flex items-center gap-2 text-[11px]">
+                          <MapPin className="text-foreground h-3.5 w-3.5" />{" "}
+                          <span>
+                            {selectedExchange.meetLocation || "Not Set"}
+                          </span>
+                        </div>
+                        <button className="rounded bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-600">
+                          Open Map
+                        </button>
+                      </div>
+                      <div className="text-muted-foreground flex items-center gap-2 text-[11px]">
+                        <CalendarDays className="text-foreground h-3.5 w-3.5" />{" "}
+                        <span>Tomorrow, Oct 28</span>
+                      </div>
+                      <div className="text-muted-foreground flex items-center gap-2 text-[11px]">
+                        <Clock className="text-foreground h-3.5 w-3.5" />{" "}
+                        <span>4:00 PM</span>
+                      </div>
+                    </div>
+                    <div className="text-brand-blue mt-4 flex gap-2 rounded-lg bg-blue-50 p-3 text-[11px] dark:bg-blue-900/20 dark:text-blue-300">
+                      <MessageCircle className="h-4 w-4 shrink-0" />
+                      <span>
+                        <strong>Notes:</strong> Meet near the main gate.
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="bg-card flex flex-col gap-2 rounded-xl border p-4 shadow-sm">
+                    <h3 className="mb-1 text-sm font-bold">Actions</h3>
+                    {isOwner &&
+                      selectedExchange.status === "pending_proposal" && (
+                        <button className="bg-brand-blue hover:bg-brand-blue/90 flex w-full items-center justify-center gap-2 rounded-lg py-2.5 text-sm font-bold text-white transition-colors">
+                          <Check className="h-4 w-4" /> Accept Request
+                        </button>
+                      )}
+                    <div className="mt-1 flex w-full flex-wrap gap-2">
+                      <button className="border-border hover:bg-muted text-brand-blue flex min-w-[100px] flex-1 items-center justify-center gap-2 rounded-lg border py-2 text-sm font-bold whitespace-nowrap transition-colors">
+                        <MessageCircle className="h-4 w-4" /> Message
+                      </button>
+
+                      {["pending_proposal", "agreement_reached"].includes(
+                        selectedExchange.status,
+                      ) && (
+                        <div className="min-w-[100px] flex-1">
+                          <CounterOfferModal
+                            exchange={selectedExchange}
+                            onCounterOffer={counterOffer}
+                            triggerClassName="w-full border border-border hover:bg-muted text-brand-blue font-bold text-sm py-2 rounded-lg flex items-center justify-center gap-2 transition-colors h-full"
+                          />
+                        </div>
+                      )}
+
+                      {isOwner &&
+                        selectedExchange.status === "pending_proposal" && (
+                          <button className="flex min-w-[100px] flex-1 items-center justify-center gap-2 rounded-lg border border-red-200 py-2 text-sm font-bold whitespace-nowrap text-red-500 transition-colors hover:bg-red-50">
+                            <XCircle className="h-4 w-4" /> Decline
+                          </button>
+                        )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
         </DialogContent>
       </Dialog>
     </div>
@@ -715,6 +953,7 @@ function CounterOfferModal({
   exchange,
   onCounterOffer,
   onClick,
+  triggerClassName,
 }: {
   exchange: ExchangeOrder;
   onCounterOffer: (
@@ -722,6 +961,7 @@ function CounterOfferModal({
     details: NonNullable<ExchangeOrder["counterOfferDetails"]>,
   ) => void;
   onClick?: (e: React.MouseEvent) => void;
+  triggerClassName?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(
@@ -750,7 +990,10 @@ function CounterOfferModal({
         <DialogTrigger asChild>
           <button
             onClick={onClick}
-            className="bg-background border-border/80 text-foreground hover:bg-muted flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all"
+            className={
+              triggerClassName ||
+              "bg-background border-border/80 text-foreground hover:bg-muted flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all"
+            }
           >
             Change Location
           </button>
