@@ -555,15 +555,15 @@ export default function SalesPage() {
                     </span>
                   </div>
 
-                  <div className="flex w-full items-center gap-2 sm:w-auto">
+                  <div className="flex w-full items-center gap-3 sm:w-auto">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
                         setSelectedOrder(order);
                       }}
-                      className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
+                      className="bg-primary/10 text-primary hover:bg-primary/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-5 py-2 text-sm font-bold transition-colors sm:flex-none"
                     >
-                      <Eye className="h-3.5 w-3.5" /> View Details
+                      <Eye className="h-4 w-4" /> View Details
                     </button>
 
                     <button
@@ -571,10 +571,9 @@ export default function SalesPage() {
                         e.stopPropagation();
                         window.location.href = `/dashboard/messages/${order.buyerUsername}?prefill=${encodeURIComponent(`Hi ${order.buyerName}, regarding your order ${order.id} for "${order.bookTitle}":\n`)}`;
                       }}
-                      className="bg-muted hover:bg-muted/80 text-foreground inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition-colors sm:flex-none"
+                      className="bg-muted hover:bg-muted/80 text-foreground inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-5 py-2 text-sm font-bold transition-colors sm:flex-none"
                     >
-                      <MessageSquare className="text-primary h-3.5 w-3.5" />{" "}
-                      Chat
+                      <MessageSquare className="text-primary h-4 w-4" /> Chat
                     </button>
 
                     {(order.status === "pending" ||
@@ -585,9 +584,9 @@ export default function SalesPage() {
                             e.stopPropagation();
                             handleCancelOrder(order.id);
                           }}
-                          className="bg-danger/10 text-danger hover:bg-danger/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold transition-all sm:flex-none"
+                          className="bg-danger/10 text-danger hover:bg-danger/20 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-6 py-2 text-sm font-bold transition-all sm:flex-none"
                         >
-                          <XCircle className="h-3.5 w-3.5" /> Cancel
+                          <XCircle className="h-4 w-4" /> Cancel
                         </button>
                         {order.status === "pending" ? (
                           <button
@@ -595,7 +594,7 @@ export default function SalesPage() {
                               e.stopPropagation();
                               handleConfirmOrder(order.id);
                             }}
-                            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold shadow-2xs transition-all active:scale-95 sm:flex-none"
+                            className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-6 py-2 text-sm font-bold shadow-2xs transition-all active:scale-95 sm:flex-none"
                           >
                             Confirm
                           </button>
@@ -605,9 +604,9 @@ export default function SalesPage() {
                               e.stopPropagation();
                               handleMarkAsShipped(order.id);
                             }}
-                            className="bg-brand-blue hover:bg-brand-blue/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-3.5 py-2 text-xs font-bold text-white shadow-2xs transition-all active:scale-95 sm:flex-none"
+                            className="bg-brand-blue hover:bg-brand-blue/90 inline-flex min-h-[36px] flex-1 items-center justify-center gap-1.5 rounded-xl px-6 py-2 text-sm font-bold text-white shadow-2xs transition-all active:scale-95 sm:flex-none"
                           >
-                            <Truck className="h-3.5 w-3.5" /> Mark Shipped
+                            <Truck className="h-4 w-4" /> Mark Shipped
                           </button>
                         )}
                       </>
@@ -626,7 +625,7 @@ export default function SalesPage() {
         onOpenChange={() => setSelectedOrder(null)}
       >
         {selectedOrder && (
-          <DialogContent className="max-w-md rounded-2xl p-6 sm:max-w-lg">
+          <DialogContent className="max-w-md rounded-2xl p-6 sm:max-w-xl md:max-w-2xl">
             <DialogHeader>
               <div className="flex items-center justify-between border-b pb-3">
                 <div>
@@ -794,15 +793,15 @@ export default function SalesPage() {
                 <Printer className="h-4 w-4" /> Print Order Slip
               </button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <button
                   onClick={() => {
                     window.location.href = `/dashboard/messages/${selectedOrder.buyerUsername}?prefill=${encodeURIComponent(`Hi ${selectedOrder.buyerName}, regarding your order ${selectedOrder.id} for "${selectedOrder.bookTitle}":\n`)}`;
                   }}
-                  className="bg-muted hover:bg-muted/80 text-foreground rounded-xl px-3 py-2 transition-colors"
+                  className="bg-muted hover:bg-muted/80 text-foreground flex items-center justify-center rounded-xl px-4 py-2.5 transition-colors"
                   title="Message Buyer"
                 >
-                  <MessageSquare className="text-primary h-4 w-4" />
+                  <MessageSquare className="text-primary h-5 w-5" />
                 </button>
                 {(selectedOrder.status === "pending" ||
                   selectedOrder.status === "confirmed") && (
@@ -815,7 +814,7 @@ export default function SalesPage() {
                           status: "cancelled",
                         });
                       }}
-                      className="bg-danger/10 text-danger hover:bg-danger/20 rounded-xl px-4 py-2 text-xs font-bold transition-colors"
+                      className="bg-danger/10 text-danger hover:bg-danger/20 flex-1 rounded-xl px-6 py-2.5 text-sm font-bold transition-colors sm:flex-none"
                     >
                       Cancel
                     </button>
@@ -828,7 +827,7 @@ export default function SalesPage() {
                             status: "confirmed",
                           });
                         }}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl px-4 py-2 text-xs font-bold transition-all"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 flex-1 rounded-xl px-8 py-2.5 text-sm font-bold transition-all sm:flex-none"
                       >
                         Confirm Order
                       </button>
@@ -837,7 +836,7 @@ export default function SalesPage() {
                         onClick={() => {
                           handleMarkAsShipped(selectedOrder.id);
                         }}
-                        className="bg-brand-blue hover:bg-brand-blue/90 rounded-xl px-4 py-2 text-xs font-bold text-white transition-all"
+                        className="bg-brand-blue hover:bg-brand-blue/90 flex-1 rounded-xl px-8 py-2.5 text-sm font-bold text-white transition-all sm:flex-none"
                       >
                         Mark Shipped
                       </button>
@@ -846,7 +845,7 @@ export default function SalesPage() {
                 )}
                 <button
                   onClick={() => setSelectedOrder(null)}
-                  className="bg-muted text-foreground hover:bg-muted/80 rounded-xl px-4 py-2 text-xs font-bold transition-colors"
+                  className="bg-muted text-foreground hover:bg-muted/80 flex-1 rounded-xl px-6 py-2.5 text-sm font-bold transition-colors sm:flex-none"
                 >
                   Close
                 </button>
