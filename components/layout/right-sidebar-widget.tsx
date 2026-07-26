@@ -196,17 +196,22 @@ export function RightSidebarWidget() {
           aria-label="Messages"
           aria-expanded={msgOpen}
         >
-          <div className="relative">
+          <div
+            className={cn(
+              "relative flex h-12 w-12 items-center justify-center rounded-full transition-all duration-300",
+              msgOpen ? "bg-primary/15" : "group-hover:bg-primary/10",
+            )}
+          >
             <MessageCircle
               className={cn(
-                "h-6 w-6 transition-colors",
+                "h-6 w-6 transition-all duration-300",
                 msgOpen
-                  ? "text-primary"
-                  : "text-muted-foreground group-hover:text-primary",
+                  ? "text-primary fill-primary/20 scale-110 drop-shadow-sm"
+                  : "text-muted-foreground group-hover:text-primary group-hover:fill-primary/10 group-hover:scale-110",
               )}
             />
             {unreadCount > 0 && (
-              <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] leading-none font-bold">
+              <span className="bg-primary text-primary-foreground absolute -top-0.5 -right-0.5 flex h-4 w-4 animate-pulse items-center justify-center rounded-full text-[9px] leading-none font-bold shadow-sm">
                 {unreadCount > 9 ? "9+" : unreadCount}
               </span>
             )}
