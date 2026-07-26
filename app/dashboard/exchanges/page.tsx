@@ -642,16 +642,6 @@ export default function ActiveExchangesDashboard() {
         )}
       </div>
 
-      {/* Floating Action Buttons */}
-      <div className="fixed right-4 bottom-20 flex flex-col gap-3 sm:right-8 sm:bottom-8">
-        <button className="bg-background text-foreground hover:bg-muted border-border flex h-12 w-12 items-center justify-center rounded-full border shadow-lg transition-transform hover:scale-105">
-          <HelpCircle className="h-5 w-5" />
-        </button>
-        <button className="bg-primary text-primary-foreground shadow-primary/30 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105">
-          <MessageCircle className="h-6 w-6" />
-        </button>
-      </div>
-
       {/* Exchange Details Dialog */}
       <Dialog
         open={!!selectedExchange}

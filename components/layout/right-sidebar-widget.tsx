@@ -5,6 +5,8 @@ import Link from "next/link";
 import {
   BookPlusIcon,
   MessageSquareIcon,
+  MessageCircle,
+  HelpCircle,
   XIcon,
   ExternalLinkIcon,
   ArrowUpIcon,
@@ -162,7 +164,7 @@ export function RightSidebarWidget() {
                 <ChatWindow conversation={activeConversation} />
               ) : (
                 <div className="text-muted-foreground flex h-full flex-col items-center justify-center">
-                  <MessageSquareIcon className="mb-4 h-12 w-12 opacity-20" />
+                  <MessageCircle className="mb-4 h-12 w-12 opacity-20" />
                   <p>Select a conversation to start messaging</p>
                 </div>
               )}
@@ -195,13 +197,9 @@ export function RightSidebarWidget() {
           aria-expanded={msgOpen}
         >
           <div className="relative">
-            <MessageSquareIcon
-              className={cn(
-                "h-6 w-6 transition-colors",
-                msgOpen
-                  ? "text-primary"
-                  : "text-muted-foreground group-hover:text-primary",
-              )}
+            <MessageCircle
+              fill="currentColor"
+              className="text-primary h-6 w-6 transition-colors"
             />
             {unreadCount > 0 && (
               <span className="bg-primary text-primary-foreground absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full text-[9px] leading-none font-bold">
@@ -220,6 +218,18 @@ export function RightSidebarWidget() {
             Messages
           </span>
         </button>
+
+        {/* Help */}
+        <Link
+          href="/faq"
+          className="hover:bg-muted group relative flex flex-col items-center gap-1.5 border-b px-4 py-4 transition-colors"
+          aria-label="Help"
+        >
+          <HelpCircle className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
+          <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
+            Help
+          </span>
+        </Link>
 
         {/* Back to Top */}
         {showBackToTop && (
