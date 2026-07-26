@@ -141,7 +141,7 @@ const MOCK_CUSTOMER_ORDERS: CustomerOrder[] = [
 export default function SalesPage() {
   const [orders, setOrders] = useState<CustomerOrder[]>(MOCK_CUSTOMER_ORDERS);
   const [activeTab, setActiveTab] = useState<
-    "all" | "pending" | "shipped" | "completed"
+    "all" | "pending" | "confirmed" | "shipped" | "completed" | "cancelled"
   >("all");
   const [selectedOrder, setSelectedOrder] = useState<CustomerOrder | null>(
     null,
