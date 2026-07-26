@@ -19,6 +19,7 @@ import {
   StarIcon,
   ActivityIcon,
   TicketIcon,
+  WalletIcon,
 } from "lucide-react";
 import type { ComponentType, SVGProps } from "react";
 
@@ -197,11 +198,16 @@ export const dashboardNavGroups: NavGroup[] = [
     title: "Account",
     items: [
       {
-        title: "Membership & Wallet",
-        href: "/dashboard/passes",
-        icon: TicketIcon,
+        title: "Earnings & Wallet",
+        href: "/dashboard/wallet",
+        icon: WalletIcon,
         badge: 2,
         badgeVariant: "success",
+      },
+      {
+        title: "Memberships",
+        href: "/dashboard/passes",
+        icon: TicketIcon,
       },
       { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
       {

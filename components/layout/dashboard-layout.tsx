@@ -9,6 +9,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { RightSidebarWidget } from "@/components/layout/right-sidebar-widget";
 import { SidebarNavigation } from "@/components/layout/sidebar-navigation";
 import { dashboardNavGroups, dashboardNavItems } from "@/lib/navigation";
+import { cn } from "@/lib/utils";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -65,9 +66,23 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         />
 
         {/* Main area takes remaining width */}
-        <main className="w-full min-w-0 flex-1 pb-20 lg:pb-12">
+        <main
+          className={cn(
+            "w-full min-w-0 flex-1 transition-all",
+            pathname.startsWith("/dashboard/messages")
+              ? "h-[calc(100vh-64px)] pb-16 lg:pb-0"
+              : "pb-20 lg:pb-12",
+          )}
+        >
           {/* Inner content constrained to max-w-6xl (1152px) so cards don't stretch infinitely */}
-          <div className="mx-auto w-full max-w-6xl p-4 md:p-6 lg:p-8">
+          <div
+            className={cn(
+              "mx-auto w-full",
+              pathname.startsWith("/dashboard/messages")
+                ? "h-full max-w-[1400px] p-0 lg:p-6 lg:pb-8"
+                : "max-w-6xl p-4 md:p-6 lg:p-8",
+            )}
+          >
             {children}
           </div>
         </main>

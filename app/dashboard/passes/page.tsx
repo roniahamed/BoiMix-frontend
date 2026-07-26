@@ -286,11 +286,11 @@ export default function MembershipWalletDashboardPage() {
         <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-4">
           <div className="bg-card border-border/70 space-y-1 rounded-2xl border p-4 shadow-2xs">
             <p className="text-muted-foreground text-[11px] font-semibold">
-              Refundable Deposit
+              Membership Fee
             </p>
             <p className="text-foreground text-xl font-black">৳ 1,000</p>
             <p className="text-muted-foreground text-[10px]">
-              Settled after 4 years
+              Valid for 4 years
             </p>
           </div>
 
@@ -308,11 +308,11 @@ export default function MembershipWalletDashboardPage() {
 
           <div className="bg-card border-border/70 space-y-1 rounded-2xl border p-4 shadow-2xs">
             <p className="text-muted-foreground text-[11px] font-semibold">
-              Pending Refund
+              Total Saved
             </p>
-            <p className="text-xl font-black text-amber-600">৳ 300</p>
+            <p className="text-xl font-black text-emerald-600">৳ 1,200</p>
             <p className="text-muted-foreground text-[10px]">
-              In Escrow processing
+              From library books
             </p>
           </div>
 

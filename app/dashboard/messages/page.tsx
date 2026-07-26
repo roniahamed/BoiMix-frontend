@@ -1,27 +1,35 @@
 import { ConversationList } from "@/components/messages/conversation-list";
 import { MOCK_CONVERSATIONS } from "@/lib/data/mock-messages";
-import { MessageSquareIcon } from "lucide-react";
+import { MessageSquareDashed, Lock } from "lucide-react";
 
 export default function MessagesPage() {
   return (
-    <div className="flex h-[calc(100vh-140px)] flex-col gap-4 md:flex-row">
-      {/* Sidebar / Conversation List */}
-      <div className="bg-card w-full overflow-hidden rounded-lg border md:w-1/3 lg:w-1/4">
+    <div className="bg-background flex h-full w-full flex-col gap-0 overflow-hidden md:flex-row lg:rounded-2xl lg:border lg:shadow-sm">
+      {/* Sidebar / ConversationList */}
+      <div className="w-full shrink-0 border-r md:w-[380px] lg:w-[420px]">
         <ConversationList conversations={MOCK_CONVERSATIONS} />
       </div>
 
       {/* Empty State for Chat Window (Desktop Only) */}
-      <div className="bg-card text-muted-foreground hidden flex-1 flex-col items-center justify-center rounded-lg border p-8 text-center md:flex">
-        <div className="bg-muted mb-4 flex h-20 w-20 items-center justify-center rounded-full">
-          <MessageSquareIcon className="text-muted-foreground/50 h-10 w-10" />
+      <div className="bg-muted/30 hidden flex-1 flex-col items-center justify-center p-8 text-center md:flex">
+        <div className="bg-primary/10 mb-8 flex h-32 w-32 items-center justify-center rounded-full shadow-inner">
+          <MessageSquareDashed
+            className="text-primary h-16 w-16"
+            strokeWidth={1.5}
+          />
         </div>
-        <h3 className="text-foreground mb-2 text-xl font-semibold">
-          Your Messages
+        <h3 className="text-foreground mb-3 text-3xl font-light tracking-tight">
+          BoiMix Messages
         </h3>
-        <p className="max-w-md">
+        <p className="text-muted-foreground mb-12 max-w-sm text-[15px] leading-relaxed">
           Select a conversation from the list to start chatting about book
           exchanges, purchases, and more.
         </p>
+
+        <div className="text-muted-foreground/60 flex items-center gap-1.5 text-xs font-medium">
+          <Lock className="h-3 w-3" />
+          <span>Your personal messages are private and secure.</span>
+        </div>
       </div>
     </div>
   );
