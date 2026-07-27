@@ -61,8 +61,9 @@ export default function SettingsPage() {
     const timer = setTimeout(async () => {
       if (searchQuery.trim().length > 2) {
         try {
+          // Added countrycodes=bd and limit=5 to speed up the query significantly
           const res = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${encodeURIComponent(searchQuery)}`,
+            `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=bd&limit=5&q=${encodeURIComponent(searchQuery)}`,
           );
           const data = await res.json();
           setSearchResults(data);
@@ -72,7 +73,7 @@ export default function SettingsPage() {
       } else {
         setSearchResults([]);
       }
-    }, 500);
+    }, 300); // Reduced debounce to 300ms for faster feedback
 
     return () => clearTimeout(timer);
   }, [searchQuery]);
