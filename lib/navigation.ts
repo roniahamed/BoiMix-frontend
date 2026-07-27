@@ -177,7 +177,6 @@ export const dashboardNavGroups: NavGroup[] = [
   {
     title: "Community",
     items: [
-      { title: "Reviews", href: "/dashboard/reviews", icon: StarIcon },
       {
         title: "Messages",
         href: "/dashboard/messages",
