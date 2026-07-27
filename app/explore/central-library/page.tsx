@@ -1,180 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  BookOpen,
-  CheckCircle2,
-  Star,
-  Shield,
-  BookMarked,
-  MapPin,
-  Users,
-  Check,
-  Heart,
-  MonitorPlay,
-  BriefcaseMedical,
-  GraduationCap,
-  LayoutGrid,
-  ArrowRight,
-} from "lucide-react";
-
+import { Star, Check, ArrowRight } from "lucide-react";
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
 import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LibrarySearchBar } from "@/components/shared/library-search-bar";
 import { FaqAccordion } from "@/components/shared/faq-accordion";
 import { fetchLocal } from "@/lib/fetchLocal";
 import type { BookCardBook } from "@/types/book";
 
-// Categories Mock
-const CATEGORIES = [
-  {
-    name: "Academic",
-    count: "2,400 Books",
-    icon: GraduationCap,
-    color: "text-blue-500",
-    bg: "bg-blue-50",
-    border: "border-blue-100",
-  },
-  {
-    name: "Novel",
-    count: "3,120 Books",
-    icon: BookMarked,
-    color: "text-rose-500",
-    bg: "bg-rose-50",
-    border: "border-rose-100",
-  },
-  {
-    name: "Science",
-    count: "1,980 Books",
-    icon: Star,
-    color: "text-teal-500",
-    bg: "bg-teal-50",
-    border: "border-teal-100",
-  },
-  {
-    name: "History",
-    count: "1,250 Books",
-    icon: MapPin,
-    color: "text-amber-500",
-    bg: "bg-amber-50",
-    border: "border-amber-100",
-  },
-  {
-    name: "Islamic",
-    count: "1,870 Books",
-    icon: Heart,
-    color: "text-green-500",
-    bg: "bg-green-50",
-    border: "border-green-100",
-  },
-  {
-    name: "Engineering",
-    count: "2,100 Books",
-    icon: MonitorPlay,
-    color: "text-indigo-500",
-    bg: "bg-indigo-50",
-    border: "border-indigo-100",
-  },
-  {
-    name: "Medical",
-    count: "950 Books",
-    icon: BriefcaseMedical,
-    color: "text-red-500",
-    bg: "bg-red-50",
-    border: "border-red-100",
-  },
-  {
-    name: "BCS",
-    count: "1,400 Books",
-    icon: Shield,
-    color: "text-purple-500",
-    bg: "bg-purple-50",
-    border: "border-purple-100",
-  },
-  {
-    name: "Kids",
-    count: "1,860 Books",
-    icon: Star,
-    color: "text-yellow-500",
-    bg: "bg-yellow-50",
-    border: "border-yellow-100",
-  },
-  {
-    name: "Comics",
-    count: "870 Books",
-    icon: Heart,
-    color: "text-orange-500",
-    bg: "bg-orange-50",
-    border: "border-orange-100",
-  },
-];
-
-const POPULAR_COLLECTIONS = [
-  {
-    name: "Exam Preparation",
-    desc: "Best books for BCS, university & job exams.",
-    count: "120+ Books",
-    image:
-      "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Self Improvement",
-    desc: "Build skills, habits and become your best self.",
-    count: "85+ Books",
-    image:
-      "https://images.unsplash.com/photo-1555448248-2571daf6344b?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Business & Finance",
-    desc: "Grow your career and financial knowledge.",
-    count: "150+ Books",
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Classic Literature",
-    desc: "Timeless stories from world's best writers.",
-    count: "200+ Books",
-    image:
-      "https://images.unsplash.com/photo-1474932430478-367dbb6832c1?auto=format&fit=crop&q=80&w=400",
-  },
-  {
-    name: "Motivational Reads",
-    desc: "Inspire your mind and change your life.",
-    count: "90+ Books",
-    image:
-      "https://images.unsplash.com/photo-1506880018603-83d5b62f4d34?auto=format&fit=crop&q=80&w=400",
-  },
-];
-
-const FAQS = [
-  {
-    q: "বই ধার করার প্রক্রিয়া কী?",
-    a: "মেম্বারশিপ প্ল্যানে সাবস্ক্রাইব করে আপনি বই ধার করতে পারবেন। সাবস্ক্রাইব করার পরে সেন্ট্রাল লাইব্রেরি থেকে বই রিকোয়েস্ট করুন, আমরা আপনার ঠিকানায় ডেলিভারি দেব।",
-  },
-  {
-    q: "একটি বই কতদিন রাখা যাবে?",
-    a: "মেম্বারশিপ প্ল্যান অনুযায়ী সময়সীমা নির্ধারিত হয়। বেসিক প্ল্যানে ৭ দিন, প্রিমিয়ামে ১৪ দিন, এবং এলিটে সর্বোচ্চ ২১ দিন বই রাখা যাবে।",
-  },
-  {
-    q: "মেম্বারশিপে কীভাবে যোগ দেব?",
-    a: "এই পেজের উপরে 'মেম্বারশিপ প্ল্যান দেখুন'-এ ক্লিক করুন, আপনার পছন্দের প্ল্যান বেছে নিন এবং চেকআউট প্রক্রিয়া সম্পন্ন করুন।",
-  },
-  {
-    q: "ধার করা বই কি নবায়ন করা যাবে?",
-    a: "হ্যাঁ, উপলব্ধতা সাপেক্ষে। অন্য কেউ যদি বইটি রিকোয়েস্ট না করে থাকেন, তাহলে মেয়াদ শেষ হওয়ার আগেই ড্যাশবোর্ড থেকে নবায়ন করতে পারবেন।",
-  },
-  {
-    q: "ডেলিভারি সুবিধা আছে কি?",
-    a: "হ্যাঁ, আমরা সারাদেশে ডেলিভারি দিয়ে থাকি। প্রিমিয়াম ও এলিট সদস্যরা বিনামূল্যে বা এক্সপ্রেস ডেলিভারি সুবিধা পাবেন।",
-  },
-  {
-    q: "মেম্বারশিপ বাতিল করা যাবে কি?",
-    a: "হ্যাঁ, যেকোনো সময় আপনার অ্যাকাউন্ট সেটিংস থেকে মেম্বারশিপ বাতিল করতে পারবেন। বিলিং সাইকেল শেষ না হওয়া পর্যন্ত সুবিধা চলমান থাকবে।",
-  },
-];
+import { CENTRAL_LIBRARY_FAQS } from "@/lib/data/central-library";
+import { CentralHero } from "@/components/explore/central-library/central-hero";
+import { CentralCategories } from "@/components/explore/central-library/central-categories";
+import { CentralCollections } from "@/components/explore/central-library/central-collections";
+import { CentralWhyUs } from "@/components/explore/central-library/central-why-us";
 
 export default async function CentralLibraryPage() {
   const allBooks: BookCardBook[] = (await fetchLocal("/api/books")) || [];
@@ -203,218 +43,10 @@ export default async function CentralLibraryPage() {
   return (
     <MainLayout>
       {/* HERO SECTION */}
-      <section className="boimix-container-wide relative mt-6 mb-2.5 flex min-h-[190px] rounded-lg border border-slate-200 bg-white shadow-sm max-sm:!mx-0 max-sm:mt-0 max-sm:!w-full max-sm:!rounded-none max-sm:!border-x-0 max-sm:!border-t-0 sm:min-h-[350px] lg:h-[400px] lg:max-h-[400px] dark:border-slate-800 dark:bg-slate-950">
-        {/* Split Background with Gradient Transition */}
-        <div className="absolute inset-0 flex w-full overflow-hidden rounded-lg max-sm:rounded-none">
-          <div className="relative z-10 w-full bg-gradient-to-br from-blue-50/80 via-white to-indigo-50/80 lg:w-[45%] lg:bg-white lg:bg-none dark:from-blue-950/40 dark:via-slate-950 dark:to-indigo-900/30 dark:lg:bg-slate-950">
-            {/* Mobile Decorative Blobs */}
-            <div className="absolute -top-12 -right-12 h-32 w-32 rounded-full bg-blue-400/20 blur-3xl lg:hidden dark:bg-blue-600/20"></div>
-            <div className="absolute -bottom-12 -left-12 h-32 w-32 rounded-full bg-indigo-400/20 blur-3xl lg:hidden dark:bg-indigo-600/20"></div>
-          </div>
-          <div className="relative hidden lg:block lg:w-[55%]">
-            <Image
-              src="https://images.unsplash.com/photo-1568667256549-094345857637?auto=format&fit=crop&q=80"
-              alt="Library Interior"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-slate-900/30"></div>
-            {/* Gradient fade transition */}
-            <div className="absolute inset-y-0 left-0 z-10 w-48 bg-gradient-to-r from-white to-transparent dark:from-slate-950"></div>
-          </div>
-        </div>
-
-        {/* Content Container */}
-        <div className="relative z-20 grid w-full items-center px-4 sm:px-6 md:px-12 lg:grid-cols-[1.2fr_1fr] lg:px-16">
-          {/* Left Content (White Background area) */}
-          <div className="py-4 sm:py-8 lg:py-10 lg:pr-12">
-            <h3 className="mb-1 text-[10px] font-bold tracking-[0.2em] text-blue-600 uppercase sm:mb-3 sm:text-xs">
-              BoiMix Central Library
-            </h3>
-            <h1 className="mb-2 text-xl font-extrabold tracking-tight text-slate-900 sm:mb-4 sm:text-4xl lg:text-5xl lg:leading-[1.15] dark:text-white">
-              Verified Books.
-              <br />
-              Trusted by Everyone.
-            </h1>
-            <p className="mb-3 line-clamp-2 max-w-xl text-xs leading-relaxed text-slate-600 sm:mb-6 sm:line-clamp-none sm:text-sm dark:text-slate-400">
-              Explore 25,000+ verified books. Borrow or buy from the most
-              trusted digital library in Bangladesh.
-            </p>
-
-            {/* Search Bar */}
-            <LibrarySearchBar
-              variant="hero"
-              className="relative mb-0 flex max-w-xl gap-1 rounded-lg border border-slate-200 bg-white p-1 shadow-sm sm:mb-6 sm:p-1.5"
-            />
-
-            {/* Stats */}
-            <div className="hidden sm:flex sm:flex-wrap sm:items-center sm:gap-6 lg:flex-nowrap lg:gap-5">
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-900/20">
-                  <BookOpen className="size-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
-                    25,000+
-                  </p>
-                  <p className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
-                    Verified Books
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20">
-                  <CheckCircle2 className="size-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
-                    100%
-                  </p>
-                  <p className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
-                    Quality Checked
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20">
-                  <Users className="size-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
-                    10,000+
-                  </p>
-                  <p className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
-                    Happy Members
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800">
-                  <MapPin className="size-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">
-                    64
-                  </p>
-                  <p className="text-[10px] font-semibold tracking-wider text-slate-500 uppercase dark:text-slate-400">
-                    Districts Covered
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Content (Floating Card) */}
-          <div className="relative hidden h-full items-center justify-end lg:flex">
-            {/* Floating Card */}
-            <div className="-mt-2.5 w-[340px] rounded-lg border border-white/10 bg-slate-800/90 p-5 shadow-2xl backdrop-blur-xl">
-              <div className="mb-3 flex items-center gap-3">
-                <Star className="size-5 fill-yellow-400 text-yellow-400" />
-                <h3 className="text-lg font-bold text-white">
-                  Become a Member
-                </h3>
-              </div>
-              <p className="mb-3 text-sm leading-snug text-slate-300">
-                Enjoy unlimited borrowing, exclusive discounts and member
-                benefits.
-              </p>
-              <div className="mb-4 space-y-2">
-                <div className="flex items-start gap-2">
-                  <Check
-                    className="mt-0.5 size-4 shrink-0 text-yellow-400"
-                    strokeWidth={3}
-                  />
-                  <span className="text-sm text-slate-200">
-                    Borrow books for up to 21 days
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check
-                    className="mt-0.5 size-4 shrink-0 text-yellow-400"
-                    strokeWidth={3}
-                  />
-                  <span className="text-sm text-slate-200">
-                    Priority access to new books
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check
-                    className="mt-0.5 size-4 shrink-0 text-yellow-400"
-                    strokeWidth={3}
-                  />
-                  <span className="text-sm text-slate-200">
-                    Special member discounts
-                  </span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Check
-                    className="mt-0.5 size-4 shrink-0 text-yellow-400"
-                    strokeWidth={3}
-                  />
-                  <span className="text-sm text-slate-200">
-                    No hidden charges
-                  </span>
-                </div>
-              </div>
-              <Button
-                asChild
-                className="h-10 w-full rounded-lg bg-white font-bold text-slate-900 shadow-md hover:bg-slate-100"
-              >
-                <Link href="/explore/central-library/memberships">
-                  View Membership Plans <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CentralHero />
 
       {/* BROWSE BY CATEGORIES */}
-      <section className="boimix-container-wide mb-6 md:mb-8">
-        <div>
-          <h2 className="mb-0 text-xl font-bold text-slate-900 dark:text-white">
-            Categories
-          </h2>
-          <ScrollContainer autoScroll={false} className="mt-[15px] pb-4">
-            {CATEGORIES.map((cat, i) => (
-              <Link
-                key={i}
-                href={`/explore/central-library/search?category=${encodeURIComponent(cat.name)}`}
-                className="group flex w-[160px] shrink-0 items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
-              >
-                <div
-                  className={`flex size-10 shrink-0 items-center justify-center rounded-lg ${cat.bg} dark:bg-slate-800`}
-                >
-                  <cat.icon
-                    className={`size-5 ${cat.color} dark:text-slate-300`}
-                    strokeWidth={2}
-                  />
-                </div>
-                <div className="min-w-0">
-                  <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">
-                    {cat.name}
-                  </h4>
-                  <p className="truncate text-[10px] text-slate-500 dark:text-slate-400">
-                    {cat.count}
-                  </p>
-                </div>
-              </Link>
-            ))}
-            <Link
-              href="/books/category"
-              className="group flex w-[100px] shrink-0 flex-col items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white p-3 shadow-sm transition-colors hover:border-slate-300 dark:border-slate-800 dark:bg-slate-900"
-            >
-              <div className="flex size-10 items-center justify-center rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400">
-                <LayoutGrid className="size-5" />
-              </div>
-              <span className="text-[10px] font-bold tracking-wider text-slate-600 uppercase dark:text-slate-400">
-                View All
-              </span>
-            </Link>
-          </ScrollContainer>
-        </div>
-      </section>
+      <CentralCategories />
 
       {/* FEATURED BOOKS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
@@ -535,48 +167,7 @@ export default async function CentralLibraryPage() {
       </section>
 
       {/* POPULAR COLLECTIONS */}
-      <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="sm:rounded-lg sm:border sm:border-slate-200 sm:bg-white sm:p-6 sm:shadow-sm dark:sm:border-slate-800 dark:sm:bg-slate-900/50">
-          <div className="mb-4 flex items-center justify-between sm:mb-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">
-              Popular Collections
-            </h2>
-            <Link
-              href="/explore/central-library/search?type=collections"
-              className="flex items-center text-sm font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400"
-            >
-              <span className="hidden sm:inline">View All Collections</span>
-              <span className="inline sm:hidden">View All</span>{" "}
-              <ArrowRight className="ml-1 size-4" />
-            </Link>
-          </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
-            {POPULAR_COLLECTIONS.map((col, i) => (
-              <Link
-                key={i}
-                href={`/explore/central-library/search?collection=${col.name}`}
-                className="group relative flex h-[160px] w-full flex-col justify-end overflow-hidden rounded-lg shadow-sm transition-transform hover:-translate-y-1 hover:shadow-md"
-              >
-                <Image
-                  src={col.image}
-                  alt={col.name}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-slate-900/20"></div>
-                <div className="relative z-10 p-3">
-                  <h3 className="mb-0.5 text-sm font-bold text-white">
-                    {col.name}
-                  </h3>
-                  <p className="text-[10px] font-bold text-white/80">
-                    {col.count}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
+      <CentralCollections />
 
       {/* MEMBERSHIP PLANS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
@@ -592,12 +183,9 @@ export default async function CentralLibraryPage() {
                   Choose the best plan for unlimited access.
                 </p>
               </div>
-              {/* Illustration Placeholder - plants and books */}
               <div className="relative hidden h-40 w-48 opacity-90 lg:block">
                 <div className="absolute bottom-0 flex items-end gap-4">
-                  {/* Fake Plant */}
                   <div className="h-24 w-10 rounded-t-full rounded-b-md bg-teal-600"></div>
-                  {/* Fake Books */}
                   <div className="flex w-24 flex-col gap-1">
                     <div className="h-4 rounded bg-orange-400"></div>
                     <div className="h-5 rounded bg-blue-500"></div>
@@ -772,158 +360,7 @@ export default async function CentralLibraryPage() {
       </section>
 
       {/* WHY CHOOSE BOIMIX */}
-      <section className="boimix-container-wide mb-6 md:mb-8">
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr]">
-          {/* Left Box */}
-          <div className="relative flex flex-col justify-between overflow-hidden rounded-lg border border-slate-100 bg-white p-8 shadow-sm md:p-10 dark:border-slate-800 dark:bg-slate-900">
-            <div className="relative z-10">
-              <h2 className="mb-6 text-2xl font-bold text-slate-900 lg:text-3xl lg:leading-tight dark:text-white">
-                Why Choose BoiMix
-                <br className="hidden lg:block" />
-                Central Library?
-              </h2>
-              <div className="mb-8 space-y-3.5">
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="size-5 shrink-0 text-slate-400" />
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    100% verified and quality checked books
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="size-5 shrink-0 text-slate-400" />
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    Easy borrowing with simple process
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="size-5 shrink-0 text-slate-400" />
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    Affordable membership plans
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="size-5 shrink-0 text-slate-400" />
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    Nationwide delivery & return support
-                  </span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <CheckCircle2 className="size-5 shrink-0 text-slate-400" />
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
-                    Trusted by thousands of readers
-                  </span>
-                </div>
-              </div>
-              <Button
-                asChild
-                className="h-10 rounded-lg bg-[#0f449e] px-6 font-bold text-white shadow-none hover:bg-[#0a3175]"
-              >
-                <Link href="/explore/central-library/memberships">
-                  Learn More <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </Button>
-            </div>
-
-            {/* Illustration (absolute positioned) */}
-            <div className="absolute -right-6 -bottom-6 hidden h-[280px] w-[240px] opacity-100 md:block">
-              {/* Using a placeholder SVG from an open source illustration set */}
-              <Image
-                src="https://illustrations.popsy.co/amber/reading.svg"
-                alt="Reading Book"
-                fill
-                className="object-contain object-bottom"
-              />
-            </div>
-          </div>
-
-          {/* Right Grid (Stats) */}
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-500 dark:bg-blue-900/20">
-                <BookOpen className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                  25,000+
-                </h4>
-                <p className="mt-0.5 text-[10px] font-semibold text-slate-500 uppercase dark:text-slate-400">
-                  Verified Books
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-500 dark:bg-purple-900/20">
-                <Users className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                  10,000+
-                </h4>
-                <p className="mt-0.5 text-[10px] font-semibold text-slate-500 uppercase dark:text-slate-400">
-                  Active Members
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-slate-50 text-slate-600 dark:bg-slate-800">
-                <MapPin className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                  64
-                </h4>
-                <p className="mt-0.5 text-[10px] font-semibold text-slate-500 uppercase dark:text-slate-400">
-                  Districts Covered
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-500 dark:bg-amber-900/20">
-                <Star className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                  4.8/5
-                </h4>
-                <p className="mt-0.5 text-[10px] font-semibold text-slate-500 uppercase dark:text-slate-400">
-                  Average Rating
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-500 dark:bg-emerald-900/20">
-                <CheckCircle2 className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                  98%
-                </h4>
-                <p className="mt-0.5 text-[10px] font-semibold text-slate-500 uppercase dark:text-slate-400">
-                  Member Satisfaction
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 rounded-lg border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-rose-500 dark:bg-rose-900/20">
-                <Heart className="size-5" />
-              </div>
-              <div>
-                <h4 className="text-xl font-bold text-slate-900 dark:text-white">
-                  500+
-                </h4>
-                <p className="mt-0.5 text-[10px] font-semibold text-slate-500 uppercase dark:text-slate-400">
-                  Books Added Monthly
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <CentralWhyUs />
 
       {/* FREQUENTLY ASKED QUESTIONS */}
       <section className="boimix-container-wide mb-6 md:mb-8">
@@ -939,14 +376,13 @@ export default async function CentralLibraryPage() {
               সব দেখুন <ArrowRight className="ml-1 size-3" />
             </Link>
           </div>
-          <FaqAccordion faqs={FAQS} />
+          <FaqAccordion faqs={CENTRAL_LIBRARY_FAQS} />
         </div>
       </section>
 
       {/* BOTTOM BANNER */}
       <section className="boimix-container-wide mb-16">
         <div className="relative flex flex-col items-center justify-between gap-8 overflow-hidden rounded-lg border border-white/10 bg-slate-800/90 px-8 py-10 shadow-xl backdrop-blur-xl md:flex-row md:px-12">
-          {/* Background design elements */}
           <div
             className="absolute top-0 right-0 hidden h-full w-1/3 bg-blue-900/20 md:block"
             style={{ clipPath: "polygon(20% 0, 100% 0, 100% 100%, 0% 100%)" }}
@@ -969,7 +405,6 @@ export default async function CentralLibraryPage() {
             </Button>
           </div>
           <div className="relative z-10 hidden shrink-0 items-center justify-center md:flex">
-            {/* Illustration placeholder */}
             <div className="relative flex h-32 w-48 items-end justify-center gap-2">
               <div className="h-20 w-16 rounded bg-blue-600"></div>
               <div className="h-28 w-12 rounded bg-emerald-600"></div>
