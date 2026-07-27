@@ -185,13 +185,6 @@ export const dashboardNavGroups: NavGroup[] = [
         badge: 5,
         badgeVariant: "brand",
       },
-      {
-        title: "Notifications",
-        href: "/dashboard/notifications",
-        icon: BellIcon,
-        badge: 3,
-        badgeVariant: "warning",
-      },
     ],
   },
   {
@@ -209,7 +202,6 @@ export const dashboardNavGroups: NavGroup[] = [
         href: "/dashboard/passes",
         icon: TicketIcon,
       },
-      { title: "Wishlist", href: "/dashboard/wishlist", icon: HeartIcon },
       {
         title: "Settings & Profile",
         href: "/dashboard/settings",
