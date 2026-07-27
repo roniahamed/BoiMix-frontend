@@ -262,6 +262,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               src={book.coverUrl}
               alt={book.title}
               fill
+              priority={true}
               sizes="(min-width: 1400px) 180px, (min-width: 992px) 16vw, 50vw"
               className="object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.3)] transition-transform duration-300 hover:scale-105"
             />

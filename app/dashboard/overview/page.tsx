@@ -392,6 +392,7 @@ export default async function OverviewPage() {
               <img
                 src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop"
                 alt="Atomic Habits"
+                fetchPriority="high"
                 className="border-border h-32 w-[88px] rounded-xl border-2 object-cover shadow-lg sm:h-36 sm:w-24"
               />
               <span className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-950 shadow">

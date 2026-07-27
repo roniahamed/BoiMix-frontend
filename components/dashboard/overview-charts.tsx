@@ -132,8 +132,13 @@ export function OverviewActivityChart() {
           </div>
         </div>
 
-        <div className="h-[210px] w-full sm:h-[260px]">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="h-[210px] min-h-0 w-full min-w-0 sm:h-[260px]">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            minWidth={0}
+            minHeight={0}
+          >
             {chartType === "area" ? (
               <AreaChart
                 data={monthlyData}
@@ -198,6 +203,7 @@ export function OverviewActivityChart() {
                   }}
                 />
                 <Area
+                  isAnimationActive={false}
                   type="monotone"
                   dataKey="exchanges"
                   name="Exchanges"
@@ -207,6 +213,7 @@ export function OverviewActivityChart() {
                   fill="url(#area-exchanges)"
                 />
                 <Area
+                  isAnimationActive={false}
                   type="monotone"
                   dataKey="lent"
                   name="Lent Books"
@@ -248,12 +255,14 @@ export function OverviewActivityChart() {
                   }}
                 />
                 <Bar
+                  isAnimationActive={false}
                   dataKey="exchanges"
                   name="Exchanges"
                   fill="#3b82f6"
                   radius={[6, 6, 0, 0]}
                 />
                 <Bar
+                  isAnimationActive={false}
                   dataKey="lent"
                   name="Books Lent"
                   fill="#ec4899"

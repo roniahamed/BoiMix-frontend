@@ -46,8 +46,13 @@ function SparklineCard({
           </div>
         </div>
 
-        <div className="mt-3 h-[64px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div className="mt-3 h-[64px] min-h-0 w-full min-w-0">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            minWidth={0}
+            minHeight={0}
+          >
             <AreaChart
               data={data}
               margin={{ top: 5, right: 0, left: 0, bottom: 0 }}
@@ -72,6 +77,7 @@ function SparklineCard({
                 cursor={false}
               />
               <Area
+                isAnimationActive={false}
                 type="monotone"
                 dataKey="value"
                 stroke={strokeColor}
