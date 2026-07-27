@@ -134,7 +134,7 @@ export function SidebarNavigation({
               <div className="relative shrink-0">
                 <Avatar className="border-border h-9 w-9 border">
                   <AvatarImage
-                    src="https://i.pravatar.cc/150?u=roni"
+                    src="https://ui-avatars.com/api/?name=Roni+Ahamed&background=0D8ABC&color=fff"
                     alt="Roni Ahamed"
                   />
                   <AvatarFallback className="text-xs font-bold">

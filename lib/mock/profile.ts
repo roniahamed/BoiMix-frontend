@@ -10,7 +10,8 @@ export const mockProfiles: UserProfile[] = [
     id: "user-roni",
     name: "Roni Ahamed",
     username: "roni",
-    avatarUrl: "https://i.pravatar.cc/240?u=roni",
+    avatarUrl:
+      "https://ui-avatars.com/api/?name=Roni+Ahamed&background=0D8ABC&color=fff",
     coverUrl: "/banners/exchange-community.png",
     location: "Dhaka, Bangladesh",
     role: "Backend Engineer",
@@ -330,7 +331,8 @@ export const profileReviews: UserProfileReview[] = [
     createdAt: "2 days ago",
     body: "excellent condition. Very friendly seller. Highly recommended!",
     reviewerName: "Hasan Mahmud",
-    reviewerAvatar: "https://i.pravatar.cc/150?u=hasan",
+    reviewerAvatar:
+      "https://ui-avatars.com/api/?name=Hasan+Mahmud&background=e67e22&color=fff",
     transactionType: "For Exchange",
     location: "Dhanmondi, Dhaka",
   },
@@ -344,7 +346,8 @@ export const profileReviews: UserProfileReview[] = [
     createdAt: "1 week ago",
     body: "Smooth exchange experience. Great communication!",
     reviewerName: "Nusrat Jahan",
-    reviewerAvatar: "https://i.pravatar.cc/150?u=nusrat",
+    reviewerAvatar:
+      "https://ui-avatars.com/api/?name=Nusrat+Jahan&background=8e44ad&color=fff",
     transactionType: "For Exchange",
     location: "Mirpur, Dhaka",
   },
@@ -358,7 +361,8 @@ export const profileReviews: UserProfileReview[] = [
     createdAt: "2 weeks ago",
     body: "Delivered on time and book was exactly as described.",
     reviewerName: "Fahim Ahmed",
-    reviewerAvatar: "https://i.pravatar.cc/150?u=fahim",
+    reviewerAvatar:
+      "https://ui-avatars.com/api/?name=Fahim+Ahmed&background=0D8ABC&color=fff",
     transactionType: "For Borrow",
     location: "Banani, Dhaka",
   },
@@ -372,7 +376,8 @@ export const profileReviews: UserProfileReview[] = [
     createdAt: "3 weeks ago",
     body: "Great book and even better experience. Thank you!",
     reviewerName: "Jannatul Ferdaus",
-    reviewerAvatar: "https://i.pravatar.cc/150?u=jannatul",
+    reviewerAvatar:
+      "https://ui-avatars.com/api/?name=Jannatul+Ferdaus&background=2b8a3e&color=fff",
     transactionType: "For Sale",
     location: "Uttara, Dhaka",
   },
@@ -386,7 +391,8 @@ export const profileReviews: UserProfileReview[] = [
     createdAt: "1 month ago",
     body: "Book quality was amazing. Packaging was safe.",
     reviewerName: "Tanvir Hossain",
-    reviewerAvatar: "https://i.pravatar.cc/150?u=tanvir",
+    reviewerAvatar:
+      "https://ui-avatars.com/api/?name=Tanvir+Hossain&background=f39c12&color=fff",
     transactionType: "For Exchange",
     location: "Gulshan, Dhaka",
   },

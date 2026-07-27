@@ -7,7 +7,8 @@ export default function FollowersPage() {
       id: "1",
       name: "Hasan Mahmud",
       username: "hasan_m",
-      avatarUrl: "https://i.pravatar.cc/150?u=hasan",
+      avatarUrl:
+        "https://ui-avatars.com/api/?name=Hasan+Mahmud&background=e67e22&color=fff",
       location: "Dhaka",
       rating: 4.8,
     },
@@ -15,7 +16,8 @@ export default function FollowersPage() {
       id: "2",
       name: "Nusrat Jahan",
       username: "nusrat_j",
-      avatarUrl: "https://i.pravatar.cc/150?u=nusrat",
+      avatarUrl:
+        "https://ui-avatars.com/api/?name=Nusrat+Jahan&background=8e44ad&color=fff",
       location: "Mirpur",
       rating: 4.5,
     },
@@ -23,7 +25,8 @@ export default function FollowersPage() {
       id: "3",
       name: "Fahim Ahmed",
       username: "fahim_a",
-      avatarUrl: "https://i.pravatar.cc/150?u=fahim",
+      avatarUrl:
+        "https://ui-avatars.com/api/?name=Fahim+Ahmed&background=0D8ABC&color=fff",
       location: "Banani",
       rating: 4.9,
     },

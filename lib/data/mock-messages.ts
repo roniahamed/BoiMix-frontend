@@ -34,7 +34,8 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
       id: "u2",
       name: "Hasan Mahmud",
       username: "hasan_m",
-      avatar: "https://i.pravatar.cc/150?u=hasan",
+      avatar:
+        "https://ui-avatars.com/api/?name=Hasan+Mahmud&background=e67e22&color=fff",
       isOnline: true,
     },
     unreadCount: 0,
@@ -76,7 +77,8 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
       id: "u3",
       name: "Nusrat Jahan",
       username: "nusrat_j",
-      avatar: "https://i.pravatar.cc/150?u=nusrat",
+      avatar:
+        "https://ui-avatars.com/api/?name=Nusrat+Jahan&background=8e44ad&color=fff",
       isOnline: false,
       lastSeen: "2 hours ago",
     },
@@ -120,7 +122,8 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
       id: "u4",
       name: "Fahim Ahmed",
       username: "fahim_ahmed",
-      avatar: "https://i.pravatar.cc/150?u=fahim",
+      avatar:
+        "https://ui-avatars.com/api/?name=Fahim+Ahmed&background=0D8ABC&color=fff",
       isOnline: true,
     },
     unreadCount: 0,

@@ -47,7 +47,7 @@ export default async function OverviewPage() {
               <div className="h-[72px] w-[72px] rounded-full bg-gradient-to-br from-amber-300 to-amber-500 p-0.5 shadow-lg sm:h-[88px] sm:w-[88px]">
                 <Avatar className="h-full w-full border-2 border-[#0b2a5b]/30">
                   <AvatarImage
-                    src="https://i.pravatar.cc/150?u=roni"
+                    src="https://ui-avatars.com/api/?name=Roni+Ahamed&background=0D8ABC&color=fff"
                     alt="Roni Ahamed"
                   />
                   <AvatarFallback className="text-foreground font-bold">

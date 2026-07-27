@@ -69,7 +69,8 @@ const MOCK_CUSTOMER_ORDERS: CustomerOrder[] = [
     paymentStatus: "Escrow Verified (bKash)",
     buyerName: "Jannatul Ferdaus",
     buyerUsername: "jannatul",
-    buyerAvatar: "https://i.pravatar.cc/150?u=jannatul",
+    buyerAvatar:
+      "https://ui-avatars.com/api/?name=Jannatul+Ferdaus&background=0D8ABC&color=fff",
     buyerPhone: "01712-345678",
     buyerAddress: "House 42, Road 9/A, Dhanmondi, Dhaka - 1209",
     deliveryMethod: "Steadfast Courier (Home Delivery)",
@@ -88,7 +89,8 @@ const MOCK_CUSTOMER_ORDERS: CustomerOrder[] = [
     paymentStatus: "Escrow Verified (Nagad)",
     buyerName: "Tanvir Hossain",
     buyerUsername: "tanvir",
-    buyerAvatar: "https://i.pravatar.cc/150?u=tanvir",
+    buyerAvatar:
+      "https://ui-avatars.com/api/?name=Tanvir+Hossain&background=2b8a3e&color=fff",
     buyerPhone: "01823-987654",
     buyerAddress: "Plot 15, Sector 4, Uttara, Dhaka - 1230",
     deliveryMethod: "Metro Station Handover (Uttara Center)",
@@ -107,7 +109,8 @@ const MOCK_CUSTOMER_ORDERS: CustomerOrder[] = [
     paymentStatus: "Escrow Verified (Card)",
     buyerName: "Fahim Ahmed",
     buyerUsername: "fahim",
-    buyerAvatar: "https://i.pravatar.cc/150?u=fahim",
+    buyerAvatar:
+      "https://ui-avatars.com/api/?name=Fahim+Ahmed&background=e67e22&color=fff",
     buyerPhone: "01911-554433",
     buyerAddress: "Block C, Road 11, Banani, Dhaka - 1213",
     deliveryMethod: "Pathao Courier",
@@ -126,7 +129,8 @@ const MOCK_CUSTOMER_ORDERS: CustomerOrder[] = [
     paymentStatus: "Paid Out to bKash",
     buyerName: "Nusrat Jahan",
     buyerUsername: "nusrat",
-    buyerAvatar: "https://i.pravatar.cc/150?u=nusrat",
+    buyerAvatar:
+      "https://ui-avatars.com/api/?name=Nusrat+Jahan&background=8e44ad&color=fff",
     buyerPhone: "01677-889900",
     buyerAddress: "Section 10, Block A, Mirpur, Dhaka - 1216",
     deliveryMethod: "Redx Courier",

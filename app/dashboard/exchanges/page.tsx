@@ -88,7 +88,8 @@ const MOCK_USERS: Record<
 > = {
   kamal123: {
     name: "Kamal Hossain",
-    avatar: "https://i.pravatar.cc/150?u=kamal123",
+    avatar:
+      "https://ui-avatars.com/api/?name=Kamal+Hossain&background=0D8ABC&color=fff",
     rating: "4.8",
     reviews: 125,
     completedSwaps: 52,
@@ -96,7 +97,8 @@ const MOCK_USERS: Record<
   },
   jamal456: {
     name: "Jamal Uddin",
-    avatar: "https://i.pravatar.cc/150?u=jamal456",
+    avatar:
+      "https://ui-avatars.com/api/?name=Jamal+Uddin&background=2b8a3e&color=fff",
     rating: "4.5",
     reviews: 89,
     completedSwaps: 34,
@@ -104,7 +106,8 @@ const MOCK_USERS: Record<
   },
   hasan789: {
     name: "Hasan Mahmud",
-    avatar: "https://i.pravatar.cc/150?u=hasan789",
+    avatar:
+      "https://ui-avatars.com/api/?name=Hasan+Mahmud&background=e67e22&color=fff",
     rating: "4.9",
     reviews: 210,
     completedSwaps: 105,
@@ -255,7 +258,8 @@ export default function ActiveExchangesDashboard() {
             const partnerId = isOwner ? exchange.proposerId : exchange.ownerId;
             const partnerInfo = MOCK_USERS[partnerId] || {
               name: "Unknown User",
-              avatar: "https://i.pravatar.cc/150?u=unknown",
+              avatar:
+                "https://ui-avatars.com/api/?name=Unknown+User&background=95a5a6&color=fff",
               rating: "0.0",
               reviews: 0,
               completedSwaps: 0,
@@ -643,7 +647,8 @@ export default function ActiveExchangesDashboard() {
                 : selectedExchange.ownerId;
               const partnerInfo = MOCK_USERS[partnerId] || {
                 name: "Unknown",
-                avatar: "https://i.pravatar.cc/150",
+                avatar:
+                  "https://ui-avatars.com/api/?name=Unknown&background=95a5a6&color=fff",
                 rating: "0.0",
                 reviews: 0,
               };

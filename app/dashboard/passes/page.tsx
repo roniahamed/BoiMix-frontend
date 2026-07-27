@@ -163,7 +163,7 @@ export default function MembershipWalletDashboardPage() {
           <div className="flex items-center gap-3.5">
             <Avatar className="h-14 w-14 shrink-0 border-2 border-amber-400 shadow-md">
               <AvatarImage
-                src="https://i.pravatar.cc/150?u=roni"
+                src="https://ui-avatars.com/api/?name=Roni+Ahamed&background=0D8ABC&color=fff"
                 alt="Roni Ahamed"
               />
               <AvatarFallback className="text-foreground font-bold">

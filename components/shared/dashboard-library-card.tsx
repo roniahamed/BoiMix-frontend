@@ -161,6 +161,7 @@ export function DashboardLibraryCard({
             src={book.coverUrl || "/book-covers/borrowed-light.svg"}
             alt={book.title}
             fill
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
           {/* Gradient fade at bottom */}

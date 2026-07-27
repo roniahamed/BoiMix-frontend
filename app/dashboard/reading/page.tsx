@@ -370,7 +370,7 @@ export default function ReadingTrackerPage() {
               title: "The Midnight Library",
               author: "Matt Haig",
               cover:
-                "https://images.unsplash.com/photo-1476275466078-4007374efac4?q=80&w=200&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&auto=format&fit=crop",
             },
             {
               title: "Project Hail Mary",

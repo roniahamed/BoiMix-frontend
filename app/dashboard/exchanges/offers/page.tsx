@@ -51,22 +51,25 @@ const MOCK_PARTNERS: Record<
   }
 > = {
   jamal456: {
-    name: "Jamal Rahman",
-    avatar: "https://i.pravatar.cc/150?u=jamal456",
-    rating: "4.8",
-    reviews: 24,
+    name: "Jamal Uddin",
+    avatar:
+      "https://ui-avatars.com/api/?name=Jamal+Uddin&background=2b8a3e&color=fff",
+    rating: "4.5",
+    reviews: 89,
     since: "2023",
   },
   hasan789: {
-    name: "Hasan Ali",
-    avatar: "https://i.pravatar.cc/150?u=hasan789",
-    rating: "4.5",
-    reviews: 12,
+    name: "Hasan Mahmud",
+    avatar:
+      "https://ui-avatars.com/api/?name=Hasan+Mahmud&background=e67e22&color=fff",
+    rating: "4.9",
+    reviews: 210,
     since: "2024",
   },
   kamal123: {
     name: "Kamal Hossain",
-    avatar: "https://i.pravatar.cc/150?u=kamal123",
+    avatar:
+      "https://ui-avatars.com/api/?name=Kamal+Hossain&background=0D8ABC&color=fff",
     rating: "4.9",
     reviews: 38,
     since: "2022",
@@ -177,7 +180,7 @@ export default function ExchangeOffersPage() {
     const partnerId = isIncoming ? exchange.proposerId : exchange.ownerId;
     const partner = MOCK_PARTNERS[partnerId] || {
       name: "Book User",
-      avatar: `https://i.pravatar.cc/150?u=${partnerId}`,
+      avatar: `https://ui-avatars.com/api/?name=${partnerId}&background=random`,
       rating: "4.5",
       reviews: 5,
       since: "2024",

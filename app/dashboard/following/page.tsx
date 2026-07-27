@@ -7,7 +7,8 @@ export default function FollowingPage() {
       id: "1",
       name: "Tanvir Hossain",
       username: "tanvir_h",
-      avatarUrl: "https://i.pravatar.cc/150?u=tanvir",
+      avatarUrl:
+        "https://ui-avatars.com/api/?name=Tanvir+Hossain&background=2b8a3e&color=fff",
       location: "Gulshan",
       rating: 4.7,
     },
@@ -15,7 +16,8 @@ export default function FollowingPage() {
       id: "2",
       name: "Ayman Sadiq",
       username: "ayman_s",
-      avatarUrl: "https://i.pravatar.cc/150?u=ayman",
+      avatarUrl:
+        "https://ui-avatars.com/api/?name=Ayman+Sadiq&background=0D8ABC&color=fff",
       location: "Banani",
       rating: 4.9,
     },

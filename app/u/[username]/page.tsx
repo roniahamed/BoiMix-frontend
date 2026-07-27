@@ -125,7 +125,10 @@ export default async function UserProfilePage({
                   <div className="mb-2 flex items-center gap-3">
                     <div className="bg-muted relative size-10 shrink-0 overflow-hidden rounded-full">
                       <Image
-                        src={`https://i.pravatar.cc/150?u=${review.id}`}
+                        src={
+                          review.reviewerAvatar ||
+                          `https://ui-avatars.com/api/?name=${encodeURIComponent(review.reviewerName || "User")}&background=0D8ABC&color=fff`
+                        }
                         alt="Reviewer"
                         fill
                         sizes="(max-width: 768px) 40px, 40px"
