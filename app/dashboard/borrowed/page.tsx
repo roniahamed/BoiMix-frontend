@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useState } from "react";
 import { useBorrowStore, BorrowOrder } from "@/lib/store/use-borrow-store";
 import {
@@ -274,12 +276,14 @@ export default function BorrowedPage() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={order.bookImage}
-                      alt={order.bookTitle}
-                      className="h-14 w-10 shrink-0 rounded border object-cover shadow-xs"
-                    />
+                    <div className="relative h-14 w-10 shrink-0 overflow-hidden rounded border shadow-xs">
+                      <Image
+                        src={order.bookImage}
+                        alt={order.bookTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="min-w-0 space-y-1">
                       <h3 className="text-foreground line-clamp-1 text-sm font-bold">
                         {order.bookTitle}
@@ -430,12 +434,14 @@ export default function BorrowedPage() {
 
                 {/* Body */}
                 <div className="flex items-center gap-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={order.bookImage}
-                    alt={order.bookTitle}
-                    className="border-border h-20 w-14 shrink-0 rounded-lg border object-cover shadow-xs"
-                  />
+                  <div className="border-border relative h-20 w-14 shrink-0 overflow-hidden rounded-lg border shadow-xs">
+                    <Image
+                      src={order.bookImage}
+                      alt={order.bookTitle}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <div className="min-w-0 flex-1 space-y-1">
                     <h3 className="text-foreground line-clamp-1 text-lg font-bold">
                       {order.bookTitle}
@@ -573,12 +579,14 @@ export default function BorrowedPage() {
                   Book Info
                 </p>
                 <div className="flex items-center gap-3">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={selectedOrder.bookImage}
-                    alt={selectedOrder.bookTitle}
-                    className="h-16 w-12 rounded border object-cover"
-                  />
+                  <div className="relative h-16 w-12 shrink-0 overflow-hidden rounded border">
+                    <Image
+                      src={selectedOrder.bookImage}
+                      alt={selectedOrder.bookTitle}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                   <div>
                     <p className="text-foreground text-sm font-bold">
                       {selectedOrder.bookTitle}

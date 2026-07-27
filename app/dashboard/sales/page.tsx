@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useState } from "react";
 import {
   ShoppingBag,
@@ -347,12 +349,14 @@ export default function SalesPage() {
               >
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={order.bookCover}
-                      alt={order.bookTitle}
-                      className="h-14 w-10 shrink-0 rounded border object-cover shadow-xs"
-                    />
+                    <div className="relative h-14 w-10 shrink-0 overflow-hidden rounded border shadow-xs">
+                      <Image
+                        src={order.bookCover}
+                        alt={order.bookTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="min-w-0 space-y-1">
                       <h3 className="text-foreground line-clamp-1 text-sm font-bold">
                         {order.bookTitle}
@@ -489,12 +493,14 @@ export default function SalesPage() {
                 <div className="grid items-center gap-4 md:grid-cols-3">
                   {/* Book Details */}
                   <div className="flex items-center gap-3 md:col-span-1">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={order.bookCover}
-                      alt={order.bookTitle}
-                      className="border-border h-16 w-12 shrink-0 rounded-lg border object-cover shadow-xs"
-                    />
+                    <div className="border-border relative h-16 w-12 shrink-0 overflow-hidden rounded-lg border shadow-xs">
+                      <Image
+                        src={order.bookCover}
+                        alt={order.bookTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="min-w-0 flex-1 space-y-1">
                       <h3 className="text-foreground line-clamp-1 text-sm font-bold">
                         {order.bookTitle}
@@ -695,12 +701,14 @@ export default function SalesPage() {
                 </p>
                 <div className="bg-card border-border/60 flex items-center justify-between rounded-xl border p-3">
                   <div className="flex items-center gap-3">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={selectedOrder.bookCover}
-                      alt={selectedOrder.bookTitle}
-                      className="h-12 w-9 rounded border object-cover"
-                    />
+                    <div className="relative h-12 w-9 overflow-hidden rounded border">
+                      <Image
+                        src={selectedOrder.bookCover}
+                        alt={selectedOrder.bookTitle}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div>
                       <p className="text-foreground line-clamp-1 font-bold">
                         {selectedOrder.bookTitle}

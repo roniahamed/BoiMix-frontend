@@ -230,7 +230,7 @@ function CheckoutForm() {
         addOrder({
           bookId: item.id,
           bookTitle: item.title,
-          bookImage: item.coverUrl || "/images/books/placeholder.jpg",
+          bookImage: item.coverUrl || "/book-covers/borrowed-light.svg",
           borrowerId: "current-user",
           ownerId: item.ownerId,
           handoverMethod: ownerMethods[item.ownerId] || "meetup",

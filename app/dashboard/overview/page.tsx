@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
+import Image from "next/image";
 import { AddBookButton } from "@/components/shared/add-book-button";
 
 export default async function OverviewPage() {
@@ -388,13 +389,15 @@ export default async function OverviewPage() {
         <div className="p-4 sm:p-5">
           <div className="border-border/40 flex flex-col items-center gap-5 rounded-2xl border bg-gradient-to-r from-[#0397d3]/5 via-transparent to-purple-500/5 p-5 sm:flex-row">
             <div className="relative shrink-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop"
-                alt="Atomic Habits"
-                fetchPriority="high"
-                className="border-border h-32 w-[88px] rounded-xl border-2 object-cover shadow-lg sm:h-36 sm:w-24"
-              />
+              <div className="border-border relative h-32 w-[88px] shrink-0 overflow-hidden rounded-xl border-2 shadow-lg sm:h-36 sm:w-24">
+                <Image
+                  src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=200&fit=crop"
+                  alt="Atomic Habits"
+                  fill
+                  priority
+                  className="object-cover"
+                />
+              </div>
               <span className="absolute -top-2 -right-2 flex h-6 w-6 items-center justify-center rounded-full bg-amber-400 text-[9px] font-black text-slate-950 shadow">
                 68%
               </span>

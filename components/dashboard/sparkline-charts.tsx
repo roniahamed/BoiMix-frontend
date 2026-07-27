@@ -52,6 +52,7 @@ function SparklineCard({
             height="100%"
             minWidth={0}
             minHeight={0}
+            initialDimension={{ width: 320, height: 64 }}
           >
             <AreaChart
               data={data}

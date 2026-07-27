@@ -1,5 +1,5 @@
 "use client";
-/* eslint-disable @next/next/no-img-element */
+import Image from "next/image";
 
 import { useState } from "react";
 import {
@@ -184,10 +184,11 @@ export default function ReadingTrackerPage() {
           <div className="group bg-card relative overflow-hidden rounded-[7px] border p-4 shadow-sm transition-all hover:shadow-md sm:p-6">
             <div className="flex flex-col gap-5 sm:flex-row sm:gap-6">
               <div className="relative h-48 w-32 shrink-0 overflow-hidden rounded-[7px] shadow-md sm:h-56 sm:w-36">
-                <img
+                <Image
                   src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=300&auto=format&fit=crop"
                   alt="Book Cover"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
 
@@ -380,10 +381,11 @@ export default function ReadingTrackerPage() {
           ].map((book, i) => (
             <div key={i} className="group relative flex flex-col gap-2">
               <div className="relative aspect-[2/3] w-full overflow-hidden rounded-[7px] border shadow-sm transition-all hover:shadow-md">
-                <img
+                <Image
                   src={book.cover}
                   alt={book.title}
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <Button

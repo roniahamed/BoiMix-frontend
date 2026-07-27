@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["10.10.13.10", "localhost"],
   images: {
+    formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -16,10 +17,21 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "covers.openlibrary.org",
       },
+      {
+        protocol: "https",
+        hostname: "*.archive.org",
+      },
     ],
   },
   experimental: {
-    optimizePackageImports: ["lucide-react", "recharts", "date-fns"],
+    optimizePackageImports: [
+      "lucide-react",
+      "recharts",
+      "date-fns",
+      "framer-motion",
+      "clsx",
+      "@hookform/resolvers",
+    ],
   },
   async redirects() {
     return [

@@ -138,6 +138,7 @@ export function OverviewActivityChart() {
             height="100%"
             minWidth={0}
             minHeight={0}
+            initialDimension={{ width: 320, height: 200 }}
           >
             {chartType === "area" ? (
               <AreaChart

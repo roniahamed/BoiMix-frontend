@@ -11,31 +11,16 @@ import {
   Repeat2,
   CheckCircle2,
   Eye,
-  MessageSquare,
   MapPin,
   CalendarDays,
   Star,
   MessageCircle,
-  HelpCircle,
   Clock,
-  XCircle,
   ShieldCheck,
   MoreVertical,
-  ChevronLeft,
   Check,
-  MoreHorizontal,
 } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 const getStatusBadge = (
   status: ExchangeStatus,
@@ -145,7 +130,7 @@ const MOCK_BOOKS: Record<
 };
 
 export default function ActiveExchangesDashboard() {
-  const { exchanges, updateExchangeStatus, counterOffer } = useExchangeStore();
+  const { exchanges, updateExchangeStatus } = useExchangeStore();
   const currentUser = "current-user";
 
   const [activeTab, setActiveTab] = useState<string>("all");
@@ -962,106 +947,5 @@ export default function ActiveExchangesDashboard() {
         </DialogContent>
       </Dialog>
     </div>
-  );
-}
-
-function CounterOfferModal({
-  exchange,
-  onCounterOffer,
-  onClick,
-  triggerClassName,
-}: {
-  exchange: ExchangeOrder;
-  onCounterOffer: (
-    id: string,
-    details: NonNullable<ExchangeOrder["counterOfferDetails"]>,
-  ) => void;
-  onClick?: (e: React.MouseEvent) => void;
-  triggerClassName?: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const [location, setLocation] = useState(
-    exchange.counterOfferDetails?.proposedLocation ||
-      exchange.meetLocation ||
-      "",
-  );
-  const [date, setDate] = useState(
-    exchange.counterOfferDetails?.proposedDate || exchange.meetDate || "",
-  );
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onCounterOffer(exchange.id, {
-      proposedLocation: location,
-      proposedDate: date,
-      message,
-    });
-    setOpen(false);
-  };
-
-  return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <div onClick={(e) => e.stopPropagation()} className="flex w-full">
-        <DialogTrigger asChild>
-          <button
-            onClick={onClick}
-            className={
-              triggerClassName ||
-              "bg-background border-border/80 text-foreground hover:bg-muted flex w-full items-center justify-center gap-1 rounded-full border px-3 py-1.5 text-[10px] font-semibold transition-all"
-            }
-          >
-            Change Location
-          </button>
-        </DialogTrigger>
-      </div>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        onClick={(e) => e.stopPropagation()}
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Propose New Meeting Details</DialogTitle>
-          </DialogHeader>
-          <div className="grid gap-4 py-4 text-sm">
-            <div className="space-y-2">
-              <Label>Location</Label>
-              <Input
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                required
-                placeholder="e.g. Dhanmondi Lake 3:00 PM"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Date & Time</Label>
-              <Input
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                required
-                placeholder="e.g. Oct 24, 2024"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label>Message to Partner (Optional)</Label>
-              <Textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Let them know why you are changing the meetup details..."
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <button
-              type="submit"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex min-h-[40px] items-center justify-center rounded-xl px-4 py-2 text-sm font-bold shadow-2xs transition-all"
-            >
-              Send New Details
-            </button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
   );
 }

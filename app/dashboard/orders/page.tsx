@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -194,12 +196,14 @@ function OrderCard({ order }: { order: Order }) {
               key={`${item.id}-${index}`}
               className="border-border/30 flex gap-3 border-b py-3.5 last:border-0"
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={item.coverUrl}
-                alt={item.title}
-                className="h-16 w-11 shrink-0 rounded object-cover shadow-sm"
-              />
+              <div className="relative h-16 w-11 shrink-0 overflow-hidden rounded shadow-sm">
+                <Image
+                  src={item.coverUrl}
+                  alt={item.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
               <div className="flex min-w-0 flex-1 flex-col">
                 <h4 className="line-clamp-1 text-sm font-bold">{item.title}</h4>
                 <p className="text-muted-foreground mt-0.5 text-xs">

@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import {
   MapPin,
@@ -457,12 +458,14 @@ export default async function BookDetailsPage({
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
             <div className="flex-1">
               <div className="flex items-start gap-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={MOCK_OWNER.avatarUrl}
-                  alt={MOCK_OWNER.name}
-                  className="size-12 rounded-full border bg-white object-cover"
-                />
+                <div className="relative size-12 shrink-0 overflow-hidden rounded-full border bg-white">
+                  <Image
+                    src={MOCK_OWNER.avatarUrl}
+                    alt={MOCK_OWNER.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <div>
                   <div className="flex items-center gap-2">
                     <h4 className="text-foreground text-lg font-semibold">

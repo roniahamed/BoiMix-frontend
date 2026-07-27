@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { Search, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -175,11 +176,11 @@ export function LibrarySearchBar({
                 className="dark:hover:bg-slate-850 flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-slate-50"
               >
                 <div className="relative h-9 w-6 shrink-0 overflow-hidden rounded-sm border border-slate-200/50 bg-slate-100 dark:border-slate-700/50 dark:bg-slate-800">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={book.coverUrl}
                     alt={book.title}
-                    className="h-full w-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
                 <div className="min-w-0 flex-1">
@@ -272,11 +273,11 @@ export function LibrarySearchBar({
               className="dark:hover:bg-slate-850 flex w-full items-center gap-3 rounded-md p-2 text-left transition-colors hover:bg-slate-50"
             >
               <div className="relative h-9 w-6 shrink-0 overflow-hidden rounded-sm border border-slate-200/50 bg-slate-100 dark:border-slate-700/50 dark:bg-slate-800">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
+                <Image
                   src={book.coverUrl}
                   alt={book.title}
-                  className="h-full w-full object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <div className="min-w-0 flex-1">

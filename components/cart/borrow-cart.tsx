@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Trash2, ShieldCheck, User, Heart } from "lucide-react";
@@ -279,12 +281,15 @@ export function BorrowCart() {
                         </div>
 
                         {/* Cover */}
-                        <Link href={`/books/${item.id}`} className="shrink-0">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
+                        <Link
+                          href={`/books/${item.id}`}
+                          className="relative h-[65px] w-12 shrink-0 sm:h-[80px] sm:w-16"
+                        >
+                          <Image
                             src={item.coverUrl}
                             alt={item.title}
-                            className="border-border/40 h-[65px] w-auto rounded-[3px] border bg-transparent object-contain transition-opacity hover:opacity-90 sm:h-[80px]"
+                            fill
+                            className="border-border/40 rounded-[3px] border object-contain transition-opacity hover:opacity-90"
                           />
                         </Link>
 

@@ -158,7 +158,7 @@ export function DashboardLibraryCard({
       <Link href={`/books/${book.id}`} className="block">
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
           <Image
-            src={book.coverUrl || "/images/books/placeholder.jpg"}
+            src={book.coverUrl || "/book-covers/borrowed-light.svg"}
             alt={book.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"

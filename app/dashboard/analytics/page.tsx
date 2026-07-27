@@ -274,6 +274,7 @@ export default function AnalyticsPage() {
               height={260}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 260 }}
             >
               <AreaChart
                 data={booksViewData}
@@ -424,6 +425,7 @@ export default function AnalyticsPage() {
               height={260}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 260 }}
             >
               <BarChart
                 data={borrowData}
@@ -475,6 +477,7 @@ export default function AnalyticsPage() {
               height={220}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 220 }}
             >
               <LineChart
                 data={borrowData}
@@ -543,6 +546,7 @@ export default function AnalyticsPage() {
               height={260}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 260 }}
             >
               <BarChart
                 data={exchangeData}
@@ -603,6 +607,7 @@ export default function AnalyticsPage() {
               height={220}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 220 }}
             >
               <AreaChart
                 data={exchangeData}
@@ -677,6 +682,7 @@ export default function AnalyticsPage() {
               height={260}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 260 }}
             >
               <AreaChart
                 data={salesData}
@@ -729,6 +735,7 @@ export default function AnalyticsPage() {
               height={220}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 220 }}
             >
               <BarChart
                 data={salesData}
@@ -803,6 +810,7 @@ export default function AnalyticsPage() {
               height={260}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 260 }}
             >
               <LineChart
                 data={communityData}
@@ -868,6 +876,7 @@ export default function AnalyticsPage() {
               height={280}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 280 }}
             >
               <RadarChart
                 data={reputationRadar}
@@ -904,6 +913,7 @@ export default function AnalyticsPage() {
               height={200}
               minWidth={0}
               minHeight={0}
+              initialDimension={{ width: 320, height: 200 }}
             >
               <BarChart
                 data={communityData}

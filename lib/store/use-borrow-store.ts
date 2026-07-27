@@ -73,7 +73,7 @@ export const useBorrowStore = create<BorrowState>((set) => ({
       id: "BR-000245",
       bookId: "b1",
       bookTitle: "Pather Panchali",
-      bookImage: "/images/books/placeholder.jpg",
+      bookImage: "/book-covers/borrowed-light.svg",
       borrowerId: "user-1",
       ownerId: "rahim123",
       status: "pending_owner_review",

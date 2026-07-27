@@ -51,7 +51,7 @@ export default function BorrowRequestPage({
       const orderId = addOrder({
         bookId: id,
         bookTitle: "Sample Borrow Book", // Mock name
-        bookImage: "/images/books/placeholder.jpg",
+        bookImage: "/book-covers/borrowed-light.svg",
         borrowerId: "current-user",
         ownerId: "owner123",
         handoverMethod: method,
@@ -139,7 +139,7 @@ export default function BorrowRequestPage({
               <div className="flex gap-4">
                 <div className="relative aspect-[3/4] w-20 shrink-0 overflow-hidden rounded-md border">
                   <Image
-                    src="/images/books/placeholder.jpg"
+                    src="/book-covers/borrowed-light.svg"
                     fill
                     alt="Book Cover"
                     className="object-cover"
