@@ -47,6 +47,16 @@ export default function SettingsPage() {
     }[]
   >([]);
 
+  const [streetResults, setStreetResults] = useState<
+    {
+      lat: string;
+      lon: string;
+      display_name: string;
+      address?: Record<string, string>;
+    }[]
+  >([]);
+  const [showStreetSuggestions, setShowStreetSuggestions] = useState(false);
+
   const [addressDetails, setAddressDetails] = useState({
     street: "",
     city: "Dhaka",
@@ -78,6 +88,26 @@ export default function SettingsPage() {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (addressDetails.street.trim().length > 2 && showStreetSuggestions) {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=bd&limit=5&q=${encodeURIComponent(addressDetails.street)}`,
+          );
+          const data = await res.json();
+          setStreetResults(data);
+        } catch (err) {
+          console.error("Street search failed", err);
+        }
+      } else {
+        setStreetResults([]);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [addressDetails.street, showStreetSuggestions]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
   };
@@ -93,6 +123,21 @@ export default function SettingsPage() {
     setSearchResults([]);
     setSearchQuery(result.display_name);
     handleLocationChange(lat, lng, result.address);
+  };
+
+  const handleStreetSelect = (result: {
+    lat: string;
+    lon: string;
+    display_name: string;
+    address?: Record<string, string>;
+  }) => {
+    setShowStreetSuggestions(false);
+    setStreetResults([]);
+    handleLocationChange(
+      parseFloat(result.lat),
+      parseFloat(result.lon),
+      result.address,
+    );
   };
 
   const handleLocationChange = async (
@@ -371,14 +416,32 @@ export default function SettingsPage() {
                         id="street"
                         placeholder="e.g. 123 Bookworm Lane"
                         value={addressDetails.street}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setAddressDetails({
                             ...addressDetails,
                             street: e.target.value,
-                          })
+                          });
+                          setShowStreetSuggestions(true);
+                        }}
+                        onBlur={() =>
+                          setTimeout(() => setShowStreetSuggestions(false), 200)
                         }
                         className="bg-muted/20 pl-9"
                       />
+                      {showStreetSuggestions && streetResults.length > 0 && (
+                        <div className="bg-background absolute top-11 right-0 left-0 z-50 max-h-48 overflow-y-auto rounded-md border shadow-md">
+                          {streetResults.map((result, idx) => (
+                            <button
+                              key={idx}
+                              className="hover:bg-muted focus:bg-muted w-full border-b px-4 py-2 text-left text-sm outline-none last:border-0"
+                              onClick={() => handleStreetSelect(result)}
+                              type="button"
+                            >
+                              {result.display_name}
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
 
