@@ -15,6 +15,7 @@ import {
   ShoppingCartIcon,
   SlidersHorizontalIcon,
   TriangleAlertIcon,
+  UserIcon,
   UsersRoundIcon,
   StarIcon,
   ActivityIcon,
@@ -202,7 +203,12 @@ export const dashboardNavGroups: NavGroup[] = [
         icon: TicketIcon,
       },
       {
-        title: "Settings & Profile",
+        title: "Profile",
+        href: "/u/roni",
+        icon: UserIcon,
+      },
+      {
+        title: "Settings",
         href: "/dashboard/settings",
         icon: SettingsIcon,
       },
