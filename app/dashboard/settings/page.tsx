@@ -230,12 +230,6 @@ export default function SettingsPage() {
             Profile
           </TabsTrigger>
           <TabsTrigger
-            value="account"
-            className="data-[state=active]:border-primary data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent px-4 pt-2 pb-3 font-semibold shadow-none transition-none"
-          >
-            Account
-          </TabsTrigger>
-          <TabsTrigger
             value="notifications"
             className="data-[state=active]:border-primary data-[state=active]:text-foreground text-muted-foreground rounded-none border-b-2 border-transparent px-4 pt-2 pb-3 font-semibold shadow-none transition-none"
           >
@@ -553,62 +547,6 @@ export default function SettingsPage() {
                 Don&apos;t forget to save your changes.
               </p>
               <Button className="shadow-sm">Save Profile</Button>
-            </CardFooter>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="account" className="space-y-6 outline-none">
-          <Card>
-            <CardHeader>
-              <CardTitle>Account Details</CardTitle>
-              <CardDescription>
-                Update your email address and password.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  defaultValue="roni@example.com"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="current-password">Current Password</Label>
-                <Input id="current-password" type="password" />
-              </div>
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor="new-password">New Password</Label>
-                  <Input id="new-password" type="password" />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Confirm Password</Label>
-                  <Input id="confirm-password" type="password" />
-                </div>
-              </div>
-            </CardContent>
-            <CardFooter className="border-t px-6 py-4">
-              <Button>Update Account</Button>
-            </CardFooter>
-          </Card>
-
-          <Card className="border-destructive/50">
-            <CardHeader>
-              <CardTitle className="text-destructive">Danger Zone</CardTitle>
-              <CardDescription>
-                Permanently delete your account and all associated data.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm font-medium">
-                Once you delete your account, there is no going back. Please be
-                certain.
-              </p>
-            </CardContent>
-            <CardFooter className="border-destructive/20 bg-destructive/5 border-t px-6 py-4">
-              <Button variant="destructive">Delete Account</Button>
             </CardFooter>
           </Card>
         </TabsContent>
