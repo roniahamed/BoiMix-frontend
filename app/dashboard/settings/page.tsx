@@ -320,6 +320,19 @@ export default function SettingsPage() {
                       className="bg-muted/20"
                     />
                   </div>
+                  <div className="space-y-2 md:col-span-2">
+                    <Label
+                      htmlFor="designation"
+                      className="text-sm font-medium"
+                    >
+                      Designation
+                    </Label>
+                    <Input
+                      id="designation"
+                      placeholder="e.g. Software Engineer, Teacher, Student"
+                      className="bg-muted/20"
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-2">

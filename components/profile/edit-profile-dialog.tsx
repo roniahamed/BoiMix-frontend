@@ -214,10 +214,10 @@ export function EditProfileDialog({
                 )}
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium">Title / Role</label>
+                <label className="text-sm font-medium">Designation</label>
                 <Input
                   {...register("role")}
-                  placeholder="e.g. Avid Reader"
+                  placeholder="e.g. Software Engineer, Teacher, Student"
                   className={errors.role ? "border-destructive" : ""}
                 />
                 {errors.role && (
