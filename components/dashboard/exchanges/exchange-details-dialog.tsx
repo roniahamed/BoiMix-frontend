@@ -11,13 +11,9 @@ import {
   CalendarDays,
   Star,
   MessageCircle,
-  Check,
-  KeyRound,
-  Copy,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 type ExchangeDetailsDialogProps = {
   selectedExchange: ExchangeOrder | null;
@@ -29,8 +25,6 @@ export function ExchangeDetailsDialog({
   onClose,
 }: ExchangeDetailsDialogProps) {
   const { updateExchangeStatus } = useExchangeStore();
-  const [partnerOtpInput, setPartnerOtpInput] = useState("");
-  const [copiedOtp, setCopiedOtp] = useState(false);
   const [verifySuccess, setVerifySuccess] = useState(false);
 
   if (!selectedExchange) return null;
@@ -217,15 +211,15 @@ export function ExchangeDetailsDialog({
               </div>
             </div>
 
-            {/* Handover Security OTP & Verification Card */}
-            <div className="space-y-3 rounded-xl border border-indigo-500/20 bg-gradient-to-br from-indigo-500/5 via-purple-500/5 to-pink-500/5 p-4 shadow-2xs">
+            {/* Simple One-Click Handover Confirmation Card */}
+            <div className="space-y-3 rounded-xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/5 via-teal-500/5 to-blue-500/5 p-4 shadow-2xs">
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 dark:text-indigo-400">
-                  <KeyRound className="h-4 w-4" />
-                  Live Handover Security OTP
+                <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle2 className="h-4 w-4" />
+                  Handover Confirmation
                 </span>
                 <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-                  4-Digit Code
+                  One-Click Verify
                 </span>
               </div>
 
@@ -233,96 +227,34 @@ export function ExchangeDetailsDialog({
                 <div className="flex items-center gap-3 rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-emerald-700 dark:text-emerald-300">
                   <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-500" />
                   <div className="text-xs">
-                    <p className="font-bold">Handover Verified & Completed!</p>
+                    <p className="font-bold">Handover Confirmed & Completed!</p>
                     <p className="text-[11px] opacity-90">
-                      Both partners confirmed receipt of their books via OTP.
+                      Both partners have successfully swapped their books.
                     </p>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
                   <p className="text-muted-foreground text-[11px] leading-relaxed">
                     When you meet{" "}
                     <span className="text-foreground font-bold">
                       {partnerInfo.name}
                     </span>{" "}
-                    in person, exchange your 4-digit codes to confirm book
-                    handover.
+                    and swap your books, click the button to complete the
+                    exchange.
                   </p>
 
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {/* Your Secret OTP */}
-                    <div className="bg-background flex flex-col justify-between rounded-lg border p-3 shadow-2xs">
-                      <span className="text-muted-foreground text-[10px] font-bold uppercase">
-                        Your Secret OTP
-                      </span>
-                      <div className="my-1.5 flex items-center justify-between">
-                        <span className="text-primary font-mono text-lg font-extrabold tracking-widest">
-                          8 4 9 2
-                        </span>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-7 text-xs"
-                          onClick={() => {
-                            navigator.clipboard.writeText("8492");
-                            setCopiedOtp(true);
-                            setTimeout(() => setCopiedOtp(false), 2000);
-                          }}
-                        >
-                          {copiedOtp ? (
-                            <>
-                              <Check className="mr-1 h-3 w-3 text-emerald-500" />
-                              Copied
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="mr-1 h-3 w-3" />
-                              Copy
-                            </>
-                          )}
-                        </Button>
-                      </div>
-                      <span className="text-muted-foreground text-[10px]">
-                        Show this to your partner
-                      </span>
-                    </div>
-
-                    {/* Partner OTP Verification Input */}
-                    <div className="bg-background flex flex-col justify-between rounded-lg border p-3 shadow-2xs">
-                      <span className="text-muted-foreground text-[10px] font-bold uppercase">
-                        Partner&apos;s OTP
-                      </span>
-                      <div className="my-1.5 flex gap-1.5">
-                        <Input
-                          value={partnerOtpInput}
-                          onChange={(e) => setPartnerOtpInput(e.target.value)}
-                          maxLength={4}
-                          placeholder="e.g. 1234"
-                          className="h-8 font-mono text-sm font-bold tracking-widest"
-                        />
-                        <Button
-                          size="sm"
-                          className="h-8 bg-emerald-600 px-3 text-xs font-bold text-white hover:bg-emerald-700"
-                          onClick={() => {
-                            if (partnerOtpInput.trim().length === 4) {
-                              setVerifySuccess(true);
-                              updateExchangeStatus(
-                                selectedExchange.id,
-                                "completed",
-                              );
-                            }
-                          }}
-                          disabled={partnerOtpInput.trim().length !== 4}
-                        >
-                          Verify
-                        </Button>
-                      </div>
-                      <span className="text-muted-foreground text-[10px]">
-                        Enter their 4-digit code
-                      </span>
-                    </div>
-                  </div>
+                  <Button
+                    size="sm"
+                    className="shrink-0 bg-emerald-600 font-bold text-white shadow-xs hover:bg-emerald-700"
+                    onClick={() => {
+                      setVerifySuccess(true);
+                      updateExchangeStatus(selectedExchange.id, "completed");
+                    }}
+                  >
+                    <CheckCircle2 className="mr-1.5 h-4 w-4" />
+                    Confirm Book Received
+                  </Button>
                 </div>
               )}
             </div>
