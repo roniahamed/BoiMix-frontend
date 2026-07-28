@@ -256,9 +256,21 @@ export function UploadBookForm({
 
   const handleIsbnAutoFill = () => {
     const currentIsbn = getValues("isbn");
-    const match =
-      Object.values(QUICK_FILL_BOOKS).find((b) => b.isbn === currentIsbn) ||
-      QUICK_FILL_BOOKS["atomic-habits"];
+    if (!currentIsbn) {
+      setAutofillMessage("⚠️ Please enter an ISBN first.");
+      setTimeout(() => setAutofillMessage(null), 3000);
+      return;
+    }
+
+    const match = Object.values(QUICK_FILL_BOOKS).find(
+      (b) => b.isbn === currentIsbn,
+    );
+
+    if (!match) {
+      setAutofillMessage("❌ No matching book found for this ISBN.");
+      setTimeout(() => setAutofillMessage(null), 3000);
+      return;
+    }
 
     setValue("title", match.title, { shouldValidate: true });
     setValue("author", match.author, { shouldValidate: true });
@@ -270,9 +282,6 @@ export function UploadBookForm({
     setValue("originalPrice", match.originalPrice, { shouldValidate: true });
     setValue("sellPrice", match.sellPrice, { shouldValidate: true });
     setValue("condition", match.condition, { shouldValidate: true });
-    if (!currentIsbn) {
-      setValue("isbn", match.isbn, { shouldValidate: true });
-    }
 
     setAutofillMessage(`✨ Auto-filled book details for "${match.title}"!`);
     setTimeout(() => setAutofillMessage(null), 5000);
@@ -395,8 +404,8 @@ export function UploadBookForm({
   };
 
   return (
-    <div className="bg-muted/10 w-full rounded-2xl">
-      <div className="boimix-container py-4">
+    <div className="w-full">
+      <div className="py-2 sm:py-4">
         <div className="mb-6 flex items-center gap-4">
           <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-xl">
             <BookOpen className="h-6 w-6" />
@@ -412,9 +421,9 @@ export function UploadBookForm({
         <form
           id={formId}
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-6 pb-24"
+          className="space-y-6 pb-8"
         >
-          <div className="bg-card space-y-8 rounded-2xl border p-4 shadow-sm md:p-6">
+          <div className="bg-card space-y-8 rounded-2xl border p-2 shadow-sm sm:p-4 md:p-6">
             {/* Upload Photos */}
             <div>
               <SectionTitle

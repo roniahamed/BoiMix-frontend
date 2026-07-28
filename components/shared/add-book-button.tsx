@@ -41,12 +41,14 @@ export function AddBookDialog({ children }: { children: ReactNode }) {
           className="!bg-background max-h-[90vh] !w-[95vw] !max-w-5xl overflow-y-auto !border-none !p-0 !shadow-2xl sm:!rounded-2xl sm:!border"
         >
           <DialogTitle className="sr-only">Add New Book</DialogTitle>
-          <DialogClose className="bg-background/95 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-4 right-4 z-[80] flex size-10 items-center justify-center rounded-full border shadow-lg backdrop-blur transition-colors focus-visible:ring-2 focus-visible:outline-none">
-            <XIcon className="size-5" />
-            <span className="sr-only">Close</span>
-          </DialogClose>
+          <div className="sticky top-0 z-[80] h-0">
+            <DialogClose className="bg-background/95 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-3 right-3 flex size-10 items-center justify-center rounded-full border shadow-lg backdrop-blur transition-colors focus-visible:ring-2 focus-visible:outline-none">
+              <XIcon className="size-5" />
+              <span className="sr-only">Close</span>
+            </DialogClose>
+          </div>
 
-          <div className="space-y-8 p-6 sm:p-8">
+          <div className="space-y-6 px-[5px] pt-0 pb-2 sm:p-8">
             <UploadBookForm
               formId={formId}
               showActions={false}

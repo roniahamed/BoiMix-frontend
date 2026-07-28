@@ -75,13 +75,6 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
         onChange(clickedLat, clickedLng);
       }
     });
-
-    // Cleanup map on unmount to prevent container reuse errors & CPU spikes
-    return () => {
-      map.remove();
-      mapInstanceRef.current = null;
-      markerRef.current = null;
-    };
   }, [isMounted]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Update marker position and map center when lat/lng props change from outside
