@@ -735,8 +735,8 @@ export function BookListing({
             <div className="flex-1">
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {paginatedBooks.length > 0 ? (
-                  paginatedBooks.map((book) => (
-                    <BookCard key={book.id} book={book} />
+                  paginatedBooks.map((book, idx) => (
+                    <BookCard key={book.id} book={book} priority={idx < 4} />
                   ))
                 ) : (
                   <div className="text-muted-foreground col-span-full py-12 text-center">

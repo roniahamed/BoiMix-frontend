@@ -43,9 +43,15 @@ type BookCardProps = {
   book: BookCardBook;
   className?: string;
   hidePrice?: boolean;
+  priority?: boolean;
 };
 
-export function BookCard({ book, className, hidePrice }: BookCardProps) {
+export function BookCard({
+  book,
+  className,
+  hidePrice,
+  priority = false,
+}: BookCardProps) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -262,7 +268,7 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
               src={book.coverUrl}
               alt={book.title}
               fill
-              priority={true}
+              priority={priority}
               sizes="(min-width: 1400px) 180px, (min-width: 992px) 16vw, 50vw"
               className="object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.3)] transition-transform duration-300 hover:scale-105"
             />
