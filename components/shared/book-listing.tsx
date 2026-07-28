@@ -58,6 +58,20 @@ type BookListingProps = {
   initialSortBy?: string;
 };
 
+function YouTubeBookSkeleton() {
+  return (
+    <div className="bg-card border-border/50 flex animate-pulse flex-col gap-3 rounded-2xl border p-3 shadow-xs">
+      <div className="bg-muted/60 aspect-[3/4] w-full rounded-xl" />
+      <div className="bg-muted/60 h-4 w-5/6 rounded-md" />
+      <div className="bg-muted/40 h-3 w-1/2 rounded-md" />
+      <div className="mt-auto flex items-center justify-between pt-2">
+        <div className="bg-muted/50 h-4 w-14 rounded-md" />
+        <div className="bg-primary/20 h-8 w-20 rounded-xl" />
+      </div>
+    </div>
+  );
+}
+
 export function BookListing({
   title,
   description,
@@ -65,7 +79,7 @@ export function BookListing({
   initialFilters = {},
   initialSortBy = "newest",
 }: BookListingProps) {
-  const { data: baseBooks = [] } = useQuery({
+  const { data: baseBooks = [], isLoading } = useQuery({
     queryKey: ["books"],
     queryFn: () => fetchBooks(),
   });
@@ -377,6 +391,26 @@ export function BookListing({
       ),
     [filteredBooks, currentPage, itemsPerPage],
   );
+
+  // Background Pre-fetching for Next Page Images & Covers
+  useEffect(() => {
+    const nextPageBooks = filteredBooks.slice(
+      currentPage * itemsPerPage,
+      (currentPage + 1) * itemsPerPage,
+    );
+
+    if (nextPageBooks.length > 0 && typeof window !== "undefined") {
+      const timer = setTimeout(() => {
+        nextPageBooks.forEach((book) => {
+          if (book.coverUrl) {
+            const img = new window.Image();
+            img.src = book.coverUrl;
+          }
+        });
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [currentPage, filteredBooks, itemsPerPage]);
 
   const getPageNumbers = useCallback(() => {
     const pages: (number | string)[] = [];
@@ -734,13 +768,33 @@ export function BookListing({
             {/* Book Grid */}
             <div className="flex-1">
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:gap-4 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-                {paginatedBooks.length > 0 ? (
+                {isLoading ? (
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <YouTubeBookSkeleton key={i} />
+                  ))
+                ) : paginatedBooks.length > 0 ? (
                   paginatedBooks.map((book, idx) => (
                     <BookCard key={book.id} book={book} priority={idx < 4} />
                   ))
                 ) : (
-                  <div className="text-muted-foreground col-span-full py-12 text-center">
-                    কোনো বই পাওয়া যায়নি। আবার চেষ্টা করুন।
+                  <div className="border-border/80 bg-card/40 col-span-full flex flex-col items-center justify-center rounded-2xl border border-dashed p-12 text-center">
+                    <div className="bg-primary/10 text-primary mb-4 flex h-14 w-14 items-center justify-center rounded-2xl">
+                      <BookOpen className="h-7 w-7" />
+                    </div>
+                    <h3 className="text-foreground mb-1 text-lg font-bold">
+                      কোনো বই পাওয়া যায়নি
+                    </h3>
+                    <p className="text-muted-foreground mb-6 max-w-sm text-sm">
+                      আপনার নির্বাচিত ফিল্টার বা সার্চ দিয়ে কোনো বই পাওয়া যায়নি।
+                      ফিল্টার রিসেট করে আবার চেষ্টা করুন।
+                    </p>
+                    <Button
+                      variant="outline"
+                      onClick={handleFilterReset}
+                      className="rounded-xl font-bold"
+                    >
+                      সব ফিল্টার রিসেট করুন
+                    </Button>
                   </div>
                 )}
               </div>

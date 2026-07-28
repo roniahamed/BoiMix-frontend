@@ -54,6 +54,7 @@ export function BookCard({
 }: BookCardProps) {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -150,7 +151,7 @@ export function BookCard({
   return (
     <article
       className={cn(
-        "group relative overflow-hidden rounded-lg transition-all duration-300",
+        "group animate-in fade-in-50 slide-in-from-top-2 relative overflow-hidden rounded-lg transition-all duration-300 duration-500 ease-out",
         "max-sm:border max-sm:border-slate-200 max-sm:bg-white max-sm:shadow-sm max-sm:dark:border-slate-800 max-sm:dark:bg-slate-900",
         "md:border-transparent md:bg-transparent md:shadow-none",
         className,
@@ -264,13 +265,22 @@ export function BookCard({
             href={`/books/${book.slug}`}
             className="relative z-10 mx-auto block aspect-[3/4] w-[60%] sm:w-[65%] md:w-[65%]"
           >
+            {!isImageLoaded && (
+              <div className="bg-muted/40 border-border/20 absolute inset-0 animate-pulse rounded-lg border" />
+            )}
             <Image
               src={book.coverUrl}
               alt={book.title}
               fill
               priority={priority}
+              onLoad={() => setIsImageLoaded(true)}
               sizes="(min-width: 1400px) 180px, (min-width: 992px) 16vw, 50vw"
-              className="object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.3)] transition-transform duration-300 hover:scale-105"
+              className={cn(
+                "object-contain drop-shadow-[0_15px_15px_rgba(0,0,0,0.3)] transition-all duration-500 hover:scale-105",
+                isImageLoaded
+                  ? "blur-0 scale-100 opacity-100"
+                  : "scale-95 opacity-0 blur-xs",
+              )}
             />
           </Link>
         </div>
