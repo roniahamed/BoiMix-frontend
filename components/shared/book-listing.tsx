@@ -3,9 +3,19 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBooks } from "@/lib/api-client";
-import { SlidersHorizontal } from "lucide-react";
+import {
+  SlidersHorizontal,
+  Search,
+  X,
+  Sparkles,
+  BookOpen,
+  HeartHandshake,
+  TrendingUp,
+  Tag,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import {
   Select,
@@ -62,6 +72,11 @@ export function BookListing({
         i % 5
       ],
       language: ["Bengali", "English"][i % 2],
+      location:
+        b.location ||
+        ["Dhanmondi", "Banani", "Mirpur", "Uttara", "Gulshan", "Chittagong"][
+          i % 6
+        ],
     })) as ExtendedBook[];
   }, [baseBooks]);
 
@@ -98,6 +113,19 @@ export function BookListing({
           label: c,
           value: c.toLowerCase(),
         })),
+      },
+      {
+        id: "location",
+        type: "checkbox" as const,
+        title: "Location / Area",
+        options: [
+          { label: "Dhanmondi", value: "dhanmondi" },
+          { label: "Banani", value: "banani" },
+          { label: "Mirpur", value: "mirpur" },
+          { label: "Uttara", value: "uttara" },
+          { label: "Gulshan", value: "gulshan" },
+          { label: "Chittagong", value: "chittagong" },
+        ],
       },
       {
         id: "author",
@@ -163,16 +191,39 @@ export function BookListing({
           return { ...prev, [groupId]: groupValues.filter((v) => v !== value) };
         }
       });
-      setCurrentPage(1); // Reset to first page on filter change
+      setCurrentPage(1);
     },
     [],
+  );
+
+  const removeFilter = useCallback((groupId: string, value: string) => {
+    setSelectedFilters((prev) => {
+      const groupValues = prev[groupId] || [];
+      const updated = groupValues.filter((v) => v !== value);
+      return { ...prev, [groupId]: updated };
+    });
+    setCurrentPage(1);
+  }, []);
+
+  const isFilterActive = useCallback(
+    (groupId: string, value: string) => {
+      return (selectedFilters[groupId] || []).includes(value);
+    },
+    [selectedFilters],
+  );
+
+  const toggleQuickFilter = useCallback(
+    (groupId: string, value: string) => {
+      handleFilterChange(groupId, value, !isFilterActive(groupId, value));
+    },
+    [handleFilterChange, isFilterActive],
   );
 
   const handleRangeChange = useCallback(
     (groupId: string, min: string, max: string) => {
       if (groupId === "price") {
         setPriceRange({ min, max });
-        setCurrentPage(1); // Reset to first page on filter change
+        setCurrentPage(1);
       }
     },
     [],
@@ -185,14 +236,12 @@ export function BookListing({
     setCurrentPage(1);
   }, []);
 
-  // Sync defaultSearchQuery from URL params to local state
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearchQuery(defaultSearchQuery);
     setCurrentPage(1);
   }, [defaultSearchQuery]);
 
-  // Derived state for filtering and sorting
   const filteredBooks = MOCK_BOOKS.filter((book) => {
     // 1. Text Search
     if (searchQuery) {
@@ -211,7 +260,8 @@ export function BookListing({
 
       if (groupId === "category") {
         const hasMatch = values.some(
-          (val) => (book as ExtendedBook).category === val,
+          (val) =>
+            (book as ExtendedBook).category.toLowerCase() === val.toLowerCase(),
         );
         if (!hasMatch) return false;
       } else if (groupId === "availability") {
@@ -220,17 +270,33 @@ export function BookListing({
             (book.tags as string[])?.includes(val) || book.availability === val,
         );
         if (!hasMatch) return false;
+      } else if (groupId === "location") {
+        const bookLoc = ((book.location || "") as string).toLowerCase();
+        const hasMatch = values.some((val) =>
+          bookLoc.includes(val.toLowerCase()),
+        );
+        if (!hasMatch) return false;
       } else if (groupId === "author") {
-        const hasMatch = values.some((val) => book.author === val);
+        const hasMatch = values.some(
+          (val) => book.author.toLowerCase() === val.toLowerCase(),
+        );
         if (!hasMatch) return false;
       } else if (groupId === "publisher") {
         const hasMatch = values.some(
-          (val) => (book as ExtendedBook).publisher === val,
+          (val) =>
+            (book as ExtendedBook).publisher.toLowerCase() ===
+            val.toLowerCase(),
         );
         if (!hasMatch) return false;
       } else if (groupId === "language") {
         const hasMatch = values.some(
-          (val) => (book as ExtendedBook).language === val,
+          (val) =>
+            (book as ExtendedBook).language.toLowerCase() === val.toLowerCase(),
+        );
+        if (!hasMatch) return false;
+      } else if (groupId === "condition") {
+        const hasMatch = values.some(
+          (val) => (book.condition || "").toLowerCase() === val.toLowerCase(),
         );
         if (!hasMatch) return false;
       } else if (groupId === "rating") {
@@ -253,7 +319,7 @@ export function BookListing({
     if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
     if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
     if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
-    return 0; // default / newest / distance mocked
+    return 0;
   });
 
   const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
@@ -271,25 +337,18 @@ export function BookListing({
         pages.push(i);
       }
     } else {
-      // Always include page 1
       pages.push(1);
-
       if (currentPage > 3) {
         pages.push("...");
       }
-
       const start = Math.max(2, currentPage - 1);
       const end = Math.min(totalPages - 1, currentPage + 1);
-
       for (let i = start; i <= end; i++) {
         pages.push(i);
       }
-
       if (currentPage < totalPages - 2) {
         pages.push("...");
       }
-
-      // Always include last page
       pages.push(totalPages);
     }
     return pages;
@@ -297,15 +356,195 @@ export function BookListing({
 
   return (
     <div ref={listRef} className="boimix-container py-6 md:py-8">
-      {/* Page Header & Search */}
-      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div>
-          <h1 className="type-heading text-3xl md:text-4xl">{title}</h1>
-          <p className="text-muted-foreground mt-1 text-sm md:text-base">
-            {description}
-          </p>
+      {/* Page Header, Search & Live Stats */}
+      <div className="border-border/60 from-primary/5 via-card to-muted/20 mb-6 flex flex-col gap-5 rounded-2xl border bg-gradient-to-br p-6 shadow-xs">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-bold">
+                <Sparkles className="size-3.5" />
+                Live Marketplace Feed
+              </span>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                ● Active Catalog
+              </span>
+            </div>
+            <h1 className="type-heading mt-2 text-3xl font-bold md:text-4xl">
+              {title}
+            </h1>
+            <p className="text-muted-foreground mt-1 text-sm md:text-base">
+              {description}
+            </p>
+          </div>
+
+          {/* Interactive Live Search Bar */}
+          <div className="relative w-full md:w-[320px] lg:w-[360px]">
+            <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+            <Input
+              type="text"
+              placeholder="Search title, author, or keyword..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="bg-background/80 h-11 rounded-xl pr-9 pl-9 text-sm shadow-2xs"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => {
+                  setSearchQuery("");
+                  setCurrentPage(1);
+                }}
+                className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1"
+                aria-label="Clear search"
+              >
+                <X className="size-4" />
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Live Trust Ticker Strip */}
+        <div className="border-border/60 grid grid-cols-1 gap-2.5 border-t pt-4 sm:grid-cols-3">
+          <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
+            <BookOpen className="text-primary size-4 shrink-0" />
+            <div className="text-xs">
+              <p className="text-foreground font-bold">1,420+ Books</p>
+              <p className="text-muted-foreground text-[11px]">Available Now</p>
+            </div>
+          </div>
+
+          <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
+            <HeartHandshake className="size-4 shrink-0 text-amber-500" />
+            <div className="text-xs">
+              <p className="text-foreground font-bold">98% Handover Rate</p>
+              <p className="text-muted-foreground text-[11px]">Peer Verified</p>
+            </div>
+          </div>
+
+          <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
+            <TrendingUp className="size-4 shrink-0 text-emerald-500" />
+            <div className="text-xs">
+              <p className="text-foreground font-bold">140+ New Arrivals</p>
+              <p className="text-muted-foreground text-[11px]">
+                Added This Week
+              </p>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Quick Category & Type Pills Strip */}
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        <Button
+          size="sm"
+          variant={
+            Object.keys(selectedFilters).length === 0 && !searchQuery
+              ? "default"
+              : "outline"
+          }
+          onClick={handleFilterReset}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          🔥 All Books
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            isFilterActive("availability", "exchange") ? "default" : "outline"
+          }
+          onClick={() => toggleQuickFilter("availability", "exchange")}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          🔄 Peer Exchanges
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            isFilterActive("availability", "sell") ? "default" : "outline"
+          }
+          onClick={() => toggleQuickFilter("availability", "sell")}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          🛒 Marketplace (Sale)
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            isFilterActive("availability", "borrow") ? "default" : "outline"
+          }
+          onClick={() => toggleQuickFilter("availability", "borrow")}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          🏛️ Central Library (Borrow)
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            isFilterActive("category", "fiction") ? "default" : "outline"
+          }
+          onClick={() => toggleQuickFilter("category", "fiction")}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          🎯 Fiction
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            isFilterActive("category", "academic") ? "default" : "outline"
+          }
+          onClick={() => toggleQuickFilter("category", "academic")}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          🎓 Academic
+        </Button>
+        <Button
+          size="sm"
+          variant={
+            isFilterActive("location", "dhanmondi") ? "default" : "outline"
+          }
+          onClick={() => toggleQuickFilter("location", "dhanmondi")}
+          className="h-8 rounded-full px-3.5 text-xs font-bold"
+        >
+          📍 Dhanmondi Area
+        </Button>
+      </div>
+
+      {/* Active Filters Bar */}
+      {Object.values(selectedFilters).some((vals) => vals.length > 0) && (
+        <div className="border-border/50 bg-muted/30 mb-6 flex flex-wrap items-center gap-2 rounded-xl border p-2.5">
+          <span className="text-muted-foreground mr-1 text-xs font-bold">
+            Active Filters:
+          </span>
+          {Object.entries(selectedFilters).flatMap(([groupId, values]) =>
+            values.map((val) => (
+              <span
+                key={`${groupId}-${val}`}
+                className="bg-primary/10 text-primary inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold"
+              >
+                <Tag className="size-3" />
+                {val}
+                <button
+                  onClick={() => removeFilter(groupId, val)}
+                  className="hover:text-primary/70 ml-0.5 rounded-full"
+                  aria-label={`Remove ${val} filter`}
+                >
+                  <X className="size-3" />
+                </button>
+              </span>
+            )),
+          )}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleFilterReset}
+            className="text-muted-foreground hover:text-foreground h-7 text-xs font-bold"
+          >
+            Clear All
+          </Button>
+        </div>
+      )}
 
       <div className="grid gap-8 lg:grid-cols-[260px_1fr] xl:grid-cols-[280px_1fr]">
         {/* Sidebar Filters (Desktop) */}

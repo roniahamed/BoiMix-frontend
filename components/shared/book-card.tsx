@@ -342,8 +342,23 @@ export function BookCard({ book, className, hidePrice }: BookCardProps) {
                   )}
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <span className="min-w-0 truncate capitalize">
-                    {book.condition}
+                  <span
+                    className={cn(
+                      "inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-[11px] font-bold capitalize",
+                      book.condition === "new" &&
+                        "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+                      book.condition === "excellent" &&
+                        "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+                      (book.condition === "good" ||
+                        book.condition === "fair") &&
+                        "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                      book.condition === "poor" &&
+                        "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                    )}
+                  >
+                    {book.condition === "excellent"
+                      ? "Like New"
+                      : book.condition}
                   </span>
                   {!hidePrice && book.price !== undefined && (
                     <div className="flex shrink-0 items-center gap-1.5">
