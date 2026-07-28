@@ -4,7 +4,10 @@ import {
   MessageCircleIcon,
   Repeat2Icon,
   ClockIcon,
+  PencilIcon,
 } from "lucide-react";
+
+import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
 
 import { ProfileHeader } from "@/components/profile/profile-header";
 import { ProfileNav } from "@/components/profile/profile-nav";
@@ -139,12 +142,22 @@ export function ProfileShell({
                     )}
 
                   {/* Reading Interests Section */}
-                  {profile.readingInterests &&
-                    profile.readingInterests.length > 0 && (
-                      <div className="mt-5 flex flex-col gap-y-3 px-1">
-                        <div className="text-foreground text-[16px] font-bold">
-                          Reading Interests
-                        </div>
+                  {((profile.readingInterests &&
+                    profile.readingInterests.length > 0) ||
+                    isOwnProfile) && (
+                    <div className="mt-5 flex flex-col gap-y-3 px-1">
+                      <div className="text-foreground flex items-center justify-between text-[16px] font-bold">
+                        <span>Reading Interests</span>
+                        {isOwnProfile && (
+                          <EditProfileDialog profile={profile}>
+                            <button className="text-muted-foreground hover:text-primary transition-colors">
+                              <PencilIcon className="size-4" />
+                            </button>
+                          </EditProfileDialog>
+                        )}
+                      </div>
+                      {profile.readingInterests &&
+                      profile.readingInterests.length > 0 ? (
                         <div className="flex flex-wrap gap-2">
                           {profile.readingInterests
                             .slice(0, 5)
@@ -162,8 +175,13 @@ export function ProfileShell({
                             </span>
                           )}
                         </div>
-                      </div>
-                    )}
+                      ) : (
+                        <div className="text-muted-foreground text-xs italic">
+                          Add your reading interests.
+                        </div>
+                      )}
+                    </div>
+                  )}
 
                   {/* Member Highlights Section */}
                   {profile.memberHighlights &&
@@ -215,7 +233,9 @@ export function ProfileShell({
             </div>
 
             <div className="flex flex-col gap-6">
-              {sidebar || <ProfileSidebar profile={profile} />}
+              {sidebar || (
+                <ProfileSidebar profile={profile} isOwnProfile={isOwnProfile} />
+              )}
             </div>
           </div>
         </main>

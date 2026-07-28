@@ -7,13 +7,17 @@ import {
   MessageCircleIcon,
   Repeat2Icon,
   StarIcon,
+  PencilIcon,
 } from "lucide-react";
+
+import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
 
 import type { UserProfile } from "@/types/user";
 import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 
 type ProfileSidebarProps = {
   profile: UserProfile;
+  isOwnProfile?: boolean;
 };
 
 function getHighlightIcon(iconName: string) {
@@ -31,7 +35,10 @@ function getHighlightIcon(iconName: string) {
   }
 }
 
-export function ProfileSidebar({ profile }: ProfileSidebarProps) {
+export function ProfileSidebar({
+  profile,
+  isOwnProfile = false,
+}: ProfileSidebarProps) {
   return (
     <aside className="hidden flex-col gap-5 lg:flex">
       {/* About Section */}
@@ -150,26 +157,42 @@ export function ProfileSidebar({ profile }: ProfileSidebarProps) {
       </section>
 
       {/* Reading Interests */}
-      {profile.readingInterests && profile.readingInterests.length > 0 && (
+      {((profile.readingInterests && profile.readingInterests.length > 0) ||
+        isOwnProfile) && (
         <section className="border-muted rounded-[5px] border p-5">
-          <h2 className="text-foreground text-base font-bold tracking-tight">
-            Reading Interests
-          </h2>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {profile.readingInterests.slice(0, 5).map((interest) => (
-              <span
-                key={interest}
-                className="bg-muted/70 hover:bg-muted text-foreground rounded-xl px-3 py-1 text-xs font-medium"
-              >
-                {interest}
-              </span>
-            ))}
-            {profile.readingInterests.length > 5 && (
-              <span className="text-primary hover:bg-info-soft rounded-xl px-3 py-1 text-xs font-medium">
-                +{profile.readingInterests.length - 5} more
-              </span>
+          <div className="flex items-center justify-between">
+            <h2 className="text-foreground text-base font-bold tracking-tight">
+              Reading Interests
+            </h2>
+            {isOwnProfile && (
+              <EditProfileDialog profile={profile}>
+                <button className="text-muted-foreground hover:text-primary transition-colors">
+                  <PencilIcon className="size-4" />
+                </button>
+              </EditProfileDialog>
             )}
           </div>
+          {profile.readingInterests && profile.readingInterests.length > 0 ? (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {profile.readingInterests.slice(0, 5).map((interest) => (
+                <span
+                  key={interest}
+                  className="bg-muted/70 hover:bg-muted text-foreground rounded-xl px-3 py-1 text-xs font-medium"
+                >
+                  {interest}
+                </span>
+              ))}
+              {profile.readingInterests.length > 5 && (
+                <span className="text-primary hover:bg-info-soft rounded-xl px-3 py-1 text-xs font-medium">
+                  +{profile.readingInterests.length - 5} more
+                </span>
+              )}
+            </div>
+          ) : (
+            <div className="text-muted-foreground mt-4 text-sm italic">
+              Add your reading interests.
+            </div>
+          )}
         </section>
       )}
 
