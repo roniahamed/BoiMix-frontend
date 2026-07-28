@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBooks } from "@/lib/api-client";
@@ -187,6 +188,35 @@ export function BookListing({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   const listRef = useRef<HTMLDivElement>(null);
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
+        setIsSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const suggestions = useMemo(() => {
+    if (searchQuery.trim().length <= 1) return [];
+    const lowerQ = searchQuery.toLowerCase();
+    return MOCK_BOOKS.filter(
+      (book) =>
+        book.title.toLowerCase().includes(lowerQ) ||
+        book.author.toLowerCase().includes(lowerQ) ||
+        (book.tags as string[])?.some((t) => t.toLowerCase().includes(lowerQ)),
+    ).slice(0, 5);
+  }, [searchQuery, MOCK_BOOKS]);
 
   const handleFilterChange = useCallback(
     (groupId: string, value: string, checked: boolean) => {
@@ -384,15 +414,20 @@ export function BookListing({
             </p>
           </div>
 
-          {/* Interactive Live Search Bar */}
-          <div className="relative w-full md:w-[320px] lg:w-[360px]">
+          {/* Interactive Live Search Bar with Autocomplete Suggestions */}
+          <div
+            ref={searchRef}
+            className="relative w-full md:w-[320px] lg:w-[360px]"
+          >
             <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
             <Input
               type="text"
               placeholder="Search title, author, or keyword..."
               value={searchQuery}
+              onFocus={() => setIsSearchOpen(true)}
               onChange={(e) => {
                 setSearchQuery(e.target.value);
+                setIsSearchOpen(true);
                 setCurrentPage(1);
               }}
               className="bg-background/80 h-11 rounded-xl pr-9 pl-9 text-sm shadow-2xs"
@@ -401,6 +436,7 @@ export function BookListing({
               <button
                 onClick={() => {
                   setSearchQuery("");
+                  setIsSearchOpen(false);
                   setCurrentPage(1);
                 }}
                 className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1"
@@ -408,6 +444,50 @@ export function BookListing({
               >
                 <X className="size-4" />
               </button>
+            )}
+
+            {/* Suggestion Dropdown - Reusing existing suggestion UI pattern */}
+            {isSearchOpen && suggestions.length > 0 && (
+              <div className="animate-in fade-in slide-in-from-top-1 border-border bg-card/95 absolute top-full right-0 left-0 z-50 mt-2 max-h-[320px] overflow-y-auto rounded-xl border p-2 shadow-lg backdrop-blur-md duration-150">
+                <div className="border-border/50 text-muted-foreground mb-1 flex items-center gap-1.5 border-b px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase">
+                  <Sparkles className="text-primary size-3" />
+                  Suggested Books
+                </div>
+                {suggestions.map((book) => (
+                  <button
+                    key={book.id}
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery(book.title);
+                      setIsSearchOpen(false);
+                      setCurrentPage(1);
+                    }}
+                    className="hover:bg-muted/80 flex w-full items-center gap-3 rounded-lg p-2 text-left transition-colors"
+                  >
+                    <div className="border-border/50 bg-muted relative h-10 w-7 shrink-0 overflow-hidden rounded-md border">
+                      <Image
+                        src={book.coverUrl}
+                        alt={book.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-foreground truncate text-xs font-bold">
+                        {book.title}
+                      </p>
+                      <p className="text-muted-foreground truncate text-[11px]">
+                        by {book.author}
+                      </p>
+                    </div>
+                    {book.condition && (
+                      <span className="border-border/50 bg-muted text-muted-foreground shrink-0 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase">
+                        {book.condition}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
         </div>
