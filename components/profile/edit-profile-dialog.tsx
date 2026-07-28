@@ -428,6 +428,30 @@ export function EditProfileDialog({
                   onChange={(lat, lng) => {
                     setLocationLat(lat);
                     setLocationLng(lng);
+                    fetch(
+                      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
+                    )
+                      .then((res) => res.json())
+                      .then((data) => {
+                        if (data && data.address) {
+                          const addr = data.address;
+                          const parts = [
+                            addr.road,
+                            addr.neighbourhood,
+                            addr.suburb || addr.locality,
+                            addr.city || addr.town || addr.village,
+                            addr.state,
+                            addr.country,
+                          ].filter(Boolean);
+                          const address = Array.from(new Set(parts)).join(", ");
+                          if (address) {
+                            setLocationAddress(address);
+                          }
+                        }
+                      })
+                      .catch((err) =>
+                        console.error("Reverse geocoding error", err),
+                      );
                   }}
                 />
               )}
