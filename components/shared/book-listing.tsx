@@ -12,6 +12,13 @@ import {
   HeartHandshake,
   TrendingUp,
   Tag,
+  LayoutGrid,
+  Repeat,
+  ShoppingBag,
+  Library,
+  BookText,
+  GraduationCap,
+  MapPin,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -447,7 +454,8 @@ export function BookListing({
           onClick={handleFilterReset}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          🔥 All Books
+          <LayoutGrid className="mr-1.5 size-3.5" />
+          All Books
         </Button>
         <Button
           size="sm"
@@ -457,7 +465,8 @@ export function BookListing({
           onClick={() => toggleQuickFilter("availability", "exchange")}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          🔄 Peer Exchanges
+          <Repeat className="mr-1.5 size-3.5" />
+          Peer Exchanges
         </Button>
         <Button
           size="sm"
@@ -467,7 +476,8 @@ export function BookListing({
           onClick={() => toggleQuickFilter("availability", "sell")}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          🛒 Marketplace (Sale)
+          <ShoppingBag className="mr-1.5 size-3.5" />
+          Marketplace (Sale)
         </Button>
         <Button
           size="sm"
@@ -477,7 +487,8 @@ export function BookListing({
           onClick={() => toggleQuickFilter("availability", "borrow")}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          🏛️ Central Library (Borrow)
+          <Library className="mr-1.5 size-3.5" />
+          Central Library (Borrow)
         </Button>
         <Button
           size="sm"
@@ -487,7 +498,8 @@ export function BookListing({
           onClick={() => toggleQuickFilter("category", "fiction")}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          🎯 Fiction
+          <BookText className="mr-1.5 size-3.5" />
+          Fiction
         </Button>
         <Button
           size="sm"
@@ -497,7 +509,8 @@ export function BookListing({
           onClick={() => toggleQuickFilter("category", "academic")}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          🎓 Academic
+          <GraduationCap className="mr-1.5 size-3.5" />
+          Academic
         </Button>
         <Button
           size="sm"
@@ -507,7 +520,8 @@ export function BookListing({
           onClick={() => toggleQuickFilter("location", "dhanmondi")}
           className="h-8 rounded-full px-3.5 text-xs font-bold"
         >
-          📍 Dhanmondi Area
+          <MapPin className="mr-1.5 size-3.5" />
+          Dhanmondi Area
         </Button>
       </div>
 
