@@ -38,22 +38,22 @@ export function AddBookDialog({ children }: { children: ReactNode }) {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
           showCloseButton={false}
-          className="h-[100dvh] w-full max-w-5xl overflow-hidden border-none bg-transparent p-0 shadow-none sm:h-[90vh] sm:max-w-5xl sm:rounded-2xl"
+          className="!bg-background max-h-[90vh] !w-[95vw] !max-w-5xl overflow-y-auto !border-none !p-0 !shadow-2xl sm:!rounded-2xl sm:!border"
         >
           <DialogTitle className="sr-only">Add New Book</DialogTitle>
           <DialogClose className="bg-background/95 text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute top-4 right-4 z-[80] flex size-10 items-center justify-center rounded-full border shadow-lg backdrop-blur transition-colors focus-visible:ring-2 focus-visible:outline-none">
             <XIcon className="size-5" />
             <span className="sr-only">Close</span>
           </DialogClose>
-          <div className="bg-background h-full w-full overflow-y-auto pb-20 sm:rounded-2xl">
+
+          <div className="space-y-8 p-6 sm:p-8">
             <UploadBookForm
               formId={formId}
               showActions={false}
               onSuccess={() => setOpen(false)}
             />
-          </div>
-          <div className="bg-card absolute right-0 bottom-0 left-0 z-[70] border-t px-4 py-3 shadow-[0_-10px_30px_rgba(15,23,42,0.14)] sm:rounded-b-2xl">
-            <div className="flex w-full justify-end">
+
+            <div className="flex w-full justify-end border-t pt-6">
               <Button
                 type="submit"
                 form={formId}

@@ -1,13 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMapEvents,
-  useMap,
-} from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapPin } from "lucide-react";
@@ -19,7 +12,7 @@ const DEFAULT_CENTER = { lat: 23.8103, lng: 90.4125 };
 type LocationMapProps = {
   lat?: number;
   lng?: number;
-  onChange: (lat: number, lng: number) => void;
+  onChange?: (lat: number, lng: number) => void;
 };
 
 // Create a custom icon using Lucide MapPin to avoid Leaflet default icon issues in Next.js
@@ -32,94 +25,86 @@ const customMarkerIcon = L.divIcon({
   iconAnchor: [16, 32],
 });
 
-function LocationMarker({
-  position,
-  setPosition,
-  onChange,
-}: {
-  position: L.LatLng | null;
-  setPosition: (p: L.LatLng) => void;
-  onChange?: (lat: number, lng: number) => void;
-}) {
-  useMapEvents({
-    click(e) {
-      setPosition(e.latlng);
-      if (onChange) onChange(e.latlng.lat, e.latlng.lng);
-    },
-  });
-
-  return position === null ? null : (
-    <Marker position={position} icon={customMarkerIcon} />
-  );
-}
-
-function MapUpdater({ position }: { position: L.LatLng | null }) {
-  const map = useMap();
-  useEffect(() => {
-    if (position) {
-      map.flyTo(position, 14);
-    }
-  }, [position, map]);
-  return null;
-}
-
 export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
   const [isMounted, setIsMounted] = useState(false);
-  const [position, setPosition] = useState<L.LatLng>(
-    lat !== undefined && lng !== undefined
-      ? new L.LatLng(lat, lng)
-      : new L.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
-  );
-
-  const [mapId, setMapId] = useState(() =>
-    Math.random().toString(36).substr(2, 9),
-  );
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
-    // In React 18 Strict Mode, components mount, unmount, and remount.
-    // By updating the key in useEffect, we force MapContainer to recreate on the final mount,
-    // avoiding the "Map container is being reused" error.
-    setMapId(Math.random().toString(36).substr(2, 9));
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+        markerRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
-    if (
-      lat !== undefined &&
-      lng !== undefined &&
-      (position.lat !== lat || position.lng !== lng)
-    ) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setPosition(new L.LatLng(lat, lng));
-    }
-  }, [lat, lng]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!isMounted || !mapContainerRef.current) return;
+    if (mapInstanceRef.current) return; // Prevent double initialization in React StrictMode
 
-  if (!isMounted)
+    const initialLat = lat !== undefined ? lat : DEFAULT_CENTER.lat;
+    const initialLng = lng !== undefined ? lng : DEFAULT_CENTER.lng;
+
+    const map = L.map(mapContainerRef.current).setView(
+      [initialLat, initialLng],
+      13,
+    );
+    mapInstanceRef.current = map;
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    const marker = L.marker([initialLat, initialLng], {
+      icon: customMarkerIcon,
+    }).addTo(map);
+    markerRef.current = marker;
+
+    map.on("click", (e: L.LeafletMouseEvent) => {
+      const { lat: clickedLat, lng: clickedLng } = e.latlng;
+      if (markerRef.current) {
+        markerRef.current.setLatLng([clickedLat, clickedLng]);
+      }
+      if (onChange) {
+        onChange(clickedLat, clickedLng);
+      }
+    });
+
+    // Cleanup map on unmount to prevent container reuse errors & CPU spikes
+    return () => {
+      map.remove();
+      mapInstanceRef.current = null;
+      markerRef.current = null;
+    };
+  }, [isMounted]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Update marker position and map center when lat/lng props change from outside
+  useEffect(() => {
+    if (!mapInstanceRef.current || !markerRef.current) return;
+    if (lat !== undefined && lng !== undefined) {
+      const currentPos = markerRef.current.getLatLng();
+      if (currentPos.lat !== lat || currentPos.lng !== lng) {
+        markerRef.current.setLatLng([lat, lng]);
+        mapInstanceRef.current.flyTo([lat, lng], 14);
+      }
+    }
+  }, [lat, lng]);
+
+  if (!isMounted) {
     return (
       <div className="bg-muted/20 h-full min-h-[300px] w-full animate-pulse overflow-hidden rounded-xl" />
     );
+  }
 
   return (
-    <div className="h-full min-h-[300px] w-full overflow-hidden">
-      <MapContainer
-        key={mapId}
-        center={position || DEFAULT_CENTER}
-        zoom={13}
-        scrollWheelZoom={true}
-        className="z-0 h-full w-full"
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
-        <LocationMarker
-          position={position}
-          setPosition={setPosition}
-          onChange={onChange}
-        />
-        <MapUpdater position={position} />
-      </MapContainer>
+    <div className="h-full min-h-[300px] w-full overflow-hidden rounded-xl">
+      <div ref={mapContainerRef} className="z-0 h-full min-h-[300px] w-full" />
     </div>
   );
 }

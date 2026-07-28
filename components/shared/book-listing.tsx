@@ -279,93 +279,106 @@ export function BookListing({
     setCurrentPage(1);
   }, [defaultSearchQuery]);
 
-  const filteredBooks = MOCK_BOOKS.filter((book) => {
-    // 1. Text Search
-    if (searchQuery) {
-      const lowerQ = searchQuery.toLowerCase();
-      if (
-        !book.title.toLowerCase().includes(lowerQ) &&
-        !book.author.toLowerCase().includes(lowerQ)
-      ) {
-        return false;
+  const filteredBooks = useMemo(() => {
+    return MOCK_BOOKS.filter((book) => {
+      // 1. Text Search
+      if (searchQuery) {
+        const lowerQ = searchQuery.toLowerCase();
+        if (
+          !book.title.toLowerCase().includes(lowerQ) &&
+          !book.author.toLowerCase().includes(lowerQ)
+        ) {
+          return false;
+        }
       }
-    }
 
-    // 2. Sidebar Filters
-    for (const [groupId, values] of Object.entries(selectedFilters)) {
-      if (!values || values.length === 0) continue;
+      // 2. Sidebar Filters
+      for (const [groupId, values] of Object.entries(selectedFilters)) {
+        if (!values || values.length === 0) continue;
 
-      if (groupId === "category") {
-        const hasMatch = values.some(
-          (val) =>
-            (book as ExtendedBook).category.toLowerCase() === val.toLowerCase(),
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "availability") {
-        const hasMatch = values.some(
-          (val) =>
-            (book.tags as string[])?.includes(val) || book.availability === val,
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "location") {
-        const bookLoc = ((book.location || "") as string).toLowerCase();
-        const hasMatch = values.some((val) =>
-          bookLoc.includes(val.toLowerCase()),
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "author") {
-        const hasMatch = values.some(
-          (val) => book.author.toLowerCase() === val.toLowerCase(),
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "publisher") {
-        const hasMatch = values.some(
-          (val) =>
-            (book as ExtendedBook).publisher.toLowerCase() ===
-            val.toLowerCase(),
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "language") {
-        const hasMatch = values.some(
-          (val) =>
-            (book as ExtendedBook).language.toLowerCase() === val.toLowerCase(),
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "condition") {
-        const hasMatch = values.some(
-          (val) => (book.condition || "").toLowerCase() === val.toLowerCase(),
-        );
-        if (!hasMatch) return false;
-      } else if (groupId === "rating") {
-        const hasMatch = values.some(
-          (val) => Math.floor(book.rating || 0) === Number(val),
-        );
-        if (!hasMatch) return false;
+        if (groupId === "listingType" || groupId === "availability") {
+          const hasMatch = values.some(
+            (val) =>
+              (book.tags as string[])?.includes(val) ||
+              book.availability === val,
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "category") {
+          const hasMatch = values.some(
+            (val) =>
+              (book as ExtendedBook).category.toLowerCase() ===
+              val.toLowerCase(),
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "location") {
+          const bookLoc = ((book.location || "") as string).toLowerCase();
+          const hasMatch = values.some((val) =>
+            bookLoc.includes(val.toLowerCase()),
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "author") {
+          const hasMatch = values.some(
+            (val) => book.author.toLowerCase() === val.toLowerCase(),
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "publisher") {
+          const hasMatch = values.some(
+            (val) =>
+              (book as ExtendedBook).publisher.toLowerCase() ===
+              val.toLowerCase(),
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "language") {
+          const hasMatch = values.some(
+            (val) =>
+              (book as ExtendedBook).language.toLowerCase() ===
+              val.toLowerCase(),
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "condition") {
+          const hasMatch = values.some(
+            (val) => (book.condition || "").toLowerCase() === val.toLowerCase(),
+          );
+          if (!hasMatch) return false;
+        } else if (groupId === "rating") {
+          const hasMatch = values.some(
+            (val) => Math.floor(book.rating || 0) === Number(val),
+          );
+          if (!hasMatch) return false;
+        }
       }
-    }
 
-    // 3. Price Filter
-    if (priceRange) {
-      const p = book.price || 0;
-      if (priceRange.min && p < Number(priceRange.min)) return false;
-      if (priceRange.max && p > Number(priceRange.max)) return false;
-    }
+      // 3. Price Filter
+      if (priceRange) {
+        const p = book.price || 0;
+        if (priceRange.min && p < Number(priceRange.min)) return false;
+        if (priceRange.max && p > Number(priceRange.max)) return false;
+      }
 
-    return true;
-  }).sort((a, b) => {
-    if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
-    if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
-    if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
-    return 0;
-  });
+      return true;
+    }).sort((a, b) => {
+      if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
+      if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
+      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
+      return 0;
+    });
+  }, [MOCK_BOOKS, searchQuery, selectedFilters, priceRange, sortBy]);
 
-  const totalPages = Math.ceil(filteredBooks.length / itemsPerPage);
-  const paginatedBooks = filteredBooks.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
+  const totalPages = useMemo(
+    () => Math.ceil(filteredBooks.length / itemsPerPage),
+    [filteredBooks.length, itemsPerPage],
   );
 
-  const getPageNumbers = () => {
+  const paginatedBooks = useMemo(
+    () =>
+      filteredBooks.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage,
+      ),
+    [filteredBooks, currentPage, itemsPerPage],
+  );
+
+  const getPageNumbers = useCallback(() => {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
 
@@ -389,7 +402,7 @@ export function BookListing({
       pages.push(totalPages);
     }
     return pages;
-  };
+  }, [totalPages, currentPage]);
 
   return (
     <div ref={listRef} className="boimix-container py-6 md:py-8">

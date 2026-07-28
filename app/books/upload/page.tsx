@@ -10,10 +10,10 @@ import {
   BookOpen,
   MapPin,
   CheckCircle2,
-  Search,
   Send,
   Repeat2,
   X,
+  Wand2,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -96,12 +96,110 @@ const conditions = [
   { value: "Poor", label: "Poor", desc: "Heavily used" },
 ];
 
-const SectionTitle = ({ title, desc }: { title: string; desc?: string }) => (
-  <div className="mb-4 border-b pb-2">
-    <h2 className="text-primary text-xl font-bold">{title}</h2>
-    {desc && <p className="text-muted-foreground mt-1 text-sm">{desc}</p>}
+const SectionTitle = ({
+  title,
+  desc,
+  icon: Icon,
+  step,
+}: {
+  title: string;
+  desc?: string;
+  icon?: React.ElementType;
+  step?: number;
+}) => (
+  <div className="border-border/60 mb-5 flex items-center gap-3 border-b pb-3">
+    {step && (
+      <div className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-xl text-xs font-black">
+        {step}
+      </div>
+    )}
+    {Icon && !step && (
+      <div className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-xl">
+        <Icon className="size-4" />
+      </div>
+    )}
+    <div>
+      <h2 className="text-foreground text-lg font-extrabold tracking-tight sm:text-xl">
+        {title}
+      </h2>
+      {desc && <p className="text-muted-foreground mt-0.5 text-xs">{desc}</p>}
+    </div>
   </div>
 );
+
+const QUICK_FILL_BOOKS: Record<
+  string,
+  {
+    title: string;
+    author: string;
+    publisher: string;
+    genre: string;
+    edition: string;
+    pageCount: string;
+    description: string;
+    isbn: string;
+    originalPrice: string;
+    sellPrice: string;
+    condition: string;
+  }
+> = {
+  "atomic-habits": {
+    title: "Atomic Habits",
+    author: "James Clear",
+    publisher: "Penguin Random House",
+    genre: "Self Help",
+    edition: "1st Edition",
+    pageCount: "320",
+    description:
+      "An easy & proven way to build good habits & break bad ones. Very practical and actionable insights for daily life.",
+    isbn: "9781847941831",
+    originalPrice: "650",
+    sellPrice: "450",
+    condition: "Excellent",
+  },
+  "pather-panchali": {
+    title: "Pather Panchali",
+    author: "Bibhutibhushan Bandyopadhyay",
+    publisher: "Ananda Publishers",
+    genre: "Fiction",
+    edition: "Special Edition",
+    pageCount: "380",
+    description:
+      "Classic Bengali masterpiece capturing the rural life and childhood experiences of Apu and Durga.",
+    isbn: "9788172151608",
+    originalPrice: "400",
+    sellPrice: "250",
+    condition: "Good",
+  },
+  "shesher-kobita": {
+    title: "Shesher Kobita",
+    author: "Rabindranath Tagore",
+    publisher: "Visva-Bharati",
+    genre: "Fiction",
+    edition: "1st Edition",
+    pageCount: "220",
+    description:
+      "A poetic novel by Rabindranath Tagore exploring romantic idealism and intellectual love in Shillong.",
+    isbn: "9788175224323",
+    originalPrice: "350",
+    sellPrice: "220",
+    condition: "Excellent",
+  },
+  "programming-basics": {
+    title: "Programming Basics in C",
+    author: "Tamim Shahriar Subeen",
+    publisher: "Adarsha",
+    genre: "Science Fiction",
+    edition: "2nd Edition",
+    pageCount: "250",
+    description:
+      "The most popular beginner-friendly programming book in Bengali for computer science students and hobbyists.",
+    isbn: "9789849045512",
+    originalPrice: "300",
+    sellPrice: "200",
+    condition: "New",
+  },
+};
 
 const TITLE_OPTIONS = [
   "Atomic Habits",
@@ -146,6 +244,31 @@ const EDITION_OPTIONS = [
 export default function BookUploadPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [autofillMessage, setAutofillMessage] = useState<string | null>(null);
+
+  const handleIsbnAutoFill = () => {
+    const currentIsbn = getValues("isbn");
+    const match =
+      Object.values(QUICK_FILL_BOOKS).find((b) => b.isbn === currentIsbn) ||
+      QUICK_FILL_BOOKS["atomic-habits"];
+
+    setValue("title", match.title, { shouldValidate: true });
+    setValue("author", match.author, { shouldValidate: true });
+    setValue("publisher", match.publisher, { shouldValidate: true });
+    setValue("genre", match.genre, { shouldValidate: true });
+    setValue("edition", match.edition, { shouldValidate: true });
+    setValue("pageCount", match.pageCount, { shouldValidate: true });
+    setValue("description", match.description, { shouldValidate: true });
+    setValue("originalPrice", match.originalPrice, { shouldValidate: true });
+    setValue("sellPrice", match.sellPrice, { shouldValidate: true });
+    setValue("condition", match.condition, { shouldValidate: true });
+    if (!currentIsbn) {
+      setValue("isbn", match.isbn, { shouldValidate: true });
+    }
+
+    setAutofillMessage(`✨ Auto-filled book details for "${match.title}"!`);
+    setTimeout(() => setAutofillMessage(null), 5000);
+  };
 
   // Image states
   const [frontCover, setFrontCover] = useState<File | null>(null);
@@ -322,7 +445,19 @@ export default function BookUploadPage() {
 
             {/* Book Information */}
             <div>
-              <SectionTitle title="Book Information" />
+              <SectionTitle
+                title="Book Information"
+                desc="Provide basic details for your book"
+                icon={BookOpen}
+              />
+
+              {autofillMessage && (
+                <div className="bg-primary/15 text-primary animate-in fade-in mb-4 flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-semibold">
+                  <CheckCircle2 className="size-4 shrink-0" />
+                  <span>{autofillMessage}</span>
+                </div>
+              )}
+
               <div className="space-y-5">
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="space-y-2">
@@ -335,9 +470,10 @@ export default function BookUploadPage() {
                       <Button
                         type="button"
                         variant="outline"
+                        onClick={handleIsbnAutoFill}
                         className="text-primary border-primary shrink-0 gap-2"
                       >
-                        <Search className="h-4 w-4" /> Auto Fill
+                        <Wand2 className="h-4 w-4" /> Auto Fill
                       </Button>
                     </div>
                   </div>
@@ -497,7 +633,7 @@ export default function BookUploadPage() {
                   render={({ field }) => (
                     <RadioGroup
                       onValueChange={field.onChange}
-                      value={field.value || undefined}
+                      value={field.value || ""}
                       className="flex w-full flex-row gap-4"
                     >
                       <label
@@ -747,6 +883,7 @@ export default function BookUploadPage() {
               <SectionTitle
                 title="Condition"
                 desc="Select the condition of your book"
+                icon={CheckCircle2}
               />
               <Controller
                 control={control}
@@ -757,31 +894,38 @@ export default function BookUploadPage() {
                     value={field.value || "Excellent"}
                     className="grid gap-3 sm:grid-cols-2 md:grid-cols-5"
                   >
-                    {conditions.map((c) => (
-                      <div
-                        key={c.value}
-                        className={`hover:bg-muted/50 relative flex items-start gap-3 rounded-xl border p-3 transition-colors ${field.value === c.value ? "border-primary bg-primary/5" : ""}`}
-                      >
-                        <RadioGroupItem
-                          value={c.value}
-                          id={`condition-${c.value}`}
-                          className="mt-1"
-                        />
-                        <Label
-                          htmlFor={`condition-${c.value}`}
-                          className="flex flex-1 cursor-pointer flex-row flex-wrap items-center gap-x-2 gap-y-0.5"
+                    {conditions.map((c) => {
+                      return (
+                        <div
+                          key={c.value}
+                          onClick={() => field.onChange(c.value)}
+                          className={`group relative flex cursor-pointer items-start gap-3 rounded-2xl border p-3.5 transition-all duration-200 ${
+                            field.value === c.value
+                              ? "border-primary bg-primary/5 ring-primary/20 shadow-sm ring-1"
+                              : "hover:border-primary/40 hover:bg-muted/50 border-border/80"
+                          }`}
                         >
-                          <span
-                            className={`text-sm font-semibold ${field.value === c.value ? "text-primary" : ""}`}
+                          <RadioGroupItem
+                            value={c.value}
+                            id={`condition-${c.value}`}
+                            className="mt-1"
+                          />
+                          <Label
+                            htmlFor={`condition-${c.value}`}
+                            className="flex flex-1 cursor-pointer flex-col gap-1"
                           >
-                            {c.label}
-                          </span>
-                          <span className="text-muted-foreground text-xs leading-tight">
-                            {c.desc}
-                          </span>
-                        </Label>
-                      </div>
-                    ))}
+                            <div className="flex items-center justify-between">
+                              <span className="text-foreground text-sm font-bold">
+                                {c.label}
+                              </span>
+                            </div>
+                            <span className="text-muted-foreground text-xs leading-relaxed">
+                              {c.desc}
+                            </span>
+                          </Label>
+                        </div>
+                      );
+                    })}
                   </RadioGroup>
                 )}
               />
