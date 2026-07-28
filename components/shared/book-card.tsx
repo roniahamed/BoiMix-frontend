@@ -186,8 +186,9 @@ export function BookCard({
               );
             }}
             className={cn(
-              "absolute top-2.5 left-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-rose-500 dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
-              inWishlist && "bg-white/70 text-rose-500 dark:bg-black/40",
+              "absolute top-2.5 left-2.5 z-30 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-white/40 bg-white/90 p-2 text-slate-900 backdrop-blur-md transition-all hover:scale-110 hover:bg-white hover:text-rose-600 dark:border-white/20 dark:bg-black/80 dark:text-slate-100",
+              inWishlist &&
+                "bg-white text-rose-600 dark:bg-black dark:text-rose-500",
             )}
             aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
           >
@@ -205,8 +206,9 @@ export function BookCard({
               onClick={handleAddToCart}
               disabled={isAdding}
               className={cn(
-                "absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
-                isInCart && "bg-white/70 text-[#f57224] dark:bg-black/40",
+                "absolute right-2.5 bottom-2.5 z-30 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-white/40 bg-white/90 p-2 text-slate-900 backdrop-blur-md transition-all hover:scale-110 hover:bg-white hover:text-[#f57224] md:hidden dark:border-white/20 dark:bg-black/80 dark:text-slate-100",
+                isInCart &&
+                  "bg-white text-[#f57224] dark:bg-black dark:text-[#f57224]",
               )}
               aria-label={isInCart ? "View cart" : "Add to cart"}
             >
@@ -223,8 +225,9 @@ export function BookCard({
               onClick={handleAddToBorrowCart}
               disabled={isAddingBorrow}
               className={cn(
-                "absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300",
-                isInBorrowCart && "bg-white/70 text-[#f57224] dark:bg-black/40",
+                "absolute right-2.5 bottom-2.5 z-30 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-white/40 bg-white/90 p-2 text-slate-900 backdrop-blur-md transition-all hover:scale-110 hover:bg-white hover:text-[#f57224] md:hidden dark:border-white/20 dark:bg-black/80 dark:text-slate-100",
+                isInBorrowCart &&
+                  "bg-white text-[#f57224] dark:bg-black dark:text-[#f57224]",
               )}
               aria-label={isInBorrowCart ? "View borrow cart" : "Add to borrow"}
             >
@@ -242,7 +245,7 @@ export function BookCard({
                 e.preventDefault();
                 router.push(`/books/${book.slug}`);
               }}
-              className="absolute right-2.5 bottom-2.5 z-30 rounded-full border border-white/30 bg-white/40 p-1.5 text-slate-700 backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/60 hover:text-[#f57224] md:hidden dark:border-white/10 dark:bg-black/20 dark:text-slate-300"
+              className="absolute right-2.5 bottom-2.5 z-30 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-white/40 bg-white/90 p-2 text-slate-900 backdrop-blur-md transition-all hover:scale-110 hover:bg-white hover:text-[#f57224] md:hidden dark:border-white/20 dark:bg-black/80 dark:text-slate-100"
               aria-label="Exchange book"
             >
               <Repeat2Icon className="size-4.5 drop-shadow-sm" />
