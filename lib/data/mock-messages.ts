@@ -9,6 +9,20 @@ export type Message = {
     url: string;
     name?: string;
   };
+  exchangeProposal?: {
+    id: string;
+    offeringBook: {
+      title: string;
+      author: string;
+      cover: string;
+    };
+    requestingBook: {
+      title: string;
+      author: string;
+      cover: string;
+    };
+    status: "pending" | "accepted" | "declined";
+  };
 };
 
 export type Conversation = {
@@ -65,9 +79,25 @@ export const MOCK_CONVERSATIONS: Conversation[] = [
       {
         id: "m4",
         senderId: "u2",
-        text: "Thanks for the book! Left you a 5-star review.",
-        time: "6:30 PM",
+        text: "I've sent an exchange proposal below so we can confirm the swap!",
+        time: "10:22 AM",
         isRead: true,
+        exchangeProposal: {
+          id: "prop-1",
+          offeringBook: {
+            title: "Atomic Habits",
+            author: "James Clear",
+            cover:
+              "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&auto=format&fit=crop&q=80",
+          },
+          requestingBook: {
+            title: "Rich Dad Poor Dad",
+            author: "Robert T. Kiyosaki",
+            cover:
+              "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400&auto=format&fit=crop&q=80",
+          },
+          status: "pending",
+        },
       },
     ],
   },
