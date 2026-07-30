@@ -744,7 +744,260 @@ Acceptance:
 - Counts update after borrow/exchange/order/message/notification mutations.
 - Dashboard warns before membership/pass expiry.
 
-## Phase 16 - Production Deployment
+## Phase 16 - Central Library Operations And Donations
+
+Goal:
+
+Make central library, donation intake, donor rewards, and library curation real.
+
+Tasks:
+
+- Central library inventory item model.
+- Library item source: purchased, donated, partner, admin-added.
+- Premium/donated/regular flags.
+- Featured/new/most-borrowed/collection curation.
+- Donation request model.
+- Donation items and pickup details.
+- Donation verification and quality check workflow.
+- Convert accepted donations into central library inventory.
+- Donor reward grants: free Library Pass months, badge, permanent Donor tag.
+- Admin donation queue and audit log.
+
+APIs:
+
+- `GET /api/central-library/home`
+- `GET /api/central-library/books`
+- `GET /api/central-library/collections`
+- `GET /api/central-library/stats`
+- `POST /api/donations`
+- `GET /api/me/donations`
+- `GET /api/donations/{id}`
+- `PATCH /api/donations/{id}/pickup`
+- `GET /api/admin/donations`
+- `PATCH /api/admin/donations/{id}/verify`
+- `PATCH /api/admin/donations/{id}/accept`
+- `PATCH /api/admin/donations/{id}/reject`
+
+Frontend routes unlocked:
+
+- `/explore/central-library`
+- `/explore/central-library/search`
+- `/explore/central-library/donate`
+- `/books/upload?mode=donate`
+
+Acceptance:
+
+- Donated books do not become public inventory until accepted by admin.
+- Donor rewards are ledgered and visible through badges/pass history.
+- Central library lists are curated from backend, not static slicing.
+
+## Phase 17 - Reading Tracker And Personalization
+
+Goal:
+
+Make reading dashboard, recently viewed, and personalized recommendations real.
+
+Tasks:
+
+- Annual reading goals.
+- Currently reading records.
+- Reading progress logs.
+- Mark finished flow.
+- Weekly page totals.
+- Reading streak calculation.
+- Reading queue.
+- Recently viewed events.
+- For-you recommendation feed.
+- Daily user/listing analytics snapshots.
+
+APIs:
+
+- `GET /api/me/reading`
+- `PATCH /api/me/reading/goals/current-year`
+- `POST /api/me/reading/items`
+- `POST /api/me/reading/items/{id}/progress`
+- `POST /api/me/reading/items/{id}/finish`
+- `POST /api/me/reading/queue`
+- `GET /api/me/recently-viewed`
+- `GET /api/recommendations/books`
+
+Frontend routes unlocked:
+
+- `/dashboard/reading`
+- `/dashboard/overview`
+- homepage recently viewed
+- homepage "Only For You"
+
+Acceptance:
+
+- Reading progress survives refresh and cross-device use.
+- Streak and weekly pages derive from logs, not static numbers.
+- Recommendations expose a reason/source label.
+
+## Phase 18 - CMS, Sponsors, Newsletter, Festival Campaigns
+
+Goal:
+
+Support all public marketing/content surfaces and monetization placements.
+
+Tasks:
+
+- CMS page model.
+- Hero banners.
+- FAQ categories and items.
+- Testimonials.
+- Sponsors and sponsor campaigns.
+- Newsletter subscribers.
+- Author spotlights.
+- Community post previews.
+- Festival/campaign pages.
+- Campaign events, categories, books, authors.
+- Discount rules with validity windows.
+- Featured listing slots.
+- Publisher partnership records.
+
+APIs:
+
+- `GET /api/home`
+- `GET /api/faqs`
+- `GET /api/sponsors`
+- `GET /api/testimonials`
+- `POST /api/newsletter/subscribe`
+- `GET /api/campaigns/{slug}`
+- `GET /api/admin/cms/pages`
+- `POST /api/admin/campaigns`
+- `POST /api/admin/featured-listings`
+
+Frontend routes unlocked:
+
+- `/`
+- `/faq`
+- `/explore/festival`
+- homepage sponsors/testimonials/newsletter
+
+Acceptance:
+
+- Homepage content can change from admin/backend without code deploy.
+- Festival page is backed by campaign data.
+- Sponsored/featured placement has start/end time and audit history.
+
+## Phase 19 - Auth Security, Preferences, Student Discounts
+
+Goal:
+
+Complete non-Firebase auth flows and dashboard security features.
+
+Tasks:
+
+- Local email/password registration and login.
+- Email OTP verification and resend.
+- Password reset flow.
+- Password change.
+- Terms/privacy version acceptance.
+- Preferred language.
+- Student ID verification model.
+- Student discount eligibility.
+- Session/device tracking.
+- Security event log.
+- Account deletion request and retention policy.
+
+APIs:
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/otp/verify`
+- `POST /api/auth/otp/resend`
+- `POST /api/auth/password/forgot`
+- `POST /api/auth/password/reset`
+- `POST /api/me/password/change`
+- `PATCH /api/me/preferences`
+- `POST /api/me/student-verification`
+- `POST /api/me/account-deletion`
+
+Frontend routes unlocked:
+
+- `/auth/login`
+- `/auth/register`
+- `/auth/verify-otp`
+- `/auth/forgot-password`
+- `/auth/reset-password`
+- `/auth/complete-profile`
+- `/auth/choose-language`
+- `/auth/verify-student-id`
+- `/dashboard/security`
+
+Acceptance:
+
+- OTP cannot be brute-forced or reused.
+- Password reset and registration OTP modes are separated.
+- Student discount is tied to verified status and plan policy.
+
+## Phase 20 - Support, Reports, Strikes, Account Standing
+
+Goal:
+
+Make reports, account standing, support messages, and moderation policy real.
+
+Tasks:
+
+- Generic report target model.
+- Report lifecycle events.
+- Account strike model.
+- Warning, temporary ban, permanent ban workflow.
+- Strike expiry task after 6 months where policy allows.
+- Support ticket model.
+- Support ticket messages or support-linked conversation.
+- Moderator/admin actions and audit log.
+
+APIs:
+
+- `POST /api/reports`
+- `GET /api/me/reports`
+- `GET /api/me/account-standing`
+- `GET /api/mod/reports`
+- `PATCH /api/mod/reports/{id}`
+- `POST /api/support/tickets`
+- `GET /api/me/support/tickets`
+- `POST /api/support/tickets/{id}/messages`
+
+Frontend routes unlocked:
+
+- `/dashboard/reports`
+- `/faq` contact support CTA
+- future moderator dashboard
+
+Acceptance:
+
+- Report status shown to reporter.
+- Strikes affect account standing and expire according to policy.
+- Moderator actions are immutable/audited.
+
+## Phase 21 - Schema Freeze And Product Policy Review
+
+Goal:
+
+Resolve frontend/backend conflicts before production migration starts.
+
+Checklist:
+
+- Membership policy finalized: Basic/Standard/Premium deposit vs Basic/Premium/Elite monthly.
+- Refund/cancellation policy finalized.
+- Student discount scope finalized.
+- Borrow durations finalized by plan/book type.
+- Premium book pass rules finalized.
+- Donation rewards finalized.
+- Delivery zones and rates finalized.
+- Withdrawal minimum and payout methods finalized.
+- Image upload max size finalized.
+- `/orders/success` target route fixed or backend docs map it to `/dashboard/orders`.
+- Duplicate cart/wishlist store migration path selected.
+
+Acceptance:
+
+- No model/table is created while key product rules are still contradictory.
+- API contracts reflect one consistent policy.
+
+## Phase 22 - Production Deployment
 
 Goal:
 

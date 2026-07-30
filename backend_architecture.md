@@ -721,6 +721,250 @@ Celery tasks:
 - `fanout_notification`
 - `cleanup_old_notifications`
 
+### 17. Central Library Operations
+
+Responsibilities:
+
+- Manage BoiMix-owned central library inventory separately from user listings.
+- Track each physical library copy, condition, source, and availability.
+- Mark books as regular, premium, donated, featured, new arrival, or most borrowed.
+- Manage library collections and category shelves.
+- Manage library queue priority from membership tier.
+- Apply library-specific borrow duration, extension, and delivery rules.
+
+Core tables:
+
+- `library_branches`
+- `library_inventory_items`
+- `library_inventory_events`
+- `library_collections`
+- `library_collection_items`
+- `library_book_flags`
+- `library_queue_entries`
+
+Key APIs:
+
+- `GET /api/central-library/home`
+- `GET /api/central-library/books`
+- `GET /api/central-library/collections`
+- `GET /api/central-library/stats`
+- `POST /api/admin/central-library/inventory`
+- `PATCH /api/admin/central-library/inventory/{id}`
+
+### 18. Donations And Donor Rewards
+
+Responsibilities:
+
+- Support `/books/upload?mode=donate`.
+- Let users submit one or more donated books.
+- Verify metadata, condition, and pickup details.
+- Schedule collection/pickup.
+- Accept donation into central library inventory.
+- Reject donation with reason.
+- Award free Library Pass months, badges, and permanent Donor profile tag.
+
+Core tables:
+
+- `donation_requests`
+- `donation_items`
+- `donation_pickups`
+- `donation_quality_checks`
+- `donor_rewards`
+- `donor_reward_redemptions`
+- `donor_profile_tags`
+
+Key APIs:
+
+- `POST /api/donations`
+- `GET /api/me/donations`
+- `GET /api/donations/{id}`
+- `PATCH /api/donations/{id}/pickup`
+- `GET /api/admin/donations`
+- `PATCH /api/admin/donations/{id}/verify`
+- `PATCH /api/admin/donations/{id}/accept`
+- `PATCH /api/admin/donations/{id}/reject`
+
+### 19. Payments, Escrow, Delivery, Payouts
+
+Responsibilities:
+
+- Support checkout recipient fields: name, phone, district, thana, address.
+- Group multi-seller orders and calculate delivery per seller.
+- Store delivery zones and shipping rates, currently Dhaka `৳60` and outside Dhaka `৳120` per seller.
+- Create payment intents for bKash, Nagad, COD, memberships, passes, and deposits.
+- Hold marketplace money in escrow until buyer delivery confirmation.
+- Release seller earnings into wallet ledger.
+- Support seller payout to bKash, Nagad, or bank.
+- Generate invoice data for buyer orders.
+
+Core tables:
+
+- `payment_intents`
+- `payment_confirmations`
+- `escrow_holds`
+- `refunds`
+- `delivery_zones`
+- `shipping_rates`
+- `shipments`
+- `shipment_events`
+- `payout_accounts`
+- `payout_requests`
+- `invoices`
+
+### 20. Reading Tracker
+
+Responsibilities:
+
+- Annual reading goal.
+- Currently reading items.
+- Page progress logs.
+- Mark as finished.
+- Weekly page totals.
+- Reading streaks.
+- Up-next reading queue.
+- Reading badges.
+
+Core tables:
+
+- `reading_goals`
+- `reading_items`
+- `reading_progress_logs`
+- `reading_streaks`
+- `reading_queue_items`
+
+Key APIs:
+
+- `GET /api/me/reading`
+- `PATCH /api/me/reading/goals/current-year`
+- `POST /api/me/reading/items`
+- `POST /api/me/reading/items/{id}/progress`
+- `POST /api/me/reading/items/{id}/finish`
+- `POST /api/me/reading/queue`
+
+### 21. CMS, Marketing, Campaigns
+
+Responsibilities:
+
+- Homepage hero carousel.
+- Category blocks.
+- Author spotlight.
+- Testimonials.
+- Newsletter subscriptions.
+- FAQ categories/items.
+- Festival/campaign pages with events, featured authors, featured books, new arrivals, and discount rules.
+- Featured listing and publisher partnership revenue surfaces.
+
+Core tables:
+
+- `cms_pages`
+- `hero_banners`
+- `sponsors`
+- `sponsor_campaigns`
+- `testimonials`
+- `newsletter_subscribers`
+- `faqs`
+- `author_spotlights`
+- `community_posts`
+- `campaigns`
+- `campaign_events`
+- `campaign_categories`
+- `campaign_books`
+- `campaign_authors`
+- `discount_rules`
+- `featured_listing_slots`
+- `publisher_partnerships`
+
+Key APIs:
+
+- `GET /api/home`
+- `POST /api/newsletter/subscribe`
+- `GET /api/faqs`
+- `GET /api/sponsors`
+- `GET /api/testimonials`
+- `GET /api/campaigns/{slug}`
+- `GET /api/admin/cms/pages`
+- `POST /api/admin/campaigns`
+
+### 22. Auth Security And Onboarding Extras
+
+Responsibilities:
+
+- Email/password login and registration beside Firebase Google/Apple.
+- Email OTP verification and resend.
+- Password reset flow.
+- Password change from dashboard.
+- Terms/privacy version acceptance.
+- Preferred language.
+- Student ID verification and discount eligibility.
+- Account deletion request and retention workflow.
+- Session/device listing and security events.
+
+Core tables:
+
+- `otp_codes`
+- `password_reset_requests`
+- `terms_acceptances`
+- `user_preferences`
+- `student_verifications`
+- `user_devices`
+- `security_events`
+- `account_deletion_requests`
+
+Key APIs:
+
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `POST /api/auth/otp/verify`
+- `POST /api/auth/otp/resend`
+- `POST /api/auth/password/forgot`
+- `POST /api/auth/password/reset`
+- `POST /api/me/password/change`
+- `PATCH /api/me/preferences`
+- `POST /api/me/student-verification`
+- `POST /api/me/account-deletion`
+
+### 23. Recommendations And Event Analytics
+
+Responsibilities:
+
+- Recently viewed books.
+- Personalized "Only For You" lists.
+- Search appearances and impressions.
+- Book/listing clicks.
+- Wishlist saves.
+- Listing CTR.
+- Daily analytics snapshots for dashboard charts.
+- Recommendation source labels.
+
+Core tables:
+
+- `book_view_events`
+- `search_impression_events`
+- `listing_click_events`
+- `recommendation_events`
+- `daily_user_analytics`
+- `daily_listing_analytics`
+
+### 24. Support, Reports, Strikes
+
+Responsibilities:
+
+- User reports against books, users, reviews, messages, orders, borrow orders, and exchanges.
+- Account standing.
+- Warning, temporary ban, permanent ban.
+- Strike expiry after 6 months where policy allows.
+- Support ticket flow from FAQ/contact.
+- Moderator/admin audit trail.
+
+Core tables:
+
+- `reports`
+- `report_events`
+- `account_strikes`
+- `moderation_actions`
+- `support_tickets`
+- `support_ticket_messages`
+
 ## User Dashboard Backend Map
 
 The dashboard is not one feature. It is a collection of user-owned operational views. Each route needs its own API surface.
@@ -801,7 +1045,22 @@ These areas were missing or too shallow in the earlier draft and must be include
 - Expiry warning notifications for membership and passes.
 - Membership/reputation/badge connection.
 - Central library operational rules: inventory source, donated books, premium books, queue priority, borrow duration.
+- Donation request, pickup, quality check, central inventory conversion, donor reward, and donor tag workflow.
+- Reading tracker: annual goal, currently reading, page logs, streaks, queue, and reading badges.
+- CMS/content system for homepage hero, categories, testimonials, sponsors, FAQs, community previews, and newsletter.
+- Festival/campaign system for events, featured authors, campaign books, discounts, publisher partnerships, and featured listing revenue.
+- Auth extras: local email/password, OTP, password reset, terms/privacy acceptance, preferred language, student discount verification, account deletion.
+- Reports/support/account standing: target-specific reports, strike policy, warning/ban lifecycle, support ticket messages.
+- Payment/escrow/delivery details: multi-seller shipping, Dhaka/outside-Dhaka rates, invoice, courier tracking, payout accounts, minimum withdrawal policy.
+- Recommendations and event analytics: recently viewed, only-for-you, impressions, clicks, CTR, wishlist saves, daily snapshots.
 - Coupons/promo/referral/sponsored/featured listing revenue items still need final product policy before schema freeze.
+
+Open product decisions before schema freeze:
+
+- Normalize conflicting membership naming/pricing: Basic/Standard/Premium 4-year deposits vs Basic/Premium/Elite monthly plans.
+- Decide if subscription cancellation/refund from FAQ is still valid, because membership details say one-time non-refundable.
+- Decide student discount scope: membership only, borrow passes, delivery, or all purchases.
+- Decide upload image limit: frontend says 5MB, backend requirement says accept up to 15MB and compress below 1MB.
 
 ## Response Cache Plan
 
