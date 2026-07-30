@@ -9,6 +9,10 @@
 - Redis is cache/queue/realtime support, not source of truth.
 - Every phase ends with API docs, tests, and frontend integration notes.
 - Dashboard must be treated as a first-class backend product, not an afterthought.
+- everyquery need to be optimises also write the minimal and optimise code.
+- only write the essinsial comment, don't write generic comment and unnessery comment.
+- for writing the models also refer the frontend code and try to match the frontend code with backend code.
+- if any changes on the front-end then notify me about that changes and ask for the changes on the back-end.
 
 ## Phase 0 - Backend Project Foundation
 

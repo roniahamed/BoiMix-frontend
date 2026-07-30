@@ -69,7 +69,7 @@ Responsibilities:
 - Issue app access/refresh tokens.
 - Support roles: user, moderator, admin.
 - Store Firebase UID and provider metadata.
-- Support email/password authentication.
+- Support email/password authentication with otp verification.
 
 Core tables:
 
@@ -197,6 +197,7 @@ Responsibilities:
 - Upload chat attachments.
 - Validate file size/type.
 - Resize, optimize, convert to WebP in background and delete the original.
+- every book image need to resize and it convert to less then 1 mb, but user can submit less than 15 mb images.
 - every book using the thumbnail and cover images.
 - Store Cloudinary public IDs and variants.
 
@@ -255,12 +256,14 @@ Requirement:
 
 Use Photon and Elasticsearch for location search, reverse location search, and book search.
 
+i want to use elasticsearch and i want to install it locally. and every search query save in elasticsearch. with location.
+
 Responsibilities:
 
 - Book search by title, author, ISBN, publisher, genre, language.
 - Filter by availability mode, condition, price, owner type, distance.
 - Sort by newest, rating, distance, price, popularity.
-- Support Bengali/English text.
+- Support Bengali/English text. others languages will be supported.
 - Index listing and metadata changes from Celery.
 
 Indexes:
@@ -595,7 +598,7 @@ The dashboard is not one feature. It is a collection of user-owned operational v
 | Frontend Route                   | Backend Domain             | Data Needed                                             |
 | -------------------------------- | -------------------------- | ------------------------------------------------------- |
 | `/dashboard`                     | dashboard shell            | menu badges, unread counts, pending actions             |
-| `/dashboard/overview`            | dashboard analytics        | stats, action summary, activity, continue reading       |
+| `/dashboard/overview`            | dashboard analytics        | stats, action summary, activity, continue actions.      |
 | `/dashboard/action-center`       | borrow/exchange/messages   | pending borrow requests, exchange offers, due returns   |
 | `/dashboard/library`             | books/inventory            | user listings, inventory status, edit/delete actions    |
 | `/dashboard/reading`             | reading tracker            | reading goals, progress logs, currently reading         |
