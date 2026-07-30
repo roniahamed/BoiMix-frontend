@@ -542,6 +542,7 @@ Tasks:
 - Read receipt.
 - Typing event.
 - Presence/last seen.
+- Exchange proposal message cards.
 - WebSocket auth.
 - Redis Channels layer.
 - Link conversations to borrow/order/exchange context.
@@ -553,6 +554,9 @@ REST APIs:
 - `GET /api/messages/conversations/{id}`
 - `POST /api/messages/conversations/{id}/messages`
 - `PATCH /api/messages/conversations/{id}/read`
+- `POST /api/messages/conversations/{id}/exchange-proposals`
+- `PATCH /api/messages/exchange-proposals/{id}/accept`
+- `PATCH /api/messages/exchange-proposals/{id}/decline`
 
 WebSocket:
 
@@ -584,6 +588,8 @@ Tasks:
 - Notification delivery model.
 - Device token registration.
 - Notification preferences.
+- Polymorphic action URL.
+- User-side delete/remove action.
 - Celery push sender.
 - WebSocket notification badge update.
 - Generate notifications from borrow/exchange/order/message/review events.
@@ -593,6 +599,7 @@ APIs:
 - `GET /api/notifications`
 - `PATCH /api/notifications/{id}/read`
 - `PATCH /api/notifications/read-all`
+- `DELETE /api/notifications/{id}`
 - `POST /api/me/devices`
 - `DELETE /api/me/devices/{id}`
 - `PATCH /api/me/notification-preferences`
@@ -980,7 +987,7 @@ Resolve frontend/backend conflicts before production migration starts.
 
 Checklist:
 
-- Membership policy finalized: Basic/Standard/Premium deposit vs Basic/Premium/Elite monthly.
+- Membership policy finalized: only 4-year Basic/Standard/Premium deposit model is valid for backend schema.
 - Refund/cancellation policy finalized.
 - Student discount scope finalized.
 - Borrow durations finalized by plan/book type.
@@ -1052,6 +1059,11 @@ Acceptance:
 11. Notifications FCM.
 12. Analytics/reputation.
 13. Reports/verification.
+14. Central library operations and donations.
+15. Reading tracker and personalization.
+16. CMS, sponsors, newsletter, festival campaigns.
+17. Auth security extras and student discounts.
+18. Support, reports, strikes, account standing.
 
 ## Dashboard Priority Order
 
@@ -1097,3 +1109,14 @@ These backend areas were missing or too shallow in the first architecture draft 
 - Immutable wallet/ledger entries for memberships, passes, sales, deposits, payouts.
 - Expiry warning notifications for membership and passes.
 - Membership/reputation/badge connection.
+- Central library operational inventory, collections, premium/donated flags, queue priority.
+- Donation request, pickup, quality check, accepted-to-inventory conversion, donor reward.
+- Reading tracker: goals, progress logs, streaks, queue.
+- CMS/content: homepage hero, sponsors, testimonials, newsletter, FAQ, terms/privacy.
+- Festival/campaigns: events, authors, campaign books, discounts, featured placements.
+- Local email/password auth, OTP, password reset, student discount verification, account deletion.
+- Payment/escrow/delivery: per-seller delivery fee, courier tracking, invoice, payout accounts.
+- Book details actions: report categories, Q&A, review eligibility, helpful votes, share events.
+- Exchange discovery/matching: owner meetup locations, proposal date/location/message, nearby sort.
+- Chat exchange proposal cards and notification delete/action URL.
+- Unimplemented linked frontend routes must be handled: `/community`, `/terms`, `/privacy`, `/newsletter`, `/featured-libraries`, `/books/for-you`.

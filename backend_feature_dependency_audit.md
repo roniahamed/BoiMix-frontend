@@ -6,18 +6,18 @@ This audit maps the current frontend routes, mock APIs, local stores, and data f
 
 ## Critical Missing Or Under-Specified Backend Areas
 
-### 1. Product Plan Conflict To Resolve First
+### 1. Membership Policy Now Fixed
 
-Different pages describe membership differently:
+Canonical backend membership model:
 
-- `/explore/central-library/memberships` describes 4-year one-time membership deposits: Basic `৳500`, Standard `৳1000`, Premium `৳2000`.
-- `/explore/central-library` describes monthly Basic/Premium/Elite plans: `৳0`, `৳199`, `৳499`, with 7/14/21 day borrow duration.
-- `/faq` mentions Basic/Premium/Elite, cancellation, student discount, refund within 7 days, and free delivery for higher tiers.
+- 4-year one-time membership deposits only.
+- Tiers: Basic `৳500`, Standard `৳1000`, Premium `৳2000`.
+- Monthly `Basic/Premium/Elite` plan copy is stale frontend content and must not shape the backend schema.
 
-Backend must either normalize these into one policy or support plan versioning with:
+Backend should model:
 
-- `plan_kind`: deposit_membership, monthly_subscription, borrow_pass, promo_plan
-- `billing_period`: one_time, monthly, yearly
+- `plan_kind`: deposit_membership, borrow_pass, promo_plan
+- `billing_period`: one_time
 - `validity_days`
 - `borrow_item_limit`
 - `borrow_value_limit`
@@ -251,6 +251,52 @@ Required tables:
 - `support_tickets`
 - `support_ticket_messages`
 
+### 11. Book Detail Actions: Q&A, Reports, Share, Review Eligibility
+
+Book details include wishlist, share, report, Q&A, review filters/sorting, write-review modal, buy actions, borrow actions, exchange actions, owner info, exact-address privacy, related books, and mobile sticky actions.
+
+Required backend logic:
+
+- Report reasons/categories seeded and admin-editable.
+- Q&A ask/answer permissions.
+- Review eligibility after valid sale/borrow/exchange only.
+- Helpful review vote.
+- Review aggregate by star count.
+- Related book recommendations.
+- Share event tracking.
+- Exact owner address hidden until accepted transaction.
+
+Required tables:
+
+- `report_categories`
+- `book_questions`
+- `book_answers`
+- `review_eligibilities`
+- `review_helpful_votes`
+- `share_events`
+- `related_book_events`
+
+### 12. Exchange Discovery And Matching
+
+Exchange pages include recently added, near you, category filters, search, sort by newest/nearby/popular/A-Z, proposal with selected owned book, proposed location/date, and message.
+
+Required backend logic:
+
+- Exchange-only listing filter.
+- Match candidate discovery from user's own library.
+- Proposed meetup location/date/message.
+- Owner preferred meetup locations.
+- Nearby exchange listings through PostGIS.
+- Exchange listing popularity/rating sort.
+
+Required tables:
+
+- `exchange_preferences`
+- `exchange_proposals`
+- `exchange_proposal_messages`
+- `user_meetup_locations`
+- `exchange_search_events`
+
 ## Route-To-Backend Dependency Matrix
 
 | Frontend area                          | Backend domains needed                                                                 |
@@ -275,6 +321,8 @@ Required tables:
 - `book_listing_modes.mode`: sell, borrow, exchange, donate.
 - `book_listing_modes.quantity`, `price`, `deposit`, `borrow_fee`, `borrow_duration_days`, `exchange_value`, `exchange_preference`.
 - `locations.lat`, `locations.lng`, `locations.display_address`, `locations.private_address`, `district`, `thana`, `postal_code`.
+- `user_meetup_locations.name`, `address`, `lat`, `lng`, `is_default`, `visibility`.
+- `borrow_order_owner_details.owner_id`, `handover_method`, `meetup_location_id`, `meetup_datetime`, `courier_district`, `courier_thana`, `courier_address`, `phone`, `message`.
 - `membership_plans.borrow_value_limit`, `borrow_item_limit`, `borrow_duration_days`, `validity_days`, `billing_period`, `refund_policy`.
 - `borrow_pass_credits.status`: active, reserved, consumed, restored, expired.
 - `orders.seller_count`, `delivery_zone`, `delivery_fee`, `payment_method`, `escrow_status`.
@@ -286,7 +334,10 @@ Required tables:
 ## Frontend Issues To Notify Before Backend Integration
 
 - `/orders/success` links to `/dashboard/purchases`, but the existing buyer order route is `/dashboard/orders`.
-- Membership naming and pricing conflict across central library page, membership details page, and FAQ.
+- Several linked routes do not currently have matching pages: `/community`, `/community/readers/*`, `/community/leaderboard`, `/terms`, `/privacy`, `/newsletter`, `/featured-libraries`, `/books/for-you`.
+- `/explore/central-library` and `/faq` still contain stale membership/subscription copy that conflicts with the now-finalized 4-year deposit model. Backend should follow deposit model only, and frontend copy should be updated later.
 - Upload page says max 5MB images, but backend requirement says users can submit up to 15MB and worker compresses under 1MB. Pick one frontend copy/policy.
 - Browser calls Photon/Nominatim directly in upload/settings; backend should replace these with `/api/locations/search` and `/api/locations/reverse`.
 - `stores/*` and `lib/store/*` contain overlapping cart/wishlist stores; migration should choose one API-backed source of truth.
+- Borrow checkout groups requests per owner and stores separate meetup/courier details per owner; backend request schema must not flatten this into one address.
+- Book report reasons are hardcoded in frontend; backend should serve categories so moderation policy and UI stay aligned.

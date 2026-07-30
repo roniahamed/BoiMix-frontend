@@ -651,6 +651,7 @@ Responsibilities:
 - Direct messages.
 - Message attachments.
 - Related order/borrow/exchange context.
+- Exchange proposal cards inside chat messages.
 - Typing indicators.
 - Online/last seen.
 - Read receipts.
@@ -664,6 +665,7 @@ Core tables:
 - `message_attachments`
 - `message_receipts`
 - `presence_sessions`
+- `message_exchange_proposals`
 
 REST APIs:
 
@@ -672,6 +674,9 @@ REST APIs:
 - `GET /api/messages/conversations/{id}`
 - `POST /api/messages/conversations/{id}/messages`
 - `PATCH /api/messages/conversations/{id}/read`
+- `POST /api/messages/conversations/{id}/exchange-proposals`
+- `PATCH /api/messages/exchange-proposals/{id}/accept`
+- `PATCH /api/messages/exchange-proposals/{id}/decline`
 
 WebSocket:
 
@@ -699,6 +704,8 @@ Responsibilities:
 - Send FCM push notification.
 - Support read/unread state.
 - Support notification categories: system, message, borrow, exchange, review, order, wallet.
+- Support polymorphic `action_url`.
+- Support user-side notification removal.
 
 Core tables:
 
@@ -712,6 +719,7 @@ Key APIs:
 - `GET /api/notifications`
 - `PATCH /api/notifications/{id}/read`
 - `PATCH /api/notifications/read-all`
+- `DELETE /api/notifications/{id}`
 - `POST /api/me/devices`
 - `PATCH /api/me/notification-preferences`
 
@@ -959,6 +967,7 @@ Responsibilities:
 Core tables:
 
 - `reports`
+- `report_categories`
 - `report_events`
 - `account_strikes`
 - `moderation_actions`
@@ -1055,10 +1064,14 @@ These areas were missing or too shallow in the earlier draft and must be include
 - Recommendations and event analytics: recently viewed, only-for-you, impressions, clicks, CTR, wishlist saves, daily snapshots.
 - Coupons/promo/referral/sponsored/featured listing revenue items still need final product policy before schema freeze.
 
+Resolved product decisions:
+
+- Membership schema follows only the 4-year deposit model: Basic `৳500`, Standard `৳1000`, Premium `৳2000`.
+- Monthly `Basic/Premium/Elite` plan copy in `/explore/central-library` is stale frontend content and must not drive backend schema.
+
 Open product decisions before schema freeze:
 
-- Normalize conflicting membership naming/pricing: Basic/Standard/Premium 4-year deposits vs Basic/Premium/Elite monthly plans.
-- Decide if subscription cancellation/refund from FAQ is still valid, because membership details say one-time non-refundable.
+- Decide if FAQ cancellation/refund copy is still valid, because membership details say one-time non-refundable.
 - Decide student discount scope: membership only, borrow passes, delivery, or all purchases.
 - Decide upload image limit: frontend says 5MB, backend requirement says accept up to 15MB and compress below 1MB.
 
