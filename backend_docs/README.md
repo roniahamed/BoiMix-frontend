@@ -20,6 +20,8 @@ This folder contains the backend planning, architecture, and database design doc
   - Environment variable and secret reference for backend services and integrations.
 - `backend_decision_log.md`
   - Major backend decisions with dates, reasons, and impact.
+- `backend_error_tracking_system_design.md`
+  - Lightweight internal error tracking system design for Django, DRF, Next.js, dashboard, alerts, and Docker.
 - `backend_phase_by_phase_plan.md`
   - Backend implementation roadmap broken into phases.
 - `backend_feature_dependency_audit.md`
