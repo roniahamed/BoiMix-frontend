@@ -1,0 +1,605 @@
+// BoiMix Domain ERD: Wishlist, carts, buy checkout, payment, wallet, escrow, refund, delivery, orders, shipment, payout, invoices
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: Wishlist, carts, buy checkout, payment, wallet, escrow, refund, delivery, orders, shipment, payout, invoices.
+
+Project BoiMix_06_commerce_orders_payments {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table locations {
+  id uuid [pk]
+  display_address text
+  private_address text
+  street varchar
+  city varchar
+  district varchar
+  thana varchar
+  state varchar
+  postal_code varchar
+  country varchar [default: 'Bangladesh']
+  lat decimal
+  lng decimal
+  visibility location_visibility [not null, default: 'transaction_only']
+  created_at timestamp [not null]
+}
+
+Table book_listings {
+  id uuid [pk]
+  book_id uuid [not null]
+  owner_user_id uuid
+  provider_type varchar [not null, default: 'user']
+  location_id uuid
+  condition book_condition [not null]
+  condition_note text
+  status listing_status [not null, default: 'draft']
+  inventory_status inventory_status [not null, default: 'available']
+  quantity_total int [not null, default: 1]
+  quantity_available int [not null, default: 1]
+  tags json
+  is_featured boolean [not null, default: false]
+  is_premium_book boolean [not null, default: false]
+  is_donated_book boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table wishlists {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  created_at timestamp [not null]
+}
+
+Table wishlist_items {
+  wishlist_id uuid [not null]
+  listing_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (wishlist_id, listing_id) [pk]
+  }
+}
+
+Table carts {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table cart_items {
+  id uuid [pk]
+  cart_id uuid [not null]
+  listing_id uuid [not null]
+  quantity int [not null, default: 1]
+  selected boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table borrow_carts {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_cart_items {
+  id uuid [pk]
+  borrow_cart_id uuid [not null]
+  listing_id uuid [not null]
+  owner_id uuid [not null]
+  deposit_required decimal
+  borrow_fee decimal
+  selected boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table wallets {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  available_balance decimal [not null, default: 0]
+  escrow_balance decimal [not null, default: 0]
+  locked_deposit decimal [not null, default: 0]
+  lifetime_earnings decimal [not null, default: 0]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table wallet_transactions {
+  id uuid [pk]
+  wallet_id uuid [not null]
+  type wallet_tx_type [not null]
+  amount decimal [not null]
+  status payment_status [not null, default: 'pending']
+  source_type varchar
+  source_id uuid
+  title varchar
+  created_at timestamp [not null]
+}
+
+Table ledger_entries {
+  id uuid [pk]
+  user_id uuid [not null]
+  wallet_transaction_id uuid
+  debit decimal [not null, default: 0]
+  credit decimal [not null, default: 0]
+  currency varchar [not null, default: 'BDT']
+  source_type varchar [not null]
+  source_id uuid [not null]
+  created_at timestamp [not null]
+}
+
+Table payment_intents {
+  id uuid [pk]
+  user_id uuid [not null]
+  method payment_method [not null]
+  amount decimal [not null]
+  currency varchar [not null, default: 'BDT']
+  status payment_status [not null, default: 'pending']
+  purpose varchar [not null]
+  metadata json
+  expires_at timestamp
+  created_at timestamp [not null]
+}
+
+Table payment_confirmations {
+  id uuid [pk]
+  payment_intent_id uuid [not null]
+  confirmed_by uuid
+  external_reference varchar
+  account_number varchar
+  status payment_status [not null, default: 'requires_confirmation']
+  notes text
+  confirmed_at timestamp
+  created_at timestamp [not null]
+}
+
+Table escrow_holds {
+  id uuid [pk]
+  payment_intent_id uuid [not null]
+  seller_id uuid [not null]
+  amount decimal [not null]
+  status varchar [not null, default: 'held']
+  released_at timestamp
+  created_at timestamp [not null]
+}
+
+Table refunds {
+  id uuid [pk]
+  payment_intent_id uuid [not null]
+  user_id uuid [not null]
+  amount decimal [not null]
+  reason text
+  status payment_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table delivery_zones {
+  id uuid [pk]
+  name varchar [not null]
+  district varchar
+  thana varchar
+  is_dhaka boolean [not null, default: false]
+  active boolean [not null, default: true]
+}
+
+Table shipping_rates {
+  id uuid [pk]
+  zone_id uuid [not null]
+  rate_per_seller decimal [not null]
+  service_type varchar [not null]
+  active boolean [not null, default: true]
+}
+
+Table orders {
+  id uuid [pk]
+  buyer_id uuid [not null]
+  order_number varchar [unique, not null]
+  status order_status [not null, default: 'pending']
+  payment_method payment_method [not null]
+  payment_intent_id uuid
+  delivery_location_id uuid
+  recipient_name varchar [not null]
+  recipient_phone varchar [not null]
+  subtotal decimal [not null]
+  delivery_fee decimal [not null, default: 0]
+  total decimal [not null]
+  seller_count int [not null, default: 1]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table order_items {
+  id uuid [pk]
+  order_id uuid [not null]
+  listing_id uuid [not null]
+  seller_id uuid [not null]
+  title_snapshot varchar [not null]
+  price_snapshot decimal [not null]
+  quantity int [not null, default: 1]
+  status order_status [not null, default: 'pending']
+}
+
+Table order_status_events {
+  id uuid [pk]
+  order_id uuid [not null]
+  actor_id uuid
+  from_status order_status
+  to_status order_status [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table shipments {
+  id uuid [pk]
+  order_id uuid
+  borrow_order_id uuid
+  seller_id uuid
+  courier_name varchar
+  tracking_number varchar
+  status shipment_status [not null, default: 'pending']
+  shipped_at timestamp
+  delivered_at timestamp
+  created_at timestamp [not null]
+}
+
+Table shipment_events {
+  id uuid [pk]
+  shipment_id uuid [not null]
+  status shipment_status [not null]
+  location_text varchar
+  notes text
+  event_at timestamp [not null]
+}
+
+Table payout_accounts {
+  id uuid [pk]
+  user_id uuid [not null]
+  method payment_method [not null]
+  account_name varchar
+  account_number varchar
+  bank_name varchar
+  is_default boolean [not null, default: false]
+  created_at timestamp [not null]
+}
+
+Table payout_requests {
+  id uuid [pk]
+  user_id uuid [not null]
+  payout_account_id uuid [not null]
+  amount decimal [not null]
+  status payment_status [not null, default: 'pending']
+  reviewed_by uuid
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table invoices {
+  id uuid [pk]
+  order_id uuid [not null]
+  invoice_number varchar [unique, not null]
+  invoice_url text
+  generated_at timestamp [not null]
+}
+
+// Relationships inside this domain
+Ref: users.id < book_listings.owner_user_id
+Ref: locations.id < book_listings.location_id
+Ref: users.id < wishlists.user_id
+Ref: wishlists.id < wishlist_items.wishlist_id
+Ref: book_listings.id < wishlist_items.listing_id
+Ref: users.id < carts.user_id
+Ref: carts.id < cart_items.cart_id
+Ref: book_listings.id < cart_items.listing_id
+Ref: users.id < borrow_carts.user_id
+Ref: borrow_carts.id < borrow_cart_items.borrow_cart_id
+Ref: book_listings.id < borrow_cart_items.listing_id
+Ref: users.id < borrow_cart_items.owner_id
+Ref: users.id < wallets.user_id
+Ref: wallets.id < wallet_transactions.wallet_id
+Ref: users.id < ledger_entries.user_id
+Ref: wallet_transactions.id < ledger_entries.wallet_transaction_id
+Ref: users.id < payment_intents.user_id
+Ref: payment_intents.id < payment_confirmations.payment_intent_id
+Ref: users.id < payment_confirmations.confirmed_by
+Ref: payment_intents.id < escrow_holds.payment_intent_id
+Ref: users.id < escrow_holds.seller_id
+Ref: payment_intents.id < refunds.payment_intent_id
+Ref: users.id < refunds.user_id
+Ref: delivery_zones.id < shipping_rates.zone_id
+Ref: users.id < orders.buyer_id
+Ref: payment_intents.id < orders.payment_intent_id
+Ref: locations.id < orders.delivery_location_id
+Ref: orders.id < order_items.order_id
+Ref: book_listings.id < order_items.listing_id
+Ref: users.id < order_items.seller_id
+Ref: orders.id < order_status_events.order_id
+Ref: users.id < order_status_events.actor_id
+Ref: orders.id < shipments.order_id
+Ref: users.id < shipments.seller_id
+Ref: shipments.id < shipment_events.shipment_id
+Ref: users.id < payout_accounts.user_id
+Ref: users.id < payout_requests.user_id
+Ref: payout_accounts.id < payout_requests.payout_account_id
+Ref: users.id < payout_requests.reviewed_by
+Ref: orders.id < invoices.order_id
+
+// Cross-domain relationships intentionally stay in the master ERD.

@@ -1,0 +1,329 @@
+// BoiMix Domain ERD: Cloudinary media, variants, backend resize/optimization, Celery job tracking
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: Cloudinary media, variants, backend resize/optimization, Celery job tracking.
+
+Project BoiMix_02_media_storage_processing {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table media_assets {
+  id uuid [pk]
+  owner_user_id uuid
+  kind media_kind [not null]
+  cloudinary_public_id varchar [not null]
+  original_url text [not null]
+  mime_type varchar
+  size_bytes int
+  width int
+  height int
+  processing_status processing_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table media_variants {
+  id uuid [pk]
+  media_id uuid [not null]
+  variant_name varchar [not null]
+  url text [not null]
+  format varchar [not null]
+  size_bytes int
+  width int
+  height int
+  created_at timestamp [not null]
+}
+
+Table media_processing_jobs {
+  id uuid [pk]
+  media_id uuid [not null]
+  status processing_status [not null, default: 'pending']
+  error_message text
+  started_at timestamp
+  completed_at timestamp
+  created_at timestamp [not null]
+}
+
+// Relationships inside this domain
+Ref: users.id < media_assets.owner_user_id
+Ref: media_assets.id < media_variants.media_id
+Ref: media_assets.id < media_processing_jobs.media_id
+
+// Cross-domain relationships intentionally stay in the master ERD.

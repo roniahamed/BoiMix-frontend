@@ -1,0 +1,539 @@
+// BoiMix Domain ERD: Borrow lifecycle, owner review, counter offers, returns, extensions, deposits, pass reservations, exchange, disputes
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: Borrow lifecycle, owner review, counter offers, returns, extensions, deposits, pass reservations, exchange, disputes.
+
+Project BoiMix_07_borrow_exchange_disputes {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table media_assets {
+  id uuid [pk]
+  owner_user_id uuid
+  kind media_kind [not null]
+  cloudinary_public_id varchar [not null]
+  original_url text [not null]
+  mime_type varchar
+  size_bytes int
+  width int
+  height int
+  processing_status processing_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table book_listings {
+  id uuid [pk]
+  book_id uuid [not null]
+  owner_user_id uuid
+  provider_type varchar [not null, default: 'user']
+  location_id uuid
+  condition book_condition [not null]
+  condition_note text
+  status listing_status [not null, default: 'draft']
+  inventory_status inventory_status [not null, default: 'available']
+  quantity_total int [not null, default: 1]
+  quantity_available int [not null, default: 1]
+  tags json
+  is_featured boolean [not null, default: false]
+  is_premium_book boolean [not null, default: false]
+  is_donated_book boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_pass_credits {
+  id uuid [pk]
+  user_borrow_pass_id uuid [not null]
+  user_id uuid [not null]
+  status pass_credit_status [not null, default: 'active']
+  reserved_for_borrow_order_id uuid
+  consumed_for_borrow_order_id uuid
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_orders {
+  id uuid [pk]
+  borrower_id uuid [not null]
+  owner_id uuid
+  order_number varchar [unique, not null]
+  status borrow_status [not null, default: 'pending_owner_review']
+  handover_method handover_method [not null, default: 'meetup']
+  deposit_locked decimal [not null, default: 0]
+  borrow_fee decimal [not null, default: 0]
+  payment_intent_id uuid
+  start_date timestamp
+  due_date timestamp
+  completed_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_order_items {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  listing_id uuid [not null]
+  title_snapshot varchar [not null]
+  deposit_snapshot decimal
+  borrow_fee_snapshot decimal
+  duration_days_snapshot int
+}
+
+Table borrow_order_owner_details {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  owner_id uuid [not null]
+  handover_method handover_method [not null]
+  meetup_location_id uuid
+  meetup_datetime timestamp
+  courier_district varchar
+  courier_thana varchar
+  courier_address text
+  recipient_name varchar
+  phone varchar
+  message text
+}
+
+Table borrow_status_events {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  actor_id uuid
+  from_status borrow_status
+  to_status borrow_status [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table borrow_counter_offers {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  proposer_id uuid [not null]
+  proposed_date timestamp
+  proposed_location_id uuid
+  message text
+  status varchar [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table borrow_return_proofs {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  submitted_by uuid [not null]
+  tracking_number varchar
+  media_id uuid
+  notes text
+  created_at timestamp [not null]
+}
+
+Table borrow_extensions {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  requested_by uuid [not null]
+  days_requested int [not null]
+  reason text
+  status varchar [not null, default: 'pending']
+  reviewed_by uuid
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table deposit_locks {
+  id uuid [pk]
+  user_id uuid [not null]
+  borrow_order_id uuid [not null]
+  amount decimal [not null]
+  status varchar [not null, default: 'locked']
+  released_at timestamp
+  created_at timestamp [not null]
+}
+
+Table borrow_order_pass_reservations {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  credit_id uuid [not null]
+  status pass_credit_status [not null, default: 'reserved']
+  created_at timestamp [not null]
+}
+
+Table disputes {
+  id uuid [pk]
+  opened_by uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  reason text [not null]
+  status dispute_status [not null, default: 'open']
+  resolved_by uuid
+  resolution text
+  created_at timestamp [not null]
+  resolved_at timestamp
+}
+
+Table exchange_orders {
+  id uuid [pk]
+  proposer_id uuid [not null]
+  owner_id uuid [not null]
+  requested_listing_id uuid [not null]
+  offered_listing_id uuid [not null]
+  status exchange_status [not null, default: 'pending_proposal']
+  proposed_location_id uuid
+  proposed_date timestamp
+  message text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table exchange_status_events {
+  id uuid [pk]
+  exchange_order_id uuid [not null]
+  actor_id uuid
+  from_status exchange_status
+  to_status exchange_status [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table exchange_counter_offers {
+  id uuid [pk]
+  exchange_order_id uuid [not null]
+  proposer_id uuid [not null]
+  offered_listing_id uuid
+  proposed_location_id uuid
+  proposed_date timestamp
+  message text
+  status varchar [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table exchange_handover_confirmations {
+  id uuid [pk]
+  exchange_order_id uuid [not null]
+  user_id uuid [not null]
+  confirmed_at timestamp [not null]
+  notes text
+}
+
+Table exchange_preferences {
+  id uuid [pk]
+  listing_id uuid [not null]
+  preference_text varchar [not null]
+}
+
+// Relationships inside this domain
+Ref: users.id < media_assets.owner_user_id
+Ref: users.id < book_listings.owner_user_id
+Ref: users.id < borrow_pass_credits.user_id
+Ref: users.id < borrow_orders.borrower_id
+Ref: users.id < borrow_orders.owner_id
+Ref: borrow_orders.id < borrow_order_items.borrow_order_id
+Ref: book_listings.id < borrow_order_items.listing_id
+Ref: borrow_orders.id < borrow_order_owner_details.borrow_order_id
+Ref: users.id < borrow_order_owner_details.owner_id
+Ref: borrow_orders.id < borrow_status_events.borrow_order_id
+Ref: users.id < borrow_status_events.actor_id
+Ref: borrow_orders.id < borrow_counter_offers.borrow_order_id
+Ref: users.id < borrow_counter_offers.proposer_id
+Ref: borrow_orders.id < borrow_return_proofs.borrow_order_id
+Ref: users.id < borrow_return_proofs.submitted_by
+Ref: media_assets.id < borrow_return_proofs.media_id
+Ref: borrow_orders.id < borrow_extensions.borrow_order_id
+Ref: users.id < borrow_extensions.requested_by
+Ref: users.id < borrow_extensions.reviewed_by
+Ref: users.id < deposit_locks.user_id
+Ref: borrow_orders.id < deposit_locks.borrow_order_id
+Ref: borrow_orders.id < borrow_order_pass_reservations.borrow_order_id
+Ref: borrow_pass_credits.id < borrow_order_pass_reservations.credit_id
+Ref: users.id < disputes.opened_by
+Ref: users.id < disputes.resolved_by
+Ref: users.id < exchange_orders.proposer_id
+Ref: users.id < exchange_orders.owner_id
+Ref: book_listings.id < exchange_orders.requested_listing_id
+Ref: book_listings.id < exchange_orders.offered_listing_id
+Ref: exchange_orders.id < exchange_status_events.exchange_order_id
+Ref: users.id < exchange_status_events.actor_id
+Ref: exchange_orders.id < exchange_counter_offers.exchange_order_id
+Ref: users.id < exchange_counter_offers.proposer_id
+Ref: book_listings.id < exchange_counter_offers.offered_listing_id
+Ref: exchange_orders.id < exchange_handover_confirmations.exchange_order_id
+Ref: users.id < exchange_handover_confirmations.user_id
+Ref: book_listings.id < exchange_preferences.listing_id
+
+// Cross-domain relationships intentionally stay in the master ERD.

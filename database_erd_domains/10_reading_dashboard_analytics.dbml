@@ -1,0 +1,491 @@
+// BoiMix Domain ERD: Reading dashboard, goals, currently-reading/progress/streak/queue, analytics/search/share/recommendation events
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: Reading dashboard, goals, currently-reading/progress/streak/queue, analytics/search/share/recommendation events.
+
+Project BoiMix_10_reading_dashboard_analytics {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table locations {
+  id uuid [pk]
+  display_address text
+  private_address text
+  street varchar
+  city varchar
+  district varchar
+  thana varchar
+  state varchar
+  postal_code varchar
+  country varchar [default: 'Bangladesh']
+  lat decimal
+  lng decimal
+  visibility location_visibility [not null, default: 'transaction_only']
+  created_at timestamp [not null]
+}
+
+Table book_metadata {
+  id uuid [pk]
+  isbn_10 varchar
+  isbn_13 varchar [unique]
+  title varchar [not null]
+  slug varchar [unique, not null]
+  publisher_id uuid
+  language varchar
+  edition varchar
+  page_count int
+  description text
+  original_cover_url text
+  source varchar [not null, default: 'manual']
+  source_payload json
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table book_listings {
+  id uuid [pk]
+  book_id uuid [not null]
+  owner_user_id uuid
+  provider_type varchar [not null, default: 'user']
+  location_id uuid
+  condition book_condition [not null]
+  condition_note text
+  status listing_status [not null, default: 'draft']
+  inventory_status inventory_status [not null, default: 'available']
+  quantity_total int [not null, default: 1]
+  quantity_available int [not null, default: 1]
+  tags json
+  is_featured boolean [not null, default: false]
+  is_premium_book boolean [not null, default: false]
+  is_donated_book boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table reading_goals {
+  id uuid [pk]
+  user_id uuid [not null]
+  year int [not null]
+  goal_books int [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table reading_items {
+  id uuid [pk]
+  user_id uuid [not null]
+  book_id uuid
+  listing_id uuid
+  title_snapshot varchar [not null]
+  author_snapshot varchar
+  total_pages int
+  pages_read int [not null, default: 0]
+  status varchar [not null, default: 'currently_reading']
+  started_at timestamp
+  finished_at timestamp
+  created_at timestamp [not null]
+}
+
+Table reading_progress_logs {
+  id uuid [pk]
+  reading_item_id uuid [not null]
+  pages_added int [not null]
+  logged_at timestamp [not null]
+}
+
+Table reading_streaks {
+  user_id uuid [pk]
+  current_streak_days int [not null, default: 0]
+  longest_streak_days int [not null, default: 0]
+  last_logged_at timestamp
+  updated_at timestamp [not null]
+}
+
+Table reading_queue_items {
+  id uuid [pk]
+  user_id uuid [not null]
+  book_id uuid
+  listing_id uuid
+  sort_order int [not null, default: 0]
+  created_at timestamp [not null]
+}
+
+Table book_view_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid [not null]
+  session_id varchar
+  source varchar
+  created_at timestamp [not null]
+}
+
+Table search_impression_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid
+  query text
+  mode varchar
+  location_id uuid
+  created_at timestamp [not null]
+}
+
+Table listing_click_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid [not null]
+  source varchar
+  created_at timestamp [not null]
+}
+
+Table share_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid
+  channel varchar
+  created_at timestamp [not null]
+}
+
+Table recommendation_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid [not null]
+  source varchar [not null]
+  reason text
+  created_at timestamp [not null]
+}
+
+Table exchange_search_events {
+  id uuid [pk]
+  user_id uuid
+  query text
+  category varchar
+  sort varchar
+  location_id uuid
+  created_at timestamp [not null]
+}
+
+Table daily_user_analytics {
+  id uuid [pk]
+  user_id uuid [not null]
+  date date [not null]
+  metric_key varchar [not null]
+  metric_value decimal [not null]
+}
+
+Table daily_listing_analytics {
+  id uuid [pk]
+  listing_id uuid [not null]
+  date date [not null]
+  views int [not null, default: 0]
+  clicks int [not null, default: 0]
+  wishlists int [not null, default: 0]
+}
+
+// Relationships inside this domain
+Ref: book_metadata.id < book_listings.book_id
+Ref: users.id < book_listings.owner_user_id
+Ref: locations.id < book_listings.location_id
+Ref: users.id < reading_goals.user_id
+Ref: users.id < reading_items.user_id
+Ref: book_metadata.id < reading_items.book_id
+Ref: book_listings.id < reading_items.listing_id
+Ref: reading_items.id < reading_progress_logs.reading_item_id
+Ref: users.id < reading_streaks.user_id
+Ref: users.id < reading_queue_items.user_id
+Ref: book_metadata.id < reading_queue_items.book_id
+Ref: book_listings.id < reading_queue_items.listing_id
+Ref: users.id < book_view_events.user_id
+Ref: book_listings.id < book_view_events.listing_id
+Ref: users.id < search_impression_events.user_id
+Ref: book_listings.id < search_impression_events.listing_id
+Ref: locations.id < search_impression_events.location_id
+Ref: users.id < listing_click_events.user_id
+Ref: book_listings.id < listing_click_events.listing_id
+Ref: users.id < share_events.user_id
+Ref: book_listings.id < share_events.listing_id
+Ref: users.id < recommendation_events.user_id
+Ref: book_listings.id < recommendation_events.listing_id
+Ref: users.id < exchange_search_events.user_id
+Ref: locations.id < exchange_search_events.location_id
+Ref: users.id < daily_user_analytics.user_id
+Ref: book_listings.id < daily_listing_analytics.listing_id
+
+// Cross-domain relationships intentionally stay in the master ERD.

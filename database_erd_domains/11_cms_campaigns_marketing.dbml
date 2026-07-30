@@ -1,0 +1,542 @@
+// BoiMix Domain ERD: CMS pages, hero banners, sponsors, testimonials, newsletter, FAQ, community posts, campaigns, discounts, featured slots
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: CMS pages, hero banners, sponsors, testimonials, newsletter, FAQ, community posts, campaigns, discounts, featured slots.
+
+Project BoiMix_11_cms_campaigns_marketing {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table media_assets {
+  id uuid [pk]
+  owner_user_id uuid
+  kind media_kind [not null]
+  cloudinary_public_id varchar [not null]
+  original_url text [not null]
+  mime_type varchar
+  size_bytes int
+  width int
+  height int
+  processing_status processing_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table authors {
+  id uuid [pk]
+  name varchar [not null]
+  slug varchar [unique]
+  bio text
+  created_at timestamp [not null]
+}
+
+Table publishers {
+  id uuid [pk]
+  name varchar [not null]
+  slug varchar [unique]
+  created_at timestamp [not null]
+}
+
+Table categories {
+  id uuid [pk]
+  name varchar [not null]
+  bn_name varchar
+  slug varchar [unique, not null]
+  parent_id uuid
+  image_media_id uuid
+  created_at timestamp [not null]
+}
+
+Table book_listings {
+  id uuid [pk]
+  book_id uuid [not null]
+  owner_user_id uuid
+  provider_type varchar [not null, default: 'user']
+  location_id uuid
+  condition book_condition [not null]
+  condition_note text
+  status listing_status [not null, default: 'draft']
+  inventory_status inventory_status [not null, default: 'available']
+  quantity_total int [not null, default: 1]
+  quantity_available int [not null, default: 1]
+  tags json
+  is_featured boolean [not null, default: false]
+  is_premium_book boolean [not null, default: false]
+  is_donated_book boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table cms_pages {
+  id uuid [pk]
+  slug varchar [unique, not null]
+  title varchar [not null]
+  body text
+  status cms_status [not null, default: 'draft']
+  created_by uuid
+  published_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table hero_banners {
+  id uuid [pk]
+  title varchar [not null]
+  subtitle text
+  image_media_id uuid
+  cta_label varchar
+  cta_url text
+  status cms_status [not null, default: 'draft']
+  sort_order int [not null, default: 0]
+  created_at timestamp [not null]
+}
+
+Table sponsors {
+  id uuid [pk]
+  name varchar [not null]
+  logo_media_id uuid
+  url text
+  active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table sponsor_campaigns {
+  id uuid [pk]
+  sponsor_id uuid [not null]
+  title varchar [not null]
+  placement varchar [not null]
+  starts_at timestamp
+  ends_at timestamp
+  status campaign_status [not null, default: 'draft']
+}
+
+Table testimonials {
+  id uuid [pk]
+  name varchar [not null]
+  role varchar
+  location varchar
+  rating int
+  quote text [not null]
+  status cms_status [not null, default: 'draft']
+  created_at timestamp [not null]
+}
+
+Table newsletter_subscribers {
+  id uuid [pk]
+  email varchar [unique, not null]
+  user_id uuid
+  status varchar [not null, default: 'subscribed']
+  subscribed_at timestamp [not null]
+}
+
+Table faqs {
+  id uuid [pk]
+  category varchar [not null]
+  question text [not null]
+  answer text [not null]
+  status cms_status [not null, default: 'published']
+  sort_order int [not null, default: 0]
+}
+
+Table author_spotlights {
+  id uuid [pk]
+  author_id uuid [not null]
+  title varchar
+  description text
+  status cms_status [not null, default: 'draft']
+  starts_at timestamp
+  ends_at timestamp
+}
+
+Table community_posts {
+  id uuid [pk]
+  author_id uuid
+  title varchar [not null]
+  body text
+  stat_label varchar
+  status cms_status [not null, default: 'draft']
+  created_at timestamp [not null]
+}
+
+Table campaigns {
+  id uuid [pk]
+  slug varchar [unique, not null]
+  title varchar [not null]
+  description text
+  status campaign_status [not null, default: 'draft']
+  starts_at timestamp
+  ends_at timestamp
+  created_at timestamp [not null]
+}
+
+Table campaign_events {
+  id uuid [pk]
+  campaign_id uuid [not null]
+  title varchar [not null]
+  event_type varchar
+  location_text varchar
+  starts_at timestamp
+  ends_at timestamp
+  sort_order int [not null, default: 0]
+}
+
+Table campaign_categories {
+  campaign_id uuid [not null]
+  category_id uuid [not null]
+
+  indexes {
+    (campaign_id, category_id) [pk]
+  }
+}
+
+Table campaign_books {
+  campaign_id uuid [not null]
+  listing_id uuid [not null]
+  placement varchar
+  sort_order int [not null, default: 0]
+
+  indexes {
+    (campaign_id, listing_id) [pk]
+  }
+}
+
+Table campaign_authors {
+  campaign_id uuid [not null]
+  author_id uuid [not null]
+  sort_order int [not null, default: 0]
+
+  indexes {
+    (campaign_id, author_id) [pk]
+  }
+}
+
+Table discount_rules {
+  id uuid [pk]
+  campaign_id uuid
+  code varchar
+  discount_type varchar [not null]
+  discount_value decimal [not null]
+  starts_at timestamp
+  ends_at timestamp
+  active boolean [not null, default: true]
+}
+
+Table featured_listing_slots {
+  id uuid [pk]
+  listing_id uuid [not null]
+  placement varchar [not null]
+  starts_at timestamp
+  ends_at timestamp
+  status campaign_status [not null, default: 'scheduled']
+}
+
+Table publisher_partnerships {
+  id uuid [pk]
+  publisher_id uuid [not null]
+  title varchar [not null]
+  terms text
+  starts_at timestamp
+  ends_at timestamp
+  status campaign_status [not null, default: 'draft']
+}
+
+// Relationships inside this domain
+Ref: users.id < media_assets.owner_user_id
+Ref: categories.id < categories.parent_id
+Ref: users.id < book_listings.owner_user_id
+Ref: users.id < cms_pages.created_by
+Ref: media_assets.id < hero_banners.image_media_id
+Ref: media_assets.id < sponsors.logo_media_id
+Ref: sponsors.id < sponsor_campaigns.sponsor_id
+Ref: users.id < newsletter_subscribers.user_id
+Ref: authors.id < author_spotlights.author_id
+Ref: users.id < community_posts.author_id
+Ref: campaigns.id < campaign_events.campaign_id
+Ref: campaigns.id < campaign_categories.campaign_id
+Ref: categories.id < campaign_categories.category_id
+Ref: campaigns.id < campaign_books.campaign_id
+Ref: book_listings.id < campaign_books.listing_id
+Ref: campaigns.id < campaign_authors.campaign_id
+Ref: authors.id < campaign_authors.author_id
+Ref: campaigns.id < discount_rules.campaign_id
+Ref: book_listings.id < featured_listing_slots.listing_id
+Ref: publishers.id < publisher_partnerships.publisher_id
+
+// Cross-domain relationships intentionally stay in the master ERD.

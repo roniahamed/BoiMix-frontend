@@ -1,0 +1,477 @@
+// BoiMix Domain ERD: Backend-controlled membership plans, borrow pass packages, credits, purchases, upgrade quotes, audit logs
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: Backend-controlled membership plans, borrow pass packages, credits, purchases, upgrade quotes, audit logs.
+
+Project BoiMix_05_membership_pass_plans {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table membership_plans {
+  id uuid [pk]
+  code varchar [unique, not null]
+  name varchar [not null]
+  kind plan_kind [not null, default: 'deposit_membership']
+  billing_period billing_period [not null, default: 'one_time']
+  price decimal [not null]
+  validity_days int [not null]
+  borrow_value_limit decimal
+  borrow_item_limit int
+  borrow_duration_days int
+  priority_weight int [not null, default: 0]
+  benefits json
+  refund_policy text
+  is_public boolean [not null, default: true]
+  is_active boolean [not null, default: true]
+  archived_at timestamp
+  effective_from timestamp
+  effective_until timestamp
+  created_by uuid
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_memberships {
+  id uuid [pk]
+  user_id uuid [not null]
+  plan_id uuid [not null]
+  plan_snapshot json [not null]
+  member_number varchar [unique]
+  status membership_status [not null, default: 'pending_payment']
+  starts_at timestamp
+  expires_at timestamp
+  upgraded_from_membership_id uuid
+  purchase_id uuid
+  created_at timestamp [not null]
+}
+
+Table membership_events {
+  id uuid [pk]
+  membership_id uuid [not null]
+  event_type varchar [not null]
+  actor_id uuid
+  metadata json
+  created_at timestamp [not null]
+}
+
+Table borrow_pass_packages {
+  id uuid [pk]
+  code varchar [unique, not null]
+  name varchar [not null]
+  price decimal [not null]
+  credit_count int [not null]
+  validity_days int [not null]
+  benefits json
+  is_public boolean [not null, default: true]
+  is_active boolean [not null, default: true]
+  archived_at timestamp
+  created_by uuid
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_borrow_passes {
+  id uuid [pk]
+  user_id uuid [not null]
+  package_id uuid [not null]
+  package_snapshot json [not null]
+  purchase_id uuid
+  starts_at timestamp [not null]
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+}
+
+Table borrow_pass_credits {
+  id uuid [pk]
+  user_borrow_pass_id uuid [not null]
+  user_id uuid [not null]
+  status pass_credit_status [not null, default: 'active']
+  reserved_for_borrow_order_id uuid
+  consumed_for_borrow_order_id uuid
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_pass_usages {
+  id uuid [pk]
+  credit_id uuid [not null]
+  borrow_order_id uuid [not null]
+  action varchar [not null]
+  created_at timestamp [not null]
+}
+
+Table free_borrow_credits {
+  id uuid [pk]
+  user_id uuid [not null]
+  membership_id uuid
+  source varchar [not null]
+  status pass_credit_status [not null, default: 'active']
+  expires_at timestamp [not null]
+  used_for_borrow_order_id uuid
+  created_at timestamp [not null]
+}
+
+Table monthly_donated_book_credits {
+  id uuid [pk]
+  user_id uuid [not null]
+  membership_id uuid
+  month_key varchar [not null]
+  status pass_credit_status [not null, default: 'active']
+  used_for_borrow_order_id uuid
+  created_at timestamp [not null]
+}
+
+Table plan_purchases {
+  id uuid [pk]
+  user_id uuid [not null]
+  purchasable_type varchar [not null]
+  purchasable_id uuid [not null]
+  purchasable_snapshot json [not null]
+  payment_intent_id uuid
+  amount decimal [not null]
+  status payment_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table membership_upgrade_quotes {
+  id uuid [pk]
+  user_id uuid [not null]
+  from_membership_id uuid [not null]
+  to_plan_id uuid [not null]
+  price_difference decimal [not null]
+  expires_at timestamp [not null]
+  accepted_at timestamp
+  created_at timestamp [not null]
+}
+
+Table plan_change_logs {
+  id uuid [pk]
+  actor_id uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  action varchar [not null]
+  before_data json
+  after_data json
+  created_at timestamp [not null]
+}
+
+Table payment_intents {
+  id uuid [pk]
+  user_id uuid [not null]
+  method payment_method [not null]
+  amount decimal [not null]
+  currency varchar [not null, default: 'BDT']
+  status payment_status [not null, default: 'pending']
+  purpose varchar [not null]
+  metadata json
+  expires_at timestamp
+  created_at timestamp [not null]
+}
+
+// Relationships inside this domain
+Ref: users.id < membership_plans.created_by
+Ref: users.id < user_memberships.user_id
+Ref: membership_plans.id < user_memberships.plan_id
+Ref: user_memberships.id < user_memberships.upgraded_from_membership_id
+Ref: plan_purchases.id < user_memberships.purchase_id
+Ref: user_memberships.id < membership_events.membership_id
+Ref: users.id < membership_events.actor_id
+Ref: users.id < borrow_pass_packages.created_by
+Ref: users.id < user_borrow_passes.user_id
+Ref: borrow_pass_packages.id < user_borrow_passes.package_id
+Ref: plan_purchases.id < user_borrow_passes.purchase_id
+Ref: user_borrow_passes.id < borrow_pass_credits.user_borrow_pass_id
+Ref: users.id < borrow_pass_credits.user_id
+Ref: borrow_pass_credits.id < borrow_pass_usages.credit_id
+Ref: users.id < free_borrow_credits.user_id
+Ref: user_memberships.id < free_borrow_credits.membership_id
+Ref: users.id < monthly_donated_book_credits.user_id
+Ref: user_memberships.id < monthly_donated_book_credits.membership_id
+Ref: users.id < plan_purchases.user_id
+Ref: payment_intents.id < plan_purchases.payment_intent_id
+Ref: users.id < membership_upgrade_quotes.user_id
+Ref: user_memberships.id < membership_upgrade_quotes.from_membership_id
+Ref: membership_plans.id < membership_upgrade_quotes.to_plan_id
+Ref: users.id < plan_change_logs.actor_id
+Ref: users.id < payment_intents.user_id
+
+// Cross-domain relationships intentionally stay in the master ERD.

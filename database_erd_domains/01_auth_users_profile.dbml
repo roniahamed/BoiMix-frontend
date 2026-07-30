@@ -1,0 +1,545 @@
+// BoiMix Domain ERD: Auth, users, profile, verification, location, devices, security entrypoints
+// Paste this single domain file into https://dbdiagram.io/d for a smaller focused diagram.
+// Master ERD: ../database_erd.dbml
+
+// BoiMix Database ERD - domain subset
+// Scope: Auth, users, profile, verification, location, devices, security entrypoints.
+
+Project BoiMix_01_auth_users_profile {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+
+// Tables
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table firebase_identities {
+  id uuid [pk]
+  user_id uuid [not null]
+  provider auth_provider [not null]
+  firebase_uid varchar [unique, not null]
+  provider_email varchar
+  raw_claims json
+  created_at timestamp [not null]
+}
+
+Table refresh_tokens {
+  id uuid [pk]
+  user_id uuid [not null]
+  token_hash varchar [not null]
+  revoked_at timestamp
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+}
+
+Table user_sessions {
+  id uuid [pk]
+  user_id uuid [not null]
+  ip_address varchar
+  user_agent text
+  last_seen_at timestamp
+  created_at timestamp [not null]
+}
+
+Table otp_codes {
+  id uuid [pk]
+  user_id uuid
+  email varchar
+  purpose varchar [not null]
+  code_hash varchar [not null]
+  attempts int [not null, default: 0]
+  expires_at timestamp [not null]
+  used_at timestamp
+  created_at timestamp [not null]
+}
+
+Table password_reset_requests {
+  id uuid [pk]
+  user_id uuid [not null]
+  token_hash varchar [not null]
+  expires_at timestamp [not null]
+  used_at timestamp
+  created_at timestamp [not null]
+}
+
+Table terms_acceptances {
+  id uuid [pk]
+  user_id uuid [not null]
+  terms_version varchar [not null]
+  privacy_version varchar [not null]
+  accepted_at timestamp [not null]
+}
+
+Table user_profiles {
+  user_id uuid [pk]
+  username varchar [unique, not null]
+  full_name varchar [not null]
+  designation varchar
+  bio text
+  avatar_media_id uuid
+  cover_media_id uuid
+  reputation_score decimal
+  public_rating decimal
+  review_count int [not null, default: 0]
+  verified_badge boolean [not null, default: false]
+  donor_tag boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_preferences {
+  user_id uuid [pk]
+  language varchar [not null, default: 'bn']
+  email_notifications boolean [not null, default: true]
+  push_notifications boolean [not null, default: true]
+  marketing_emails boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_social_links {
+  id uuid [pk]
+  user_id uuid [not null]
+  label varchar [not null]
+  url varchar [not null]
+  created_at timestamp [not null]
+}
+
+Table reading_interests {
+  id uuid [pk]
+  name varchar [unique, not null]
+}
+
+Table user_reading_interests {
+  user_id uuid [not null]
+  interest_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (user_id, interest_id) [pk]
+  }
+}
+
+Table follows {
+  follower_id uuid [not null]
+  following_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (follower_id, following_id) [pk]
+  }
+}
+
+Table locations {
+  id uuid [pk]
+  display_address text
+  private_address text
+  street varchar
+  city varchar
+  district varchar
+  thana varchar
+  state varchar
+  postal_code varchar
+  country varchar [default: 'Bangladesh']
+  lat decimal
+  lng decimal
+  visibility location_visibility [not null, default: 'transaction_only']
+  created_at timestamp [not null]
+}
+
+Table user_locations {
+  id uuid [pk]
+  user_id uuid [not null]
+  location_id uuid [not null]
+  is_default boolean [not null, default: false]
+  created_at timestamp [not null]
+}
+
+Table user_meetup_locations {
+  id uuid [pk]
+  user_id uuid [not null]
+  location_id uuid [not null]
+  name varchar [not null]
+  is_default boolean [not null, default: false]
+  visibility location_visibility [not null, default: 'transaction_only']
+  created_at timestamp [not null]
+}
+
+Table student_verifications {
+  id uuid [pk]
+  user_id uuid [not null]
+  institution_name varchar [not null]
+  student_id_number varchar [not null]
+  document_media_id uuid
+  status verification_status [not null, default: 'pending']
+  reviewer_id uuid
+  rejection_reason text
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table user_verifications {
+  id uuid [pk]
+  user_id uuid [not null]
+  document_type varchar [not null]
+  document_number varchar
+  status verification_status [not null, default: 'pending']
+  reviewer_id uuid
+  rejection_reason text
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table verification_documents {
+  id uuid [pk]
+  verification_id uuid [not null]
+  media_id uuid [not null]
+  side varchar
+  created_at timestamp [not null]
+}
+
+Table user_devices {
+  id uuid [pk]
+  user_id uuid [not null]
+  fcm_token varchar
+  device_name varchar
+  platform varchar
+  last_seen_at timestamp
+  created_at timestamp [not null]
+}
+
+Table security_events {
+  id uuid [pk]
+  user_id uuid [not null]
+  event_type varchar [not null]
+  ip_address varchar
+  user_agent text
+  metadata json
+  created_at timestamp [not null]
+}
+
+Table account_deletion_requests {
+  id uuid [pk]
+  user_id uuid [not null]
+  reason text
+  requested_at timestamp [not null]
+  scheduled_delete_at timestamp
+  cancelled_at timestamp
+}
+
+Table media_assets {
+  id uuid [pk]
+  owner_user_id uuid
+  kind media_kind [not null]
+  cloudinary_public_id varchar [not null]
+  original_url text [not null]
+  mime_type varchar
+  size_bytes int
+  width int
+  height int
+  processing_status processing_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+// Relationships inside this domain
+Ref: users.id < firebase_identities.user_id
+Ref: users.id < refresh_tokens.user_id
+Ref: users.id < user_sessions.user_id
+Ref: users.id < otp_codes.user_id
+Ref: users.id < password_reset_requests.user_id
+Ref: users.id < terms_acceptances.user_id
+Ref: users.id < user_profiles.user_id
+Ref: users.id < user_preferences.user_id
+Ref: users.id < user_social_links.user_id
+Ref: users.id < user_reading_interests.user_id
+Ref: reading_interests.id < user_reading_interests.interest_id
+Ref: users.id < follows.follower_id
+Ref: users.id < follows.following_id
+Ref: users.id < user_locations.user_id
+Ref: locations.id < user_locations.location_id
+Ref: users.id < user_meetup_locations.user_id
+Ref: locations.id < user_meetup_locations.location_id
+Ref: users.id < student_verifications.user_id
+Ref: media_assets.id < student_verifications.document_media_id
+Ref: users.id < user_verifications.user_id
+Ref: users.id < user_verifications.reviewer_id
+Ref: user_verifications.id < verification_documents.verification_id
+Ref: media_assets.id < verification_documents.media_id
+Ref: users.id < user_devices.user_id
+Ref: users.id < security_events.user_id
+Ref: users.id < account_deletion_requests.user_id
+Ref: users.id < media_assets.owner_user_id
+
+// Cross-domain relationships intentionally stay in the master ERD.
