@@ -59,6 +59,114 @@ Django API + DRF + Channels
   |-- Cloudinary: image storage
 ```
 
+## Final Backend Structure
+
+Architecture style:
+
+- Modular monolith
+- Feature-based modules
+- Shared infrastructure kept outside feature business logic
+- Clear separation of API, services, selectors, tasks, and integrations
+
+Suggested project shape:
+
+```txt
+backend/
+├── manage.py
+├── pyproject.toml
+├── Dockerfile
+├── docker-compose.yml
+├── .env.example
+├── config/
+│   ├── settings/
+│   │   ├── base.py
+│   │   ├── local.py
+│   │   ├── production.py
+│   │   └── test.py
+│   ├── urls.py
+│   ├── asgi.py
+│   ├── wsgi.py
+│   ├── celery.py
+│   └── routing.py
+├── apps/
+│   ├── accounts/
+│   ├── profiles/
+│   ├── media/
+│   ├── catalog/
+│   ├── listings/
+│   ├── search/
+│   ├── central_library/
+│   ├── memberships/
+│   ├── commerce/
+│   ├── borrowing/
+│   ├── exchanges/
+│   ├── chat/
+│   ├── notifications/
+│   ├── moderation/
+│   ├── dashboard/
+│   ├── reading/
+│   ├── cms/
+│   └── analytics/
+├── integrations/
+│   ├── firebase/
+│   ├── cloudinary/
+│   ├── google_books/
+│   ├── openstreetmap/
+│   ├── elasticsearch/
+│   └── payment_gateway/
+├── common/
+│   ├── permissions.py
+│   ├── pagination.py
+│   ├── responses.py
+│   ├── exceptions.py
+│   ├── validators.py
+│   ├── cache.py
+│   ├── throttling.py
+│   ├── enums.py
+│   └── utils.py
+├── tests/
+│   ├── factories/
+│   └── integration/
+└── scripts/
+    ├── seed_membership_plans.py
+    ├── seed_categories.py
+    └── rebuild_search_index.py
+```
+
+Feature module internal style:
+
+```txt
+apps/memberships/
+├── migrations/
+├── api/
+│   └── v1/
+│       ├── urls.py
+│       ├── views.py
+│       ├── serializers.py
+│       └── filters.py
+├── models.py
+├── services.py
+├── selectors.py
+├── permissions.py
+├── tasks.py
+├── admin.py
+├── events.py
+├── exceptions.py
+└── tests/
+    ├── test_models.py
+    ├── test_services.py
+    └── test_api.py
+```
+
+Layer rules:
+
+- `api` handles request/response only.
+- `services` contains write-side business logic.
+- `selectors` contains read/query logic.
+- `tasks` contains Celery background jobs.
+- `integrations` wraps external systems like Firebase, Cloudinary, Photon, Nominatim, and Elasticsearch.
+- Feature modules can depend on `common` and `integrations`, but business logic should not be scattered across global utility files.
+
 ## Backend Modules
 
 ### 1. Auth
