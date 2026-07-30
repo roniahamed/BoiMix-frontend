@@ -8,6 +8,8 @@ This folder contains the backend planning, architecture, and database design doc
   - Main backend architecture, final infrastructure decision, and modular monolith structure.
 - `backend_implementation_instructions.md`
   - Backend best practices, do/don't rules, and implementation instructions.
+- `backend_api_documentation_standards.md`
+  - API documentation standards, required endpoint details, and professional documentation rules.
 - `backend_phase_by_phase_plan.md`
   - Backend implementation roadmap broken into phases.
 - `backend_feature_dependency_audit.md`
