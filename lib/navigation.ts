@@ -100,7 +100,7 @@ export const mobileBottomNavItems: NavItem[] = [
 
 export const dashboardNavGroups: NavGroup[] = [
   {
-    title: "Dashboard",
+    title: "Overview & Activity",
     items: [
       {
         title: "Overview",
@@ -122,7 +122,7 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Library",
+    title: "My Library",
     items: [
       { title: "My Books", href: "/dashboard/library", icon: LibraryIcon },
       { title: "Add New Book", href: "/books/upload", icon: BookPlusIcon },
@@ -134,7 +134,7 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Exchange",
+    title: "Borrow & Lend",
     items: [
       {
         title: "Borrowing",
@@ -142,6 +142,11 @@ export const dashboardNavGroups: NavGroup[] = [
         icon: BookOpenIcon,
       },
       { title: "Lending", href: "/dashboard/lent", icon: BookOpenIcon },
+    ],
+  },
+  {
+    title: "Book Exchanges",
+    items: [
       {
         title: "Active Exchanges",
         href: "/dashboard/exchanges",
@@ -157,7 +162,7 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Marketplace",
+    title: "Orders & Sales",
     items: [
       {
         title: "Customer Orders",
@@ -174,7 +179,7 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Community",
+    title: "Messages & Community",
     items: [
       {
         title: "Messages",
@@ -186,7 +191,7 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Membership",
+    title: "Subscriptions",
     items: [
       {
         title: "Memberships",
@@ -196,7 +201,7 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
-    title: "Account",
+    title: "Account & Settings",
     items: [
       {
         title: "Earnings & Wallet",
