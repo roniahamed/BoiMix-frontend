@@ -339,6 +339,11 @@ Current frontend rules from the membership pages:
 Responsibilities:
 
 - Manage public membership plans and borrow pass packages.
+- Keep all membership and pass rules backend-configurable from admin.
+- Allow adding new plans/packages without code deploy.
+- Allow editing pricing, validity, limits, benefits, and eligibility rules.
+- Allow disabling/removing public visibility without deleting historical purchases.
+- Allow future product changes if BoiMix wants to replace or expand the current plan structure.
 - Track active membership tier, validity, renewal, and upgrades.
 - Track borrow limit per membership.
 - Track active pass wallet and pass expiry.
@@ -351,6 +356,7 @@ Responsibilities:
 - Store all purchases in wallet/order ledger.
 - Expose active pass wallet and usage history to dashboard.
 - Admin can create/update/disable plans without code deploy.
+- Admin can archive old plans and publish new plans while preserving purchase history.
 
 Core tables:
 
@@ -366,6 +372,7 @@ Core tables:
 - `plan_purchases`
 - `membership_upgrade_quotes`
 - `library_queue_priorities`
+- `plan_change_logs`
 
 Key APIs:
 
@@ -383,6 +390,16 @@ Key APIs:
 - `POST /api/borrow-passes/{id}/restore`
 - `GET /api/me/borrow-capacity`
 - `GET /api/me/free-borrow-credits`
+- `GET /api/admin/memberships/plans`
+- `POST /api/admin/memberships/plans`
+- `PATCH /api/admin/memberships/plans/{id}`
+- `DELETE /api/admin/memberships/plans/{id}`
+- `POST /api/admin/memberships/plans/{id}/archive`
+- `GET /api/admin/borrow-passes/packages`
+- `POST /api/admin/borrow-passes/packages`
+- `PATCH /api/admin/borrow-passes/packages/{id}`
+- `DELETE /api/admin/borrow-passes/packages/{id}`
+- `POST /api/admin/borrow-passes/packages/{id}/archive`
 
 Borrow eligibility rules:
 
@@ -426,6 +443,13 @@ Dashboard data:
 - welcome gift credits remaining
 - monthly donated book credit status
 - pass usage history
+
+Plan-management rules:
+
+- Plans/packages are backend data, not frontend constants.
+- Old plans should be soft-deleted or archived, not hard-deleted, if any user purchase/history references them.
+- New plans can be added later with different price, duration, borrow limits, benefits, or visibility.
+- Editing a plan should not silently rewrite historical purchase snapshots; purchase records should keep their original effective terms.
 
 ### 10. Marketplace Orders
 

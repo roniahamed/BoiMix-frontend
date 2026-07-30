@@ -303,6 +303,8 @@ Tasks:
 
 - Membership plan model.
 - Borrow pass package model.
+- Plan versioning and soft-delete/archive strategy.
+- Admin-configurable plan benefits/rules instead of frontend constants.
 - Active user membership model.
 - Membership purchase checkout.
 - Membership renewal after 4 years.
@@ -319,6 +321,7 @@ Tasks:
 - Member ID generation.
 - Dashboard pass usage history.
 - Admin plan management.
+- Admin can add new plan/package, edit existing, archive old ones, and publish replacements.
 
 APIs:
 
@@ -348,6 +351,8 @@ Acceptance:
 
 - Basic, Standard, Premium membership plans come from backend.
 - Mini, Standard, Pro borrow pass packages come from backend.
+- Admin can create a new membership or pass package without code deploy.
+- Archiving a plan does not break historical purchases, ledger entries, or active memberships.
 - Active pass wallet shows real active passes and expiry.
 - Borrow capacity shows real membership limit, locked amount, and available amount.
 - Welcome gift and monthly donated free-book credits are tracked separately from paid pass credits.
