@@ -1029,7 +1029,15 @@ Tasks:
 - Rate limits.
 - Security headers.
 
-Services:
+Final deployment shape:
+
+- 2 VPS architecture is the final decision.
+- VPS 1 runs public BoiMix application services.
+- VPS 2 runs internal search + map services.
+- Communication between VPS 1 and VPS 2 uses private network only.
+- Search/map ports are firewall-restricted to VPS 1 private IP.
+
+VPS 1 services:
 
 - frontend
 - backend
@@ -1038,8 +1046,13 @@ Services:
 - celery-worker
 - celery-beat
 - channels-worker
+- nginx
+
+VPS 2 services:
+
 - elasticsearch
 - photon
+- nominatim
 - nginx
 
 Acceptance:
@@ -1048,6 +1061,8 @@ Acceptance:
 - Migrations run safely.
 - Healthcheck passes after deploy.
 - Database backup exists.
+- Search/map services are not publicly reachable.
+- Backend reaches search/map services through private network only.
 
 ## Frontend Integration Order
 

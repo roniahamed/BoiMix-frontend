@@ -1137,7 +1137,14 @@ Cache invalidation:
 
 ## Deployment Architecture
 
-VPS services through Docker Compose:
+Final infrastructure decision:
+
+- Use 2 VPS servers.
+- Public traffic uses domains/subdomains.
+- Internal search and map traffic uses private network only.
+- Search stack is not exposed to the public internet.
+
+VPS 1 - Main BoiMix App:
 
 - `nginx`
 - `frontend`
@@ -1147,8 +1154,21 @@ VPS services through Docker Compose:
 - `celery-worker`
 - `celery-beat`
 - `channels-worker`
+
+VPS 2 - Search + Map:
+
 - `elasticsearch`
 - `photon`
+- `nominatim`
+- `nginx`
+
+Network rules:
+
+- `api.boimix.com` points to VPS 1.
+- Search/map services use private IP between VPS 1 and VPS 2.
+- Elasticsearch/Photon/Nominatim ports allow only VPS 1 private IP.
+- No public domain is used for Elasticsearch/Photon/Nominatim.
+- Firewall blocks public access to search ports.
 
 GitHub Actions:
 
