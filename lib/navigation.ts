@@ -186,6 +186,16 @@ export const dashboardNavGroups: NavGroup[] = [
     ],
   },
   {
+    title: "Membership",
+    items: [
+      {
+        title: "Memberships",
+        href: "/dashboard/passes",
+        icon: TicketIcon,
+      },
+    ],
+  },
+  {
     title: "Account",
     items: [
       {
@@ -195,11 +205,7 @@ export const dashboardNavGroups: NavGroup[] = [
         badge: 2,
         badgeVariant: "success",
       },
-      {
-        title: "Memberships",
-        href: "/dashboard/passes",
-        icon: TicketIcon,
-      },
+
       {
         title: "Profile",
         href: "/u/roni",

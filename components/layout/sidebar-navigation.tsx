@@ -2,8 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { BadgeCheck, LogOut, Sparkles } from "lucide-react";
+import {
+  BadgeCheck,
+  LogOut,
+  Sparkles,
+  Plus,
+  Minus,
+  Ticket,
+  Bell,
+} from "lucide-react";
 import type { NavItem, NavGroup } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { AddBookDialog } from "@/components/shared/add-book-button";
@@ -22,6 +31,23 @@ export function SidebarNavigation({
   className,
 }: SidebarNavigationProps) {
   const pathname = usePathname();
+  const [openGroup, setOpenGroup] = useState<string | null>(() => {
+    if (!groups) return null;
+    const activeGroup = groups.find((g) =>
+      g.items.some(
+        (item) =>
+          pathname === item.href ||
+          (item.href !== "/dashboard/overview" &&
+            item.href !== "/dashboard/exchanges" &&
+            pathname.startsWith(`${item.href}/`)),
+      ),
+    );
+    return activeGroup ? activeGroup.title : null;
+  });
+
+  const toggleGroup = (groupTitle: string) => {
+    setOpenGroup((prev) => (prev === groupTitle ? null : groupTitle));
+  };
 
   const renderNavItem = (item: NavItem) => {
     const Icon = item.icon;
@@ -108,18 +134,90 @@ export function SidebarNavigation({
         </div>
 
         {/* Navigation list */}
-        <div className="flex-1 scrollbar-none space-y-6 overflow-y-auto p-3.5">
+        <div className="flex-1 scrollbar-none space-y-4 overflow-y-auto p-3.5">
+          {/* Pro Membership Highlights */}
+          <div className="relative mb-2 overflow-hidden rounded-xl bg-gradient-to-r from-amber-500 to-orange-400 p-3 text-white shadow-md">
+            <div className="relative z-10 space-y-0.5">
+              <h3 className="flex items-center gap-1.5 text-sm font-extrabold">
+                <Ticket className="h-4 w-4" /> Pro Membership
+              </h3>
+              <p className="text-[10px] font-medium text-white/90">
+                Unlock all premium features
+              </p>
+            </div>
+            <Link
+              href="/dashboard/passes"
+              className="relative z-10 mt-2 inline-block rounded-lg bg-white px-3 py-1.5 text-[10px] font-bold text-orange-500 shadow-sm transition-transform hover:bg-white/90 active:scale-95"
+            >
+              Upgrade
+            </Link>
+            <Sparkles className="absolute -top-2 -right-2 h-16 w-16 text-white/20" />
+          </div>
+
           {groups ? (
-            groups.map((group) => (
-              <div key={group.title} className="space-y-1.5">
-                <h4 className="text-muted-foreground/80 px-3 text-[11px] font-bold tracking-wider uppercase">
-                  {group.title}
-                </h4>
-                <nav className="space-y-1" aria-label={group.title}>
-                  {group.items.map(renderNavItem)}
-                </nav>
-              </div>
-            ))
+            <div className="space-y-2">
+              {groups.map((group) => {
+                const totalNotifications = group.items.reduce((sum, item) => {
+                  if (typeof item.badge === "number") return sum + item.badge;
+                  if (typeof item.badge === "string") {
+                    const parsed = parseInt(item.badge, 10);
+                    return isNaN(parsed) ? sum : sum + parsed;
+                  }
+                  return sum;
+                }, 0);
+                const isOpen = openGroup === group.title;
+
+                return (
+                  <div
+                    key={group.title}
+                    className="border-border/40 bg-card overflow-hidden rounded-xl border shadow-2xs"
+                  >
+                    <button
+                      onClick={() => toggleGroup(group.title)}
+                      className="hover:bg-muted/50 flex w-full items-center justify-between px-3 py-2.5 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-foreground text-xs font-bold tracking-wider uppercase">
+                          {group.title}
+                        </span>
+                        {totalNotifications > 0 && (
+                          <div className="bg-brand-pink/15 text-brand-pink flex items-center gap-1 rounded-full px-1.5 py-0.5">
+                            <Bell className="h-2.5 w-2.5" />
+                            <span className="text-[9px] font-extrabold">
+                              {totalNotifications}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <div className="text-muted-foreground flex items-center justify-center">
+                        {isOpen ? (
+                          <Minus className="h-3.5 w-3.5" />
+                        ) : (
+                          <Plus className="h-3.5 w-3.5" />
+                        )}
+                      </div>
+                    </button>
+                    <div
+                      className={cn(
+                        "grid transition-all duration-300 ease-in-out",
+                        isOpen
+                          ? "grid-rows-[1fr] opacity-100"
+                          : "grid-rows-[0fr] opacity-0",
+                      )}
+                    >
+                      <div className="overflow-hidden">
+                        <nav
+                          className="bg-muted/10 border-border/40 space-y-0.5 border-t p-1.5 pt-0"
+                          aria-label={group.title}
+                        >
+                          {group.items.map(renderNavItem)}
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           ) : (
             <nav className="space-y-1" aria-label={title}>
               {items?.map(renderNavItem)}
