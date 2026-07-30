@@ -1,0 +1,2133 @@
+// BoiMix Database ERD
+// Paste this file into https://dbdiagram.io/d
+// Scope: current frontend features + planned backend data dependencies.
+
+Project BoiMix {
+  database_type: 'PostgreSQL'
+  Note: 'PostgreSQL + PostGIS. Plans, passes, CMS, campaigns, and moderation rules are backend-controlled data.'
+}
+
+Enum user_role {
+  user
+  moderator
+  admin
+}
+
+Enum account_status {
+  active
+  suspended
+  deleted
+}
+
+Enum auth_provider {
+  email
+  google
+  apple
+}
+
+Enum verification_status {
+  pending
+  approved
+  rejected
+  expired
+}
+
+Enum media_kind {
+  book_cover
+  book_back_cover
+  book_inside_page
+  book_toc
+  book_index
+  profile_avatar
+  profile_cover
+  verification_document
+  chat_attachment
+  cms_asset
+}
+
+Enum processing_status {
+  pending
+  processing
+  completed
+  failed
+}
+
+Enum listing_mode {
+  sell
+  borrow
+  exchange
+  donate
+}
+
+Enum listing_status {
+  draft
+  pending_review
+  active
+  paused
+  archived
+  rejected
+}
+
+Enum inventory_status {
+  available
+  borrowed
+  reserved
+  sold
+  draft
+  archived
+}
+
+Enum book_condition {
+  new
+  excellent
+  good
+  fair
+  poor
+}
+
+Enum location_visibility {
+  private
+  approximate
+  transaction_only
+  public
+}
+
+Enum plan_kind {
+  deposit_membership
+  borrow_pass
+  promo_plan
+}
+
+Enum billing_period {
+  one_time
+}
+
+Enum membership_status {
+  pending_payment
+  active
+  upgraded
+  expired
+  cancelled_by_admin
+}
+
+Enum pass_credit_status {
+  active
+  reserved
+  consumed
+  restored
+  expired
+}
+
+Enum order_status {
+  pending
+  processing
+  confirmed
+  shipped
+  delivered
+  completed
+  cancelled
+  disputed
+}
+
+Enum payment_method {
+  bkash
+  nagad
+  cod
+  bank
+  manual
+}
+
+Enum payment_status {
+  pending
+  requires_confirmation
+  confirmed
+  failed
+  refunded
+  cancelled
+}
+
+Enum shipment_status {
+  pending
+  packed
+  shipped
+  in_transit
+  delivered
+  returned
+  failed
+}
+
+Enum wallet_tx_type {
+  sale
+  escrow
+  withdrawal
+  deposit
+  membership
+  borrow_pass
+  borrow_fee
+  refund
+  adjustment
+  free_credit
+  donor_reward
+}
+
+Enum borrow_status {
+  pending_owner_review
+  counter_offered
+  accepted
+  rejected
+  paid
+  handed_over_by_owner
+  borrow_active
+  return_initiated
+  completed
+  disputed
+  expired
+}
+
+Enum handover_method {
+  meetup
+  courier
+}
+
+Enum exchange_status {
+  pending_proposal
+  counter_offered
+  accepted
+  rejected
+  handed_over
+  completed
+  disputed
+  cancelled
+}
+
+Enum dispute_status {
+  open
+  under_review
+  resolved
+  rejected
+}
+
+Enum notification_type {
+  system
+  message
+  borrow_request
+  borrow_approved
+  borrow_returned
+  exchange_offer
+  exchange_accepted
+  review
+  order
+  wallet
+  membership
+  pass_expiry
+}
+
+Enum notification_channel {
+  in_app
+  websocket
+  fcm
+  email
+}
+
+Enum report_target_type {
+  book
+  user
+  review
+  message
+  order
+  borrow_order
+  exchange_order
+}
+
+Enum report_status {
+  submitted
+  in_review
+  resolved
+  rejected
+}
+
+Enum strike_type {
+  warning
+  temporary_ban
+  permanent_ban
+}
+
+Enum cms_status {
+  draft
+  published
+  archived
+}
+
+Enum campaign_status {
+  draft
+  scheduled
+  active
+  ended
+  archived
+}
+
+Table users {
+  id uuid [pk]
+  email varchar [unique]
+  phone varchar
+  password_hash varchar
+  role user_role [not null, default: 'user']
+  status account_status [not null, default: 'active']
+  email_verified boolean [not null, default: false]
+  last_login_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table firebase_identities {
+  id uuid [pk]
+  user_id uuid [not null]
+  provider auth_provider [not null]
+  firebase_uid varchar [unique, not null]
+  provider_email varchar
+  raw_claims json
+  created_at timestamp [not null]
+}
+
+Table refresh_tokens {
+  id uuid [pk]
+  user_id uuid [not null]
+  token_hash varchar [not null]
+  revoked_at timestamp
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+}
+
+Table user_sessions {
+  id uuid [pk]
+  user_id uuid [not null]
+  ip_address varchar
+  user_agent text
+  last_seen_at timestamp
+  created_at timestamp [not null]
+}
+
+Table otp_codes {
+  id uuid [pk]
+  user_id uuid
+  email varchar
+  purpose varchar [not null]
+  code_hash varchar [not null]
+  attempts int [not null, default: 0]
+  expires_at timestamp [not null]
+  used_at timestamp
+  created_at timestamp [not null]
+}
+
+Table password_reset_requests {
+  id uuid [pk]
+  user_id uuid [not null]
+  token_hash varchar [not null]
+  expires_at timestamp [not null]
+  used_at timestamp
+  created_at timestamp [not null]
+}
+
+Table terms_acceptances {
+  id uuid [pk]
+  user_id uuid [not null]
+  terms_version varchar [not null]
+  privacy_version varchar [not null]
+  accepted_at timestamp [not null]
+}
+
+Table user_profiles {
+  user_id uuid [pk]
+  username varchar [unique, not null]
+  full_name varchar [not null]
+  designation varchar
+  bio text
+  avatar_media_id uuid
+  cover_media_id uuid
+  reputation_score decimal
+  public_rating decimal
+  review_count int [not null, default: 0]
+  verified_badge boolean [not null, default: false]
+  donor_tag boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_preferences {
+  user_id uuid [pk]
+  language varchar [not null, default: 'bn']
+  email_notifications boolean [not null, default: true]
+  push_notifications boolean [not null, default: true]
+  marketing_emails boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_social_links {
+  id uuid [pk]
+  user_id uuid [not null]
+  label varchar [not null]
+  url varchar [not null]
+  created_at timestamp [not null]
+}
+
+Table reading_interests {
+  id uuid [pk]
+  name varchar [unique, not null]
+}
+
+Table user_reading_interests {
+  user_id uuid [not null]
+  interest_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (user_id, interest_id) [pk]
+  }
+}
+
+Table follows {
+  follower_id uuid [not null]
+  following_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (follower_id, following_id) [pk]
+  }
+}
+
+Table locations {
+  id uuid [pk]
+  display_address text
+  private_address text
+  street varchar
+  city varchar
+  district varchar
+  thana varchar
+  state varchar
+  postal_code varchar
+  country varchar [default: 'Bangladesh']
+  lat decimal
+  lng decimal
+  visibility location_visibility [not null, default: 'transaction_only']
+  created_at timestamp [not null]
+}
+
+Table user_locations {
+  id uuid [pk]
+  user_id uuid [not null]
+  location_id uuid [not null]
+  is_default boolean [not null, default: false]
+  created_at timestamp [not null]
+}
+
+Table user_meetup_locations {
+  id uuid [pk]
+  user_id uuid [not null]
+  location_id uuid [not null]
+  name varchar [not null]
+  is_default boolean [not null, default: false]
+  visibility location_visibility [not null, default: 'transaction_only']
+  created_at timestamp [not null]
+}
+
+Table student_verifications {
+  id uuid [pk]
+  user_id uuid [not null]
+  institution_name varchar [not null]
+  student_id_number varchar [not null]
+  document_media_id uuid
+  status verification_status [not null, default: 'pending']
+  reviewer_id uuid
+  rejection_reason text
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table user_verifications {
+  id uuid [pk]
+  user_id uuid [not null]
+  document_type varchar [not null]
+  document_number varchar
+  status verification_status [not null, default: 'pending']
+  reviewer_id uuid
+  rejection_reason text
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table verification_documents {
+  id uuid [pk]
+  verification_id uuid [not null]
+  media_id uuid [not null]
+  side varchar
+  created_at timestamp [not null]
+}
+
+Table user_devices {
+  id uuid [pk]
+  user_id uuid [not null]
+  fcm_token varchar
+  device_name varchar
+  platform varchar
+  last_seen_at timestamp
+  created_at timestamp [not null]
+}
+
+Table security_events {
+  id uuid [pk]
+  user_id uuid [not null]
+  event_type varchar [not null]
+  ip_address varchar
+  user_agent text
+  metadata json
+  created_at timestamp [not null]
+}
+
+Table account_deletion_requests {
+  id uuid [pk]
+  user_id uuid [not null]
+  reason text
+  requested_at timestamp [not null]
+  scheduled_delete_at timestamp
+  cancelled_at timestamp
+}
+
+Table media_assets {
+  id uuid [pk]
+  owner_user_id uuid
+  kind media_kind [not null]
+  cloudinary_public_id varchar [not null]
+  original_url text [not null]
+  mime_type varchar
+  size_bytes int
+  width int
+  height int
+  processing_status processing_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table media_variants {
+  id uuid [pk]
+  media_id uuid [not null]
+  variant_name varchar [not null]
+  url text [not null]
+  format varchar [not null]
+  size_bytes int
+  width int
+  height int
+  created_at timestamp [not null]
+}
+
+Table media_processing_jobs {
+  id uuid [pk]
+  media_id uuid [not null]
+  status processing_status [not null, default: 'pending']
+  error_message text
+  started_at timestamp
+  completed_at timestamp
+  created_at timestamp [not null]
+}
+
+Table authors {
+  id uuid [pk]
+  name varchar [not null]
+  slug varchar [unique]
+  bio text
+  created_at timestamp [not null]
+}
+
+Table publishers {
+  id uuid [pk]
+  name varchar [not null]
+  slug varchar [unique]
+  created_at timestamp [not null]
+}
+
+Table categories {
+  id uuid [pk]
+  name varchar [not null]
+  bn_name varchar
+  slug varchar [unique, not null]
+  parent_id uuid
+  image_media_id uuid
+  created_at timestamp [not null]
+}
+
+Table book_metadata {
+  id uuid [pk]
+  isbn_10 varchar
+  isbn_13 varchar [unique]
+  title varchar [not null]
+  slug varchar [unique, not null]
+  publisher_id uuid
+  language varchar
+  edition varchar
+  page_count int
+  description text
+  original_cover_url text
+  source varchar [not null, default: 'manual']
+  source_payload json
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table book_authors {
+  book_id uuid [not null]
+  author_id uuid [not null]
+
+  indexes {
+    (book_id, author_id) [pk]
+  }
+}
+
+Table book_categories {
+  book_id uuid [not null]
+  category_id uuid [not null]
+
+  indexes {
+    (book_id, category_id) [pk]
+  }
+}
+
+Table isbn_lookup_logs {
+  id uuid [pk]
+  isbn varchar [not null]
+  source varchar [not null]
+  found_local boolean [not null, default: false]
+  user_id uuid
+  created_at timestamp [not null]
+}
+
+Table book_listings {
+  id uuid [pk]
+  book_id uuid [not null]
+  owner_user_id uuid
+  provider_type varchar [not null, default: 'user']
+  location_id uuid
+  condition book_condition [not null]
+  condition_note text
+  status listing_status [not null, default: 'draft']
+  inventory_status inventory_status [not null, default: 'available']
+  quantity_total int [not null, default: 1]
+  quantity_available int [not null, default: 1]
+  tags json
+  is_featured boolean [not null, default: false]
+  is_premium_book boolean [not null, default: false]
+  is_donated_book boolean [not null, default: false]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table book_listing_modes {
+  id uuid [pk]
+  listing_id uuid [not null]
+  mode listing_mode [not null]
+  price decimal
+  original_price decimal
+  deposit decimal
+  borrow_fee decimal
+  borrow_duration_days int
+  exchange_value decimal
+  exchange_preference text
+  quantity int [not null, default: 1]
+  active boolean [not null, default: true]
+}
+
+Table book_images {
+  id uuid [pk]
+  listing_id uuid [not null]
+  media_id uuid [not null]
+  image_role varchar [not null]
+  sort_order int [not null, default: 0]
+}
+
+Table book_questions {
+  id uuid [pk]
+  listing_id uuid [not null]
+  asker_id uuid [not null]
+  question text [not null]
+  created_at timestamp [not null]
+}
+
+Table book_answers {
+  id uuid [pk]
+  question_id uuid [not null]
+  answerer_id uuid [not null]
+  answer text [not null]
+  created_at timestamp [not null]
+}
+
+Table review_eligibilities {
+  id uuid [pk]
+  user_id uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  source_type varchar [not null]
+  source_id uuid [not null]
+  used_at timestamp
+  created_at timestamp [not null]
+}
+
+Table reviews {
+  id uuid [pk]
+  reviewer_id uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  eligibility_id uuid
+  rating int [not null]
+  body text
+  transaction_type varchar
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table review_helpful_votes {
+  review_id uuid [not null]
+  user_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (review_id, user_id) [pk]
+  }
+}
+
+Table badges {
+  id uuid [pk]
+  code varchar [unique, not null]
+  name varchar [not null]
+  description text
+  weight int [not null, default: 0]
+  icon_media_id uuid
+  active boolean [not null, default: true]
+}
+
+Table user_badges {
+  user_id uuid [not null]
+  badge_id uuid [not null]
+  awarded_reason text
+  awarded_at timestamp [not null]
+
+  indexes {
+    (user_id, badge_id) [pk]
+  }
+}
+
+Table reputation_scores {
+  user_id uuid [pk]
+  score decimal [not null, default: 0]
+  avg_rating decimal
+  review_count int [not null, default: 0]
+  on_time_return_ratio decimal
+  successful_exchange_count int [not null, default: 0]
+  completed_sale_count int [not null, default: 0]
+  dispute_ratio decimal
+  updated_at timestamp [not null]
+}
+
+Table reputation_events {
+  id uuid [pk]
+  user_id uuid [not null]
+  source_type varchar [not null]
+  source_id uuid [not null]
+  delta decimal [not null]
+  reason text
+  created_at timestamp [not null]
+}
+
+Table library_branches {
+  id uuid [pk]
+  name varchar [not null]
+  location_id uuid
+  active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table library_inventory_items {
+  id uuid [pk]
+  listing_id uuid [not null]
+  branch_id uuid
+  copy_code varchar [unique]
+  source varchar [not null]
+  status inventory_status [not null, default: 'available']
+  acquired_at timestamp
+  created_at timestamp [not null]
+}
+
+Table library_inventory_events {
+  id uuid [pk]
+  inventory_item_id uuid [not null]
+  event_type varchar [not null]
+  actor_id uuid
+  notes text
+  created_at timestamp [not null]
+}
+
+Table library_collections {
+  id uuid [pk]
+  title varchar [not null]
+  slug varchar [unique, not null]
+  description text
+  status cms_status [not null, default: 'draft']
+  sort_order int [not null, default: 0]
+  created_at timestamp [not null]
+}
+
+Table library_collection_items {
+  collection_id uuid [not null]
+  listing_id uuid [not null]
+  sort_order int [not null, default: 0]
+
+  indexes {
+    (collection_id, listing_id) [pk]
+  }
+}
+
+Table library_queue_entries {
+  id uuid [pk]
+  user_id uuid [not null]
+  listing_id uuid [not null]
+  membership_id uuid
+  priority_score int [not null, default: 0]
+  status varchar [not null, default: 'waiting']
+  created_at timestamp [not null]
+}
+
+Table donation_requests {
+  id uuid [pk]
+  donor_id uuid [not null]
+  status varchar [not null, default: 'submitted']
+  pickup_location_id uuid
+  notes text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table donation_items {
+  id uuid [pk]
+  donation_request_id uuid [not null]
+  book_id uuid
+  isbn varchar
+  title varchar
+  author_name varchar
+  condition book_condition
+  status varchar [not null, default: 'pending_review']
+  accepted_listing_id uuid
+  rejection_reason text
+}
+
+Table donation_pickups {
+  id uuid [pk]
+  donation_request_id uuid [not null]
+  scheduled_at timestamp
+  courier_name varchar
+  tracking_number varchar
+  status shipment_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table donation_quality_checks {
+  id uuid [pk]
+  donation_item_id uuid [not null]
+  reviewer_id uuid [not null]
+  result varchar [not null]
+  notes text
+  checked_at timestamp [not null]
+}
+
+Table donor_rewards {
+  id uuid [pk]
+  donor_id uuid [not null]
+  donation_request_id uuid [not null]
+  reward_type varchar [not null]
+  reward_value decimal
+  expires_at timestamp
+  created_at timestamp [not null]
+}
+
+Table donor_reward_redemptions {
+  id uuid [pk]
+  reward_id uuid [not null]
+  redeemed_by uuid [not null]
+  redeemed_at timestamp [not null]
+}
+
+Table donor_profile_tags {
+  id uuid [pk]
+  user_id uuid [not null]
+  tag varchar [not null]
+  granted_at timestamp [not null]
+}
+
+Table membership_plans {
+  id uuid [pk]
+  code varchar [unique, not null]
+  name varchar [not null]
+  kind plan_kind [not null, default: 'deposit_membership']
+  billing_period billing_period [not null, default: 'one_time']
+  price decimal [not null]
+  validity_days int [not null]
+  borrow_value_limit decimal
+  borrow_item_limit int
+  borrow_duration_days int
+  priority_weight int [not null, default: 0]
+  benefits json
+  refund_policy text
+  is_public boolean [not null, default: true]
+  is_active boolean [not null, default: true]
+  archived_at timestamp
+  effective_from timestamp
+  effective_until timestamp
+  created_by uuid
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_memberships {
+  id uuid [pk]
+  user_id uuid [not null]
+  plan_id uuid [not null]
+  plan_snapshot json [not null]
+  member_number varchar [unique]
+  status membership_status [not null, default: 'pending_payment']
+  starts_at timestamp
+  expires_at timestamp
+  upgraded_from_membership_id uuid
+  purchase_id uuid
+  created_at timestamp [not null]
+}
+
+Table membership_events {
+  id uuid [pk]
+  membership_id uuid [not null]
+  event_type varchar [not null]
+  actor_id uuid
+  metadata json
+  created_at timestamp [not null]
+}
+
+Table borrow_pass_packages {
+  id uuid [pk]
+  code varchar [unique, not null]
+  name varchar [not null]
+  price decimal [not null]
+  credit_count int [not null]
+  validity_days int [not null]
+  benefits json
+  is_public boolean [not null, default: true]
+  is_active boolean [not null, default: true]
+  archived_at timestamp
+  created_by uuid
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table user_borrow_passes {
+  id uuid [pk]
+  user_id uuid [not null]
+  package_id uuid [not null]
+  package_snapshot json [not null]
+  purchase_id uuid
+  starts_at timestamp [not null]
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+}
+
+Table borrow_pass_credits {
+  id uuid [pk]
+  user_borrow_pass_id uuid [not null]
+  user_id uuid [not null]
+  status pass_credit_status [not null, default: 'active']
+  reserved_for_borrow_order_id uuid
+  consumed_for_borrow_order_id uuid
+  expires_at timestamp [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_pass_usages {
+  id uuid [pk]
+  credit_id uuid [not null]
+  borrow_order_id uuid [not null]
+  action varchar [not null]
+  created_at timestamp [not null]
+}
+
+Table free_borrow_credits {
+  id uuid [pk]
+  user_id uuid [not null]
+  membership_id uuid
+  source varchar [not null]
+  status pass_credit_status [not null, default: 'active']
+  expires_at timestamp [not null]
+  used_for_borrow_order_id uuid
+  created_at timestamp [not null]
+}
+
+Table monthly_donated_book_credits {
+  id uuid [pk]
+  user_id uuid [not null]
+  membership_id uuid
+  month_key varchar [not null]
+  status pass_credit_status [not null, default: 'active']
+  used_for_borrow_order_id uuid
+  created_at timestamp [not null]
+}
+
+Table plan_purchases {
+  id uuid [pk]
+  user_id uuid [not null]
+  purchasable_type varchar [not null]
+  purchasable_id uuid [not null]
+  purchasable_snapshot json [not null]
+  payment_intent_id uuid
+  amount decimal [not null]
+  status payment_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table membership_upgrade_quotes {
+  id uuid [pk]
+  user_id uuid [not null]
+  from_membership_id uuid [not null]
+  to_plan_id uuid [not null]
+  price_difference decimal [not null]
+  expires_at timestamp [not null]
+  accepted_at timestamp
+  created_at timestamp [not null]
+}
+
+Table plan_change_logs {
+  id uuid [pk]
+  actor_id uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  action varchar [not null]
+  before_data json
+  after_data json
+  created_at timestamp [not null]
+}
+
+Table wishlists {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  created_at timestamp [not null]
+}
+
+Table wishlist_items {
+  wishlist_id uuid [not null]
+  listing_id uuid [not null]
+  created_at timestamp [not null]
+
+  indexes {
+    (wishlist_id, listing_id) [pk]
+  }
+}
+
+Table carts {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table cart_items {
+  id uuid [pk]
+  cart_id uuid [not null]
+  listing_id uuid [not null]
+  quantity int [not null, default: 1]
+  selected boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table borrow_carts {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_cart_items {
+  id uuid [pk]
+  borrow_cart_id uuid [not null]
+  listing_id uuid [not null]
+  owner_id uuid [not null]
+  deposit_required decimal
+  borrow_fee decimal
+  selected boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table wallets {
+  id uuid [pk]
+  user_id uuid [unique, not null]
+  available_balance decimal [not null, default: 0]
+  escrow_balance decimal [not null, default: 0]
+  locked_deposit decimal [not null, default: 0]
+  lifetime_earnings decimal [not null, default: 0]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table wallet_transactions {
+  id uuid [pk]
+  wallet_id uuid [not null]
+  type wallet_tx_type [not null]
+  amount decimal [not null]
+  status payment_status [not null, default: 'pending']
+  source_type varchar
+  source_id uuid
+  title varchar
+  created_at timestamp [not null]
+}
+
+Table ledger_entries {
+  id uuid [pk]
+  user_id uuid [not null]
+  wallet_transaction_id uuid
+  debit decimal [not null, default: 0]
+  credit decimal [not null, default: 0]
+  currency varchar [not null, default: 'BDT']
+  source_type varchar [not null]
+  source_id uuid [not null]
+  created_at timestamp [not null]
+}
+
+Table payment_intents {
+  id uuid [pk]
+  user_id uuid [not null]
+  method payment_method [not null]
+  amount decimal [not null]
+  currency varchar [not null, default: 'BDT']
+  status payment_status [not null, default: 'pending']
+  purpose varchar [not null]
+  metadata json
+  expires_at timestamp
+  created_at timestamp [not null]
+}
+
+Table payment_confirmations {
+  id uuid [pk]
+  payment_intent_id uuid [not null]
+  confirmed_by uuid
+  external_reference varchar
+  account_number varchar
+  status payment_status [not null, default: 'requires_confirmation']
+  notes text
+  confirmed_at timestamp
+  created_at timestamp [not null]
+}
+
+Table escrow_holds {
+  id uuid [pk]
+  payment_intent_id uuid [not null]
+  seller_id uuid [not null]
+  amount decimal [not null]
+  status varchar [not null, default: 'held']
+  released_at timestamp
+  created_at timestamp [not null]
+}
+
+Table refunds {
+  id uuid [pk]
+  payment_intent_id uuid [not null]
+  user_id uuid [not null]
+  amount decimal [not null]
+  reason text
+  status payment_status [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table delivery_zones {
+  id uuid [pk]
+  name varchar [not null]
+  district varchar
+  thana varchar
+  is_dhaka boolean [not null, default: false]
+  active boolean [not null, default: true]
+}
+
+Table shipping_rates {
+  id uuid [pk]
+  zone_id uuid [not null]
+  rate_per_seller decimal [not null]
+  service_type varchar [not null]
+  active boolean [not null, default: true]
+}
+
+Table orders {
+  id uuid [pk]
+  buyer_id uuid [not null]
+  order_number varchar [unique, not null]
+  status order_status [not null, default: 'pending']
+  payment_method payment_method [not null]
+  payment_intent_id uuid
+  delivery_location_id uuid
+  recipient_name varchar [not null]
+  recipient_phone varchar [not null]
+  subtotal decimal [not null]
+  delivery_fee decimal [not null, default: 0]
+  total decimal [not null]
+  seller_count int [not null, default: 1]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table order_items {
+  id uuid [pk]
+  order_id uuid [not null]
+  listing_id uuid [not null]
+  seller_id uuid [not null]
+  title_snapshot varchar [not null]
+  price_snapshot decimal [not null]
+  quantity int [not null, default: 1]
+  status order_status [not null, default: 'pending']
+}
+
+Table order_status_events {
+  id uuid [pk]
+  order_id uuid [not null]
+  actor_id uuid
+  from_status order_status
+  to_status order_status [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table shipments {
+  id uuid [pk]
+  order_id uuid
+  borrow_order_id uuid
+  seller_id uuid
+  courier_name varchar
+  tracking_number varchar
+  status shipment_status [not null, default: 'pending']
+  shipped_at timestamp
+  delivered_at timestamp
+  created_at timestamp [not null]
+}
+
+Table shipment_events {
+  id uuid [pk]
+  shipment_id uuid [not null]
+  status shipment_status [not null]
+  location_text varchar
+  notes text
+  event_at timestamp [not null]
+}
+
+Table payout_accounts {
+  id uuid [pk]
+  user_id uuid [not null]
+  method payment_method [not null]
+  account_name varchar
+  account_number varchar
+  bank_name varchar
+  is_default boolean [not null, default: false]
+  created_at timestamp [not null]
+}
+
+Table payout_requests {
+  id uuid [pk]
+  user_id uuid [not null]
+  payout_account_id uuid [not null]
+  amount decimal [not null]
+  status payment_status [not null, default: 'pending']
+  reviewed_by uuid
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table invoices {
+  id uuid [pk]
+  order_id uuid [not null]
+  invoice_number varchar [unique, not null]
+  invoice_url text
+  generated_at timestamp [not null]
+}
+
+Table borrow_orders {
+  id uuid [pk]
+  borrower_id uuid [not null]
+  owner_id uuid
+  order_number varchar [unique, not null]
+  status borrow_status [not null, default: 'pending_owner_review']
+  handover_method handover_method [not null, default: 'meetup']
+  deposit_locked decimal [not null, default: 0]
+  borrow_fee decimal [not null, default: 0]
+  payment_intent_id uuid
+  start_date timestamp
+  due_date timestamp
+  completed_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table borrow_order_items {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  listing_id uuid [not null]
+  title_snapshot varchar [not null]
+  deposit_snapshot decimal
+  borrow_fee_snapshot decimal
+  duration_days_snapshot int
+}
+
+Table borrow_order_owner_details {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  owner_id uuid [not null]
+  handover_method handover_method [not null]
+  meetup_location_id uuid
+  meetup_datetime timestamp
+  courier_district varchar
+  courier_thana varchar
+  courier_address text
+  recipient_name varchar
+  phone varchar
+  message text
+}
+
+Table borrow_status_events {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  actor_id uuid
+  from_status borrow_status
+  to_status borrow_status [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table borrow_counter_offers {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  proposer_id uuid [not null]
+  proposed_date timestamp
+  proposed_location_id uuid
+  message text
+  status varchar [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table borrow_return_proofs {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  submitted_by uuid [not null]
+  tracking_number varchar
+  media_id uuid
+  notes text
+  created_at timestamp [not null]
+}
+
+Table borrow_extensions {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  requested_by uuid [not null]
+  days_requested int [not null]
+  reason text
+  status varchar [not null, default: 'pending']
+  reviewed_by uuid
+  created_at timestamp [not null]
+  reviewed_at timestamp
+}
+
+Table deposit_locks {
+  id uuid [pk]
+  user_id uuid [not null]
+  borrow_order_id uuid [not null]
+  amount decimal [not null]
+  status varchar [not null, default: 'locked']
+  released_at timestamp
+  created_at timestamp [not null]
+}
+
+Table borrow_order_pass_reservations {
+  id uuid [pk]
+  borrow_order_id uuid [not null]
+  credit_id uuid [not null]
+  status pass_credit_status [not null, default: 'reserved']
+  created_at timestamp [not null]
+}
+
+Table disputes {
+  id uuid [pk]
+  opened_by uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  reason text [not null]
+  status dispute_status [not null, default: 'open']
+  resolved_by uuid
+  resolution text
+  created_at timestamp [not null]
+  resolved_at timestamp
+}
+
+Table exchange_orders {
+  id uuid [pk]
+  proposer_id uuid [not null]
+  owner_id uuid [not null]
+  requested_listing_id uuid [not null]
+  offered_listing_id uuid [not null]
+  status exchange_status [not null, default: 'pending_proposal']
+  proposed_location_id uuid
+  proposed_date timestamp
+  message text
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table exchange_status_events {
+  id uuid [pk]
+  exchange_order_id uuid [not null]
+  actor_id uuid
+  from_status exchange_status
+  to_status exchange_status [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table exchange_counter_offers {
+  id uuid [pk]
+  exchange_order_id uuid [not null]
+  proposer_id uuid [not null]
+  offered_listing_id uuid
+  proposed_location_id uuid
+  proposed_date timestamp
+  message text
+  status varchar [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table exchange_handover_confirmations {
+  id uuid [pk]
+  exchange_order_id uuid [not null]
+  user_id uuid [not null]
+  confirmed_at timestamp [not null]
+  notes text
+}
+
+Table exchange_preferences {
+  id uuid [pk]
+  listing_id uuid [not null]
+  preference_text varchar [not null]
+}
+
+Table conversations {
+  id uuid [pk]
+  context_type varchar
+  context_id uuid
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table conversation_participants {
+  conversation_id uuid [not null]
+  user_id uuid [not null]
+  last_read_at timestamp
+  muted_at timestamp
+
+  indexes {
+    (conversation_id, user_id) [pk]
+  }
+}
+
+Table messages {
+  id uuid [pk]
+  conversation_id uuid [not null]
+  sender_id uuid [not null]
+  body text
+  created_at timestamp [not null]
+  edited_at timestamp
+  deleted_at timestamp
+}
+
+Table message_attachments {
+  id uuid [pk]
+  message_id uuid [not null]
+  media_id uuid [not null]
+  attachment_type varchar [not null]
+}
+
+Table message_receipts {
+  message_id uuid [not null]
+  user_id uuid [not null]
+  delivered_at timestamp
+  read_at timestamp
+
+  indexes {
+    (message_id, user_id) [pk]
+  }
+}
+
+Table presence_sessions {
+  id uuid [pk]
+  user_id uuid [not null]
+  connection_id varchar [not null]
+  is_online boolean [not null, default: true]
+  last_seen_at timestamp [not null]
+}
+
+Table message_exchange_proposals {
+  id uuid [pk]
+  message_id uuid [not null]
+  exchange_order_id uuid
+  offering_listing_id uuid [not null]
+  requesting_listing_id uuid [not null]
+  status varchar [not null, default: 'pending']
+  created_at timestamp [not null]
+}
+
+Table notifications {
+  id uuid [pk]
+  user_id uuid [not null]
+  actor_id uuid
+  type notification_type [not null]
+  title varchar [not null]
+  description text
+  action_url text
+  is_read boolean [not null, default: false]
+  removed_at timestamp
+  created_at timestamp [not null]
+}
+
+Table notification_deliveries {
+  id uuid [pk]
+  notification_id uuid [not null]
+  channel notification_channel [not null]
+  status varchar [not null, default: 'pending']
+  sent_at timestamp
+  error_message text
+}
+
+Table notification_preferences {
+  user_id uuid [pk]
+  email_enabled boolean [not null, default: true]
+  push_enabled boolean [not null, default: true]
+  marketing_enabled boolean [not null, default: false]
+  updated_at timestamp [not null]
+}
+
+Table report_categories {
+  id uuid [pk]
+  target_type report_target_type [not null]
+  name varchar [not null]
+  active boolean [not null, default: true]
+  sort_order int [not null, default: 0]
+}
+
+Table reports {
+  id uuid [pk]
+  reporter_id uuid [not null]
+  category_id uuid
+  target_type report_target_type [not null]
+  target_id uuid [not null]
+  details text
+  status report_status [not null, default: 'submitted']
+  resolution text
+  created_at timestamp [not null]
+  resolved_at timestamp
+}
+
+Table report_events {
+  id uuid [pk]
+  report_id uuid [not null]
+  actor_id uuid
+  event_type varchar [not null]
+  notes text
+  created_at timestamp [not null]
+}
+
+Table account_strikes {
+  id uuid [pk]
+  user_id uuid [not null]
+  report_id uuid
+  type strike_type [not null]
+  reason text
+  starts_at timestamp [not null]
+  expires_at timestamp
+  created_at timestamp [not null]
+}
+
+Table moderation_actions {
+  id uuid [pk]
+  actor_id uuid [not null]
+  target_type varchar [not null]
+  target_id uuid [not null]
+  action varchar [not null]
+  reason text
+  metadata json
+  created_at timestamp [not null]
+}
+
+Table support_tickets {
+  id uuid [pk]
+  user_id uuid [not null]
+  subject varchar [not null]
+  status varchar [not null, default: 'open']
+  created_at timestamp [not null]
+  closed_at timestamp
+}
+
+Table support_ticket_messages {
+  id uuid [pk]
+  ticket_id uuid [not null]
+  sender_id uuid [not null]
+  body text [not null]
+  created_at timestamp [not null]
+}
+
+Table reading_goals {
+  id uuid [pk]
+  user_id uuid [not null]
+  year int [not null]
+  goal_books int [not null]
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table reading_items {
+  id uuid [pk]
+  user_id uuid [not null]
+  book_id uuid
+  listing_id uuid
+  title_snapshot varchar [not null]
+  author_snapshot varchar
+  total_pages int
+  pages_read int [not null, default: 0]
+  status varchar [not null, default: 'currently_reading']
+  started_at timestamp
+  finished_at timestamp
+  created_at timestamp [not null]
+}
+
+Table reading_progress_logs {
+  id uuid [pk]
+  reading_item_id uuid [not null]
+  pages_added int [not null]
+  logged_at timestamp [not null]
+}
+
+Table reading_streaks {
+  user_id uuid [pk]
+  current_streak_days int [not null, default: 0]
+  longest_streak_days int [not null, default: 0]
+  last_logged_at timestamp
+  updated_at timestamp [not null]
+}
+
+Table reading_queue_items {
+  id uuid [pk]
+  user_id uuid [not null]
+  book_id uuid
+  listing_id uuid
+  sort_order int [not null, default: 0]
+  created_at timestamp [not null]
+}
+
+Table cms_pages {
+  id uuid [pk]
+  slug varchar [unique, not null]
+  title varchar [not null]
+  body text
+  status cms_status [not null, default: 'draft']
+  created_by uuid
+  published_at timestamp
+  created_at timestamp [not null]
+  updated_at timestamp [not null]
+}
+
+Table hero_banners {
+  id uuid [pk]
+  title varchar [not null]
+  subtitle text
+  image_media_id uuid
+  cta_label varchar
+  cta_url text
+  status cms_status [not null, default: 'draft']
+  sort_order int [not null, default: 0]
+  created_at timestamp [not null]
+}
+
+Table sponsors {
+  id uuid [pk]
+  name varchar [not null]
+  logo_media_id uuid
+  url text
+  active boolean [not null, default: true]
+  created_at timestamp [not null]
+}
+
+Table sponsor_campaigns {
+  id uuid [pk]
+  sponsor_id uuid [not null]
+  title varchar [not null]
+  placement varchar [not null]
+  starts_at timestamp
+  ends_at timestamp
+  status campaign_status [not null, default: 'draft']
+}
+
+Table testimonials {
+  id uuid [pk]
+  name varchar [not null]
+  role varchar
+  location varchar
+  rating int
+  quote text [not null]
+  status cms_status [not null, default: 'draft']
+  created_at timestamp [not null]
+}
+
+Table newsletter_subscribers {
+  id uuid [pk]
+  email varchar [unique, not null]
+  user_id uuid
+  status varchar [not null, default: 'subscribed']
+  subscribed_at timestamp [not null]
+}
+
+Table faqs {
+  id uuid [pk]
+  category varchar [not null]
+  question text [not null]
+  answer text [not null]
+  status cms_status [not null, default: 'published']
+  sort_order int [not null, default: 0]
+}
+
+Table author_spotlights {
+  id uuid [pk]
+  author_id uuid [not null]
+  title varchar
+  description text
+  status cms_status [not null, default: 'draft']
+  starts_at timestamp
+  ends_at timestamp
+}
+
+Table community_posts {
+  id uuid [pk]
+  author_id uuid
+  title varchar [not null]
+  body text
+  stat_label varchar
+  status cms_status [not null, default: 'draft']
+  created_at timestamp [not null]
+}
+
+Table campaigns {
+  id uuid [pk]
+  slug varchar [unique, not null]
+  title varchar [not null]
+  description text
+  status campaign_status [not null, default: 'draft']
+  starts_at timestamp
+  ends_at timestamp
+  created_at timestamp [not null]
+}
+
+Table campaign_events {
+  id uuid [pk]
+  campaign_id uuid [not null]
+  title varchar [not null]
+  event_type varchar
+  location_text varchar
+  starts_at timestamp
+  ends_at timestamp
+  sort_order int [not null, default: 0]
+}
+
+Table campaign_categories {
+  campaign_id uuid [not null]
+  category_id uuid [not null]
+
+  indexes {
+    (campaign_id, category_id) [pk]
+  }
+}
+
+Table campaign_books {
+  campaign_id uuid [not null]
+  listing_id uuid [not null]
+  placement varchar
+  sort_order int [not null, default: 0]
+
+  indexes {
+    (campaign_id, listing_id) [pk]
+  }
+}
+
+Table campaign_authors {
+  campaign_id uuid [not null]
+  author_id uuid [not null]
+  sort_order int [not null, default: 0]
+
+  indexes {
+    (campaign_id, author_id) [pk]
+  }
+}
+
+Table discount_rules {
+  id uuid [pk]
+  campaign_id uuid
+  code varchar
+  discount_type varchar [not null]
+  discount_value decimal [not null]
+  starts_at timestamp
+  ends_at timestamp
+  active boolean [not null, default: true]
+}
+
+Table featured_listing_slots {
+  id uuid [pk]
+  listing_id uuid [not null]
+  placement varchar [not null]
+  starts_at timestamp
+  ends_at timestamp
+  status campaign_status [not null, default: 'scheduled']
+}
+
+Table publisher_partnerships {
+  id uuid [pk]
+  publisher_id uuid [not null]
+  title varchar [not null]
+  terms text
+  starts_at timestamp
+  ends_at timestamp
+  status campaign_status [not null, default: 'draft']
+}
+
+Table book_view_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid [not null]
+  session_id varchar
+  source varchar
+  created_at timestamp [not null]
+}
+
+Table search_impression_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid
+  query text
+  mode varchar
+  location_id uuid
+  created_at timestamp [not null]
+}
+
+Table listing_click_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid [not null]
+  source varchar
+  created_at timestamp [not null]
+}
+
+Table share_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid
+  channel varchar
+  created_at timestamp [not null]
+}
+
+Table recommendation_events {
+  id uuid [pk]
+  user_id uuid
+  listing_id uuid [not null]
+  source varchar [not null]
+  reason text
+  created_at timestamp [not null]
+}
+
+Table exchange_search_events {
+  id uuid [pk]
+  user_id uuid
+  query text
+  category varchar
+  sort varchar
+  location_id uuid
+  created_at timestamp [not null]
+}
+
+Table daily_user_analytics {
+  id uuid [pk]
+  user_id uuid [not null]
+  date date [not null]
+  metric_key varchar [not null]
+  metric_value decimal [not null]
+}
+
+Table daily_listing_analytics {
+  id uuid [pk]
+  listing_id uuid [not null]
+  date date [not null]
+  views int [not null, default: 0]
+  clicks int [not null, default: 0]
+  wishlists int [not null, default: 0]
+}
+
+Ref: users.id < firebase_identities.user_id
+Ref: users.id < refresh_tokens.user_id
+Ref: users.id < user_sessions.user_id
+Ref: users.id < otp_codes.user_id
+Ref: users.id < password_reset_requests.user_id
+Ref: users.id < terms_acceptances.user_id
+Ref: users.id < user_profiles.user_id
+Ref: users.id < user_preferences.user_id
+Ref: users.id < user_social_links.user_id
+Ref: users.id < user_reading_interests.user_id
+Ref: reading_interests.id < user_reading_interests.interest_id
+Ref: users.id < follows.follower_id
+Ref: users.id < follows.following_id
+Ref: users.id < user_locations.user_id
+Ref: locations.id < user_locations.location_id
+Ref: users.id < user_meetup_locations.user_id
+Ref: locations.id < user_meetup_locations.location_id
+Ref: users.id < student_verifications.user_id
+Ref: media_assets.id < student_verifications.document_media_id
+Ref: users.id < user_verifications.user_id
+Ref: users.id < user_verifications.reviewer_id
+Ref: user_verifications.id < verification_documents.verification_id
+Ref: media_assets.id < verification_documents.media_id
+Ref: users.id < user_devices.user_id
+Ref: users.id < security_events.user_id
+Ref: users.id < account_deletion_requests.user_id
+
+Ref: users.id < media_assets.owner_user_id
+Ref: media_assets.id < media_variants.media_id
+Ref: media_assets.id < media_processing_jobs.media_id
+
+Ref: publishers.id < book_metadata.publisher_id
+Ref: book_metadata.id < book_authors.book_id
+Ref: authors.id < book_authors.author_id
+Ref: book_metadata.id < book_categories.book_id
+Ref: categories.id < book_categories.category_id
+Ref: categories.id < categories.parent_id
+Ref: users.id < isbn_lookup_logs.user_id
+Ref: book_metadata.id < book_listings.book_id
+Ref: users.id < book_listings.owner_user_id
+Ref: locations.id < book_listings.location_id
+Ref: book_listings.id < book_listing_modes.listing_id
+Ref: book_listings.id < book_images.listing_id
+Ref: media_assets.id < book_images.media_id
+Ref: book_listings.id < book_questions.listing_id
+Ref: users.id < book_questions.asker_id
+Ref: book_questions.id < book_answers.question_id
+Ref: users.id < book_answers.answerer_id
+Ref: users.id < review_eligibilities.user_id
+Ref: users.id < reviews.reviewer_id
+Ref: review_eligibilities.id < reviews.eligibility_id
+Ref: reviews.id < review_helpful_votes.review_id
+Ref: users.id < review_helpful_votes.user_id
+Ref: badges.id < user_badges.badge_id
+Ref: users.id < user_badges.user_id
+Ref: users.id < reputation_scores.user_id
+Ref: users.id < reputation_events.user_id
+
+Ref: locations.id < library_branches.location_id
+Ref: book_listings.id < library_inventory_items.listing_id
+Ref: library_branches.id < library_inventory_items.branch_id
+Ref: library_inventory_items.id < library_inventory_events.inventory_item_id
+Ref: users.id < library_inventory_events.actor_id
+Ref: library_collections.id < library_collection_items.collection_id
+Ref: book_listings.id < library_collection_items.listing_id
+Ref: users.id < library_queue_entries.user_id
+Ref: book_listings.id < library_queue_entries.listing_id
+
+Ref: users.id < donation_requests.donor_id
+Ref: locations.id < donation_requests.pickup_location_id
+Ref: donation_requests.id < donation_items.donation_request_id
+Ref: book_metadata.id < donation_items.book_id
+Ref: book_listings.id < donation_items.accepted_listing_id
+Ref: donation_requests.id < donation_pickups.donation_request_id
+Ref: donation_items.id < donation_quality_checks.donation_item_id
+Ref: users.id < donation_quality_checks.reviewer_id
+Ref: users.id < donor_rewards.donor_id
+Ref: donation_requests.id < donor_rewards.donation_request_id
+Ref: donor_rewards.id < donor_reward_redemptions.reward_id
+Ref: users.id < donor_reward_redemptions.redeemed_by
+Ref: users.id < donor_profile_tags.user_id
+
+Ref: users.id < membership_plans.created_by
+Ref: users.id < user_memberships.user_id
+Ref: membership_plans.id < user_memberships.plan_id
+Ref: user_memberships.id < user_memberships.upgraded_from_membership_id
+Ref: plan_purchases.id < user_memberships.purchase_id
+Ref: user_memberships.id < membership_events.membership_id
+Ref: users.id < membership_events.actor_id
+Ref: users.id < borrow_pass_packages.created_by
+Ref: users.id < user_borrow_passes.user_id
+Ref: borrow_pass_packages.id < user_borrow_passes.package_id
+Ref: plan_purchases.id < user_borrow_passes.purchase_id
+Ref: user_borrow_passes.id < borrow_pass_credits.user_borrow_pass_id
+Ref: users.id < borrow_pass_credits.user_id
+Ref: borrow_pass_credits.id < borrow_pass_usages.credit_id
+Ref: borrow_orders.id < borrow_pass_usages.borrow_order_id
+Ref: users.id < free_borrow_credits.user_id
+Ref: user_memberships.id < free_borrow_credits.membership_id
+Ref: users.id < monthly_donated_book_credits.user_id
+Ref: user_memberships.id < monthly_donated_book_credits.membership_id
+Ref: users.id < plan_purchases.user_id
+Ref: payment_intents.id < plan_purchases.payment_intent_id
+Ref: users.id < membership_upgrade_quotes.user_id
+Ref: user_memberships.id < membership_upgrade_quotes.from_membership_id
+Ref: membership_plans.id < membership_upgrade_quotes.to_plan_id
+Ref: users.id < plan_change_logs.actor_id
+
+Ref: users.id < wishlists.user_id
+Ref: wishlists.id < wishlist_items.wishlist_id
+Ref: book_listings.id < wishlist_items.listing_id
+Ref: users.id < carts.user_id
+Ref: carts.id < cart_items.cart_id
+Ref: book_listings.id < cart_items.listing_id
+Ref: users.id < borrow_carts.user_id
+Ref: borrow_carts.id < borrow_cart_items.borrow_cart_id
+Ref: book_listings.id < borrow_cart_items.listing_id
+Ref: users.id < borrow_cart_items.owner_id
+
+Ref: users.id < wallets.user_id
+Ref: wallets.id < wallet_transactions.wallet_id
+Ref: users.id < ledger_entries.user_id
+Ref: wallet_transactions.id < ledger_entries.wallet_transaction_id
+Ref: users.id < payment_intents.user_id
+Ref: payment_intents.id < payment_confirmations.payment_intent_id
+Ref: users.id < payment_confirmations.confirmed_by
+Ref: payment_intents.id < escrow_holds.payment_intent_id
+Ref: users.id < escrow_holds.seller_id
+Ref: payment_intents.id < refunds.payment_intent_id
+Ref: users.id < refunds.user_id
+Ref: delivery_zones.id < shipping_rates.zone_id
+Ref: users.id < orders.buyer_id
+Ref: payment_intents.id < orders.payment_intent_id
+Ref: locations.id < orders.delivery_location_id
+Ref: orders.id < order_items.order_id
+Ref: book_listings.id < order_items.listing_id
+Ref: users.id < order_items.seller_id
+Ref: orders.id < order_status_events.order_id
+Ref: users.id < order_status_events.actor_id
+Ref: orders.id < shipments.order_id
+Ref: borrow_orders.id < shipments.borrow_order_id
+Ref: users.id < shipments.seller_id
+Ref: shipments.id < shipment_events.shipment_id
+Ref: users.id < payout_accounts.user_id
+Ref: users.id < payout_requests.user_id
+Ref: payout_accounts.id < payout_requests.payout_account_id
+Ref: users.id < payout_requests.reviewed_by
+Ref: orders.id < invoices.order_id
+
+Ref: users.id < borrow_orders.borrower_id
+Ref: users.id < borrow_orders.owner_id
+Ref: payment_intents.id < borrow_orders.payment_intent_id
+Ref: borrow_orders.id < borrow_order_items.borrow_order_id
+Ref: book_listings.id < borrow_order_items.listing_id
+Ref: borrow_orders.id < borrow_order_owner_details.borrow_order_id
+Ref: users.id < borrow_order_owner_details.owner_id
+Ref: user_meetup_locations.id < borrow_order_owner_details.meetup_location_id
+Ref: borrow_orders.id < borrow_status_events.borrow_order_id
+Ref: users.id < borrow_status_events.actor_id
+Ref: borrow_orders.id < borrow_counter_offers.borrow_order_id
+Ref: users.id < borrow_counter_offers.proposer_id
+Ref: locations.id < borrow_counter_offers.proposed_location_id
+Ref: borrow_orders.id < borrow_return_proofs.borrow_order_id
+Ref: users.id < borrow_return_proofs.submitted_by
+Ref: media_assets.id < borrow_return_proofs.media_id
+Ref: borrow_orders.id < borrow_extensions.borrow_order_id
+Ref: users.id < borrow_extensions.requested_by
+Ref: users.id < borrow_extensions.reviewed_by
+Ref: users.id < deposit_locks.user_id
+Ref: borrow_orders.id < deposit_locks.borrow_order_id
+Ref: borrow_orders.id < borrow_order_pass_reservations.borrow_order_id
+Ref: borrow_pass_credits.id < borrow_order_pass_reservations.credit_id
+Ref: users.id < disputes.opened_by
+Ref: users.id < disputes.resolved_by
+
+Ref: users.id < exchange_orders.proposer_id
+Ref: users.id < exchange_orders.owner_id
+Ref: book_listings.id < exchange_orders.requested_listing_id
+Ref: book_listings.id < exchange_orders.offered_listing_id
+Ref: locations.id < exchange_orders.proposed_location_id
+Ref: exchange_orders.id < exchange_status_events.exchange_order_id
+Ref: users.id < exchange_status_events.actor_id
+Ref: exchange_orders.id < exchange_counter_offers.exchange_order_id
+Ref: users.id < exchange_counter_offers.proposer_id
+Ref: book_listings.id < exchange_counter_offers.offered_listing_id
+Ref: locations.id < exchange_counter_offers.proposed_location_id
+Ref: exchange_orders.id < exchange_handover_confirmations.exchange_order_id
+Ref: users.id < exchange_handover_confirmations.user_id
+Ref: book_listings.id < exchange_preferences.listing_id
+
+Ref: conversations.id < conversation_participants.conversation_id
+Ref: users.id < conversation_participants.user_id
+Ref: conversations.id < messages.conversation_id
+Ref: users.id < messages.sender_id
+Ref: messages.id < message_attachments.message_id
+Ref: media_assets.id < message_attachments.media_id
+Ref: messages.id < message_receipts.message_id
+Ref: users.id < message_receipts.user_id
+Ref: users.id < presence_sessions.user_id
+Ref: messages.id < message_exchange_proposals.message_id
+Ref: exchange_orders.id < message_exchange_proposals.exchange_order_id
+Ref: book_listings.id < message_exchange_proposals.offering_listing_id
+Ref: book_listings.id < message_exchange_proposals.requesting_listing_id
+
+Ref: users.id < notifications.user_id
+Ref: users.id < notifications.actor_id
+Ref: notifications.id < notification_deliveries.notification_id
+Ref: users.id < notification_preferences.user_id
+
+Ref: report_categories.id < reports.category_id
+Ref: users.id < reports.reporter_id
+Ref: reports.id < report_events.report_id
+Ref: users.id < report_events.actor_id
+Ref: users.id < account_strikes.user_id
+Ref: reports.id < account_strikes.report_id
+Ref: users.id < moderation_actions.actor_id
+Ref: users.id < support_tickets.user_id
+Ref: support_tickets.id < support_ticket_messages.ticket_id
+Ref: users.id < support_ticket_messages.sender_id
+
+Ref: users.id < reading_goals.user_id
+Ref: users.id < reading_items.user_id
+Ref: book_metadata.id < reading_items.book_id
+Ref: book_listings.id < reading_items.listing_id
+Ref: reading_items.id < reading_progress_logs.reading_item_id
+Ref: users.id < reading_streaks.user_id
+Ref: users.id < reading_queue_items.user_id
+Ref: book_metadata.id < reading_queue_items.book_id
+Ref: book_listings.id < reading_queue_items.listing_id
+
+Ref: users.id < cms_pages.created_by
+Ref: media_assets.id < hero_banners.image_media_id
+Ref: media_assets.id < sponsors.logo_media_id
+Ref: sponsors.id < sponsor_campaigns.sponsor_id
+Ref: users.id < newsletter_subscribers.user_id
+Ref: authors.id < author_spotlights.author_id
+Ref: users.id < community_posts.author_id
+Ref: campaigns.id < campaign_events.campaign_id
+Ref: campaigns.id < campaign_categories.campaign_id
+Ref: categories.id < campaign_categories.category_id
+Ref: campaigns.id < campaign_books.campaign_id
+Ref: book_listings.id < campaign_books.listing_id
+Ref: campaigns.id < campaign_authors.campaign_id
+Ref: authors.id < campaign_authors.author_id
+Ref: campaigns.id < discount_rules.campaign_id
+Ref: book_listings.id < featured_listing_slots.listing_id
+Ref: publishers.id < publisher_partnerships.publisher_id
+
+Ref: users.id < book_view_events.user_id
+Ref: book_listings.id < book_view_events.listing_id
+Ref: users.id < search_impression_events.user_id
+Ref: book_listings.id < search_impression_events.listing_id
+Ref: locations.id < search_impression_events.location_id
+Ref: users.id < listing_click_events.user_id
+Ref: book_listings.id < listing_click_events.listing_id
+Ref: users.id < share_events.user_id
+Ref: book_listings.id < share_events.listing_id
+Ref: users.id < recommendation_events.user_id
+Ref: book_listings.id < recommendation_events.listing_id
+Ref: users.id < exchange_search_events.user_id
+Ref: locations.id < exchange_search_events.location_id
+Ref: users.id < daily_user_analytics.user_id
+Ref: book_listings.id < daily_listing_analytics.listing_id
