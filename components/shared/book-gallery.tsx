@@ -16,48 +16,83 @@ export function BookGallery({ images, className }: BookGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const selectedImage = images[selectedIndex];
 
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
   if (!selectedImage) {
     return null;
   }
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const scrollLeft = e.currentTarget.scrollLeft;
-    const width = e.currentTarget.clientWidth;
-    if (width > 0) {
-      const index = Math.round(scrollLeft / width);
-      if (index !== selectedIndex) {
-        setSelectedIndex(index);
-      }
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && selectedIndex < images.length - 1) {
+      setSelectedIndex(selectedIndex + 1);
     }
+    if (isRightSwipe && selectedIndex > 0) {
+      setSelectedIndex(selectedIndex - 1);
+    }
+    setTouchStart(0);
+    setTouchEnd(0);
   };
 
   return (
     <div className={cn("relative space-y-3", className)}>
+      {/* Mobile Swipeable Gallery */}
       <div
-        className="flex w-full snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto sm:block sm:overflow-visible [&::-webkit-scrollbar]:hidden"
-        onScroll={handleScroll}
+        className="overflow-hidden sm:hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        {images.map((image, index) => (
-          <div
-            key={`${image.src}-${index}`}
-            className={cn(
-              "w-full shrink-0 snap-center",
-              index === selectedIndex ? "block" : "block sm:hidden",
-            )}
-          >
-            <div className="bg-muted relative h-[380px] overflow-hidden rounded-none border-none sm:aspect-[3/4] sm:h-auto sm:rounded-xl sm:border">
-              <Image
-                src={image.src}
-                alt={image.alt || `Image ${index + 1}`}
-                fill
-                sizes="(min-width: 992px) 420px, 100vw"
-                className="object-cover"
-                priority={index === 0}
-              />
+        <div
+          className="flex transition-transform duration-300 ease-out"
+          style={{ transform: `translateX(-${selectedIndex * 100}%)` }}
+        >
+          {images.map((image, index) => (
+            <div key={`${image.src}-${index}`} className="w-full shrink-0">
+              <div className="bg-muted relative h-[380px] overflow-hidden rounded-none border-none">
+                <Image
+                  src={image.src}
+                  alt={image.alt || `Image ${index + 1}`}
+                  fill
+                  sizes="100vw"
+                  className="object-cover"
+                  priority={index === 0}
+                />
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* Desktop Single Image View */}
+      <div className="hidden sm:block">
+        <div className="w-full shrink-0">
+          <div className="bg-muted relative aspect-[3/4] h-auto overflow-hidden rounded-xl border">
+            <Image
+              src={selectedImage.src}
+              alt={selectedImage.alt || `Selected Image`}
+              fill
+              sizes="(min-width: 992px) 420px, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
       {images.length > 1 && (
         <div className="absolute bottom-4 left-1/2 z-10 flex -translate-x-1/2 gap-1.5 sm:hidden">
           {images.map((_, index) => (
@@ -73,6 +108,7 @@ export function BookGallery({ images, className }: BookGalleryProps) {
           ))}
         </div>
       )}
+
       {images.length > 1 && (
         <div className="hidden snap-x [scrollbar-width:none] gap-2 overflow-x-auto pb-2 sm:flex [&::-webkit-scrollbar]:hidden">
           {images.map((image, index) => (

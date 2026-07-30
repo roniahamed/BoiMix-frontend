@@ -117,6 +117,7 @@ export function ScrollContainer({
         ref={containerRef}
         className={cn(
           "-mx-4 flex scrollbar-none gap-4 overflow-x-auto scroll-smooth px-4 py-1 pb-3 md:gap-6",
+          "snap-x snap-mandatory [&>*]:snap-start [&>*]:snap-always",
           className,
         )}
         style={{
