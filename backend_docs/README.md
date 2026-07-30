@@ -10,6 +10,16 @@ This folder contains the backend planning, architecture, and database design doc
   - Backend best practices, do/don't rules, and implementation instructions.
 - `backend_api_documentation_standards.md`
   - API documentation standards, required endpoint details, and professional documentation rules.
+- `backend_coding_standards.md`
+  - Coding conventions, module ownership rules, naming, file-size guidance, and code organization standards.
+- `backend_testing_standards.md`
+  - Required testing expectations for services, APIs, integrations, and critical workflows.
+- `backend_deployment_runbook.md`
+  - Deployment, migration, rollback, and operational verification guide.
+- `backend_env_and_secrets_reference.md`
+  - Environment variable and secret reference for backend services and integrations.
+- `backend_decision_log.md`
+  - Major backend decisions with dates, reasons, and impact.
 - `backend_phase_by_phase_plan.md`
   - Backend implementation roadmap broken into phases.
 - `backend_feature_dependency_audit.md`
