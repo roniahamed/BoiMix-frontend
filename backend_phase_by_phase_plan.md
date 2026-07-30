@@ -293,7 +293,67 @@ Acceptance:
 - Cart/wishlist survives across devices.
 - Borrow cart validates deposit and owner grouping.
 
-## Phase 7 - Marketplace Orders, Sales, Wallet
+## Phase 7 - Memberships, Subscriptions, Borrow Passes
+
+Goal:
+
+Implement BoiMix's two-step borrow access model: long-term membership plus consumable borrow passes.
+
+Tasks:
+
+- Membership plan model.
+- Borrow pass package model.
+- Active user membership model.
+- Membership purchase checkout.
+- Membership renewal after 4 years.
+- Membership upgrade quote and upgrade payment.
+- Active pass wallet.
+- Pass purchase checkout.
+- Pass expiry.
+- Pass credit reserve/consume/restore rules.
+- Welcome gift: 5 free borrows, valid for 2 months.
+- Monthly donated free-book credit.
+- Premium-book pass requirement.
+- Borrow capacity calculation.
+- Priority queue flags by membership tier.
+- Member ID generation.
+- Dashboard pass usage history.
+- Admin plan management.
+
+APIs:
+
+- `GET /api/memberships/plans`
+- `GET /api/borrow-passes/packages`
+- `GET /api/me/membership`
+- `GET /api/me/passes`
+- `GET /api/me/passes/history`
+- `GET /api/me/borrow-capacity`
+- `GET /api/me/free-borrow-credits`
+- `POST /api/memberships/checkout`
+- `POST /api/memberships/renew`
+- `POST /api/memberships/upgrade-quote`
+- `POST /api/memberships/upgrade`
+- `POST /api/borrow-passes/checkout`
+- `POST /api/borrow-passes/{id}/consume`
+- `POST /api/borrow-passes/{id}/restore`
+
+Frontend routes unlocked:
+
+- `/explore/central-library/memberships`
+- `/dashboard/passes`
+- `/borrow/checkout` eligibility summary
+- `/dashboard/overview` membership/pass cards
+
+Acceptance:
+
+- Basic, Standard, Premium membership plans come from backend.
+- Mini, Standard, Pro borrow pass packages come from backend.
+- Active pass wallet shows real active passes and expiry.
+- Borrow capacity shows real membership limit, locked amount, and available amount.
+- Welcome gift and monthly donated free-book credits are tracked separately from paid pass credits.
+- Premium books cannot be borrowed without a valid pass credit.
+
+## Phase 8 - Marketplace Orders, Sales, Wallet
 
 Goal:
 
@@ -310,6 +370,8 @@ Tasks:
 - Wallet ledger.
 - Sales earning hold/release.
 - Payout request model.
+- Membership/pass payments and purchase ledger entries.
+- Manual payment confirmation support for bKash/Nagad/COD-style early operations.
 
 APIs:
 
@@ -324,7 +386,10 @@ APIs:
 - `GET /api/orders/{id}/tracking`
 - `GET /api/me/wallet`
 - `GET /api/me/wallet/transactions`
+- `GET /api/me/wallet/ledger`
 - `POST /api/me/wallet/payouts`
+- `POST /api/payments/intents`
+- `POST /api/payments/confirm`
 
 Frontend routes unlocked:
 
@@ -335,6 +400,7 @@ Frontend routes unlocked:
 - `/dashboard/orders`
 - `/dashboard/sales`
 - `/dashboard/wallet`
+- payment confirmation for memberships and passes
 
 Acceptance:
 
@@ -342,7 +408,7 @@ Acceptance:
 - Buyer can see tracking timeline.
 - Wallet transactions are ledger-based.
 
-## Phase 8 - Borrow Workflow
+## Phase 9 - Borrow Workflow
 
 Goal:
 
@@ -352,6 +418,9 @@ Tasks:
 
 - Borrow order entity.
 - Deposit lock.
+- Membership/pass eligibility check.
+- Borrow pass reservation and consumption.
+- Welcome gift/free monthly donated book credit usage.
 - Request creation.
 - Owner accept/reject.
 - Counter offer.
@@ -367,10 +436,12 @@ Tasks:
 - Borrow review.
 - Auto-expiry Celery tasks.
 - Reminder notification tasks.
+- Expire stale pass reservations.
 
 APIs:
 
 - `POST /api/borrow/orders`
+- `POST /api/borrow/orders/check-eligibility`
 - `GET /api/me/borrowed`
 - `GET /api/me/lent`
 - `GET /api/me/borrow-requests`
@@ -381,6 +452,7 @@ APIs:
 - `PATCH /api/borrow/orders/{id}/counter-offers/{counter_id}/accept`
 - `PATCH /api/borrow/orders/{id}/counter-offers/{counter_id}/reject`
 - `PATCH /api/borrow/orders/{id}/pay`
+- `POST /api/borrow/orders/{id}/reserve-pass`
 - `PATCH /api/borrow/orders/{id}/owner-handover`
 - `PATCH /api/borrow/orders/{id}/borrower-receive`
 - `POST /api/borrow/orders/{id}/return`
@@ -398,13 +470,16 @@ Frontend routes unlocked:
 - `/dashboard/lent`
 - `/dashboard/requests`
 - `/dashboard/action-center`
+- `/dashboard/passes`
 
 Acceptance:
 
 - Borrow status machine prevents invalid transitions.
 - Deposit releases only after valid completion or admin decision.
+- Pass credit is consumed only when borrow policy says the order is committed.
+- Cancel/reject/expire restores reserved pass credit according to policy.
 
-## Phase 9 - Exchange Workflow
+## Phase 10 - Exchange Workflow
 
 Goal:
 
@@ -452,7 +527,7 @@ Acceptance:
 - Incoming/outgoing offers match current dashboard tabs.
 - Only proposal participants can mutate exchange state.
 
-## Phase 10 - Messaging Realtime
+## Phase 11 - Messaging Realtime
 
 Goal:
 
@@ -497,7 +572,7 @@ Acceptance:
 - Read/seen state works.
 - Unread count updates without refresh.
 
-## Phase 11 - Notifications And Firebase FCM
+## Phase 12 - Notifications And Firebase FCM
 
 Goal:
 
@@ -535,7 +610,7 @@ Acceptance:
 - Authenticated browser can register FCM token.
 - Push notification sends through Firebase.
 
-## Phase 12 - Reputation, Reviews, Badges, Analytics
+## Phase 13 - Reputation, Reviews, Badges, Analytics
 
 Goal:
 
@@ -548,6 +623,8 @@ Tasks:
 - User transaction review model.
 - Reputation score model.
 - Badge rules.
+- Membership badges and VIP badge.
+- Pass usage and on-time return contribution.
 - Aggregated analytics tables.
 - Celery recalculation tasks.
 - Daily analytics snapshots.
@@ -564,6 +641,7 @@ APIs:
 - `GET /api/me/analytics/exchanges`
 - `GET /api/me/analytics/sales`
 - `GET /api/me/analytics/community`
+- `GET /api/me/analytics/membership`
 
 Frontend routes unlocked:
 
@@ -579,7 +657,7 @@ Acceptance:
 - Reputation changes after completed reviews/status events.
 - Dashboard analytics no longer use static arrays.
 
-## Phase 13 - Verification, Reports, Moderation
+## Phase 14 - Verification, Reports, Moderation
 
 Goal:
 
@@ -594,6 +672,8 @@ Tasks:
 - Admin audit log.
 - Account standing.
 - Abuse/report lifecycle.
+- Admin plan/pass controls.
+- Admin membership/payment adjustment audit.
 
 APIs:
 
@@ -606,6 +686,12 @@ APIs:
 - `GET /api/mod/disputes`
 - `PATCH /api/mod/disputes/{id}`
 - `GET /api/admin/audit-log`
+- `GET /api/admin/memberships/plans`
+- `POST /api/admin/memberships/plans`
+- `PATCH /api/admin/memberships/plans/{id}`
+- `GET /api/admin/borrow-passes/packages`
+- `POST /api/admin/borrow-passes/packages`
+- `PATCH /api/admin/borrow-passes/packages/{id}`
 
 Frontend routes unlocked:
 
@@ -620,7 +706,7 @@ Acceptance:
 - User can track submitted reports.
 - Moderator/admin actions are audited.
 
-## Phase 14 - Dashboard Summary And Badges
+## Phase 15 - Dashboard Summary And Badges
 
 Goal:
 
@@ -634,12 +720,15 @@ Tasks:
 - Pending action detector.
 - Nav badge counts.
 - Right sidebar summary.
+- Membership/pass summary.
+- Free credit and pass expiry warnings.
 
 APIs:
 
 - `GET /api/me/dashboard/summary`
 - `GET /api/me/dashboard/actions`
 - `GET /api/me/dashboard/activity`
+- `GET /api/me/dashboard/membership-summary`
 
 Frontend routes unlocked:
 
@@ -653,8 +742,9 @@ Acceptance:
 
 - Dashboard counts match source modules.
 - Counts update after borrow/exchange/order/message/notification mutations.
+- Dashboard warns before membership/pass expiry.
 
-## Phase 15 - Production Deployment
+## Phase 16 - Production Deployment
 
 Goal:
 
@@ -701,13 +791,14 @@ Acceptance:
 3. Books and upload.
 4. Search/location.
 5. Wishlist/cart.
-6. Marketplace orders.
-7. Borrow dashboard.
-8. Exchange dashboard.
-9. Messages WebSocket.
-10. Notifications FCM.
-11. Analytics/reputation.
-12. Reports/verification.
+6. Membership/pass system.
+7. Marketplace orders.
+8. Borrow dashboard.
+9. Exchange dashboard.
+10. Messages WebSocket.
+11. Notifications FCM.
+12. Analytics/reputation.
+13. Reports/verification.
 
 ## Dashboard Priority Order
 
@@ -732,3 +823,24 @@ Acceptance:
 19. `/dashboard/reports`
 20. `/dashboard/followers`
 21. `/dashboard/following`
+
+## Missing Coverage Audit
+
+These backend areas were missing or too shallow in the first architecture draft and are now explicit scope:
+
+- Subscription/membership plans.
+- Membership purchase, renewal, upgrade, expiry.
+- Borrow pass packages.
+- Active pass wallet.
+- Pass credit reserve, consume, restore, expire.
+- Welcome gift: 5 free borrows valid for 2 months.
+- Monthly donated free-book credit.
+- Premium-book pass requirement.
+- Membership-based borrow limit and priority queue.
+- Dashboard membership/pass summary.
+- Pass usage history.
+- Admin plan/package management.
+- Payment intents and manual payment confirmations.
+- Immutable wallet/ledger entries for memberships, passes, sales, deposits, payouts.
+- Expiry warning notifications for membership and passes.
+- Membership/reputation/badge connection.

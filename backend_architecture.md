@@ -22,6 +22,7 @@ No third-party backend database service is used. PostgreSQL is the source of tru
   - message unread count
 - Dashboard pages are present and need full backend coverage.
 - Upload book flow currently previews local files and mock-submits form data.
+- Membership/pass UI is present in `/explore/central-library/memberships` and `/dashboard/passes`.
 - Location search/reverse geocode is currently called from browser using Photon/Nominatim.
 - Messaging and notification UIs exist but are not backed by WebSocket, database, or Firebase yet.
 
@@ -309,7 +310,124 @@ Key APIs:
 - `POST /api/me/borrow-cart/items`
 - `DELETE /api/me/borrow-cart/items/{book_id}`
 
-### 9. Marketplace Orders
+### 9. Memberships, Subscriptions, Borrow Passes
+
+Requirement:
+
+BoiMix borrowing uses a two-step access model:
+
+1. A long-term library membership/subscription establishes the user's maximum borrow limit and library access.
+2. Consumable borrow passes are required to order premium/online borrow books.
+
+Current frontend rules from the membership pages:
+
+- Basic Member: one-time `৳500`, valid for 4 years, borrow books up to `৳500`.
+- Standard Member: one-time `৳1000`, valid for 4 years, borrow books up to `৳1000`, priority queue.
+- Premium Member: one-time `৳2000`, valid for 4 years, borrow books up to `৳2000+`, VIP/express priority and badge.
+- Membership fee is non-refundable.
+- Membership can be renewed after 4 years.
+- Membership upgrade should charge only the tier difference when possible.
+- Welcome gift gives 5 free borrows valid for 2 months.
+- Every member gets 1 donated book free per month.
+- Borrow passes are consumable top-ups:
+  - Mini Pass: `৳40`, 2 books, valid 1 month.
+  - Standard Pass: `৳70`, 4 books, valid 1 month.
+  - Pro Pass: `৳100`, 7 books, valid 2 months.
+- Premium books always require a valid borrow pass, even for premium members.
+- Donated monthly free book does not consume a borrow pass.
+
+Responsibilities:
+
+- Manage public membership plans and borrow pass packages.
+- Track active membership tier, validity, renewal, and upgrades.
+- Track borrow limit per membership.
+- Track active pass wallet and pass expiry.
+- Consume pass credits when a borrow order is confirmed.
+- Refund/restore pass credit only when policy allows.
+- Issue welcome free-borrow credits on first membership activation.
+- Issue monthly donated-book credit.
+- Enforce premium-book pass requirements.
+- Enforce membership requirement before central library borrowing.
+- Store all purchases in wallet/order ledger.
+- Expose active pass wallet and usage history to dashboard.
+- Admin can create/update/disable plans without code deploy.
+
+Core tables:
+
+- `membership_plans`
+- `user_memberships`
+- `membership_events`
+- `borrow_pass_packages`
+- `user_borrow_passes`
+- `borrow_pass_credits`
+- `borrow_pass_usages`
+- `free_borrow_credits`
+- `monthly_donated_book_credits`
+- `plan_purchases`
+- `membership_upgrade_quotes`
+- `library_queue_priorities`
+
+Key APIs:
+
+- `GET /api/memberships/plans`
+- `GET /api/borrow-passes/packages`
+- `GET /api/me/membership`
+- `GET /api/me/passes`
+- `GET /api/me/passes/history`
+- `POST /api/memberships/checkout`
+- `POST /api/memberships/renew`
+- `POST /api/memberships/upgrade-quote`
+- `POST /api/memberships/upgrade`
+- `POST /api/borrow-passes/checkout`
+- `POST /api/borrow-passes/{id}/consume`
+- `POST /api/borrow-passes/{id}/restore`
+- `GET /api/me/borrow-capacity`
+- `GET /api/me/free-borrow-credits`
+
+Borrow eligibility rules:
+
+```txt
+Borrow request
+  -> user must have active membership for central library/premium borrow
+  -> book value must be <= membership borrow limit
+  -> if donated monthly free book and monthly credit unused: no pass consumed
+  -> else if premium/online borrow: valid unexpired pass credit required
+  -> deposit/borrow limit must be available
+  -> create borrow order
+  -> reserve pass credit only after request is accepted or payment is confirmed
+```
+
+Pass lifecycle:
+
+```txt
+purchased -> active -> reserved -> consumed
+                    -> restored
+          -> expired
+```
+
+Membership lifecycle:
+
+```txt
+pending_payment -> active -> upgraded -> expired -> renewed
+               -> cancelled_by_admin
+```
+
+Dashboard data:
+
+- active membership name/tier
+- member ID
+- valid until
+- borrow limit
+- available borrow capacity
+- currently locked amount
+- active passes count
+- pass credits remaining
+- pass expiry date
+- welcome gift credits remaining
+- monthly donated book credit status
+- pass usage history
+
+### 10. Marketplace Orders
 
 Responsibilities:
 
@@ -342,12 +460,15 @@ Key APIs:
 - `PATCH /api/orders/{id}/complete`
 - `GET /api/orders/{id}/tracking`
 
-### 10. Borrow System
+### 11. Borrow System
 
 Responsibilities:
 
 - Order-centric borrow workflow.
 - Deposit lock.
+- Membership/pass eligibility check.
+- Pass reservation and consumption.
+- Monthly donated free-book credit check.
 - Owner review.
 - Counter offer.
 - Payment.
@@ -368,6 +489,7 @@ Core tables:
 - `borrow_return_proofs`
 - `borrow_extensions`
 - `deposit_locks`
+- `borrow_order_pass_reservations`
 - `disputes`
 
 Key APIs:
@@ -381,6 +503,7 @@ Key APIs:
 - `POST /api/borrow/orders/{id}/counter-offers`
 - `PATCH /api/borrow/orders/{id}/counter-offers/{counter_id}/accept`
 - `PATCH /api/borrow/orders/{id}/pay`
+- `POST /api/borrow/orders/{id}/reserve-pass`
 - `PATCH /api/borrow/orders/{id}/owner-handover`
 - `PATCH /api/borrow/orders/{id}/borrower-receive`
 - `POST /api/borrow/orders/{id}/return`
@@ -388,16 +511,19 @@ Key APIs:
 - `POST /api/borrow/orders/{id}/extensions`
 - `POST /api/borrow/orders/{id}/disputes`
 - `POST /api/borrow/orders/{id}/reviews`
+- `POST /api/borrow/orders/check-eligibility`
 
 Celery tasks:
 
 - Expire pending borrow requests after 48 hours.
 - Send due-date reminders.
 - Apply overdue penalties.
+- Expire old pass reservations.
+- Issue monthly donated-book credits.
 - Auto-complete meetup returns after timeout.
 - Move stale courier returns to admin review.
 
-### 11. Exchange System
+### 12. Exchange System
 
 Responsibilities:
 
@@ -430,7 +556,7 @@ Key APIs:
 - `PATCH /api/exchanges/{id}/complete`
 - `POST /api/exchanges/{id}/disputes`
 
-### 12. Wallet And Passes
+### 13. Wallet And Ledger
 
 Responsibilities:
 
@@ -438,17 +564,21 @@ Responsibilities:
 - Locked deposit.
 - Sales earnings.
 - Payout request.
-- Membership/pass plans.
-- Borrowing capacity.
+- Membership payments.
+- Borrow pass purchases.
+- Free-credit grants.
+- Refunds/restores where policy allows.
+- Manual/admin adjustments.
+- One immutable ledger for every money or credit movement.
 
 Core tables:
 
 - `wallets`
 - `wallet_transactions`
 - `deposit_locks`
-- `membership_plans`
-- `user_memberships`
-- `borrow_passes`
+- `ledger_entries`
+- `payment_intents`
+- `payment_confirmations`
 - `payout_requests`
 
 Key APIs:
@@ -457,11 +587,11 @@ Key APIs:
 - `GET /api/me/wallet/transactions`
 - `POST /api/me/wallet/deposit`
 - `POST /api/me/wallet/payouts`
-- `GET /api/memberships/plans`
-- `POST /api/memberships/checkout`
-- `GET /api/me/passes`
+- `GET /api/me/wallet/ledger`
+- `POST /api/payments/intents`
+- `POST /api/payments/confirm`
 
-### 13. Reviews, Badges, Reputation
+### 14. Reviews, Badges, Reputation
 
 Requirement:
 
@@ -509,7 +639,7 @@ Celery tasks:
 - `award_badges`
 - `refresh_rating_aggregates`
 
-### 14. Messaging
+### 15. Messaging
 
 Requirement:
 
@@ -556,7 +686,7 @@ Events:
 - `typing.stopped`
 - `presence.updated`
 
-### 15. Notifications
+### 16. Notifications
 
 Requirement:
 
@@ -595,33 +725,33 @@ Celery tasks:
 
 The dashboard is not one feature. It is a collection of user-owned operational views. Each route needs its own API surface.
 
-| Frontend Route                   | Backend Domain             | Data Needed                                             |
-| -------------------------------- | -------------------------- | ------------------------------------------------------- |
-| `/dashboard`                     | dashboard shell            | menu badges, unread counts, pending actions             |
-| `/dashboard/overview`            | dashboard analytics        | stats, action summary, activity, continue actions.      |
-| `/dashboard/action-center`       | borrow/exchange/messages   | pending borrow requests, exchange offers, due returns   |
-| `/dashboard/library`             | books/inventory            | user listings, inventory status, edit/delete actions    |
-| `/dashboard/reading`             | reading tracker            | reading goals, progress logs, currently reading         |
-| `/dashboard/borrowed`            | borrow                     | orders where current user is borrower                   |
-| `/dashboard/lent`                | borrow                     | orders where current user is owner/lender               |
-| `/dashboard/requests`            | borrow                     | incoming borrow requests requiring owner action         |
-| `/dashboard/exchanges`           | exchange                   | active exchange orders                                  |
-| `/dashboard/exchanges/offers`    | exchange                   | incoming/outgoing exchange proposals and counter offers |
-| `/dashboard/sales`               | marketplace                | seller customer orders                                  |
-| `/dashboard/orders`              | marketplace                | buyer purchase orders                                   |
-| `/dashboard/cart`                | carts                      | buy/borrow cart redirect/state                          |
-| `/dashboard/wallet`              | wallet                     | available balance, locked funds, payout, ledger         |
-| `/dashboard/passes`              | memberships                | active passes, borrow capacity, plan store              |
-| `/dashboard/messages`            | messaging                  | conversation list, unread count                         |
-| `/dashboard/messages/[username]` | messaging                  | conversation thread, realtime chat                      |
-| `/dashboard/notifications`       | notifications              | notification list, read/unread                          |
-| `/dashboard/settings`            | users/location/preferences | profile, address, map pin, notification preferences     |
-| `/dashboard/security`            | auth/security              | password/session/device/2FA placeholders                |
-| `/dashboard/verification`        | verification/media         | ID upload, verification status                          |
-| `/dashboard/reports`             | moderation                 | submitted reports, account standing                     |
-| `/dashboard/analytics`           | analytics                  | books, borrow, exchange, sales, community charts        |
-| `/dashboard/followers`           | social                     | follower list                                           |
-| `/dashboard/following`           | social                     | following list                                          |
+| Frontend Route                   | Backend Domain             | Data Needed                                                                                |
+| -------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------ |
+| `/dashboard`                     | dashboard shell            | menu badges, unread counts, pending actions                                                |
+| `/dashboard/overview`            | dashboard analytics        | stats, action summary, activity, continue actions.                                         |
+| `/dashboard/action-center`       | borrow/exchange/messages   | pending borrow requests, exchange offers, due returns                                      |
+| `/dashboard/library`             | books/inventory            | user listings, inventory status, edit/delete actions                                       |
+| `/dashboard/reading`             | reading tracker            | reading goals, progress logs, currently reading                                            |
+| `/dashboard/borrowed`            | borrow                     | orders where current user is borrower                                                      |
+| `/dashboard/lent`                | borrow                     | orders where current user is owner/lender                                                  |
+| `/dashboard/requests`            | borrow                     | incoming borrow requests requiring owner action                                            |
+| `/dashboard/exchanges`           | exchange                   | active exchange orders                                                                     |
+| `/dashboard/exchanges/offers`    | exchange                   | incoming/outgoing exchange proposals and counter offers                                    |
+| `/dashboard/sales`               | marketplace                | seller customer orders                                                                     |
+| `/dashboard/orders`              | marketplace                | buyer purchase orders                                                                      |
+| `/dashboard/cart`                | carts                      | buy/borrow cart redirect/state                                                             |
+| `/dashboard/wallet`              | wallet                     | available balance, locked funds, payout, ledger                                            |
+| `/dashboard/passes`              | memberships/passes         | active membership, active passes, borrow capacity, plan store, free credits, usage history |
+| `/dashboard/messages`            | messaging                  | conversation list, unread count                                                            |
+| `/dashboard/messages/[username]` | messaging                  | conversation thread, realtime chat                                                         |
+| `/dashboard/notifications`       | notifications              | notification list, read/unread                                                             |
+| `/dashboard/settings`            | users/location/preferences | profile, address, map pin, notification preferences                                        |
+| `/dashboard/security`            | auth/security              | password/session/device/2FA placeholders                                                   |
+| `/dashboard/verification`        | verification/media         | ID upload, verification status                                                             |
+| `/dashboard/reports`             | moderation                 | submitted reports, account standing                                                        |
+| `/dashboard/analytics`           | analytics                  | books, borrow, exchange, sales, community charts                                           |
+| `/dashboard/followers`           | social                     | follower list                                                                              |
+| `/dashboard/following`           | social                     | following list                                                                             |
 
 Dashboard summary API:
 
@@ -648,6 +778,30 @@ Dashboard analytics APIs:
 - `GET /api/me/analytics/exchanges`
 - `GET /api/me/analytics/sales`
 - `GET /api/me/analytics/community`
+- `GET /api/me/analytics/membership`
+
+## Missing Coverage Audit
+
+These areas were missing or too shallow in the earlier draft and must be included before backend implementation starts:
+
+- Membership/subscription plans.
+- Membership purchase, renewal, upgrade, expiry, and non-refundable policy.
+- Borrow pass packages.
+- Active pass wallet.
+- Pass credit reserve, consume, restore, and expire logic.
+- Welcome gift: 5 free borrows valid for 2 months.
+- Monthly donated free-book credit that does not consume paid pass credits.
+- Premium-book pass requirement.
+- Membership-based borrow limit and priority queue.
+- Dashboard membership/pass summary.
+- Pass usage history.
+- Admin plan and pass-package management.
+- Payment intent and manual payment confirmation lifecycle.
+- Immutable wallet/ledger entries for memberships, passes, sales, deposits, payouts, free credits, and adjustments.
+- Expiry warning notifications for membership and passes.
+- Membership/reputation/badge connection.
+- Central library operational rules: inventory source, donated books, premium books, queue priority, borrow duration.
+- Coupons/promo/referral/sponsored/featured listing revenue items still need final product policy before schema freeze.
 
 ## Response Cache Plan
 
