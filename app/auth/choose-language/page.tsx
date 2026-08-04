@@ -17,7 +17,13 @@ export default function ChooseLanguagePage() {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsLoading(false);
     // Proceed to student verification or dashboard
-    router.push("/auth/verify-student-id");
+      let redirectQuery = "";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        const r = searchParams.get("redirect");
+        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      }
+      router.push(`/auth/verify-student-id${redirectQuery}`);
   };
 
   return (
@@ -71,7 +77,14 @@ export default function ChooseLanguagePage() {
       <div className="text-center">
         <button
           type="button"
-          onClick={() => router.push("/dashboard")}
+          onClick={() => {
+            let redirectUrl = "/dashboard/overview";
+            if (typeof window !== "undefined") {
+              const searchParams = new URLSearchParams(window.location.search);
+              redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+            }
+            router.push(redirectUrl);
+          }}
           className="text-muted-foreground hover:text-primary text-sm font-medium underline-offset-4 hover:underline"
         >
           পরে নির্ধারণ করবো

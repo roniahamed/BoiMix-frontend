@@ -105,7 +105,13 @@ export default function RegisterPage() {
         response.data.access_token,
       );
 
-      router.push("/auth/complete-profile");
+      let redirectQuery = "";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        const r = searchParams.get("redirect");
+        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      }
+      router.push(`/auth/complete-profile${redirectQuery}`);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Register Error:", error);
@@ -146,7 +152,13 @@ export default function RegisterPage() {
         response.data.access_token
       );
       
-      router.push("/auth/complete-profile");
+      let redirectQuery = "";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        const r = searchParams.get("redirect");
+        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      }
+      router.push(`/auth/complete-profile${redirectQuery}`);
     } catch (error: any) {
       console.error("Google Login Error:", error);
       const msg = error?.response?.data?.error?.message || error?.message || "Google registration failed.";
@@ -186,7 +198,13 @@ export default function RegisterPage() {
         response.data.access_token
       );
       
-      router.push("/auth/complete-profile");
+      let redirectQuery = "";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        const r = searchParams.get("redirect");
+        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      }
+      router.push(`/auth/complete-profile${redirectQuery}`);
     } catch (error: any) {
       console.error("Apple Login Error:", error);
       const msg = error?.response?.data?.error?.message || error?.message || "Apple registration failed.";

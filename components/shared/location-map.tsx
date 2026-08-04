@@ -43,6 +43,11 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
     };
   }, []);
 
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
   useEffect(() => {
     if (!isMounted || !mapContainerRef.current) return;
     if (mapInstanceRef.current) return; // Prevent double initialization in React StrictMode
@@ -71,8 +76,8 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
       if (markerRef.current) {
         markerRef.current.setLatLng([clickedLat, clickedLng]);
       }
-      if (onChange) {
-        onChange(clickedLat, clickedLng);
+      if (onChangeRef.current) {
+        onChangeRef.current(clickedLat, clickedLng);
       }
     });
   }, [isMounted]); // eslint-disable-line react-hooks/exhaustive-deps

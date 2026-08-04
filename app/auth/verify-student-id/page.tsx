@@ -36,8 +36,12 @@ export default function VerifyStudentIdPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(data);
     setIsLoading(false);
-    // Finally move to dashboard or home
-    router.push("/");
+      let redirectUrl = "/dashboard/overview";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+      }
+      router.push(redirectUrl);
   };
 
   return (
@@ -120,7 +124,14 @@ export default function VerifyStudentIdPage() {
       <div className="text-center">
         <button
           type="button"
-          onClick={() => router.push("/")}
+          onClick={() => {
+            let redirectUrl = "/dashboard/overview";
+            if (typeof window !== "undefined") {
+              const searchParams = new URLSearchParams(window.location.search);
+              redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+            }
+            router.push(redirectUrl);
+          }}
           className="text-muted-foreground hover:text-primary text-sm font-medium underline-offset-4 hover:underline"
         >
           এখন স্কিপ করুন, পরে করবো

@@ -32,6 +32,7 @@ import { LogOut, LayoutDashboard } from "lucide-react";
 function UserMenuButton() {
   const { isAuthenticated, user, clearSession } = useAuthStore();
   const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
   
   useEffect(() => {
     setMounted(true);
@@ -42,7 +43,7 @@ function UserMenuButton() {
   if (!isAuthenticated) {
     return (
       <Button variant="outline" size="sm" className="inline-flex" asChild>
-        <Link href="/auth/login">
+        <Link href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}>
           <UserIcon className="mr-2 size-4" />
           <span className="hidden md:inline">Sign in</span>
         </Link>

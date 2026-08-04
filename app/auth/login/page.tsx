@@ -81,7 +81,13 @@ export default function LoginPage() {
       response.data.access_token
     );
     toast.success("Successfully logged in!");
-    router.push("/dashboard/overview");
+    
+    let redirectUrl = "/dashboard/overview";
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+    }
+    router.push(redirectUrl);
   };
 
   const onSubmit = async (data: LoginFormValues) => {

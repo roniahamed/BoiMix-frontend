@@ -107,7 +107,13 @@ export default function CompleteProfilePage() {
         }, accessToken);
       }
 
-      router.push("/auth/choose-language");
+      let redirectQuery = "";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        const r = searchParams.get("redirect");
+        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      }
+      router.push(`/auth/choose-language${redirectQuery}`);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Complete Profile Error:", error);
@@ -221,7 +227,15 @@ export default function CompleteProfilePage() {
       <div className="text-center">
         <button
           type="button"
-          onClick={() => router.push("/auth/choose-language")}
+          onClick={() => {
+            let redirectQuery = "";
+            if (typeof window !== "undefined") {
+              const searchParams = new URLSearchParams(window.location.search);
+              const r = searchParams.get("redirect");
+              if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+            }
+            router.push(`/auth/choose-language${redirectQuery}`);
+          }}
           className="text-muted-foreground hover:text-primary text-sm font-medium underline-offset-4 hover:underline"
         >
           এখন স্কিপ করুন

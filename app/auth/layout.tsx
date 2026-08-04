@@ -21,10 +21,12 @@ export default function AuthLayout({
   }, []);
 
   useEffect(() => {
-    if (isMounted && isAuthenticated && pathname !== "/auth/complete-profile") {
-      router.push("/dashboard/overview");
+    // Only redirect if they load an auth page while ALREADY authenticated
+    if (isAuthenticated && (pathname === "/auth/login" || pathname === "/auth/register" || pathname === "/auth/forgot-password")) {
+      router.replace("/dashboard/overview");
     }
-  }, [isMounted, isAuthenticated, router, pathname]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!isMounted) return null;
 
