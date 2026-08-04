@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 
@@ -10,6 +10,7 @@ import { RightSidebarWidget } from "@/components/layout/right-sidebar-widget";
 import { SidebarNavigation } from "@/components/layout/sidebar-navigation";
 import { dashboardNavGroups, dashboardNavItems } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/stores/auth-store";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -18,6 +19,20 @@ type DashboardLayoutProps = {
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    if (!isAuthenticated) {
+      router.push("/auth/login?redirect=" + encodeURIComponent(pathname));
+    }
+  }, [isAuthenticated, router, pathname]);
+
+  if (!mounted || !isAuthenticated) {
+    return null; // or a loading spinner
+  }
+
 
   const activeNavItem = dashboardNavItems
     .slice()

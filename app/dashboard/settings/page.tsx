@@ -161,7 +161,7 @@ export default function SettingsPage() {
       toast.success("Profile saved successfully!");
     } catch (err: any) {
       console.error("Failed to save profile", err);
-      toast.error(err.details || "Failed to save profile.");
+      toast.error(err.message || "Failed to save profile.");
     } finally {
       setIsSaving(false);
     }
@@ -179,7 +179,7 @@ export default function SettingsPage() {
       toast.success("Preferences saved successfully!");
     } catch (err: any) {
       console.error("Failed to save preferences", err);
-      toast.error(err.details || "Failed to save preferences.");
+      toast.error(err.message || "Failed to save preferences.");
     } finally {
       setIsSavingPrefs(false);
     }

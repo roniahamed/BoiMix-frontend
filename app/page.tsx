@@ -20,7 +20,7 @@ import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
-import { fetchBooks, fetchCategories } from "@/lib/api-client";
+import { fetchBooks, fetchSearchBooks, fetchCategories } from "@/lib/api-client";
 
 interface CategoryItem {
   href: string;
@@ -166,10 +166,7 @@ function BookSection({
 }
 
 async function CentralLibrarySection() {
-  const featuredBooks: BookCardBook[] = await fetchBooks();
-  const books = featuredBooks
-    .filter((b) => b.providerType === "library" || b.tags.includes("borrow"))
-    .slice(0, 12);
+  const books: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "borrow" }) || []).slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
@@ -195,10 +192,7 @@ async function CentralLibrarySection() {
 }
 
 async function MarketplaceSection() {
-  const featuredBooks: BookCardBook[] = await fetchBooks();
-  const books = featuredBooks
-    .filter((b) => b.tags.includes("sell"))
-    .slice(0, 12);
+  const books: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "sell" }) || []).slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
@@ -224,10 +218,7 @@ async function MarketplaceSection() {
 }
 
 async function ExchangeBooksSection() {
-  const featuredBooks: BookCardBook[] = await fetchBooks();
-  const books = featuredBooks
-    .filter((b) => b.tags.includes("exchange"))
-    .slice(0, 12);
+  const books: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "exchange" }) || []).slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
@@ -593,7 +584,7 @@ async function PersonalizationSection() {
                     >
                       <div className="bg-muted relative mx-auto aspect-[3/4] w-10 overflow-hidden rounded-xs shadow-xs transition-transform group-hover:scale-105">
                         <Image
-                          src={book.coverUrl || "/book-covers/borrowed-light.svg"}
+                          src={book.coverUrl?.trim() ? book.coverUrl : "/placeholder-book.png"}
                           alt={book.title}
                           fill
                           sizes="40px"

@@ -26,8 +26,20 @@ export async function fetchBookDetails(slug: string) {
   return res.json();
 }
 
-export async function fetchSearchBooks(query: string) {
-  const res = await apiFetch(`/search/books/?q=${encodeURIComponent(query)}`);
+export async function fetchSearchBooks(query: string = "", filters?: Record<string, string | number>) {
+  const queryParams = new URLSearchParams();
+  if (query) queryParams.append("q", query);
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        queryParams.append(key, String(value));
+      }
+    });
+  }
+  const queryString = queryParams.toString();
+  const url = queryString ? `/search/books/?${queryString}` : `/search/books/`;
+  
+  const res = await apiFetch(url);
   const data = await res.json();
   return data.results || data;
 }

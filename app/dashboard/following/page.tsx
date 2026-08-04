@@ -23,7 +23,7 @@ function FollowingUserCard({ user }: { user: any }) {
       queryClient.invalidateQueries({ queryKey: ["following"] });
     } catch (err: any) {
       console.error(err);
-      toast.error(err.details || "Failed to unfollow");
+      toast.error(err.message || "Failed to unfollow");
     } finally {
       setIsUnfollowing(false);
     }

@@ -28,7 +28,7 @@ import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 import { BookBuyActions } from "@/components/shared/book-buy-actions";
 import { BookBorrowActions } from "@/components/shared/book-borrow-actions";
-import { fetchBookDetails, fetchBooks } from "@/lib/api-client";
+import { fetchBookDetails } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -63,11 +63,8 @@ export default async function BookDetailsPage({
   ];
   
   // Build gallery images: prefer API images, then cover URL from book listing, else fallbacks
-  const BASE_BOOKS = await fetchBooks();
-  const foundBase = BASE_BOOKS.find((b: BookCardBook) => b.slug === slug);
-  
   const apiImages = API_BOOK.images && API_BOOK.images.length > 0 ? API_BOOK.images : null;
-  const coverUrl = foundBase?.coverUrl || null;
+  const coverUrl = API_BOOK.coverUrl || null;
   
   const galleryImages = apiImages
     ?? (coverUrl ? [
@@ -78,16 +75,16 @@ export default async function BookDetailsPage({
   const currentBook = {
     ...API_BOOK,
     // Normalize price fields
-    price: parseFloat(API_BOOK.price) || foundBase?.price || 0,
-    originalPrice: API_BOOK.original_price ? parseFloat(API_BOOK.original_price) : (foundBase?.originalPrice ?? null),
+    price: parseFloat(API_BOOK.price) || 0,
+    originalPrice: API_BOOK.original_price ? parseFloat(API_BOOK.original_price) : null,
     images: galleryImages,
     // Availability comes directly from API
     availability: API_BOOK.availability,
-    tags: API_BOOK.tags?.length > 0 ? API_BOOK.tags : (foundBase?.tags ?? ["sell"]),
-    rating: foundBase?.rating ?? API_BOOK.rating ?? 0,
-    reviewCount: foundBase?.reviewCount ?? 0,
-    location: API_BOOK.locationAddress || foundBase?.location || "Dhaka",
-    distance: foundBase?.distance ?? null,
+    tags: API_BOOK.tags?.length > 0 ? API_BOOK.tags : ["sell"],
+    rating: API_BOOK.rating ?? 0,
+    reviewCount: API_BOOK.reviewCount ?? 0,
+    location: API_BOOK.locationAddress || "Dhaka",
+    distance: API_BOOK.distance ?? null,
     exchangePrice: API_BOOK.exchange_price ? parseFloat(API_BOOK.exchange_price) : (API_BOOK.estimatedExchangeValue ?? null),
     exchangePreferences: API_BOOK.exchangePreferences ?? [],
     borrowFee: API_BOOK.borrow_fee ? parseFloat(API_BOOK.borrow_fee) : null,

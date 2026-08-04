@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBooks } from "@/lib/api-client";
+import { fetchSearchSuggestions } from "@/lib/api-client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,9 +47,10 @@ export function SearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const { data: books = [] } = useQuery({
-    queryKey: ["books"],
-    queryFn: () => fetchBooks(),
+  const { data: suggestions = [] } = useQuery({
+    queryKey: ["books-search", query],
+    queryFn: () => fetchSearchSuggestions(query),
+    enabled: query.length > 1,
   });
 
   // Focus input when autoFocus prop changes to true
@@ -120,18 +121,7 @@ export function SearchBar({
     setRecents((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
-  // Filter book suggestions based on user query
-  const suggestions =
-    query.length > 1
-      ? books
-          .filter(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (b: any) =>
-              b.title.toLowerCase().includes(query.toLowerCase()) ||
-              b.author.toLowerCase().includes(query.toLowerCase()),
-          )
-          .slice(0, 5)
-      : books.slice(0, 3);
+  const displaySuggestions = suggestions.slice(0, 5);
 
   return (
     <form
@@ -296,10 +286,10 @@ export function SearchBar({
               <span className="text-muted-foreground mb-2 block text-[0.7rem] font-bold tracking-wider uppercase">
                 Matching Suggestions
               </span>
-              {suggestions.length > 0 ? (
+              {displaySuggestions.length > 0 ? (
                 <div className="flex flex-col">
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {suggestions.map((book: any) => (
+                  {displaySuggestions.map((book: any) => (
                     <Link
                       key={book.slug}
                       href={`/books/${book.slug}`}

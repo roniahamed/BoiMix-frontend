@@ -3,7 +3,7 @@ import { RefreshCw, ArrowRight, BookOpen } from "lucide-react";
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
 import { LibrarySearchBar } from "@/components/shared/library-search-bar";
-import { fetchBooks, fetchSearchBooks } from "@/lib/api-client";
+import { fetchSearchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 
 const EXCHANGE_CATEGORIES = [
@@ -40,26 +40,9 @@ export default async function ExchangesSearchPage({
   const category = resolvedParams?.category || "";
   const sort = resolvedParams?.sort || "";
 
-  const allBooks: BookCardBook[] = q
-    ? await fetchSearchBooks(q)
-    : await fetchBooks();
-
-  // Use all non-library books as exchange books (fallback: all books)
-  let exchangeBooks = allBooks.filter(
-    (b) => b.providerType !== "library" || b.tags?.includes("exchange"),
-  );
-  if (exchangeBooks.length < 6) exchangeBooks = [...allBooks];
-
-  // Apply search query
-  if (q) {
-    const query = q.toLowerCase().trim();
-    exchangeBooks = exchangeBooks.filter(
-      (book) =>
-        book.title.toLowerCase().includes(query) ||
-        book.author.toLowerCase().includes(query) ||
-        book.tags?.some((t) => t.toLowerCase().includes(query)),
-    );
-  }
+  let exchangeBooks: BookCardBook[] = await fetchSearchBooks(q, {
+    availability_mode: "exchange"
+  });
 
   // Apply category filter
   if (category) {

@@ -17,7 +17,7 @@ import { BookCard } from "@/components/shared/book-card";
 import { LibrarySearchBar } from "@/components/shared/library-search-bar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { fetchBooks } from "@/lib/api-client";
+import { fetchSearchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 
 const EXCHANGE_CATEGORIES = [
@@ -66,14 +66,8 @@ const STATS = [
 ];
 
 export default async function ExploreExchangesPage() {
-  const allBooks: BookCardBook[] = await fetchBooks();
-
-  // For exchanges, use books that are not library type as "available for exchange"
-  const exchangeBooks = allBooks.filter(
-    (b) => b.providerType !== "library" && b.tags?.includes("exchange"),
-  );
-  const renderBooks =
-    exchangeBooks.length > 0 ? exchangeBooks : allBooks.slice(0, 12);
+  const exchangeBooks: BookCardBook[] = await fetchSearchBooks("", { availability_mode: "exchange" });
+  const renderBooks = exchangeBooks;
 
   const recentlyAdded = renderBooks.slice(0, 6);
   const nearYou = renderBooks.slice(6, 12);

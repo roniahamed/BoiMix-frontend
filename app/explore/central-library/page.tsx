@@ -7,7 +7,7 @@ import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FaqAccordion } from "@/components/shared/faq-accordion";
-import { fetchBooks } from "@/lib/api-client";
+import { fetchSearchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 
 import { CENTRAL_LIBRARY_FAQS } from "@/lib/data/central-library";
@@ -17,12 +17,7 @@ import { CentralCollections } from "@/components/explore/central-library/central
 import { CentralWhyUs } from "@/components/explore/central-library/central-why-us";
 
 export default async function CentralLibraryPage() {
-  const allBooks: BookCardBook[] = (await fetchBooks()) || [];
-
-  // Filter only library books
-  const libraryBooks = allBooks.filter(
-    (book) => book.providerType === "library" || book.tags?.includes("library"),
-  );
+  const libraryBooks: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "borrow" })) || [];
 
   // Create splits
   const featuredBooks = libraryBooks.slice(0, 6);
@@ -30,7 +25,7 @@ export default async function CentralLibraryPage() {
   const mostBorrowed = libraryBooks.slice(10, 14);
 
   // Fillers if empty
-  const fallbackBooks = allBooks.slice(0, 12);
+  const fallbackBooks = libraryBooks.slice(0, 12);
   const renderFeat =
     featuredBooks.length > 0
       ? featuredBooks.slice(0, 6)

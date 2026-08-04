@@ -1,7 +1,7 @@
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
 import { BookOpen } from "lucide-react";
-import { fetchBooks, fetchSearchBooks } from "@/lib/api-client";
+import { fetchSearchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 import { LibrarySearchBar } from "@/components/shared/library-search-bar";
 import Link from "next/link";
@@ -37,27 +37,10 @@ export default async function CentralLibrarySearchPage({
   const collection = resolvedParams?.collection || "";
   const category = resolvedParams?.category || "";
 
-  const allBooks: BookCardBook[] = q
-    ? await fetchSearchBooks(q)
-    : await fetchBooks();
-
-
-  // Filter only library books
-  let libraryBooks = allBooks.filter(
-    (book) => book.providerType === "library" || book.tags?.includes("library") || (book as any).availability === "borrow",
-  );
-
-  // Search query is handled by the backend API call if q is present.
-  // We still do a safety filter just in case
-  if (q) {
-    const query = q.toLowerCase().trim();
-    libraryBooks = libraryBooks.filter(
-      (book) =>
-        book.title.toLowerCase().includes(query) ||
-        book.author.toLowerCase().includes(query) ||
-        book.tags?.some((t) => t.toLowerCase().includes(query)),
-    );
-  }
+  // Use search API for everything
+  let libraryBooks: BookCardBook[] = await fetchSearchBooks(q, {
+    availability_mode: "borrow",
+  });
 
   // Apply tag filter (tag)
   if (tag) {
