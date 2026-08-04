@@ -272,8 +272,8 @@ export function BookCard({
               <div className="bg-muted/40 border-border/20 absolute inset-0 animate-pulse rounded-lg border" />
             )}
             <Image
-              src={book.coverUrl}
-              alt={book.title}
+              src={book.coverUrl || "/book-covers/borrowed-light.svg"}
+              alt={book.title || "Book Cover"}
               fill
               priority={priority}
               onLoad={() => setIsImageLoaded(true)}

@@ -9,6 +9,8 @@ import { OverviewActionCenter } from "@/components/dashboard/overview/overview-a
 import { OverviewActivityTimeline } from "@/components/dashboard/overview/overview-activity-timeline";
 import { OverviewContinueReading } from "@/components/dashboard/overview/overview-continue-reading";
 
+export const dynamic = "force-dynamic";
+
 export default async function OverviewPage() {
   const allBooks: BookCardBook[] = await fetchBooks();
   const recommendedBooks = allBooks.slice(0, 4);

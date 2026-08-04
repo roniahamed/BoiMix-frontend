@@ -83,9 +83,19 @@ export default function LoginPage() {
     toast.success("Successfully logged in!");
     
     let redirectUrl = "/dashboard/overview";
-    if (typeof window !== "undefined") {
-      const searchParams = new URLSearchParams(window.location.search);
-      redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+    if (!response.data.user.is_onboarded) {
+      let redirectQuery = "";
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        const r = searchParams.get("redirect");
+        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      }
+      redirectUrl = `/auth/complete-profile${redirectQuery}`;
+    } else {
+      if (typeof window !== "undefined") {
+        const searchParams = new URLSearchParams(window.location.search);
+        redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+      }
     }
     router.push(redirectUrl);
   };
@@ -103,7 +113,12 @@ export default function LoginPage() {
       handleAuthSuccess(response);
     } catch (error: any) {
       console.error("Login Error:", error);
-      toast.error(error.message || "Failed to login. Check your credentials.");
+      if (error?.details?.terms_accepted) {
+        toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
+        router.push("/auth/register");
+      } else {
+        toast.error(error?.message || "Failed to login. Check your credentials.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -124,7 +139,12 @@ export default function LoginPage() {
       handleAuthSuccess(response);
     } catch (error: any) {
       console.error("Google Login Error:", error);
-      toast.error(error.message || "Failed to login with Google.");
+      if (error?.details?.terms_accepted) {
+        toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
+        router.push("/auth/register");
+      } else {
+        toast.error(error?.message || "Failed to login with Google.");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -145,7 +165,12 @@ export default function LoginPage() {
       handleAuthSuccess(response);
     } catch (error: any) {
       console.error("Apple Login Error:", error);
-      toast.error(error.message || "Failed to login with Apple.");
+      if (error?.details?.terms_accepted) {
+        toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
+        router.push("/auth/register");
+      } else {
+        toast.error(error?.message || "Failed to login with Apple.");
+      }
     } finally {
       setIsLoading(false);
     }

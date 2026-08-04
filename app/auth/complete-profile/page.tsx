@@ -101,9 +101,16 @@ export default function CompleteProfilePage() {
 
       // Update local state if needed (e.g. setting avatarUrl)
       if (user) {
+        let newAvatarUrl = res.data.avatarUrl || user.avatarUrl;
+        if (!res.data.avatarUrl && avatarFile) {
+          // Temporarily use object URL until backend processes the image
+          newAvatarUrl = URL.createObjectURL(avatarFile);
+        }
         setSession({
           ...user,
-          avatarUrl: res.data.avatarUrl || user.avatarUrl,
+          name: res.data.name || res.data.full_name || user.name,
+          username: res.data.username || user.username,
+          avatarUrl: newAvatarUrl,
         }, accessToken);
       }
 

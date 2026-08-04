@@ -67,6 +67,7 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -91,7 +92,7 @@ export default function RegisterPage() {
       // 2. Register with backend via firebase-login
       const response = await apiClient.post<{ access_token: string; user: Record<string, unknown> }>(
         "/auth/firebase-login",
-        { id_token: idToken, full_name: data.fullName },
+        { id_token: idToken, full_name: data.fullName, terms_accepted: data.termsAccepted },
       );
 
       setApiAccessToken(response.data.access_token);
@@ -123,6 +124,13 @@ export default function RegisterPage() {
   };
 
   const handleGoogleLogin = async () => {
+    const termsAccepted = getValues("termsAccepted");
+    if (!termsAccepted) {
+      const { toast } = await import("sonner");
+      toast.error("অনুগ্রহ করে শর্তাবলী এবং গোপনীয়তা নীতি মেনে নিন।");
+      return;
+    }
+    
     setIsLoading(true);
     try {
       const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
@@ -137,6 +145,7 @@ export default function RegisterPage() {
       const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
+        terms_accepted: true,
       });
 
       setApiAccessToken(response.data.access_token);
@@ -152,13 +161,23 @@ export default function RegisterPage() {
         response.data.access_token
       );
       
-      let redirectQuery = "";
-      if (typeof window !== "undefined") {
-        const searchParams = new URLSearchParams(window.location.search);
-        const r = searchParams.get("redirect");
-        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      
+      let redirectUrl = "/dashboard/overview";
+      if (!response.data.user.is_onboarded) {
+        let redirectQuery = "";
+        if (typeof window !== "undefined") {
+          const searchParams = new URLSearchParams(window.location.search);
+          const r = searchParams.get("redirect");
+          if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+        }
+        redirectUrl = `/auth/complete-profile${redirectQuery}`;
+      } else {
+        if (typeof window !== "undefined") {
+          const searchParams = new URLSearchParams(window.location.search);
+          redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+        }
       }
-      router.push(`/auth/complete-profile${redirectQuery}`);
+      router.push(redirectUrl);
     } catch (error: any) {
       console.error("Google Login Error:", error);
       const msg = error?.response?.data?.error?.message || error?.message || "Google registration failed.";
@@ -169,6 +188,13 @@ export default function RegisterPage() {
   };
 
   const handleAppleLogin = async () => {
+    const termsAccepted = getValues("termsAccepted");
+    if (!termsAccepted) {
+      const { toast } = await import("sonner");
+      toast.error("অনুগ্রহ করে শর্তাবলী এবং গোপনীয়তা নীতি মেনে নিন।");
+      return;
+    }
+    
     setIsLoading(true);
     try {
       const { signInWithPopup, OAuthProvider } = await import("firebase/auth");
@@ -183,6 +209,7 @@ export default function RegisterPage() {
       const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
+        terms_accepted: true,
       });
 
       setApiAccessToken(response.data.access_token);
@@ -198,13 +225,23 @@ export default function RegisterPage() {
         response.data.access_token
       );
       
-      let redirectQuery = "";
-      if (typeof window !== "undefined") {
-        const searchParams = new URLSearchParams(window.location.search);
-        const r = searchParams.get("redirect");
-        if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+      
+      let redirectUrl = "/dashboard/overview";
+      if (!response.data.user.is_onboarded) {
+        let redirectQuery = "";
+        if (typeof window !== "undefined") {
+          const searchParams = new URLSearchParams(window.location.search);
+          const r = searchParams.get("redirect");
+          if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
+        }
+        redirectUrl = `/auth/complete-profile${redirectQuery}`;
+      } else {
+        if (typeof window !== "undefined") {
+          const searchParams = new URLSearchParams(window.location.search);
+          redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+        }
       }
-      router.push(`/auth/complete-profile${redirectQuery}`);
+      router.push(redirectUrl);
     } catch (error: any) {
       console.error("Apple Login Error:", error);
       const msg = error?.response?.data?.error?.message || error?.message || "Apple registration failed.";

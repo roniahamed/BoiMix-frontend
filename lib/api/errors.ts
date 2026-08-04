@@ -16,17 +16,19 @@ type ApiErrorPayload = {
 
 export function normalizeApiError(error: unknown): ApiError {
   if (error instanceof AxiosError) {
-    const payload = error.response?.data as ApiErrorPayload | undefined;
+    const payload = error.response?.data as any;
+
+    let message = "Something went wrong.";
+    if (typeof payload?.message === "string") message = payload.message;
+    else if (typeof payload?.error === "string") message = payload.error;
+    else if (typeof payload?.error?.message === "string") message = payload.error.message;
+    else if (error.message) message = error.message;
 
     return {
-      message:
-        payload?.message ??
-        payload?.error ??
-        error.message ??
-        "Something went wrong.",
+      message,
       status: error.response?.status,
-      code: payload?.code ?? error.code,
-      details: payload?.details ?? error.response?.data,
+      code: payload?.code ?? payload?.error?.code ?? error.code,
+      details: payload?.details ?? payload?.error?.details ?? payload,
     };
   }
 

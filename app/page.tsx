@@ -50,6 +50,8 @@ interface TestimonialItem {
   location: string;
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const featuredBooks: BookCardBook[] = await fetchBooks();
   const newBooks: BookCardBook[] = [...featuredBooks].reverse();
@@ -591,7 +593,7 @@ async function PersonalizationSection() {
                     >
                       <div className="bg-muted relative mx-auto aspect-[3/4] w-10 overflow-hidden rounded-xs shadow-xs transition-transform group-hover:scale-105">
                         <Image
-                          src={book.coverUrl}
+                          src={book.coverUrl || "/book-covers/borrowed-light.svg"}
                           alt={book.title}
                           fill
                           sizes="40px"

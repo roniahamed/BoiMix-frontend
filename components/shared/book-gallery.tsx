@@ -113,7 +113,7 @@ export function BookGallery({ images, className }: BookGalleryProps) {
         <div className="hidden snap-x [scrollbar-width:none] gap-2 overflow-x-auto pb-2 sm:flex [&::-webkit-scrollbar]:hidden">
           {images.map((image, index) => (
             <Button
-              key={image.src}
+              key={`${image.src}-${index}`}
               type="button"
               variant="ghost"
               className={cn(
