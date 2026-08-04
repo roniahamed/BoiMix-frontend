@@ -13,9 +13,14 @@ export const apiClient = axios.create({
   timeout: 15_000,
 });
 
+import { useAuthStore } from "@/stores/auth-store";
+
 apiClient.interceptors.request.use((config) => {
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  // Try to get token from local variable first (if recently set),
+  // otherwise fallback to Zustand store
+  const token = accessToken || useAuthStore.getState().accessToken;
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
 
   return config;

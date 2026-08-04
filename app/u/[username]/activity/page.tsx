@@ -4,7 +4,7 @@ import { ProfileActivityList } from "@/components/profile/profile-activity-list"
 import { ProfileActivitySidebar } from "@/components/profile/profile-activity-sidebar";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchPublicProfile } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Reader Activity - BoiMix",
@@ -16,12 +16,16 @@ export default async function UserActivityPage({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { mockProfiles, profileActivity } = await fetchLocal("/api/profile");
-  const getUserProfile = (username: string) =>
-    mockProfiles.find((p: { username: string }) => p.username === username);
-
   const { username } = await params;
-  const profile = getUserProfile(username);
+
+  let profile = null;
+  try {
+    profile = await fetchPublicProfile(username);
+  } catch (error) {
+    console.error("Failed to fetch public profile:", error);
+  }
+
+  const profileActivity: any[] = []; // TODO: Phase 4/8 Integration
 
   if (!profile) {
     return <ProfileNotFound />;

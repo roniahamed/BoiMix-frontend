@@ -20,7 +20,7 @@ import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 
 const FESTIVAL_CATEGORIES = [
@@ -138,7 +138,7 @@ const EVENT_TYPE_LABEL: Record<string, string> = {
 };
 
 export default async function ExploreFestivalPage() {
-  const allBooks: BookCardBook[] = (await fetchLocal("/api/books")) || [];
+  const allBooks: BookCardBook[] = await fetchBooks();
 
   const festivalBooks = allBooks.slice(0, 12);
   const featuredBooks = festivalBooks.slice(0, 6);

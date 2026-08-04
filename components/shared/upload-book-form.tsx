@@ -18,6 +18,7 @@ import {
 import Image from "next/image";
 
 import { TagInput } from "@/components/ui/tag-input";
+import { searchLocation, reverseGeocode } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -310,17 +311,9 @@ export function UploadBookForm({
   });
 
   interface LocationSuggestion {
-    geometry: {
-      coordinates: [number, number];
-    };
-    properties: {
-      name: string;
-      street?: string;
-      locality?: string;
-      city?: string;
-      state?: string;
-      country?: string;
-    };
+    display_name: string;
+    lat: number;
+    lng: number;
   }
 
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -362,17 +355,10 @@ export function UploadBookForm({
 
       setShowSuggestions(true);
       const timer = setTimeout(() => {
-        fetch(
-          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddressWatch)}&lat=23.8103&lon=90.4125&limit=5`,
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            if (data && data.features && data.features.length > 0) {
-              setLocationSuggestions(data.features);
-              setShowSuggestions(true);
-            } else {
-              setLocationSuggestions([]);
-            }
+        searchLocation(locationAddressWatch)
+          .then((features) => {
+            setLocationSuggestions(features);
+            setShowSuggestions(features.length > 0);
           })
           .catch((err) => console.error("Geocoding error", err))
           .finally(() => setIsSearchingLocation(false));
@@ -1050,53 +1036,21 @@ export function UploadBookForm({
                                             className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
                                             onMouseDown={(e) => {
                                               e.preventDefault();
-                                              const props =
-                                                sug.properties || {};
-                                              const rawAddressParts = [
-                                                props.name,
-                                                props.street,
-                                                props.locality,
-                                                props.city,
-                                                props.state,
-                                                props.country,
-                                              ].filter(Boolean);
-                                              const address = Array.from(
-                                                new Set(rawAddressParts),
-                                              ).join(", ");
                                               setValue(
                                                 "locationAddress",
-                                                address,
+                                                sug.display_name,
                                                 { shouldValidate: true },
                                               );
-                                              setValue(
-                                                "locationLat",
-                                                sug.geometry.coordinates[1],
-                                              );
-                                              setValue(
-                                                "locationLng",
-                                                sug.geometry.coordinates[0],
-                                              );
+                                              setValue("locationLat", sug.lat);
+                                              setValue("locationLng", sug.lng);
                                               setShowSuggestions(false);
                                             }}
                                           >
                                             <div className="font-medium">
-                                              {sug.properties.name ||
-                                                sug.properties.street ||
-                                                sug.properties.locality ||
-                                                "Unknown Location"}
+                                              {sug.display_name.split(",")[0]}
                                             </div>
                                             <div className="text-muted-foreground text-xs">
-                                              {Array.from(
-                                                new Set(
-                                                  [
-                                                    sug.properties.street,
-                                                    sug.properties.locality,
-                                                    sug.properties.city,
-                                                    sug.properties.state,
-                                                    sug.properties.country,
-                                                  ].filter(Boolean),
-                                                ),
-                                              ).join(", ")}
+                                              {sug.display_name.split(",").slice(1).join(",").trim()}
                                             </div>
                                           </div>
                                         ))
@@ -1126,12 +1080,14 @@ export function UploadBookForm({
                       if (locationType === "custom") {
                         setValue("locationLat", lat);
                         setValue("locationLng", lng);
-                        fetch(
-                          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
-                        )
-                          .then((res) => res.json())
+                        reverseGeocode(lat, lng)
                           .then((data) => {
-                            if (data && data.address) {
+                            if (data && data.display_name) {
+                              setValue("locationAddress", data.display_name, {
+                                shouldValidate: true,
+                              });
+                            } else if (data && data.address) {
+                              // Fallback logic just in case
                               const addr = data.address;
                               const parts = [
                                 addr.road,
@@ -1141,9 +1097,7 @@ export function UploadBookForm({
                                 addr.state,
                                 addr.country,
                               ].filter(Boolean);
-                              const address = Array.from(new Set(parts)).join(
-                                ", ",
-                              );
+                              const address = Array.from(new Set(parts)).join(", ");
                               if (address) {
                                 setValue("locationAddress", address, {
                                   shouldValidate: true,

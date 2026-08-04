@@ -1,11 +1,33 @@
+"use client";
+
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookOpenIcon, CheckCircle2Icon } from "lucide-react";
+import { useAuthStore } from "@/stores/auth-store";
+import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (isMounted && isAuthenticated && pathname !== "/auth/complete-profile") {
+      router.push("/dashboard/overview");
+    }
+  }, [isMounted, isAuthenticated, router, pathname]);
+
+  if (!isMounted) return null;
+
   return (
     <MainLayout>
       <div className="bg-muted/10 flex min-h-[calc(100vh-200px)] items-center justify-center p-4 py-8 md:py-16">

@@ -18,6 +18,8 @@ import {
 import Image from "next/image";
 
 import { TagInput } from "@/components/ui/tag-input";
+import { apiRequest } from "@/lib/api/client";
+import { searchLocation, reverseGeocode } from "@/lib/api-client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -246,28 +248,46 @@ export default function BookUploadPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [autofillMessage, setAutofillMessage] = useState<string | null>(null);
 
-  const handleIsbnAutoFill = () => {
+  const handleIsbnAutoFill = async () => {
     const currentIsbn = getValues("isbn");
-    const match =
-      Object.values(QUICK_FILL_BOOKS).find((b) => b.isbn === currentIsbn) ||
-      QUICK_FILL_BOOKS["atomic-habits"];
+    if (!currentIsbn) return;
+    
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const match = await apiRequest<any>({ url: `/books/isbn/${currentIsbn}/`, method: "GET" });
+      if (match) {
+        setValue("title", match.title || "", { shouldValidate: true });
+        setValue("author", match.author || "", { shouldValidate: true });
+        setValue("publisher", match.publisher || "", { shouldValidate: true });
+        setValue("pageCount", match.pageCount || "", { shouldValidate: true });
+        setValue("description", match.description || "", { shouldValidate: true });
+        if (match.genre) {
+          setValue("genre", match.genre, { shouldValidate: true });
+        }
+        setAutofillMessage(`✨ Auto-filled book details for "${match.title}"!`);
+        setTimeout(() => setAutofillMessage(null), 5000);
+      }
+    } catch (err) {
+      console.error("Failed to fetch ISBN data", err);
+      // Fallback to quick fill for testing if API fails
+      const match = QUICK_FILL_BOOKS[currentIsbn as keyof typeof QUICK_FILL_BOOKS] || QUICK_FILL_BOOKS["atomic-habits"];
+      setValue("title", match.title, { shouldValidate: true });
+      setValue("author", match.author, { shouldValidate: true });
+      setValue("publisher", match.publisher, { shouldValidate: true });
+      setValue("genre", match.genre, { shouldValidate: true });
+      setValue("edition", match.edition, { shouldValidate: true });
+      setValue("pageCount", match.pageCount, { shouldValidate: true });
+      setValue("description", match.description, { shouldValidate: true });
+      setValue("originalPrice", match.originalPrice, { shouldValidate: true });
+      setValue("sellPrice", match.sellPrice, { shouldValidate: true });
+      setValue("condition", match.condition, { shouldValidate: true });
+      if (!currentIsbn) {
+        setValue("isbn", match.isbn, { shouldValidate: true });
+      }
 
-    setValue("title", match.title, { shouldValidate: true });
-    setValue("author", match.author, { shouldValidate: true });
-    setValue("publisher", match.publisher, { shouldValidate: true });
-    setValue("genre", match.genre, { shouldValidate: true });
-    setValue("edition", match.edition, { shouldValidate: true });
-    setValue("pageCount", match.pageCount, { shouldValidate: true });
-    setValue("description", match.description, { shouldValidate: true });
-    setValue("originalPrice", match.originalPrice, { shouldValidate: true });
-    setValue("sellPrice", match.sellPrice, { shouldValidate: true });
-    setValue("condition", match.condition, { shouldValidate: true });
-    if (!currentIsbn) {
-      setValue("isbn", match.isbn, { shouldValidate: true });
+      setAutofillMessage(`✨ Auto-filled book details for "${match.title}" (Mock)!`);
+      setTimeout(() => setAutofillMessage(null), 5000);
     }
-
-    setAutofillMessage(`✨ Auto-filled book details for "${match.title}"!`);
-    setTimeout(() => setAutofillMessage(null), 5000);
   };
 
   // Image states
@@ -293,17 +313,9 @@ export default function BookUploadPage() {
   });
 
   interface LocationSuggestion {
-    geometry: {
-      coordinates: [number, number];
-    };
-    properties: {
-      name: string;
-      street?: string;
-      locality?: string;
-      city?: string;
-      state?: string;
-      country?: string;
-    };
+    display_name: string;
+    lat: number;
+    lng: number;
   }
 
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -345,17 +357,10 @@ export default function BookUploadPage() {
 
       setShowSuggestions(true);
       const timer = setTimeout(() => {
-        fetch(
-          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddressWatch)}&lat=23.8103&lon=90.4125&limit=5`,
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            if (data && data.features && data.features.length > 0) {
-              setLocationSuggestions(data.features);
-              setShowSuggestions(true);
-            } else {
-              setLocationSuggestions([]);
-            }
+        searchLocation(locationAddressWatch)
+          .then((features) => {
+            setLocationSuggestions(features);
+            setShowSuggestions(features.length > 0);
           })
           .catch((err) => console.error("Geocoding error", err))
           .finally(() => setIsSearchingLocation(false));
@@ -369,17 +374,35 @@ export default function BookUploadPage() {
 
   const onSubmit = async (data: UploadFormValues) => {
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log({
-      ...data,
-      frontCover,
-      backCover,
-      insidePages,
-      tocImage,
-      indexImage,
-    });
-    setIsLoading(false);
-    router.push("/books");
+    try {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) {
+          formData.append(key, value.toString());
+        }
+      });
+      if (frontCover) formData.append("frontCover", frontCover);
+      if (backCover) formData.append("backCover", backCover);
+      if (insidePages) formData.append("insidePages", insidePages);
+      if (tocImage) formData.append("tocImage", tocImage);
+      if (indexImage) formData.append("indexImage", indexImage);
+
+      await apiRequest({
+        url: "/books/",
+        method: "POST",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
+      
+      router.push("/books");
+    } catch (err) {
+      console.error("Failed to upload book", err);
+      alert("Failed to upload book");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -1025,53 +1048,21 @@ export default function BookUploadPage() {
                                             className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
                                             onMouseDown={(e) => {
                                               e.preventDefault();
-                                              const props =
-                                                sug.properties || {};
-                                              const rawAddressParts = [
-                                                props.name,
-                                                props.street,
-                                                props.locality,
-                                                props.city,
-                                                props.state,
-                                                props.country,
-                                              ].filter(Boolean);
-                                              const address = Array.from(
-                                                new Set(rawAddressParts),
-                                              ).join(", ");
                                               setValue(
                                                 "locationAddress",
-                                                address,
+                                                sug.display_name,
                                                 { shouldValidate: true },
                                               );
-                                              setValue(
-                                                "locationLat",
-                                                sug.geometry.coordinates[1],
-                                              );
-                                              setValue(
-                                                "locationLng",
-                                                sug.geometry.coordinates[0],
-                                              );
+                                              setValue("locationLat", sug.lat);
+                                              setValue("locationLng", sug.lng);
                                               setShowSuggestions(false);
                                             }}
                                           >
                                             <div className="font-medium">
-                                              {sug.properties.name ||
-                                                sug.properties.street ||
-                                                sug.properties.locality ||
-                                                "Unknown Location"}
+                                              {sug.display_name.split(",")[0]}
                                             </div>
                                             <div className="text-muted-foreground text-xs">
-                                              {Array.from(
-                                                new Set(
-                                                  [
-                                                    sug.properties.street,
-                                                    sug.properties.locality,
-                                                    sug.properties.city,
-                                                    sug.properties.state,
-                                                    sug.properties.country,
-                                                  ].filter(Boolean),
-                                                ),
-                                              ).join(", ")}
+                                              {sug.display_name.split(",").slice(1).join(",").trim()}
                                             </div>
                                           </div>
                                         ))
@@ -1101,10 +1092,7 @@ export default function BookUploadPage() {
                       if (locationType === "custom") {
                         setValue("locationLat", lat);
                         setValue("locationLng", lng);
-                        fetch(
-                          `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
-                        )
-                          .then((res) => res.json())
+                        reverseGeocode(lat, lng)
                           .then((data) => {
                             if (data && data.address) {
                               const addr = data.address;

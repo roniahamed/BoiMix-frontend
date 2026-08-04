@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { fetchLocal } from "@/lib/fetchLocal";
 import { TimelineItem } from "@/components/shared/timeline";
 
 export default async function OrderTrackingPage({
@@ -22,9 +21,7 @@ export default async function OrderTrackingPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const trackingEvents: TimelineItem[] = await fetchLocal(
-    "/api/orders/tracking",
-  );
+  const trackingEvents: TimelineItem[] = [];
 
   // Determine current status based on the last completed event
   const lastCompletedIndex = trackingEvents

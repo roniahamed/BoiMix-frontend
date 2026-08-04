@@ -28,7 +28,7 @@ import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { BookDetailsMobileActions } from "@/components/shared/book-details-mobile-actions";
 import { BookBuyActions } from "@/components/shared/book-buy-actions";
 import { BookBorrowActions } from "@/components/shared/book-borrow-actions";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBookDetails, fetchBooks } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Book Details - BoiMix",
@@ -43,21 +43,27 @@ export default async function BookDetailsPage({
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  const BASE_MOCK_BOOKS = await fetchLocal("/api/books");
+  const BASE_BOOKS = await fetchBooks();
+  const bookDetailsData = await fetchBookDetails(slug).catch(() => null);
+  
+  if (!bookDetailsData) {
+    return <div className="p-8 text-center">Book not found.</div>;
+  }
+  
   const {
-    book: MOCK_BOOK,
-    owner: MOCK_OWNER,
-    reviews: MOCK_REVIEWS,
-    qa: MOCK_QA,
-    recommended: MOCK_RECOMMENDED_BOOKS,
-  } = await fetchLocal(`/api/books/${slug}`);
+    book: API_BOOK,
+    owner: API_OWNER,
+    reviews: API_REVIEWS,
+    qa: API_QA,
+    recommended: API_RECOMMENDED_BOOKS,
+  } = bookDetailsData;
 
   // Find the book in recommendations to see if it has specific tags,
   // or use test slugs, or default to "sell"
-  const foundRecommended = MOCK_RECOMMENDED_BOOKS.find(
+  const foundRecommended = API_RECOMMENDED_BOOKS.find(
     (b: BookCardBook) => b.slug === slug,
   );
-  const foundBase = BASE_MOCK_BOOKS.find((b: BookCardBook) => b.slug === slug);
+  const foundBase = BASE_BOOKS.find((b: BookCardBook) => b.slug === slug);
   const foundBook = foundRecommended || foundBase;
 
   const currentTag =
@@ -77,47 +83,55 @@ export default async function BookDetailsPage({
   else if (currentTag === "borrow") availability.borrow = 2;
   else if (currentTag === "exchange") availability.exchange = 1;
 
+  const fallbackImages = [
+    { src: "/placeholder-book.png", alt: "Cover" },
+    { src: "/placeholder-book.png", alt: "Inside page" },
+    { src: "/placeholder-book.png", alt: "Back cover" },
+  ];
+  
+  const defaultImages = API_BOOK.images && API_BOOK.images.length >= 3 ? API_BOOK.images : fallbackImages;
+
   // Merge foundBook data so the details page reflects the actual clicked book
-  const coverImages = foundBook
+  const coverImages = foundBook && foundBook.coverUrl
     ? [
         {
           src: foundBook.coverUrl.replace("w=400", "w=800"),
           alt: `${foundBook.title} — Cover`,
         },
-        { src: MOCK_BOOK.images[1].src, alt: "Inside page" },
-        { src: MOCK_BOOK.images[2].src, alt: "Back cover" },
+        { src: defaultImages[1]?.src || fallbackImages[1].src, alt: "Inside page" },
+        { src: defaultImages[2]?.src || fallbackImages[2].src, alt: "Back cover" },
       ]
-    : MOCK_BOOK.images;
+    : defaultImages;
 
   const currentBook = {
-    ...MOCK_BOOK,
+    ...API_BOOK,
     tags:
       slug === "book-123"
-        ? MOCK_BOOK.tags
+        ? API_BOOK.tags
         : foundBook
-          ? foundBook.tags
+          ? foundBook.tags || ["sell"]
           : ["sell"],
-    availability: slug === "book-123" ? MOCK_BOOK.availability : availability,
+    availability: slug === "book-123" ? API_BOOK.availability : availability,
     ...(foundBook
       ? {
           id: foundBook.id,
           title: foundBook.title,
           author: foundBook.author,
-          price: foundBook.price ?? MOCK_BOOK.price,
-          originalPrice: foundBook.originalPrice ?? MOCK_BOOK.originalPrice,
+          price: foundBook.price ?? API_BOOK.price,
+          originalPrice: foundBook.originalPrice ?? API_BOOK.original_price,
           images: coverImages,
           rating: foundBook.rating,
           reviewCount: foundBook.reviewCount,
-          condition: foundBook.condition as typeof MOCK_BOOK.condition,
-          location: foundBook.location ?? MOCK_BOOK.location,
-          distance: foundBook.distance ?? MOCK_BOOK.distance,
+          condition: foundBook.condition as typeof API_BOOK.condition,
+          location: foundBook.location ?? API_BOOK.location,
+          distance: foundBook.distance ?? API_BOOK.distance,
         }
       : {
           title: slug
             .split("-")
             .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
             .join(" "),
-          images: MOCK_BOOK.images,
+          images: defaultImages,
         }),
   };
 
@@ -415,8 +429,8 @@ export default async function BookDetailsPage({
                       originalPrice: currentBook.originalPrice,
                       condition: currentBook.condition,
                       images: currentBook.images,
-                      sellerName: MOCK_OWNER.name,
-                      sellerId: MOCK_OWNER.id,
+                      sellerName: API_OWNER.name,
+                      sellerId: API_OWNER.id,
                       tags: currentBook.tags,
                     }}
                   />
@@ -434,8 +448,8 @@ export default async function BookDetailsPage({
                       title: currentBook.title,
                       author: currentBook.author,
                       images: currentBook.images,
-                      ownerName: MOCK_OWNER.name,
-                      ownerId: MOCK_OWNER.id,
+                      ownerName: API_OWNER.name,
+                      ownerId: API_OWNER.id,
                       borrowFee: currentBook.borrowFee,
                       maxBorrowDays: currentBook.maxBorrowDays,
                       tags: currentBook.tags,
@@ -460,8 +474,8 @@ export default async function BookDetailsPage({
               <div className="flex items-start gap-4">
                 <div className="relative size-12 shrink-0 overflow-hidden rounded-full border bg-white">
                   <Image
-                    src={MOCK_OWNER.avatarUrl}
-                    alt={MOCK_OWNER.name}
+                    src={API_OWNER.avatarUrl || `https://ui-avatars.com/api/?name=${API_OWNER.name}`}
+                    alt={API_OWNER.name}
                     fill
                     className="object-cover"
                   />
@@ -469,24 +483,24 @@ export default async function BookDetailsPage({
                 <div>
                   <div className="flex items-center gap-2">
                     <h4 className="text-foreground text-lg font-semibold">
-                      {MOCK_OWNER.name}
+                      {API_OWNER.name}
                     </h4>
                     <span className="text-muted-foreground/50 hidden shrink-0 sm:inline">
                       •
                     </span>
                     <div className="text-muted-foreground flex items-center gap-1 text-sm font-medium">
                       <Users className="size-4" />
-                      {MOCK_OWNER.followers} Followers
+                      {API_OWNER.followers} Followers
                     </div>
                   </div>
                   <div className="text-muted-foreground mt-0.5 flex items-center gap-1.5 text-sm">
                     <MapPin className="size-4 shrink-0" />
-                    <span className="truncate">{MOCK_OWNER.location}</span>
+                    <span className="truncate">{API_OWNER.location}</span>
                   </div>
-                  {!!MOCK_OWNER.badges?.length && (
+                  {!!API_OWNER.badges?.length && (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {MOCK_OWNER.badges.map((badge: any) => (
+                      {API_OWNER.badges.map((badge: any) => (
                         <UserBadge key={badge.label} {...badge} />
                       ))}
                     </div>
@@ -500,7 +514,7 @@ export default async function BookDetailsPage({
                 </div>
                 <div className="text-primary flex items-center gap-1.5">
                   <Star className="fill-primary size-4" />
-                  {MOCK_OWNER.rating} ({currentBook.reviewCount} Reviews)
+                  {API_OWNER.rating} ({currentBook.reviewCount} Reviews)
                 </div>
               </div>
             </div>
@@ -521,7 +535,7 @@ export default async function BookDetailsPage({
         <div className="bg-card border p-5 shadow-sm lg:p-6">
           <h3 className="type-heading mb-4 text-xl">সারাংশ (Summary)</h3>
           <p className="text-muted-foreground text-justify leading-relaxed">
-            {MOCK_BOOK.description}
+            {API_BOOK.description || "কোনো সারাংশ দেওয়া নেই।"}
           </p>
         </div>
 
@@ -536,7 +550,7 @@ export default async function BookDetailsPage({
                 প্রকাশক
               </div>
               <div className="col-span-2 p-3 font-medium">
-                {MOCK_BOOK.publisher}
+                {API_BOOK.publisher || "-"}
               </div>
             </div>
             <div className="grid grid-cols-3 border-b">
@@ -544,13 +558,13 @@ export default async function BookDetailsPage({
                 ক্যাটাগরি
               </div>
               <div className="col-span-2 p-3 font-medium">
-                {MOCK_BOOK.genre}
+                {API_BOOK.genre || "-"}
               </div>
             </div>
             <div className="bg-muted/30 grid grid-cols-3 border-b">
               <div className="text-muted-foreground p-3 font-medium">ভাষা</div>
               <div className="col-span-2 p-3 font-medium">
-                {MOCK_BOOK.language}
+                {API_BOOK.language || "-"}
               </div>
             </div>
             <div className="grid grid-cols-3 border-b">
@@ -558,7 +572,7 @@ export default async function BookDetailsPage({
                 সংস্করণ
               </div>
               <div className="col-span-2 p-3 font-medium">
-                {MOCK_BOOK.edition}
+                {API_BOOK.edition || "-"}
               </div>
             </div>
             <div className="bg-muted/30 grid grid-cols-3 border-b">
@@ -566,48 +580,30 @@ export default async function BookDetailsPage({
                 পৃষ্ঠা সংখ্যা
               </div>
               <div className="col-span-2 p-3 font-medium">
-                {MOCK_BOOK.pages}
+                {API_BOOK.pages || "-"}
               </div>
             </div>
             <div className="grid grid-cols-3">
               <div className="text-muted-foreground p-3 font-medium">ISBN</div>
-              <div className="col-span-2 p-3 font-medium">{MOCK_BOOK.isbn}</div>
+              <div className="col-span-2 p-3 font-medium">{API_BOOK.isbn || "-"}</div>
             </div>
           </div>
         </div>
 
-        <BookReviews reviews={MOCK_REVIEWS} bookTitle={MOCK_BOOK.title} />
+        <BookReviews reviews={API_REVIEWS} bookTitle={API_BOOK.title} />
 
-        <BookQA qas={MOCK_QA} />
+        <BookQA qas={API_QA} />
       </div>
 
       {/* Similar Books Section */}
-      <div className="mt-16">
-        <h2 className="type-heading mb-6 text-2xl">
-          একই ধরনের আরও বই (Similar Books)
-        </h2>
-        <ScrollContainer>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {MOCK_RECOMMENDED_BOOKS.map((book: any) => (
-            <div
-              key={book.id}
-              className="w-[140px] shrink-0 snap-start sm:w-[160px]"
-            >
-              <BookCard book={book} />
-            </div>
-          ))}
-        </ScrollContainer>
-      </div>
-
-      {/* Recently Viewed Books Section */}
-      <div className="mt-12">
-        <h2 className="type-heading mb-6 text-2xl">
-          সম্প্রতি দেখা বই (Recently Viewed)
-        </h2>
-        <ScrollContainer>
-          {MOCK_RECOMMENDED_BOOKS.slice()
-            .reverse()
-            .map((book: BookCardBook) => (
+      {API_RECOMMENDED_BOOKS && API_RECOMMENDED_BOOKS.length > 0 && (
+        <div className="mt-16">
+          <h2 className="type-heading mb-6 text-2xl">
+            একই ধরনের আরও বই (Similar Books)
+          </h2>
+          <ScrollContainer>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {API_RECOMMENDED_BOOKS.map((book: any) => (
               <div
                 key={book.id}
                 className="w-[140px] shrink-0 snap-start sm:w-[160px]"
@@ -615,8 +611,30 @@ export default async function BookDetailsPage({
                 <BookCard book={book} />
               </div>
             ))}
-        </ScrollContainer>
-      </div>
+          </ScrollContainer>
+        </div>
+      )}
+
+      {/* Recently Viewed Books Section */}
+      {API_RECOMMENDED_BOOKS && API_RECOMMENDED_BOOKS.length > 0 && (
+        <div className="mt-12">
+          <h2 className="type-heading mb-6 text-2xl">
+            সম্প্রতি দেখা বই (Recently Viewed)
+          </h2>
+          <ScrollContainer>
+            {API_RECOMMENDED_BOOKS.slice()
+              .reverse()
+              .map((book: BookCardBook) => (
+                <div
+                  key={book.id}
+                  className="w-[140px] shrink-0 snap-start sm:w-[160px]"
+                >
+                  <BookCard book={book} />
+                </div>
+              ))}
+          </ScrollContainer>
+        </div>
+      )}
 
       <BookDetailsMobileActions
         book={{
@@ -626,8 +644,8 @@ export default async function BookDetailsPage({
           price: currentBook.price,
           condition: currentBook.condition,
           images: currentBook.images,
-          sellerName: MOCK_OWNER.name,
-          sellerId: MOCK_OWNER.id,
+          sellerName: API_OWNER.name,
+          sellerId: API_OWNER.id,
           tags: currentBook.tags,
         }}
       />

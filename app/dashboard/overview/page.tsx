@@ -1,4 +1,4 @@
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBooks } from "@/lib/api-client";
 import { BookCard } from "@/components/shared/book-card";
 import type { BookCardBook } from "@/types/book";
 import { ChevronRight } from "lucide-react";
@@ -10,8 +10,9 @@ import { OverviewActivityTimeline } from "@/components/dashboard/overview/overvi
 import { OverviewContinueReading } from "@/components/dashboard/overview/overview-continue-reading";
 
 export default async function OverviewPage() {
-  const { profileLibraryBooks } = await fetchLocal("/api/profile");
-  const recommendedBooks = profileLibraryBooks.slice(0, 4);
+  const allBooks: BookCardBook[] = await fetchBooks();
+  const recommendedBooks = allBooks.slice(0, 4);
+
 
   return (
     <div className="space-y-5 pb-24 sm:space-y-6 lg:pb-8">

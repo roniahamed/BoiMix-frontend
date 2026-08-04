@@ -20,7 +20,7 @@ import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBooks, fetchCategories } from "@/lib/api-client";
 
 interface CategoryItem {
   href: string;
@@ -51,7 +51,7 @@ interface TestimonialItem {
 }
 
 export default async function Home() {
-  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
+  const featuredBooks: BookCardBook[] = await fetchBooks();
   const newBooks: BookCardBook[] = [...featuredBooks].reverse();
   const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
   const forYouBooks: BookCardBook[] = [...featuredBooks].slice(5, 17);
@@ -91,7 +91,7 @@ export default async function Home() {
 }
 
 async function CategorySection() {
-  const categories: CategoryItem[] = await fetchLocal("/api/categories");
+  const categories: CategoryItem[] = await fetchCategories();
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -164,7 +164,7 @@ function BookSection({
 }
 
 async function CentralLibrarySection() {
-  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
+  const featuredBooks: BookCardBook[] = await fetchBooks();
   const books = featuredBooks
     .filter((b) => b.providerType === "library" || b.tags.includes("borrow"))
     .slice(0, 12);
@@ -193,7 +193,7 @@ async function CentralLibrarySection() {
 }
 
 async function MarketplaceSection() {
-  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
+  const featuredBooks: BookCardBook[] = await fetchBooks();
   const books = featuredBooks
     .filter((b) => b.tags.includes("sell"))
     .slice(0, 12);
@@ -222,7 +222,7 @@ async function MarketplaceSection() {
 }
 
 async function ExchangeBooksSection() {
-  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
+  const featuredBooks: BookCardBook[] = await fetchBooks();
   const books = featuredBooks
     .filter((b) => b.tags.includes("exchange"))
     .slice(0, 12);
@@ -334,7 +334,7 @@ function FeaturePanel({
 }
 
 async function CommunityReaderSection() {
-  const readers: ReaderItem[] = await fetchLocal("/api/readers");
+  const readers: ReaderItem[] = [];
 
   return (
     <section className="py-2 md:py-3">
@@ -457,8 +457,7 @@ async function CommunityReaderSection() {
 }
 
 async function CommunitySection() {
-  const communityPosts: CommunityPostItem[] =
-    await fetchLocal("/api/community");
+  const communityPosts: CommunityPostItem[] = [];
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -488,7 +487,7 @@ async function CommunitySection() {
 }
 
 async function SponsorsSection() {
-  const sponsors: string[] = await fetchLocal("/api/sponsors");
+  const sponsors: string[] = [];
   return (
     <section className="py-2 md:py-3">
       <div className="boimix-container-wide bg-card border-border/50 rounded-lg border p-4 shadow-none md:p-6">
@@ -554,7 +553,7 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
 }
 
 async function PersonalizationSection() {
-  const featuredBooks: BookCardBook[] = await fetchLocal("/api/books");
+  const featuredBooks: BookCardBook[] = await fetchBooks();
   const recentlyViewed = featuredBooks.slice(0, 3);
   return (
     <section className="py-2 md:py-3">
@@ -637,11 +636,7 @@ async function PersonalizationSection() {
 }
 
 async function AuthorSpotlightSection() {
-  // Mock books by Humayun Ahmed
-
-  const humayunBooks: BookCardBook[] = await fetchLocal(
-    "/api/authors/humayun-ahmed/books",
-  );
+  const humayunBooks: BookCardBook[] = await fetchBooks();
 
   return (
     <section className="py-2 md:py-3">
@@ -746,7 +741,7 @@ async function AuthorSpotlightSection() {
 }
 
 async function TestimonialsSection() {
-  const testimonials: TestimonialItem[] = await fetchLocal("/api/testimonials");
+  const testimonials: TestimonialItem[] = [];
 
   return (
     <section className="py-2 md:py-3">

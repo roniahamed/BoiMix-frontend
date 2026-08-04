@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBooks } from "@/lib/api-client";
+import { fetchBooks, fetchNearbyBooks } from "@/lib/api-client";
 import {
   SlidersHorizontal,
   Search,
@@ -79,9 +79,19 @@ export function BookListing({
   initialFilters = {},
   initialSortBy = "newest",
 }: BookListingProps) {
+
+
+  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [sortBy, setSortBy] = useState(initialSortBy);
+
   const { data: baseBooks = [], isLoading } = useQuery({
-    queryKey: ["books"],
-    queryFn: () => fetchBooks(),
+    queryKey: ["books", sortBy === "distance" ? "nearby" : "all", userLocation],
+    queryFn: () => {
+      if (sortBy === "distance" && userLocation) {
+        return fetchNearbyBooks(userLocation.lat, userLocation.lng);
+      }
+      return fetchBooks();
+    },
   });
 
   const MOCK_BOOKS = useMemo(() => {
@@ -191,7 +201,7 @@ export function BookListing({
   }, [MOCK_BOOKS]);
 
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
-  const [sortBy, setSortBy] = useState(initialSortBy);
+
   const [selectedFilters, setSelectedFilters] =
     useState<Record<string, string[]>>(initialFilters);
   const [priceRange, setPriceRange] = useState<{
@@ -202,6 +212,17 @@ export function BookListing({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
   const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (sortBy === "distance" && !userLocation && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      }, () => {
+        // Handle error or default to Dhaka coordinates
+        setUserLocation({ lat: 23.8103, lng: 90.4125 });
+      });
+    }
+  }, [sortBy, userLocation]);
 
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);

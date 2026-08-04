@@ -42,10 +42,12 @@ interface EditProfileDialogProps {
   profile: UserProfile;
   children: React.ReactNode;
 }
+import { searchLocation, reverseGeocode } from "@/lib/api-client";
 
 interface LocationSuggestion {
-  geometry: { coordinates: [number, number] };
-  properties: { name: string; city?: string; country?: string };
+  display_name: string;
+  lat: number;
+  lng: number;
 }
 
 export function EditProfileDialog({
@@ -75,17 +77,10 @@ export function EditProfileDialog({
 
       setShowSuggestions(true);
       const timer = setTimeout(() => {
-        fetch(
-          `https://photon.komoot.io/api/?q=${encodeURIComponent(locationAddress)}&lat=23.8103&lon=90.4125&limit=15`,
-        )
-          .then((res) => res.json())
-          .then((data) => {
-            if (data && data.features && data.features.length > 0) {
-              setLocationSuggestions(data.features);
-              setShowSuggestions(true);
-            } else {
-              setLocationSuggestions([]);
-            }
+        searchLocation(locationAddress)
+          .then((features) => {
+            setLocationSuggestions(features);
+            setShowSuggestions(features.length > 0);
           })
           .catch((err) => console.error("Geocoding error", err))
           .finally(() => setIsSearchingLocation(false));
@@ -370,36 +365,18 @@ export function EditProfileDialog({
                               type="button"
                               className="hover:bg-muted border-border/50 flex w-full flex-col items-start border-b px-4 py-2 text-left text-sm transition-colors last:border-b-0"
                               onClick={() => {
-                                const props = suggestion.properties;
-                                const address = [
-                                  props.name,
-                                  props.city,
-                                  props.country,
-                                ]
-                                  .filter(Boolean)
-                                  .join(", ");
-
                                 setIsTyping(false);
-                                setLocationAddress(address);
-                                setLocationLat(
-                                  suggestion.geometry.coordinates[1],
-                                );
-                                setLocationLng(
-                                  suggestion.geometry.coordinates[0],
-                                );
+                                setLocationAddress(suggestion.display_name);
+                                setLocationLat(suggestion.lat);
+                                setLocationLng(suggestion.lng);
                                 setShowSuggestions(false);
                               }}
                             >
                               <span className="font-medium">
-                                {suggestion.properties.name}
+                                {suggestion.display_name.split(",")[0]}
                               </span>
                               <span className="text-muted-foreground text-xs">
-                                {[
-                                  suggestion.properties.city,
-                                  suggestion.properties.country,
-                                ]
-                                  .filter(Boolean)
-                                  .join(", ")}
+                                {suggestion.display_name.split(",").slice(1).join(",").trim()}
                               </span>
                             </button>
                           ))
@@ -428,10 +405,7 @@ export function EditProfileDialog({
                   onChange={(lat, lng) => {
                     setLocationLat(lat);
                     setLocationLng(lng);
-                    fetch(
-                      `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1`,
-                    )
-                      .then((res) => res.json())
+                    reverseGeocode(lat, lng)
                       .then((data) => {
                         if (data && data.address) {
                           const addr = data.address;

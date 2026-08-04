@@ -1,4 +1,7 @@
-import { fetchLocal } from "@/lib/fetchLocal";
+"use client";
+
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserLibrary } from "@/lib/api-client";
 import { LibraryGrid } from "@/components/shared/library-grid";
 import {
   Library,
@@ -12,8 +15,11 @@ import {
 import { AddBookButton } from "@/components/shared/add-book-button";
 import { Book } from "@/components/shared/library-grid";
 
-export default async function LibraryPage() {
-  const { profileLibraryBooks } = await fetchLocal("/api/profile");
+export default function LibraryPage() {
+  const { data: profileLibraryBooks = [] } = useQuery({
+    queryKey: ["userLibrary"],
+    queryFn: fetchUserLibrary,
+  });
 
   const totalBooks = profileLibraryBooks.length;
   // Compute statuses based on our new inventoryStatus field

@@ -7,7 +7,7 @@ import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { FaqAccordion } from "@/components/shared/faq-accordion";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 
 import { CENTRAL_LIBRARY_FAQS } from "@/lib/data/central-library";
@@ -17,7 +17,7 @@ import { CentralCollections } from "@/components/explore/central-library/central
 import { CentralWhyUs } from "@/components/explore/central-library/central-why-us";
 
 export default async function CentralLibraryPage() {
-  const allBooks: BookCardBook[] = (await fetchLocal("/api/books")) || [];
+  const allBooks: BookCardBook[] = (await fetchBooks()) || [];
 
   // Filter only library books
   const libraryBooks = allBooks.filter(

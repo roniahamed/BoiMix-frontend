@@ -17,7 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useExchangeStore } from "@/lib/store/use-exchange-store";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 import Link from "next/link";
 
@@ -45,7 +45,7 @@ export default function ExchangeOfferPage({
   useEffect(() => {
     async function loadBook() {
       try {
-        const books = await fetchLocal("/api/books");
+        const books = await fetchBooks();
         const found =
           books.find((b: BookCardBook) => b.id === bookId) || books[0];
         setRequestedBook(found);

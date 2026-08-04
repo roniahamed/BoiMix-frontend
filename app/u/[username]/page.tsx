@@ -4,7 +4,7 @@ import { ProfileShell } from "@/components/profile/profile-shell";
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchPublicProfile } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Reader Profile - BoiMix",
@@ -16,19 +16,24 @@ export default async function UserProfilePage({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { mockProfiles, profileLibraryBooks, profileReviews } =
-    await fetchLocal("/api/profile");
-  const getUserProfile = (username: string) =>
-    mockProfiles.find((p: { username: string }) => p.username === username);
-
   const { username } = await params;
-  const profile = getUserProfile(username);
+  
+  let profile = null;
+  try {
+    profile = await fetchPublicProfile(username);
+  } catch (error) {
+    console.error("Failed to fetch public profile:", error);
+  }
+
+  const profileLibraryBooks: any[] = []; // Phase 13 will add /api/users/{username}/library
+  const profileReviews: any[] = []; // Phase 13 will add /api/users/{username}/reviews
 
   if (!profile) {
     return <ProfileNotFound />;
   }
 
-  const isOwnProfile = true; // TODO: Replace with actual auth check
+  // isOwnProfile determined client-side via auth store in ProfileShell
+  const isOwnProfile = false;
 
   return (
     <ProfileShell

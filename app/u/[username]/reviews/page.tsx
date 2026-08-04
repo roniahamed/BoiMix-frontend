@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchPublicProfile } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Reader Reviews - BoiMix",
@@ -24,12 +24,16 @@ export default async function UserReviewsPage({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { mockProfiles, profileReviews } = await fetchLocal("/api/profile");
-  const getUserProfile = (username: string) =>
-    mockProfiles.find((p: { username: string }) => p.username === username);
-
   const { username } = await params;
-  const profile = getUserProfile(username);
+  
+  let profile = null;
+  try {
+    profile = await fetchPublicProfile(username);
+  } catch (error) {
+    console.error("Failed to fetch public profile:", error);
+  }
+  
+  const profileReviews: any[] = []; // TODO: Phase 4/8 Integration
   const isOwnProfile = false;
 
   if (!profile) {

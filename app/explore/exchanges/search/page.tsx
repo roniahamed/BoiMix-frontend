@@ -3,7 +3,7 @@ import { RefreshCw, ArrowRight, BookOpen } from "lucide-react";
 import { MainLayout } from "@/components/layout/main-layout";
 import { BookCard } from "@/components/shared/book-card";
 import { LibrarySearchBar } from "@/components/shared/library-search-bar";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchBooks, fetchSearchBooks } from "@/lib/api-client";
 import type { BookCardBook } from "@/types/book";
 
 const EXCHANGE_CATEGORIES = [
@@ -40,7 +40,9 @@ export default async function ExchangesSearchPage({
   const category = resolvedParams?.category || "";
   const sort = resolvedParams?.sort || "";
 
-  const allBooks: BookCardBook[] = (await fetchLocal("/api/books")) || [];
+  const allBooks: BookCardBook[] = q
+    ? await fetchSearchBooks(q)
+    : await fetchBooks();
 
   // Use all non-library books as exchange books (fallback: all books)
   let exchangeBooks = allBooks.filter(

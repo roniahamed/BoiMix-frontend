@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { Search, X, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBooks } from "@/lib/api-client";
+import { fetchSearchBooks } from "@/lib/api-client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { BookCardBook } from "@/types/book";
@@ -42,36 +42,25 @@ export function LibrarySearchBar({
     setPrevDefaultValue(defaultValue);
   }
 
-  // Fetch all books
-  const { data: books = [] } = useQuery({
-    queryKey: ["books"],
-    queryFn: () => fetchBooks(),
+  // Fetch searched books directly from API based on query
+  const { data: searchedBooks = [] } = useQuery({
+    queryKey: ["searchBooks", query],
+    queryFn: () => fetchSearchBooks(query),
+    enabled: query.trim().length > 1,
   });
 
-  // Filter books based on mode
-  const filteredSourceBooks = (books as BookCardBook[]).filter((book) => {
+  // Since backend already filters by query, we just filter by mode if needed
+  const suggestions = (searchedBooks as any[]).filter((book) => {
     if (mode === "library") {
-      return book.providerType === "library" || book.tags?.includes("library");
+      return book.availability_mode === "borrow" || book.tags?.includes("library");
     } else if (mode === "exchanges") {
-      return book.providerType !== "library" || book.tags?.includes("exchange");
+      return book.availability_mode !== "borrow" || book.tags?.includes("exchange");
     }
     return true;
-  });
-
-  // Filter suggestion results
-  const suggestions =
-    query.trim().length > 1
-      ? filteredSourceBooks
-          .filter((book) => {
-            const lowerQuery = query.toLowerCase();
-            return (
-              book.title.toLowerCase().includes(lowerQuery) ||
-              book.author.toLowerCase().includes(lowerQuery) ||
-              book.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
-            );
-          })
-          .slice(0, 5)
-      : [];
+  }).slice(0, 5).map(b => ({
+    ...b,
+    coverUrl: b.coverUrl || "https://m.media-amazon.com/images/I/41K-Lsc8w5L._SY445_SX342_.jpg"
+  }));
 
   // Click outside to close
   useEffect(() => {

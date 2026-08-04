@@ -35,6 +35,12 @@ const GoogleIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const AppleIcon = ({ className }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.62-1.496 3.603-2.947 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.533 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.56-1.702z"/>
+  </svg>
+);
+
 const registerSchema = z
   .object({
     fullName: z.string().min(3, "নাম অন্তত ৩ অক্ষরের হতে হবে"),
@@ -71,12 +77,123 @@ export default function RegisterPage() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(data);
-    setIsLoading(false);
-    // Move to next step (OTP verification or complete profile)
-    router.push("/auth/verify-otp");
+    try {
+      // 1. Create Firebase user
+      const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
+      const { auth } = await import("@/lib/firebase");
+      const { apiClient, setApiAccessToken } = await import("@/lib/api/client");
+      const { useAuthStore } = await import("@/stores/auth-store");
+
+      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+      await updateProfile(userCredential.user, { displayName: data.fullName });
+      const idToken = await userCredential.user.getIdToken();
+
+      // 2. Register with backend via firebase-login
+      const response = await apiClient.post<{ access_token: string; user: Record<string, unknown> }>(
+        "/auth/firebase-login",
+        { id_token: idToken, full_name: data.fullName },
+      );
+
+      setApiAccessToken(response.data.access_token);
+      useAuthStore.getState().setSession(
+        {
+          id: response.data.user.id as string,
+          name: data.fullName,
+          email: data.email,
+          roles: [(response.data.user.role as string) || "user"],
+        },
+        response.data.access_token,
+      );
+
+      router.push("/auth/complete-profile");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Register Error:", error);
+      const msg = error?.response?.data?.error?.message || error?.message || "Registration failed.";
+      alert(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const { signInWithPopup, GoogleAuthProvider } = await import("firebase/auth");
+      const { auth } = await import("@/lib/firebase");
+      const { apiClient, setApiAccessToken } = await import("@/lib/api/client");
+      const { useAuthStore } = await import("@/stores/auth-store");
+      
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+      
+      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+        id_token: idToken,
+        full_name: userCredential.user.displayName,
+      });
+
+      setApiAccessToken(response.data.access_token);
+      useAuthStore.getState().setSession(
+        {
+          id: response.data.user.id,
+          name: response.data.user.full_name || response.data.user.name || "User",
+          username: response.data.user.username,
+          email: response.data.user.email,
+          avatarUrl: response.data.user.avatarUrl || response.data.user.avatar_url,
+          roles: [response.data.user.role || "user"],
+        },
+        response.data.access_token
+      );
+      
+      router.push("/auth/complete-profile");
+    } catch (error: any) {
+      console.error("Google Login Error:", error);
+      const msg = error?.response?.data?.error?.message || error?.message || "Google registration failed.";
+      alert(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    setIsLoading(true);
+    try {
+      const { signInWithPopup, OAuthProvider } = await import("firebase/auth");
+      const { auth } = await import("@/lib/firebase");
+      const { apiClient, setApiAccessToken } = await import("@/lib/api/client");
+      const { useAuthStore } = await import("@/stores/auth-store");
+      
+      const provider = new OAuthProvider("apple.com");
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+      
+      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+        id_token: idToken,
+        full_name: userCredential.user.displayName,
+      });
+
+      setApiAccessToken(response.data.access_token);
+      useAuthStore.getState().setSession(
+        {
+          id: response.data.user.id,
+          name: response.data.user.full_name || response.data.user.name || "User",
+          username: response.data.user.username,
+          email: response.data.user.email,
+          avatarUrl: response.data.user.avatarUrl || response.data.user.avatar_url,
+          roles: [response.data.user.role || "user"],
+        },
+        response.data.access_token
+      );
+      
+      router.push("/auth/complete-profile");
+    } catch (error: any) {
+      console.error("Apple Login Error:", error);
+      const msg = error?.response?.data?.error?.message || error?.message || "Apple registration failed.";
+      alert(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -232,9 +349,13 @@ export default function RegisterPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        <Button variant="outline" type="button" disabled={isLoading}>
+        <Button variant="outline" type="button" disabled={isLoading} onClick={handleGoogleLogin}>
           <GoogleIcon className="mr-2 size-5" />
           Google দিয়ে অ্যাকাউন্ট খুলুন
+        </Button>
+        <Button variant="outline" type="button" disabled={isLoading} onClick={handleAppleLogin}>
+          <AppleIcon className="mr-2 size-5" />
+          Apple দিয়ে অ্যাকাউন্ট খুলুন
         </Button>
       </div>
 

@@ -15,6 +15,9 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
+import { useAuthStore } from "@/stores";
+import { apiRequest } from "@/lib/api/client";
+
 import dynamic from "next/dynamic";
 const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
   ssr: false,
@@ -33,6 +36,7 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function SettingsPage() {
+  const { user, isAuthenticated } = useAuthStore();
   const [mapPosition, setMapPosition] = useState<{
     lat: number;
     lng: number;
@@ -40,8 +44,8 @@ export default function SettingsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<
     {
-      lat: string;
-      lon: string;
+      lat: number;
+      lng: number;
       display_name: string;
       address?: Record<string, string>;
     }[]
@@ -49,13 +53,24 @@ export default function SettingsPage() {
 
   const [streetResults, setStreetResults] = useState<
     {
-      lat: string;
-      lon: string;
+      lat: number;
+      lng: number;
       display_name: string;
       address?: Record<string, string>;
     }[]
   >([]);
   const [showStreetSuggestions, setShowStreetSuggestions] = useState(false);
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [profile, setProfile] = useState({
+    fullName: "",
+    username: "",
+    designation: "",
+    bio: "",
+  });
+  
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>("/placeholder-user.jpg");
 
   const [addressDetails, setAddressDetails] = useState({
     street: "",
@@ -68,15 +83,73 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
+    if (isAuthenticated && user?.username) {
+      apiRequest<any>({ url: `/profiles/${user.username}`, method: "GET" })
+        .then((data) => {
+          setProfile({
+            fullName: data.name || "",
+            username: data.username || "",
+            designation: data.role || "",
+            bio: data.bio || "",
+          });
+          if (data.avatarUrl) {
+            setAvatarPreview(data.avatarUrl);
+          }
+          if (data.locationDetails) {
+            setAddressDetails((prev) => ({
+              ...prev,
+              city: data.locationDetails.area || "Dhaka",
+              state: data.locationDetails.district || "",
+            }));
+          }
+        })
+        .catch(console.error);
+    }
+  }, [isAuthenticated, user?.username]);
+
+  const handleSaveProfile = async () => {
+    if (!isAuthenticated) return;
+    setIsSaving(true);
+    try {
+      const formData = new FormData();
+      formData.append("full_name", profile.fullName);
+      formData.append("bio", profile.bio);
+      formData.append("designation", profile.designation);
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
+      }
+      
+      // Location data should be JSON encoded if sending in multipart, but the endpoint might just expect regular JSON if no file
+      // Wait, CompleteProfileView expects location as well? In serializers.py CompleteProfileSerializer doesn't include locations!
+      // I will just send what is supported by CompleteProfileSerializer.
+      
+      await apiRequest({
+        url: "/profiles/me/",
+        method: "PATCH",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      alert("Profile saved successfully!");
+    } catch (err) {
+      console.error("Failed to save profile", err);
+      alert("Failed to save profile.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  useEffect(() => {
     const timer = setTimeout(async () => {
       if (searchQuery.trim().length > 2) {
         try {
-          // Added countrycodes=bd and limit=5 to speed up the query significantly
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=bd&limit=5&q=${encodeURIComponent(searchQuery)}`,
-          );
-          const data = await res.json();
-          setSearchResults(data);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data = await apiRequest<{results: any[]}>({ 
+            url: `/locations/search/?q=${encodeURIComponent(searchQuery)}`, 
+            method: 'GET' 
+          });
+          setSearchResults(data.results || []);
         } catch (err) {
           console.error("Search failed", err);
         }
@@ -92,11 +165,12 @@ export default function SettingsPage() {
     const timer = setTimeout(async () => {
       if (addressDetails.street.trim().length > 2 && showStreetSuggestions) {
         try {
-          const res = await fetch(
-            `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=bd&limit=5&q=${encodeURIComponent(addressDetails.street)}`,
-          );
-          const data = await res.json();
-          setStreetResults(data);
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const data = await apiRequest<{results: any[]}>({ 
+            url: `/locations/search/?q=${encodeURIComponent(addressDetails.street)}`, 
+            method: 'GET' 
+          });
+          setStreetResults(data.results || []);
         } catch (err) {
           console.error("Street search failed", err);
         }
@@ -112,30 +186,22 @@ export default function SettingsPage() {
     e.preventDefault();
   };
 
-  const handleSelectResult = async (result: {
-    lat: string;
-    lon: string;
-    display_name: string;
-    address?: Record<string, string>;
-  }) => {
-    const lat = parseFloat(result.lat);
-    const lng = parseFloat(result.lon);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSelectResult = async (result: any) => {
+    const lat = result.lat;
+    const lng = result.lng;
     setSearchResults([]);
     setSearchQuery(result.display_name);
     handleLocationChange(lat, lng, result.address);
   };
 
-  const handleStreetSelect = (result: {
-    lat: string;
-    lon: string;
-    display_name: string;
-    address?: Record<string, string>;
-  }) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleStreetSelect = (result: any) => {
     setShowStreetSuggestions(false);
     setStreetResults([]);
     handleLocationChange(
-      parseFloat(result.lat),
-      parseFloat(result.lon),
+      result.lat,
+      result.lng,
       result.address,
     );
   };
@@ -175,29 +241,30 @@ export default function SettingsPage() {
     }
 
     try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-      );
-      const data = await res.json();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data = await apiRequest<any>({
+        url: `/locations/reverse/?lat=${lat}&lng=${lng}`,
+        method: "GET",
+      });
 
-      if (data.address) {
+      if (data) {
         setAddressDetails((prev) => ({
           ...prev,
           street:
-            data.address.road ||
-            data.address.suburb ||
-            data.address.neighbourhood ||
-            data.address.village ||
+            data.road ||
+            data.suburb ||
+            data.neighbourhood ||
+            data.village ||
             "",
           city:
-            data.address.city || data.address.town || data.address.county || "",
-          state: data.address.state || "",
-          zip: data.address.postcode
-            ? String(data.address.postcode)
-            : data.address.postal_code
-              ? String(data.address.postal_code)
+            data.city || data.town || data.county || "",
+          state: data.state || "",
+          zip: data.postcode
+            ? String(data.postcode)
+            : data.postal_code
+              ? String(data.postal_code)
               : "",
-          country: data.address.country || "",
+          country: data.country || "",
           lat: lat.toString(),
           lng: lng.toString(),
         }));
@@ -252,17 +319,30 @@ export default function SettingsPage() {
                 <div className="group relative cursor-pointer">
                   <Avatar className="border-background h-24 w-24 border-4 shadow-md transition-opacity group-hover:opacity-80">
                     <AvatarImage
-                      src="/placeholder-user.jpg"
+                      src={avatarPreview}
                       alt="Profile picture"
                       className="object-cover"
                     />
                     <AvatarFallback className="bg-primary/10 text-primary text-2xl font-medium">
-                      RA
+                      {profile.fullName?.charAt(0) || user?.name?.charAt(0) || "U"}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                  <label htmlFor="avatar-upload" className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
                     <Camera className="h-8 w-8 text-white" />
-                  </div>
+                  </label>
+                  <input
+                    id="avatar-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        const file = e.target.files[0];
+                        setAvatarFile(file);
+                        setAvatarPreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
                 </div>
                 <div className="space-y-2">
                   <h3 className="text-lg font-medium">Profile Picture</h3>
@@ -271,13 +351,17 @@ export default function SettingsPage() {
                     size of 2MB.
                   </p>
                   <div className="flex items-center gap-3 pt-2">
-                    <Button variant="default" size="sm" className="shadow-sm">
+                    <Button variant="default" size="sm" className="shadow-sm" onClick={() => document.getElementById("avatar-upload")?.click()}>
                       Upload New
                     </Button>
                     <Button
                       variant="outline"
                       size="sm"
                       className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => {
+                        setAvatarFile(null);
+                        setAvatarPreview("/placeholder-user.jpg");
+                      }}
                     >
                       Remove
                     </Button>
@@ -300,7 +384,8 @@ export default function SettingsPage() {
                     </Label>
                     <Input
                       id="fullName"
-                      defaultValue="Roni Ahamed"
+                      value={profile.fullName}
+                      onChange={(e) => setProfile({...profile, fullName: e.target.value})}
                       className="bg-muted/20"
                     />
                   </div>
@@ -310,8 +395,9 @@ export default function SettingsPage() {
                     </Label>
                     <Input
                       id="username"
-                      defaultValue="roni"
-                      className="bg-muted/20"
+                      value={profile.username}
+                      disabled
+                      className="bg-muted/20 cursor-not-allowed opacity-70"
                     />
                   </div>
                   <div className="space-y-2 md:col-span-2">
@@ -324,6 +410,8 @@ export default function SettingsPage() {
                     <Input
                       id="designation"
                       placeholder="e.g. Software Engineer, Teacher, Student"
+                      value={profile.designation}
+                      onChange={(e) => setProfile({...profile, designation: e.target.value})}
                       className="bg-muted/20"
                     />
                   </div>
@@ -335,7 +423,8 @@ export default function SettingsPage() {
                   </Label>
                   <Textarea
                     id="bio"
-                    defaultValue="Love reading. Love sharing. Let's build a community of book lovers."
+                    value={profile.bio}
+                    onChange={(e) => setProfile({...profile, bio: e.target.value})}
                     rows={3}
                     className="bg-muted/20 resize-none"
                   />
@@ -546,7 +635,9 @@ export default function SettingsPage() {
               <p className="text-muted-foreground text-sm">
                 Don&apos;t forget to save your changes.
               </p>
-              <Button className="shadow-sm">Save Profile</Button>
+              <Button onClick={handleSaveProfile} disabled={isSaving} className="shadow-sm">
+                {isSaving ? "Saving..." : "Save Profile"}
+              </Button>
             </CardFooter>
           </Card>
         </TabsContent>

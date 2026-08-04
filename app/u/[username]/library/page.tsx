@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
-import { fetchLocal } from "@/lib/fetchLocal";
+import { fetchPublicProfile, fetchUserLibrary } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Reader Library - BoiMix",
@@ -15,19 +15,28 @@ export default async function UserLibraryPage({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { mockProfiles, profileLibraryBooks } =
-    await fetchLocal("/api/profile");
-  const getUserProfile = (username: string) =>
-    mockProfiles.find((p: { username: string }) => p.username === username);
-
   const { username } = await params;
-  const profile = getUserProfile(username);
+
+  let profile = null;
+  try {
+    profile = await fetchPublicProfile(username);
+  } catch (error) {
+    console.error("Failed to fetch public profile:", error);
+  }
 
   if (!profile) {
     return <ProfileNotFound />;
   }
 
-  const isOwnProfile = true; // TODO: Replace with actual auth check
+  // Fetch library — falls back to empty if unauthenticated or error
+  let profileLibraryBooks: any[] = [];
+  try {
+    profileLibraryBooks = await fetchUserLibrary();
+  } catch {
+    // Library is only available to own authenticated profile
+  }
+
+  const isOwnProfile = false; // isOwnProfile determined client-side via auth store
 
   return (
     <ProfileShell

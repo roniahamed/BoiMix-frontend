@@ -17,6 +17,81 @@ import { WishlistButton } from "@/components/shared/wishlist-button";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuthStore } from "@/stores/auth-store";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { LogOut, LayoutDashboard } from "lucide-react";
+
+function UserMenuButton() {
+  const { isAuthenticated, user, clearSession } = useAuthStore();
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <div className="h-9 w-9 rounded-full bg-muted animate-pulse" />;
+
+  if (!isAuthenticated) {
+    return (
+      <Button variant="outline" size="sm" className="inline-flex" asChild>
+        <Link href="/auth/login">
+          <UserIcon className="mr-2 size-4" />
+          <span className="hidden md:inline">Sign in</span>
+        </Link>
+      </Button>
+    );
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+          <Avatar className="h-9 w-9">
+            <AvatarImage src={user?.avatarUrl || ""} alt={user?.name || "User"} />
+            <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuLabel className="font-normal">
+          <div className="flex flex-col space-y-1">
+            <p className="text-sm font-medium leading-none">{user?.name}</p>
+            <p className="text-muted-foreground text-xs leading-none">
+              {user?.email}
+            </p>
+          </div>
+        </DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/dashboard/overview">
+            <LayoutDashboard className="mr-2 size-4" />
+            <span>Dashboard</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          className="cursor-pointer text-destructive focus:text-destructive"
+          onClick={() => {
+            clearSession();
+            window.location.href = "/";
+          }}
+        >
+          <LogOut className="mr-2 size-4" />
+          <span>Log out</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   const [isAtTop, setIsAtTop] = useState(true);
@@ -90,12 +165,8 @@ export function SiteHeader() {
           <div className="hidden sm:inline-flex">
             <NotificationPopover />
           </div>
-          <Button variant="outline" size="sm" className="inline-flex" asChild>
-            <Link href="/auth/login">
-              <UserIcon className="mr-2 size-4" />
-              <span className="hidden md:inline">Sign in</span>
-            </Link>
-          </Button>
+          
+          <UserMenuButton />
         </div>
       </div>
       <div

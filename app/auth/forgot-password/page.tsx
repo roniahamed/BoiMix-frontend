@@ -32,13 +32,20 @@ export default function ForgotPasswordPage() {
 
   const onSubmit = async (data: ForgotPasswordFormValues) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(data);
-    setIsLoading(false);
-    // Move to verify OTP for reset password
-    // Real flow might go to a different OTP page or pass state
-    router.push("/auth/verify-otp?mode=reset");
+    try {
+      const { auth } = await import("@/lib/firebase");
+      const { sendPasswordResetEmail } = await import("firebase/auth");
+      
+      await sendPasswordResetEmail(auth, data.email);
+      alert("পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে। ದয়া করে ইনবক্স চেক করুন।");
+      router.push("/auth/login");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Forgot Password Error:", error);
+      alert(error?.message || "Failed to send reset email.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

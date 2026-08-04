@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function NearbyPage() {
   return (
-    <BookListing
+    <BookListing initialSortBy="distance"
       title="আশেপাশের বই"
       description="আপনার কাছাকাছি থাকা ইউজারদের বইগুলো"
     />
