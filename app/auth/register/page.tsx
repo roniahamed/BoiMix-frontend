@@ -90,7 +90,7 @@ export default function RegisterPage() {
       const idToken = await userCredential.user.getIdToken();
 
       // 2. Register with backend via firebase-login
-      const response = await apiClient.post<{ access_token: string; user: Record<string, unknown> }>(
+      const response = await apiClient.post<{ access_token: string; refresh_token?: string; user: Record<string, unknown> }>(
         "/auth/firebase-login",
         { id_token: idToken, full_name: data.fullName, terms_accepted: data.termsAccepted },
       );
@@ -102,8 +102,10 @@ export default function RegisterPage() {
           name: data.fullName,
           email: data.email,
           roles: [(response.data.user.role as string) || "user"],
+          isOnboarded: (response.data.user.is_onboarded as boolean) ?? false,
         },
         response.data.access_token,
+        response.data.refresh_token as string,
       );
 
       let redirectQuery = "";
@@ -142,7 +144,7 @@ export default function RegisterPage() {
       const userCredential = await signInWithPopup(auth, provider);
       const idToken = await userCredential.user.getIdToken();
       
-      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+      const response = await apiClient.post<{ access_token: string; refresh_token?: string; user: any }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
         terms_accepted: true,
@@ -157,8 +159,10 @@ export default function RegisterPage() {
           email: response.data.user.email,
           avatarUrl: response.data.user.avatarUrl || response.data.user.avatar_url,
           roles: [response.data.user.role || "user"],
+          isOnboarded: response.data.user.is_onboarded ?? false,
         },
-        response.data.access_token
+        response.data.access_token,
+        response.data.refresh_token
       );
       
       
@@ -206,7 +210,7 @@ export default function RegisterPage() {
       const userCredential = await signInWithPopup(auth, provider);
       const idToken = await userCredential.user.getIdToken();
       
-      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+      const response = await apiClient.post<{ access_token: string; refresh_token?: string; user: any }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
         terms_accepted: true,
@@ -221,8 +225,10 @@ export default function RegisterPage() {
           email: response.data.user.email,
           avatarUrl: response.data.user.avatarUrl || response.data.user.avatar_url,
           roles: [response.data.user.role || "user"],
+          isOnboarded: response.data.user.is_onboarded ?? false,
         },
-        response.data.access_token
+        response.data.access_token,
+        response.data.refresh_token
       );
       
       

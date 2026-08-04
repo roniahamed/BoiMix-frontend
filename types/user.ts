@@ -102,6 +102,7 @@ export type UserProfile = UserSummary & {
     website?: string;
   };
   readingInterests?: string[];
+  isFollowing?: boolean;
   memberHighlights?: {
     icon: string;
     title: string;

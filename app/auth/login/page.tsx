@@ -77,8 +77,10 @@ export default function LoginPage() {
         email: response.data.user.email,
         avatarUrl: response.data.user.avatarUrl || response.data.user.avatar_url,
         roles: [response.data.user.role || "user"],
+        isOnboarded: response.data.user.is_onboarded ?? false,
       },
-      response.data.access_token
+      response.data.access_token,
+      response.data.refresh_token
     );
     toast.success("Successfully logged in!");
     

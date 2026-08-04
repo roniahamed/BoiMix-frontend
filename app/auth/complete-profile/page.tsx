@@ -28,6 +28,17 @@ export default function CompleteProfilePage() {
   const user = useAuthStore((state) => state.user);
   const accessToken = useAuthStore((state) => state.accessToken);
 
+  // Guard: if already onboarded, redirect to dashboard
+  useEffect(() => {
+    if (user?.isOnboarded) {
+      const searchParams = new URLSearchParams(
+        typeof window !== "undefined" ? window.location.search : ""
+      );
+      const redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
+      router.replace(redirectUrl);
+    }
+  }, [user, router]);
+
   // Avatar Upload State
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
@@ -93,7 +104,7 @@ export default function CompleteProfilePage() {
       if (data.bio) formData.append("bio", data.bio);
       if (avatarFile) formData.append("avatar", avatarFile);
 
-      const res = await apiClient.patch("/profiles/me", formData, {
+      const res = await apiClient.patch("/profiles/me/", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -111,6 +122,7 @@ export default function CompleteProfilePage() {
           name: res.data.name || res.data.full_name || user.name,
           username: res.data.username || user.username,
           avatarUrl: newAvatarUrl,
+          isOnboarded: true,
         }, accessToken);
       }
 

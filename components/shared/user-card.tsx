@@ -9,15 +9,17 @@ import type { UserSummary } from "@/types/user";
 type UserCardProps = {
   user: UserSummary;
   className?: string;
+  action?: React.ReactNode;
 };
 
-export function UserCard({ user, className }: UserCardProps) {
+export function UserCard({ user, className, action }: UserCardProps) {
   return (
     <article
-      className={cn("bg-card shadow-soft rounded-lg border p-4", className)}
+      className={cn("bg-card shadow-soft flex flex-col justify-between rounded-lg border p-4", className)}
     >
-      <div className="flex items-start gap-3">
-        <UserAvatar name={user.name} src={user.avatarUrl} />
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-3 min-w-0 flex-1">
+          <UserAvatar name={user.name} src={user.avatarUrl} />
         <div className="min-w-0 flex-1">
           <Link
             href={user.username ? `/u/${user.username}` : "#"}
@@ -41,6 +43,8 @@ export function UserCard({ user, className }: UserCardProps) {
             </p>
           )}
         </div>
+        </div>
+        {action && <div className="shrink-0">{action}</div>}
       </div>
       {!!user.badges?.length && (
         <div className="mt-3 flex flex-wrap gap-2">

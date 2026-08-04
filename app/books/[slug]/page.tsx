@@ -43,7 +43,6 @@ export default async function BookDetailsPage({
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  const BASE_BOOKS = await fetchBooks();
   const bookDetailsData = await fetchBookDetails(slug).catch(() => null);
   
   if (!bookDetailsData) {
@@ -55,33 +54,7 @@ export default async function BookDetailsPage({
     owner: API_OWNER,
     reviews: API_REVIEWS,
     qa: API_QA,
-    recommended: API_RECOMMENDED_BOOKS,
   } = bookDetailsData;
-
-  // Find the book in recommendations to see if it has specific tags,
-  // or use test slugs, or default to "sell"
-  const foundRecommended = API_RECOMMENDED_BOOKS.find(
-    (b: BookCardBook) => b.slug === slug,
-  );
-  const foundBase = BASE_BOOKS.find((b: BookCardBook) => b.slug === slug);
-  const foundBook = foundRecommended || foundBase;
-
-  const currentTag =
-    slug === "test-sell"
-      ? "sell"
-      : slug === "test-exchange"
-        ? "exchange"
-        : slug === "test-borrow"
-          ? "borrow"
-          : foundBook
-            ? foundBook.tags[0]
-            : "sell";
-
-  // Adjust availability based on the tag so it looks realistic
-  const availability = { sell: 0, borrow: 0, exchange: 0 };
-  if (currentTag === "sell") availability.sell = 3;
-  else if (currentTag === "borrow") availability.borrow = 2;
-  else if (currentTag === "exchange") availability.exchange = 1;
 
   const fallbackImages = [
     { src: "/placeholder-book.png", alt: "Cover" },
@@ -89,50 +62,37 @@ export default async function BookDetailsPage({
     { src: "/placeholder-book.png", alt: "Back cover" },
   ];
   
-  const defaultImages = API_BOOK.images && API_BOOK.images.length >= 3 ? API_BOOK.images : fallbackImages;
-
-  // Merge foundBook data so the details page reflects the actual clicked book
-  const coverImages = foundBook && foundBook.coverUrl
-    ? [
-        {
-          src: foundBook.coverUrl.replace("w=400", "w=800"),
-          alt: `${foundBook.title} — Cover`,
-        },
-        { src: defaultImages[1]?.src || fallbackImages[1].src, alt: "Inside page" },
-        { src: defaultImages[2]?.src || fallbackImages[2].src, alt: "Back cover" },
-      ]
-    : defaultImages;
+  // Build gallery images: prefer API images, then cover URL from book listing, else fallbacks
+  const BASE_BOOKS = await fetchBooks();
+  const foundBase = BASE_BOOKS.find((b: BookCardBook) => b.slug === slug);
+  
+  const apiImages = API_BOOK.images && API_BOOK.images.length > 0 ? API_BOOK.images : null;
+  const coverUrl = foundBase?.coverUrl || null;
+  
+  const galleryImages = apiImages
+    ?? (coverUrl ? [
+        { src: coverUrl.replace("w=400", "w=800"), alt: `${API_BOOK.title} — Cover` },
+        ...fallbackImages.slice(1),
+      ] : fallbackImages);
 
   const currentBook = {
     ...API_BOOK,
-    tags:
-      slug === "book-123"
-        ? API_BOOK.tags
-        : foundBook
-          ? foundBook.tags || ["sell"]
-          : ["sell"],
-    availability: slug === "book-123" ? API_BOOK.availability : availability,
-    ...(foundBook
-      ? {
-          id: foundBook.id,
-          title: foundBook.title,
-          author: foundBook.author,
-          price: foundBook.price ?? API_BOOK.price,
-          originalPrice: foundBook.originalPrice ?? API_BOOK.original_price,
-          images: coverImages,
-          rating: foundBook.rating,
-          reviewCount: foundBook.reviewCount,
-          condition: foundBook.condition as typeof API_BOOK.condition,
-          location: foundBook.location ?? API_BOOK.location,
-          distance: foundBook.distance ?? API_BOOK.distance,
-        }
-      : {
-          title: slug
-            .split("-")
-            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(" "),
-          images: defaultImages,
-        }),
+    // Normalize price fields
+    price: parseFloat(API_BOOK.price) || foundBase?.price || 0,
+    originalPrice: API_BOOK.original_price ? parseFloat(API_BOOK.original_price) : (foundBase?.originalPrice ?? null),
+    images: galleryImages,
+    // Availability comes directly from API
+    availability: API_BOOK.availability,
+    tags: API_BOOK.tags?.length > 0 ? API_BOOK.tags : (foundBase?.tags ?? ["sell"]),
+    rating: foundBase?.rating ?? API_BOOK.rating ?? 0,
+    reviewCount: foundBase?.reviewCount ?? 0,
+    location: API_BOOK.locationAddress || foundBase?.location || "Dhaka",
+    distance: foundBase?.distance ?? null,
+    exchangePrice: API_BOOK.exchange_price ? parseFloat(API_BOOK.exchange_price) : (API_BOOK.estimatedExchangeValue ?? null),
+    exchangePreferences: API_BOOK.exchangePreferences ?? [],
+    borrowFee: API_BOOK.borrow_fee ? parseFloat(API_BOOK.borrow_fee) : null,
+    deposit: API_BOOK.deposit ? parseFloat(API_BOOK.deposit) : null,
+    maxBorrowDays: API_BOOK.max_borrow_days ?? null,
   };
 
   return (
@@ -596,14 +556,14 @@ export default async function BookDetailsPage({
       </div>
 
       {/* Similar Books Section */}
-      {API_RECOMMENDED_BOOKS && API_RECOMMENDED_BOOKS.length > 0 && (
+      {bookDetailsData.recommended && bookDetailsData.recommended.length > 0 && (
         <div className="mt-16">
           <h2 className="type-heading mb-6 text-2xl">
             একই ধরনের আরও বই (Similar Books)
           </h2>
           <ScrollContainer>
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {API_RECOMMENDED_BOOKS.map((book: any) => (
+            {bookDetailsData.recommended.map((book: any) => (
               <div
                 key={book.id}
                 className="w-[140px] shrink-0 snap-start sm:w-[160px]"
@@ -616,13 +576,14 @@ export default async function BookDetailsPage({
       )}
 
       {/* Recently Viewed Books Section */}
-      {API_RECOMMENDED_BOOKS && API_RECOMMENDED_BOOKS.length > 0 && (
+      {bookDetailsData.recommended && bookDetailsData.recommended.length > 0 && (
         <div className="mt-12">
           <h2 className="type-heading mb-6 text-2xl">
             সম্প্রতি দেখা বই (Recently Viewed)
           </h2>
           <ScrollContainer>
-            {API_RECOMMENDED_BOOKS.slice()
+            {bookDetailsData.recommended
+              .slice()
               .reverse()
               .map((book: BookCardBook) => (
                 <div

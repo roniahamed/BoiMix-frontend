@@ -14,6 +14,7 @@ import {
   DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 import { useAuthStore } from "@/stores";
 import { apiRequest } from "@/lib/api/client";
@@ -62,6 +63,7 @@ export default function SettingsPage() {
   const [showStreetSuggestions, setShowStreetSuggestions] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
+  const [isSavingPrefs, setIsSavingPrefs] = useState(false);
   const [profile, setProfile] = useState({
     fullName: "",
     username: "",
@@ -69,6 +71,13 @@ export default function SettingsPage() {
     bio: "",
   });
   
+  const [preferences, setPreferences] = useState({
+    email_notifications: true,
+    push_notifications: true,
+    marketing_emails: false,
+    language: "en"
+  });
+
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>("/placeholder-user.jpg");
 
@@ -84,7 +93,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (isAuthenticated && user?.username) {
-      apiRequest<any>({ url: `/profiles/${user.username}`, method: "GET" })
+      apiRequest<any>({ url: `/profiles/${user.username}/`, method: "GET" })
         .then((data) => {
           setProfile({
             fullName: data.name || "",
@@ -104,6 +113,19 @@ export default function SettingsPage() {
           }
         })
         .catch(console.error);
+
+      apiRequest<any>({ url: `/profiles/me/preferences/`, method: "GET" })
+        .then((data) => {
+          if (data) {
+            setPreferences({
+              email_notifications: data.email_notifications ?? true,
+              push_notifications: data.push_notifications ?? true,
+              marketing_emails: data.marketing_emails ?? false,
+              language: data.language || "en"
+            });
+          }
+        })
+        .catch(console.error);
     }
   }, [isAuthenticated, user?.username]);
 
@@ -119,9 +141,14 @@ export default function SettingsPage() {
         formData.append("avatar", avatarFile);
       }
       
-      // Location data should be JSON encoded if sending in multipart, but the endpoint might just expect regular JSON if no file
-      // Wait, CompleteProfileView expects location as well? In serializers.py CompleteProfileSerializer doesn't include locations!
-      // I will just send what is supported by CompleteProfileSerializer.
+      const locParts = [];
+      if (addressDetails.street) locParts.push(addressDetails.street);
+      if (addressDetails.city) locParts.push(addressDetails.city);
+      if (addressDetails.state) locParts.push(addressDetails.state);
+      if (addressDetails.country) locParts.push(addressDetails.country);
+      if (locParts.length > 0) {
+        formData.append("location", locParts.join(", "));
+      }
       
       await apiRequest({
         url: "/profiles/me/",
@@ -131,12 +158,30 @@ export default function SettingsPage() {
           "Content-Type": "multipart/form-data"
         }
       });
-      alert("Profile saved successfully!");
-    } catch (err) {
+      toast.success("Profile saved successfully!");
+    } catch (err: any) {
       console.error("Failed to save profile", err);
-      alert("Failed to save profile.");
+      toast.error(err.details || "Failed to save profile.");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleSavePreferences = async () => {
+    if (!isAuthenticated) return;
+    setIsSavingPrefs(true);
+    try {
+      await apiRequest({
+        url: "/profiles/me/preferences/",
+        method: "PATCH",
+        data: preferences,
+      });
+      toast.success("Preferences saved successfully!");
+    } catch (err: any) {
+      console.error("Failed to save preferences", err);
+      toast.error(err.details || "Failed to save preferences.");
+    } finally {
+      setIsSavingPrefs(false);
     }
   };
 
@@ -660,7 +705,10 @@ export default function SettingsPage() {
                     Receive emails about your account activity and exchanges.
                   </p>
                 </div>
-                <Switch defaultChecked />
+                <Switch 
+                  checked={preferences.email_notifications}
+                  onCheckedChange={(checked) => setPreferences({ ...preferences, email_notifications: checked })}
+                />
               </div>
 
               <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
@@ -672,7 +720,10 @@ export default function SettingsPage() {
                     Receive push notifications in your browser.
                   </p>
                 </div>
-                <Switch defaultChecked />
+                <Switch 
+                  checked={preferences.push_notifications}
+                  onCheckedChange={(checked) => setPreferences({ ...preferences, push_notifications: checked })}
+                />
               </div>
 
               <div className="flex items-center justify-between space-x-4 rounded-lg border p-4">
@@ -684,9 +735,17 @@ export default function SettingsPage() {
                     Receive emails about new features, updates, and offers.
                   </p>
                 </div>
-                <Switch />
+                <Switch 
+                  checked={preferences.marketing_emails}
+                  onCheckedChange={(checked) => setPreferences({ ...preferences, marketing_emails: checked })}
+                />
               </div>
             </CardContent>
+            <CardFooter className="bg-muted/30 flex items-center justify-end border-t px-6 py-4">
+              <Button onClick={handleSavePreferences} disabled={isSavingPrefs} className="shadow-sm">
+                {isSavingPrefs ? "Saving..." : "Save Preferences"}
+              </Button>
+            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>

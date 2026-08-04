@@ -20,6 +20,9 @@ import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import type { UserProfile } from "@/types/user";
 import { EditProfileDialog } from "@/components/profile/edit-profile-dialog";
 import { PencilIcon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { apiRequest } from "@/lib/api/client";
+import { useAuthStore } from "@/stores";
 
 const CustomShareArrow = ({ className }: { className?: string }) => (
   <svg
@@ -42,10 +45,53 @@ export function ProfileHeader({
   profile: UserProfile;
   isOwnProfile?: boolean;
 }) {
+  const [isFollowing, setIsFollowing] = useState(profile.isFollowing || false);
+  const [followersCount, setFollowersCount] = useState(profile.stats?.followers || 0);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const { isAuthenticated } = useAuthStore();
+
+  useEffect(() => {
+    if (isAuthenticated && !isOwnProfile) {
+      apiRequest<any>({ url: `/profiles/${profile.username}/`, method: "GET" })
+        .then((data) => {
+          setIsFollowing(data.isFollowing || false);
+          setFollowersCount(data.stats?.followers || 0);
+        })
+        .catch(console.error);
+    }
+  }, [isAuthenticated, isOwnProfile, profile.username]);
+
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard.writeText(window.location.href);
       toast.success("Profile link copied to clipboard!");
+    }
+  };
+
+  const handleFollowToggle = async () => {
+    if (!isAuthenticated) {
+      toast.error("You need to be logged in to follow users.");
+      return;
+    }
+    
+    setIsUpdating(true);
+    try {
+      if (isFollowing) {
+        await apiRequest({ url: `/profiles/${profile.username}/follow/`, method: "DELETE" });
+        setIsFollowing(false);
+        setFollowersCount((prev) => Math.max(0, prev - 1));
+        toast.success(`Unfollowed ${profile.name}`);
+      } else {
+        await apiRequest({ url: `/profiles/${profile.username}/follow/`, method: "POST" });
+        setIsFollowing(true);
+        setFollowersCount((prev) => prev + 1);
+        toast.success(`Following ${profile.name}`);
+      }
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.details || "Failed to update follow status.");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -102,7 +148,7 @@ export function ProfileHeader({
               </div>
               <div className="mt-1.5 flex items-center gap-1.5 text-[13px] font-medium">
                 <span className="text-foreground font-semibold">
-                  {profile.stats.followers}{" "}
+                  {followersCount}{" "}
                   <span className="text-muted-foreground font-normal">
                     followers
                   </span>
@@ -133,9 +179,18 @@ export function ProfileHeader({
 
             {/* Action Buttons (Facebook Style) */}
             <div className="mt-4 flex w-full flex-row items-center gap-2">
-              <Button className="bg-muted text-foreground hover:bg-muted/80 h-9 flex-1 rounded-md font-semibold shadow-none">
-                Following
-              </Button>
+              {!isOwnProfile && (
+                <Button 
+                  onClick={handleFollowToggle}
+                  disabled={isUpdating}
+                  variant={isFollowing ? "outline" : "default"}
+                  className={`h-9 flex-1 rounded-md font-semibold shadow-none ${
+                    isFollowing ? 'bg-muted text-foreground hover:bg-muted/80' : 'bg-[#0ea5e9] text-white hover:bg-[#0284c7]'
+                  }`}
+                >
+                  {isFollowing ? "Following" : "Follow"}
+                </Button>
+              )}
               <Button
                 className="h-9 flex-1 rounded-md bg-[#0866ff] font-semibold text-white shadow-none hover:bg-[#0866ff]/90"
                 asChild
@@ -252,7 +307,7 @@ export function ProfileHeader({
                 <div className="flex items-center gap-1.5">
                   <UsersIcon className="text-primary size-4" />
                   <span className="text-foreground font-bold">
-                    {profile.stats.followers}
+                    {followersCount}
                   </span>
                   <span className="text-muted-foreground font-medium">
                     Followers
@@ -293,9 +348,20 @@ export function ProfileHeader({
 
               {/* Row 5: Action Buttons grouped together */}
               <div className="mt-4 flex items-center gap-4">
-                <Button className="h-9 w-[110px] rounded-md bg-[#0ea5e9] text-[14px] font-semibold text-white shadow-none transition-colors hover:bg-[#0284c7]">
-                  Follow
-                </Button>
+                {!isOwnProfile && (
+                  <Button 
+                    onClick={handleFollowToggle}
+                    disabled={isUpdating}
+                    variant={isFollowing ? "outline" : "default"}
+                    className={`h-9 w-[110px] rounded-md text-[14px] font-semibold shadow-none transition-colors ${
+                      isFollowing 
+                        ? 'bg-card text-muted-foreground hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white border'
+                        : 'bg-[#0ea5e9] text-white hover:bg-[#0284c7]'
+                    }`}
+                  >
+                    {isFollowing ? "Following" : "Follow"}
+                  </Button>
+                )}
                 <Button
                   variant="outline"
                   className="bg-card text-muted-foreground h-9 w-[110px] rounded-md px-0 text-[14px] font-medium shadow-sm transition-all duration-200 hover:border-slate-300 hover:bg-slate-100 hover:text-slate-900 dark:hover:border-slate-700 dark:hover:bg-slate-800 dark:hover:text-white"
