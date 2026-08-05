@@ -213,7 +213,7 @@ export const dashboardNavGroups: NavGroup[] = [
 
       {
         title: "Profile",
-        href: "/u/roni",
+        href: "/u/[username]",
         icon: UserIcon,
       },
       {

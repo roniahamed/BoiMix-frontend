@@ -70,7 +70,7 @@ export async function reverseGeocode(lat: number, lng: number) {
 }
 
 export async function fetchPublicProfile(username: string) {
-  const res = await apiFetch(`/profiles/${username}`);
+  const res = await apiFetch(`/profiles/${username}/`);
   if (!res.ok) throw new Error(`Profile not found: ${res.statusText}`);
   return res.json();
 }

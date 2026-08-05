@@ -32,20 +32,16 @@ export default async function UserProfilePage({
     return <ProfileNotFound />;
   }
 
-  // isOwnProfile determined client-side via auth store in ProfileShell
-  const isOwnProfile = false;
-
   return (
     <ProfileShell
       profile={profile}
       active="overview"
-      isOwnProfile={isOwnProfile}
     >
       <div className="space-y-6">
         {/* Interactive Books Viewer */}
         <ProfileBooksViewer
           books={profileLibraryBooks.slice(0, 20)}
-          isOwnProfile={isOwnProfile}
+          username={profile.username}
           libraryUrl={`/u/${profile.username}/library`}
         />
 

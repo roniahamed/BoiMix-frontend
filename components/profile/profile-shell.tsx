@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import {
   StarIcon,
@@ -16,13 +18,13 @@ import { ProfileVerifications } from "@/components/profile/profile-verifications
 import { BeautifulBadge } from "@/components/shared/beautiful-badge";
 import Link from "next/link";
 import type { UserProfile } from "@/types/user";
+import { useAuthStore } from "@/stores/auth-store";
 
 type ProfileShellProps = {
   profile: UserProfile;
   active: "overview" | "reviews" | "library" | "activity" | "badges";
   children: ReactNode;
   sidebar?: ReactNode;
-  isOwnProfile?: boolean;
 };
 
 export function ProfileShell({
@@ -30,8 +32,10 @@ export function ProfileShell({
   active,
   children,
   sidebar,
-  isOwnProfile = false,
 }: ProfileShellProps) {
+  const { isAuthenticated, user } = useAuthStore();
+  const isOwnProfile = isAuthenticated && user?.username === profile.username;
+
   return (
     <div className="relative pb-6 md:pb-8">
       <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top_left,_rgba(3,151,211,0.16),_transparent_50%),radial-gradient(circle_at_top_right,_rgba(255,153,0,0.14),_transparent_42%)]" />

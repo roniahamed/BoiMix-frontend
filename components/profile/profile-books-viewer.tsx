@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BookCard } from "@/components/shared/book-card";
 import { BookCardBook, BookAvailabilityMode } from "@/types/book";
+import { useAuthStore } from "@/stores/auth-store";
 import {
   Select,
   SelectContent,
@@ -16,24 +17,28 @@ import {
 
 interface ProfileBooksViewerProps {
   books: BookCardBook[];
+  username?: string;
   isOwnProfile?: boolean;
   libraryUrl?: string; // If provided, clicking filters/show more redirects here.
 }
 
 function BooksViewerContent({
   books,
+  username,
   isOwnProfile = false,
   libraryUrl,
 }: ProfileBooksViewerProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { user } = useAuthStore();
+  const actualIsOwnProfile = isOwnProfile || (username && user?.username === username);
 
   const filters = [
     "All",
     "Selling",
     "Exchanging",
     "Borrowing",
-    ...(isOwnProfile ? ["Wishlist"] : []),
+    ...(actualIsOwnProfile ? ["Wishlist"] : []),
     "Collection",
   ];
 

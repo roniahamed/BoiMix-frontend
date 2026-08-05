@@ -16,6 +16,7 @@ import {
 import type { NavItem, NavGroup } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { AddBookDialog } from "@/components/shared/add-book-button";
+import { useAuthStore } from "@/stores/auth-store";
 
 type SidebarNavigationProps = {
   title: string;
@@ -31,6 +32,8 @@ export function SidebarNavigation({
   className,
 }: SidebarNavigationProps) {
   const pathname = usePathname();
+  const user = useAuthStore((state) => state.user);
+  
   const [openGroup, setOpenGroup] = useState<string | null>(() => {
     if (!groups) return null;
     const activeGroup = groups.find((g) =>
@@ -51,16 +54,18 @@ export function SidebarNavigation({
 
   const renderNavItem = (item: NavItem) => {
     const Icon = item.icon;
+    const finalHref = item.href.replace("[username]", user?.username || "me");
+    
     const isActive =
-      pathname === item.href ||
-      (item.href !== "/dashboard/overview" &&
-        item.href !== "/dashboard/exchanges" &&
-        pathname.startsWith(`${item.href}/`));
+      pathname === finalHref ||
+      (finalHref !== "/dashboard/overview" &&
+        finalHref !== "/dashboard/exchanges" &&
+        pathname.startsWith(`${finalHref}/`));
 
     const navLink = (
       <Link
         key={item.href}
-        href={item.href}
+        href={finalHref}
         className={cn(
           "group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150 focus-visible:ring-2 focus-visible:outline-none",
           isActive
@@ -232,11 +237,11 @@ export function SidebarNavigation({
               <div className="relative shrink-0">
                 <Avatar className="border-border h-9 w-9 border">
                   <AvatarImage
-                    src="https://ui-avatars.com/api/?name=Roni+Ahamed&background=0D8ABC&color=fff"
-                    alt="Roni Ahamed"
+                    src={user?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=0D8ABC&color=fff`}
+                    alt={user?.name || "User"}
                   />
                   <AvatarFallback className="text-xs font-bold">
-                    RA
+                    {user?.name?.substring(0, 2).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
                 <span className="bg-success ring-background absolute right-0 bottom-0 h-2.5 w-2.5 rounded-full ring-2" />
@@ -244,7 +249,7 @@ export function SidebarNavigation({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1">
                   <p className="text-foreground truncate text-xs font-bold">
-                    Roni Ahamed
+                    {user?.name || "User"}
                   </p>
                   <BadgeCheck className="text-brand-blue h-3.5 w-3.5 shrink-0" />
                 </div>
