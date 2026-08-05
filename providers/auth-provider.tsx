@@ -13,9 +13,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     setApiAccessToken(useAuthStore.getState().accessToken);
 
-    return useAuthStore.subscribe((state) => {
+    const unsubscribe = useAuthStore.subscribe((state) => {
       setApiAccessToken(state.accessToken);
     });
+
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "auth-storage") {
+        const wasAuthenticated = useAuthStore.getState().isAuthenticated;
+
+        let isNowAuthenticated = false;
+        if (e.newValue) {
+          try {
+            const parsed = JSON.parse(e.newValue);
+            isNowAuthenticated = parsed?.state?.isAuthenticated === true;
+          } catch (err) {
+            // Ignore parse error
+          }
+        }
+
+        if (wasAuthenticated && !isNowAuthenticated) {
+          window.location.reload();
+        }
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, []);
 
   return children;
