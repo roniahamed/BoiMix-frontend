@@ -82,7 +82,7 @@ function UserMenuButton() {
           className="cursor-pointer text-destructive focus:text-destructive"
           onClick={() => {
             clearSession();
-            window.location.href = "/";
+            window.location.reload();
           }}
         >
           <LogOut className="mr-2 size-4" />

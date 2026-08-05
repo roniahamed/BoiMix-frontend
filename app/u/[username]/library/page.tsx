@@ -42,7 +42,6 @@ export default async function UserLibraryPage({
     <ProfileShell
       profile={profile}
       active="library"
-      isOwnProfile={isOwnProfile}
     >
       <ProfileBooksViewer
         books={profileLibraryBooks}

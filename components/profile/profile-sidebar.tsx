@@ -60,7 +60,7 @@ export function ProfileSidebar({
           {profile.joinedAt && (
             <li className="flex items-center gap-2">
               <CalendarDaysIcon className="size-4 shrink-0" />
-              <span>{profile.joinedAt}</span>
+              <span>{new Date(profile.joinedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}</span>
             </li>
           )}
           {profile.socialLinks?.website && (

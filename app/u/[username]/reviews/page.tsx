@@ -44,7 +44,6 @@ export default async function UserReviewsPage({
     <ProfileShell
       profile={profile}
       active="reviews"
-      isOwnProfile={isOwnProfile}
     >
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         {/* Left Sidebar: Ratings */}

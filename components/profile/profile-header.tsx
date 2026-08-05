@@ -99,14 +99,18 @@ export function ProfileHeader({
     <section>
       {/* Cover Image */}
       <div className="bg-muted relative h-36 md:h-48 lg:h-56">
-        <Image
-          src={profile.coverUrl}
-          alt={`${profile.name} profile cover`}
-          fill
-          priority
-          sizes="(min-width: 1200px) 1200px, 100vw"
-          className="object-cover"
-        />
+        {profile.coverUrl ? (
+          <Image
+            src={profile.coverUrl}
+            alt={`${profile.name} profile cover`}
+            fill
+            priority
+            sizes="(min-width: 1200px) 1200px, 100vw"
+            className="object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-primary/10" />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
         {/* Edit Profile Button - Top Right */}
@@ -134,7 +138,7 @@ export function ProfileHeader({
               <UserAvatar
                 name={profile.name}
                 src={profile.avatarUrl}
-                className="bg-card border-card text-foreground relative z-10 size-[76px] border-[3px] text-2xl shadow-sm dark:border-zinc-900"
+                className="bg-background border-background text-foreground relative z-10 size-[76px] border-[3px] !rounded-full text-2xl shadow-sm dark:border-zinc-900"
               />
             </div>
             <div className="flex flex-col pt-3">
@@ -284,7 +288,7 @@ export function ProfileHeader({
               <UserAvatar
                 name={profile.name}
                 src={profile.avatarUrl}
-                className="bg-card relative z-10 size-24 border-4 border-white text-2xl text-white shadow-sm md:size-32 md:text-3xl dark:border-zinc-900"
+                className="bg-background relative z-10 size-24 !rounded-full overflow-hidden border-4 border-white text-2xl text-white shadow-sm md:size-32 md:text-3xl dark:border-zinc-900"
               />
             </div>
 
@@ -342,7 +346,7 @@ export function ProfileHeader({
               {/* Row 4: Joined Date */}
               {profile.joinedAt && (
                 <p className="text-muted-foreground mt-1.5 text-[14px]">
-                  {profile.joinedAt}
+                  Joined {new Date(profile.joinedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
                 </p>
               )}
 

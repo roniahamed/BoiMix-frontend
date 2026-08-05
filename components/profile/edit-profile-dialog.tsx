@@ -21,6 +21,9 @@ import dynamic from "next/dynamic";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { apiRequest } from "@/lib/api/client";
+import { useAuthStore } from "@/stores/auth-store";
+import React from "react";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -56,48 +59,44 @@ export function EditProfileDialog({
 }: EditProfileDialogProps) {
   const [open, setOpen] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  const [locationAddress, setLocationAddress] = useState(
-    profile.location || "",
-  );
-  const [locationLat, setLocationLat] = useState<number | undefined>(23.8103);
-  const [locationLng, setLocationLng] = useState<number | undefined>(90.4125);
 
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const [locationSuggestions, setLocationSuggestions] = useState<
-    LocationSuggestion[]
-  >([]);
-  const [isTyping, setIsTyping] = useState(false);
-  const [isSearchingLocation, setIsSearchingLocation] = useState(false);
-  const [locationError, setLocationError] = useState("");
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [coverFile, setCoverFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string>(profile.avatarUrl || "");
+  const [coverPreview, setCoverPreview] = useState<string>(profile.coverUrl || "");
 
-  useEffect(() => {
-    if (isTyping && locationAddress && locationAddress.length > 2) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsSearchingLocation(true);
-
-      setShowSuggestions(true);
-      const timer = setTimeout(() => {
-        searchLocation(locationAddress)
-          .then((features) => {
-            setLocationSuggestions(features);
-            setShowSuggestions(features.length > 0);
-          })
-          .catch((err) => console.error("Geocoding error", err))
-          .finally(() => setIsSearchingLocation(false));
-      }, 300);
-      return () => {
-        clearTimeout(timer);
-        setIsSearchingLocation(false);
-      };
-    } else if (!isTyping) {
-      setShowSuggestions(false);
-    }
-  }, [locationAddress, isTyping]);
+  const avatarInputRef = React.useRef<HTMLInputElement>(null);
+  const coverInputRef = React.useRef<HTMLInputElement>(null);
 
   const [readingInterests, setReadingInterests] = useState<string[]>(
     profile.readingInterests || [],
   );
   const [interestInput, setInterestInput] = useState("");
+  const [interestSuggestions, setInterestSuggestions] = useState<{id: string, name: string}[]>([]);
+  const [isSearchingInterests, setIsSearchingInterests] = useState(false);
+  const [showInterestSuggestions, setShowInterestSuggestions] = useState(false);
+
+  useEffect(() => {
+    if (interestInput && interestInput.length > 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setIsSearchingInterests(true);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setShowInterestSuggestions(true);
+      const timer = setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        apiRequest<any[]>({ url: `/profiles/reading-interests/?q=${encodeURIComponent(interestInput)}`, method: "GET" })
+          .then((data) => {
+            setInterestSuggestions(data || []);
+          })
+          .catch((err) => console.error("Error fetching interests", err))
+          .finally(() => setIsSearchingInterests(false));
+      }, 300);
+      return () => clearTimeout(timer);
+    } else {
+      setShowInterestSuggestions(false);
+      setInterestSuggestions([]);
+    }
+  }, [interestInput]);
 
   const {
     register,
@@ -112,30 +111,49 @@ export function EditProfileDialog({
     },
   });
 
-  const onSubmit = async (data: ProfileFormValues) => {
-    setLocationError("");
-    if (!locationAddress || !locationLat || !locationLng) {
-      setLocationError(
-        "Please select a valid location from the map or suggestions.",
-      );
-      toast.error("Please select a valid location.");
-      return;
-    }
+  const { updateUser } = useAuthStore();
 
+  const onSubmit = async (data: ProfileFormValues) => {
     setIsSaving(true);
-    // Simulate API call with all data
-    console.log("Saving profile data:", {
-      ...data,
-      locationAddress,
-      locationLat,
-      locationLng,
-      readingInterests,
-    });
-    setTimeout(() => {
-      setIsSaving(false);
-      setOpen(false);
+    
+    try {
+      const formData = new FormData();
+      formData.append("full_name", data.name);
+      if (data.role) formData.append("designation", data.role);
+      if (data.bio) formData.append("bio", data.bio);
+      
+      if (avatarFile) formData.append("avatar", avatarFile);
+      if (coverFile) formData.append("cover", coverFile);
+      
+      if (readingInterests.length > 0) {
+        formData.append("reading_interests", JSON.stringify(readingInterests));
+      }
+
+      await apiRequest<unknown>({
+        url: "/profiles/me/",
+        method: "PATCH",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      // Update local auth store so UI reacts
+      updateUser({
+        name: data.name,
+      });
+
       toast.success("Profile updated successfully!");
-    }, 1000);
+      setOpen(false);
+      
+      // Optionally refresh the page to get all new details
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to update profile", error);
+      toast.error("Failed to update profile. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -155,18 +173,36 @@ export function EditProfileDialog({
             <div className="space-y-2">
               <label className="text-sm font-medium">Cover Photo</label>
               <div className="bg-muted group relative h-32 w-full overflow-hidden rounded-xl">
-                <Image
-                  src={profile.coverUrl || "/placeholder.svg"}
-                  alt="Cover Preview"
-                  fill
-                  className="object-cover transition-all group-hover:brightness-75"
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  ref={coverInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setCoverFile(file);
+                      setCoverPreview(URL.createObjectURL(file));
+                    }
+                  }}
                 />
+                {coverPreview ? (
+                  <Image
+                    src={coverPreview}
+                    alt="Cover Preview"
+                    fill
+                    className="object-cover transition-all group-hover:brightness-75"
+                  />
+                ) : (
+                  <div className="absolute inset-0 bg-primary/10 transition-all group-hover:brightness-75" />
+                )}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                   <Button
                     type="button"
                     variant="secondary"
                     size="sm"
                     className="gap-2"
+                    onClick={() => coverInputRef.current?.click()}
                   >
                     <CameraIcon className="h-4 w-4" /> Change
                   </Button>
@@ -178,9 +214,22 @@ export function EditProfileDialog({
             <div className="space-y-2">
               <label className="text-sm font-medium">Profile Picture</label>
               <div className="flex items-center gap-4">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  ref={avatarInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setAvatarFile(file);
+                      setAvatarPreview(URL.createObjectURL(file));
+                    }
+                  }}
+                />
                 <div className="bg-muted border-border group relative h-16 w-16 overflow-hidden rounded-full border-2">
                   <Image
-                    src={profile.avatarUrl || "/placeholder.svg"}
+                    src={avatarPreview || "/placeholder.svg"}
                     alt="Avatar Preview"
                     fill
                     className="object-cover transition-all group-hover:brightness-75"
@@ -189,7 +238,12 @@ export function EditProfileDialog({
                     <CameraIcon className="h-4 w-4 text-white" />
                   </div>
                 </div>
-                <Button type="button" variant="outline" size="sm">
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => avatarInputRef.current?.click()}
+                >
                   Upload New
                 </Button>
               </div>
@@ -253,29 +307,68 @@ export function EditProfileDialog({
                       ))}
                     </div>
                   )}
-                  <Input
-                    value={interestInput}
-                    onChange={(e) => setInterestInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" || e.key === ",") {
-                        e.preventDefault();
-                        const newInterest = interestInput
-                          .trim()
-                          .replace(/^,+|,+$/g, "");
-                        if (
-                          newInterest &&
-                          !readingInterests.includes(newInterest)
-                        ) {
-                          setReadingInterests([
-                            ...readingInterests,
-                            newInterest,
-                          ]);
+                  <div className="relative">
+                    <Input
+                      value={interestInput}
+                      onChange={(e) => setInterestInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === "," || e.key === " ") {
+                          e.preventDefault();
+                          const newInterest = interestInput
+                            .trim()
+                            .replace(/^,+|,+$/g, "");
+                          if (
+                            newInterest &&
+                            !readingInterests.includes(newInterest)
+                          ) {
+                            setReadingInterests([
+                              ...readingInterests,
+                              newInterest,
+                            ]);
+                          }
+                          setInterestInput("");
+                          setShowInterestSuggestions(false);
                         }
-                        setInterestInput("");
-                      }
-                    }}
-                    placeholder="Type an interest and press Enter or comma"
-                  />
+                      }}
+                      onFocus={() => {
+                        if (interestInput.length > 0) setShowInterestSuggestions(true);
+                      }}
+                      onBlur={() => {
+                        setTimeout(() => setShowInterestSuggestions(false), 200);
+                      }}
+                      placeholder="Type an interest and press Enter or select from dropdown"
+                    />
+
+                    {showInterestSuggestions && (
+                      <div className="bg-popover text-popover-foreground absolute z-50 mt-1 max-h-48 w-full overflow-auto rounded-md border shadow-md">
+                        {isSearchingInterests ? (
+                          <div className="text-muted-foreground py-2 text-center text-xs">
+                            Searching...
+                          </div>
+                        ) : interestSuggestions.length > 0 ? (
+                          interestSuggestions.map((suggestion) => (
+                            <div
+                              key={suggestion.id}
+                              className="hover:bg-accent hover:text-accent-foreground cursor-pointer px-4 py-2 text-sm"
+                              onClick={() => {
+                                if (!readingInterests.includes(suggestion.name)) {
+                                  setReadingInterests([...readingInterests, suggestion.name]);
+                                }
+                                setInterestInput("");
+                                setShowInterestSuggestions(false);
+                              }}
+                            >
+                              {suggestion.name}
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-muted-foreground py-2 text-center text-xs">
+                            Press enter to add &quot;{interestInput}&quot;
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="space-y-2 md:col-span-2">
@@ -293,147 +386,6 @@ export function EditProfileDialog({
                 )}
               </div>
             </div>
-          </div>
-
-          <div className="flex flex-col space-y-4 border-t pt-4">
-            <label className="text-sm font-medium">Location</label>
-
-            <div className="space-y-2">
-              <div className="relative">
-                <MapPin className="text-muted-foreground absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2" />
-                <Input
-                  value={locationAddress}
-                  onChange={(e) => {
-                    setLocationAddress(e.target.value);
-                    setIsTyping(true);
-                    setLocationError("");
-                  }}
-                  placeholder="Type your location or select on map"
-                  className={`pr-9 pl-9 ${locationError ? "border-destructive" : ""}`}
-                  onFocus={() => {
-                    if (locationSuggestions.length > 0)
-                      setShowSuggestions(true);
-                  }}
-                  onBlur={() =>
-                    setTimeout(() => setShowSuggestions(false), 200)
-                  }
-                />
-
-                {locationAddress && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setLocationAddress("");
-                      setShowSuggestions(false);
-                      setLocationSuggestions([]);
-                      setIsTyping(false);
-                    }}
-                    className="text-muted-foreground hover:text-foreground absolute top-1/2 right-3 -translate-y-1/2"
-                  >
-                    <Search className="hidden h-4 w-4" />{" "}
-                    {/* Hidden search just to keep the import used if needed, actually we can just use X */}
-                    <span className="text-xl leading-none">&times;</span>
-                  </button>
-                )}
-
-                {showSuggestions &&
-                  (locationSuggestions.length > 0 || isSearchingLocation) && (
-                    <div className="bg-popover text-popover-foreground animate-in fade-in zoom-in-95 absolute top-full z-50 mt-1 flex max-h-64 w-full flex-col overflow-hidden rounded-md border shadow-md">
-                      <div className="border-border bg-muted/30 flex items-center justify-between border-b px-4 py-2 text-xs font-medium">
-                        <span>Suggestions</span>
-                        <button
-                          type="button"
-                          onClick={() => setShowSuggestions(false)}
-                          className="text-muted-foreground hover:bg-muted hover:text-foreground rounded p-1 transition-colors"
-                        >
-                          <span className="sr-only">Close suggestions</span>
-                          <span className="text-base leading-none">
-                            &times;
-                          </span>
-                        </button>
-                      </div>
-                      <div className="overflow-y-auto">
-                        {isSearchingLocation ? (
-                          <div className="text-muted-foreground flex items-center justify-center py-6 text-sm">
-                            <div className="border-primary mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
-                            Searching for locations...
-                          </div>
-                        ) : (
-                          locationSuggestions.map((suggestion, idx) => (
-                            <button
-                              key={idx}
-                              type="button"
-                              className="hover:bg-muted border-border/50 flex w-full flex-col items-start border-b px-4 py-2 text-left text-sm transition-colors last:border-b-0"
-                              onClick={() => {
-                                setIsTyping(false);
-                                setLocationAddress(suggestion.display_name);
-                                setLocationLat(suggestion.lat);
-                                setLocationLng(suggestion.lng);
-                                setShowSuggestions(false);
-                              }}
-                            >
-                              <span className="font-medium">
-                                {suggestion.display_name.split(",")[0]}
-                              </span>
-                              <span className="text-muted-foreground text-xs">
-                                {suggestion.display_name.split(",").slice(1).join(",").trim()}
-                              </span>
-                            </button>
-                          ))
-                        )}
-                        {!isSearchingLocation &&
-                          locationSuggestions.length === 0 && (
-                            <div className="text-muted-foreground py-4 text-center text-sm">
-                              No locations found
-                            </div>
-                          )}
-                      </div>
-                    </div>
-                  )}
-              </div>
-              {locationError && (
-                <p className="text-destructive text-xs">{locationError}</p>
-              )}
-            </div>
-
-            <div className="h-[400px] w-full overflow-hidden rounded-xl border">
-              {open && (
-                <LocationMap
-                  key={open ? "map-open" : "map-closed"}
-                  lat={locationLat}
-                  lng={locationLng}
-                  onChange={(lat, lng) => {
-                    setLocationLat(lat);
-                    setLocationLng(lng);
-                    reverseGeocode(lat, lng)
-                      .then((data) => {
-                        if (data && data.address) {
-                          const addr = data.address;
-                          const parts = [
-                            addr.road,
-                            addr.neighbourhood,
-                            addr.suburb || addr.locality,
-                            addr.city || addr.town || addr.village,
-                            addr.state,
-                            addr.country,
-                          ].filter(Boolean);
-                          const address = Array.from(new Set(parts)).join(", ");
-                          if (address) {
-                            setLocationAddress(address);
-                          }
-                        }
-                      })
-                      .catch((err) =>
-                        console.error("Reverse geocoding error", err),
-                      );
-                  }}
-                />
-              )}
-            </div>
-            <p className="text-muted-foreground mt-2 text-xs">
-              Drag the map and click to pinpoint your exact location for better
-              book exchanges.
-            </p>
           </div>
 
           <DialogFooter className="mt-8">

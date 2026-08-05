@@ -91,7 +91,7 @@ export function ProfileShell({
                         <>
                           <span className="text-muted-foreground">&bull;</span>
                           <span className="text-muted-foreground">
-                            Joined {profile.joinedAt}
+                            Joined {new Date(profile.joinedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
                           </span>
                         </>
                       )}
