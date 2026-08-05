@@ -25,15 +25,17 @@ export default async function UserReviewsPage({
   params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
-  
+
   let profile = null;
   try {
     profile = await fetchPublicProfile(username);
   } catch (error) {
     console.error("Failed to fetch public profile:", error);
   }
-  
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileReviews: any[] = []; // TODO: Phase 4/8 Integration
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const isOwnProfile = false;
 
   if (!profile) {
@@ -41,10 +43,7 @@ export default async function UserReviewsPage({
   }
 
   return (
-    <ProfileShell
-      profile={profile}
-      active="reviews"
-    >
+    <ProfileShell profile={profile} active="reviews">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:gap-8">
         {/* Left Sidebar: Ratings */}
         <div className="w-full shrink-0 space-y-6 lg:w-[200px]">

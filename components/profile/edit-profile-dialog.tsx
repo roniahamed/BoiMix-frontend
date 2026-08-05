@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { CameraIcon, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,6 +33,7 @@ const profileSchema = z.object({
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
   ssr: false,
   loading: () => (
@@ -45,8 +47,10 @@ interface EditProfileDialogProps {
   profile: UserProfile;
   children: React.ReactNode;
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { searchLocation, reverseGeocode } from "@/lib/api-client";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface LocationSuggestion {
   display_name: string;
   lat: number;
@@ -62,8 +66,12 @@ export function EditProfileDialog({
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [coverFile, setCoverFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string>(profile.avatarUrl || "");
-  const [coverPreview, setCoverPreview] = useState<string>(profile.coverUrl || "");
+  const [avatarPreview, setAvatarPreview] = useState<string>(
+    profile.avatarUrl || "",
+  );
+  const [coverPreview, setCoverPreview] = useState<string>(
+    profile.coverUrl || "",
+  );
 
   const avatarInputRef = React.useRef<HTMLInputElement>(null);
   const coverInputRef = React.useRef<HTMLInputElement>(null);
@@ -72,7 +80,9 @@ export function EditProfileDialog({
     profile.readingInterests || [],
   );
   const [interestInput, setInterestInput] = useState("");
-  const [interestSuggestions, setInterestSuggestions] = useState<{id: string, name: string}[]>([]);
+  const [interestSuggestions, setInterestSuggestions] = useState<
+    { id: string; name: string }[]
+  >([]);
   const [isSearchingInterests, setIsSearchingInterests] = useState(false);
   const [showInterestSuggestions, setShowInterestSuggestions] = useState(false);
 
@@ -80,11 +90,13 @@ export function EditProfileDialog({
     if (interestInput && interestInput.length > 0) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingInterests(true);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShowInterestSuggestions(true);
       const timer = setTimeout(() => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        apiRequest<any[]>({ url: `/profiles/reading-interests/?q=${encodeURIComponent(interestInput)}`, method: "GET" })
+        apiRequest<any[]>({
+          url: `/profiles/reading-interests/?q=${encodeURIComponent(interestInput)}`,
+          method: "GET",
+        })
           .then((data) => {
             setInterestSuggestions(data || []);
           })
@@ -115,16 +127,16 @@ export function EditProfileDialog({
 
   const onSubmit = async (data: ProfileFormValues) => {
     setIsSaving(true);
-    
+
     try {
       const formData = new FormData();
       formData.append("full_name", data.name);
       if (data.role) formData.append("designation", data.role);
       if (data.bio) formData.append("bio", data.bio);
-      
+
       if (avatarFile) formData.append("avatar", avatarFile);
       if (coverFile) formData.append("cover", coverFile);
-      
+
       if (readingInterests.length > 0) {
         formData.append("reading_interests", JSON.stringify(readingInterests));
       }
@@ -145,7 +157,7 @@ export function EditProfileDialog({
 
       toast.success("Profile updated successfully!");
       setOpen(false);
-      
+
       // Optionally refresh the page to get all new details
       window.location.reload();
     } catch (error) {
@@ -194,7 +206,7 @@ export function EditProfileDialog({
                     className="object-cover transition-all group-hover:brightness-75"
                   />
                 ) : (
-                  <div className="absolute inset-0 bg-primary/10 transition-all group-hover:brightness-75" />
+                  <div className="bg-primary/10 absolute inset-0 transition-all group-hover:brightness-75" />
                 )}
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                   <Button
@@ -238,9 +250,9 @@ export function EditProfileDialog({
                     <CameraIcon className="h-4 w-4 text-white" />
                   </div>
                 </div>
-                <Button 
-                  type="button" 
-                  variant="outline" 
+                <Button
+                  type="button"
+                  variant="outline"
                   size="sm"
                   onClick={() => avatarInputRef.current?.click()}
                 >
@@ -312,7 +324,11 @@ export function EditProfileDialog({
                       value={interestInput}
                       onChange={(e) => setInterestInput(e.target.value)}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter" || e.key === "," || e.key === " ") {
+                        if (
+                          e.key === "Enter" ||
+                          e.key === "," ||
+                          e.key === " "
+                        ) {
                           e.preventDefault();
                           const newInterest = interestInput
                             .trim()
@@ -331,10 +347,14 @@ export function EditProfileDialog({
                         }
                       }}
                       onFocus={() => {
-                        if (interestInput.length > 0) setShowInterestSuggestions(true);
+                        if (interestInput.length > 0)
+                          setShowInterestSuggestions(true);
                       }}
                       onBlur={() => {
-                        setTimeout(() => setShowInterestSuggestions(false), 200);
+                        setTimeout(
+                          () => setShowInterestSuggestions(false),
+                          200,
+                        );
                       }}
                       placeholder="Type an interest and press Enter or select from dropdown"
                     />
@@ -351,8 +371,13 @@ export function EditProfileDialog({
                               key={suggestion.id}
                               className="hover:bg-accent hover:text-accent-foreground cursor-pointer px-4 py-2 text-sm"
                               onClick={() => {
-                                if (!readingInterests.includes(suggestion.name)) {
-                                  setReadingInterests([...readingInterests, suggestion.name]);
+                                if (
+                                  !readingInterests.includes(suggestion.name)
+                                ) {
+                                  setReadingInterests([
+                                    ...readingInterests,
+                                    suggestion.name,
+                                  ]);
                                 }
                                 setInterestInput("");
                                 setShowInterestSuggestions(false);

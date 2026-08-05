@@ -23,6 +23,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     if (!isAuthenticated) {
       router.push("/auth/login?redirect=" + encodeURIComponent(pathname));
@@ -32,7 +33,6 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   if (!mounted || !isAuthenticated) {
     return null; // or a loading spinner
   }
-
 
   const activeNavItem = dashboardNavItems
     .slice()

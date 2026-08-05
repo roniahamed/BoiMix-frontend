@@ -1,8 +1,12 @@
 // Imports removed for clean API integration
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function fetchLocal(endpoint: string, options?: RequestInit): Promise<any> {
-  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+ 
+export async function fetchLocal(
+  endpoint: string,
+  options?: RequestInit,
+): Promise<unknown> {
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
   // Map profile route
   if (endpoint.includes("/api/profile")) {
@@ -10,7 +14,10 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
     const username = url.searchParams.get("username");
     if (username) {
       try {
-        const res = await fetch(`${baseUrl}/api/v1/profiles/${username}/`, { cache: 'no-store', ...options });
+        const res = await fetch(`${baseUrl}/api/v1/profiles/${username}/`, {
+          cache: "no-store",
+          ...options,
+        });
         if (res.ok) {
           const profile = await res.json();
           // Backend returns a single profile object, frontend expects `{ profile, books, reviews, activity }`
@@ -26,7 +33,10 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
   // Map categories
   if (endpoint.includes("/api/categories")) {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/books/categories/`, { cache: 'no-store', ...options });
+      const res = await fetch(`${baseUrl}/api/v1/books/categories/`, {
+        cache: "no-store",
+        ...options,
+      });
       if (res.ok) {
         const backendCategories = await res.json();
         // Map backend schema to frontend schema
@@ -34,7 +44,7 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
           href: `/books/category/${c.slug}`,
           title: c.name,
           image: `/categories/${c.slug}.png`,
-          icon: "BookOpenIcon"
+          icon: "BookOpenIcon",
         }));
       }
     } catch {
@@ -49,7 +59,10 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
     const idOrSlug = parts[parts.length - 1];
     try {
       // Books endpoint in backend handles book listings
-      const res = await fetch(`${baseUrl}/api/v1/books/${idOrSlug}/`, { cache: 'no-store', ...options });
+      const res = await fetch(`${baseUrl}/api/v1/books/${idOrSlug}/`, {
+        cache: "no-store",
+        ...options,
+      });
       if (res.ok) return await res.json();
     } catch {
       // ignore
@@ -59,11 +72,14 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
   // Map books list
   if (endpoint.includes("/api/books")) {
     try {
-      const res = await fetch(`${baseUrl}/api/v1/books/`, { cache: 'no-store', ...options });
+      const res = await fetch(`${baseUrl}/api/v1/books/`, {
+        cache: "no-store",
+        ...options,
+      });
       if (res.ok) {
-         const data = await res.json();
-         // Django paginated response `{ results: [...] }`
-         return data.results || data; 
+        const data = await res.json();
+        // Django paginated response `{ results: [...] }`
+        return data.results || data;
       }
     } catch {
       // ignore
@@ -76,18 +92,23 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
     try {
       const url = new URL(endpoint, "http://localhost:3000");
       const qs = url.search;
-      const res = await fetch(`${baseUrl}/api/v1/search/books/${qs}`, { cache: 'no-store', ...options });
+      const res = await fetch(`${baseUrl}/api/v1/search/books/${qs}`, {
+        cache: "no-store",
+        ...options,
+      });
       if (res.ok) {
         const data = await res.json();
         // Django elasticsearch response returns { results: [...] }
         // We map BookSearchResultSerializer to BookCardBook
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return data.results.map((r: any) => ({
           id: r.id,
           title: r.title,
           author: r.author,
           rating: 4.5,
           reviewCount: 0,
-          coverUrl: "https://m.media-amazon.com/images/I/41K-Lsc8w5L._SY445_SX342_.jpg", // fallback
+          coverUrl:
+            "https://m.media-amazon.com/images/I/41K-Lsc8w5L._SY445_SX342_.jpg", // fallback
           providerType: "library",
           providerName: "Central Library",
           tags: ["library", r.genre, r.condition].filter(Boolean),
@@ -105,7 +126,10 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
     try {
       const url = new URL(endpoint, "http://localhost:3000");
       const qs = url.search;
-      const res = await fetch(`${baseUrl}/api/v1/search/suggestions/${qs}`, { cache: 'no-store', ...options });
+      const res = await fetch(`${baseUrl}/api/v1/search/suggestions/${qs}`, {
+        cache: "no-store",
+        ...options,
+      });
       if (res.ok) {
         return await res.json();
       }
@@ -124,7 +148,7 @@ export async function fetchLocal(endpoint: string, options?: RequestInit): Promi
   if (endpoint.includes("/api/testimonials")) return [];
   if (endpoint.includes("/api/orders/tracking")) return [];
   if (endpoint.includes("/api/authors/humayun-ahmed/books")) return [];
-  
+
   if (endpoint.includes("/api/books/")) {
     return null;
   }

@@ -33,12 +33,14 @@ function UserMenuButton() {
   const { isAuthenticated, user, clearSession } = useAuthStore();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  
+
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
-  if (!mounted) return <div className="h-9 w-9 rounded-full bg-muted animate-pulse" />;
+  if (!mounted)
+    return <div className="bg-muted h-9 w-9 animate-pulse rounded-full" />;
 
   if (!isAuthenticated) {
     return (
@@ -56,7 +58,10 @@ function UserMenuButton() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarImage src={user?.avatarUrl || ""} alt={user?.name || "User"} />
+            <AvatarImage
+              src={user?.avatarUrl || ""}
+              alt={user?.name || "User"}
+            />
             <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
           </Avatar>
         </Button>
@@ -64,7 +69,7 @@ function UserMenuButton() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user?.name}</p>
+            <p className="text-sm leading-none font-medium">{user?.name}</p>
             <p className="text-muted-foreground text-xs leading-none">
               {user?.email}
             </p>
@@ -79,7 +84,7 @@ function UserMenuButton() {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          className="cursor-pointer text-destructive focus:text-destructive"
+          className="text-destructive focus:text-destructive cursor-pointer"
           onClick={() => {
             clearSession();
             window.location.reload();
@@ -166,7 +171,7 @@ export function SiteHeader() {
           <div className="hidden sm:inline-flex">
             <NotificationPopover />
           </div>
-          
+
           <UserMenuButton />
         </div>
       </div>

@@ -44,8 +44,11 @@ function processQueue(error: unknown, token: string | null = null) {
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: unknown) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalRequest = (error as any)?.config;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const status = (error as any)?.response?.status;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const errorCode = (error as any)?.response?.data?.error?.code;
 
     // Only attempt refresh for 401 with authentication_failed, not on the refresh endpoint itself
@@ -105,7 +108,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(normalizeApiError(error));
-  }
+  },
 );
 
 export async function apiRequest<TResponse>(

@@ -25,6 +25,7 @@ export default async function UserActivityPage({
     console.error("Failed to fetch public profile:", error);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileActivity: any[] = []; // TODO: Phase 4/8 Integration
 
   if (!profile) {

@@ -35,7 +35,7 @@ const GoogleIcon = ({ className }: { className?: string }) => (
 
 const AppleIcon = ({ className }: { className?: string }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.62-1.496 3.603-2.947 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.533 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.56-1.702z"/>
+    <path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.62-1.496 3.603-2.947 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.533 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.56-1.702z" />
   </svg>
 );
 
@@ -46,7 +46,12 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
-import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+  OAuthProvider,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { useAuthStore } from "@/stores/auth-store";
 import { apiClient, setApiAccessToken } from "@/lib/api/client";
@@ -67,7 +72,8 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  const handleAuthSuccess = (response: any) => {
+   
+  const handleAuthSuccess = (response: unknown) => {
     setApiAccessToken(response.data.access_token);
     setSession(
       {
@@ -75,15 +81,16 @@ export default function LoginPage() {
         name: response.data.user.full_name || response.data.user.name || "User",
         username: response.data.user.username,
         email: response.data.user.email,
-        avatarUrl: response.data.user.avatarUrl || response.data.user.avatar_url,
+        avatarUrl:
+          response.data.user.avatarUrl || response.data.user.avatar_url,
         roles: [response.data.user.role || "user"],
         isOnboarded: response.data.user.is_onboarded ?? false,
       },
       response.data.access_token,
-      response.data.refresh_token
+      response.data.refresh_token,
     );
     toast.success("Successfully logged in!");
-    
+
     let redirectUrl = "/dashboard/overview";
     if (!response.data.user.is_onboarded) {
       let redirectQuery = "";
@@ -105,21 +112,32 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password,
+      );
       const idToken = await userCredential.user.getIdToken();
 
-      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+       
+      const response = await apiClient.post<{
+        access_token: string;
+        user: unknown;
+      }>("/auth/firebase-login", {
         id_token: idToken,
       });
 
       handleAuthSuccess(response);
-    } catch (error: any) {
+       
+    } catch (error: unknown) {
       console.error("Login Error:", error);
       if (error?.details?.terms_accepted) {
         toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
         router.push("/auth/register");
       } else {
-        toast.error(error?.message || "Failed to login. Check your credentials.");
+        toast.error(
+          error?.message || "Failed to login. Check your credentials.",
+        );
       }
     } finally {
       setIsLoading(false);
@@ -132,14 +150,19 @@ export default function LoginPage() {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
       const idToken = await userCredential.user.getIdToken();
-      
-      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+
+       
+      const response = await apiClient.post<{
+        access_token: string;
+        user: unknown;
+      }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
       });
 
       handleAuthSuccess(response);
-    } catch (error: any) {
+       
+    } catch (error: unknown) {
       console.error("Google Login Error:", error);
       if (error?.details?.terms_accepted) {
         toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
@@ -158,14 +181,19 @@ export default function LoginPage() {
       const provider = new OAuthProvider("apple.com");
       const userCredential = await signInWithPopup(auth, provider);
       const idToken = await userCredential.user.getIdToken();
-      
-      const response = await apiClient.post<{ access_token: string; user: any }>("/auth/firebase-login", {
+
+       
+      const response = await apiClient.post<{
+        access_token: string;
+        user: unknown;
+      }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
       });
 
       handleAuthSuccess(response);
-    } catch (error: any) {
+       
+    } catch (error: unknown) {
       console.error("Apple Login Error:", error);
       if (error?.details?.terms_accepted) {
         toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
@@ -269,11 +297,21 @@ export default function LoginPage() {
       </div>
 
       <div className="grid grid-cols-1 gap-4">
-        <Button variant="outline" type="button" disabled={isLoading} onClick={handleGoogleLogin}>
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          onClick={handleGoogleLogin}
+        >
           <GoogleIcon className="mr-2 size-5" />
           Google দিয়ে লগইন করুন
         </Button>
-        <Button variant="outline" type="button" disabled={isLoading} onClick={handleAppleLogin}>
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          onClick={handleAppleLogin}
+        >
           <AppleIcon className="mr-2 size-5" />
           Apple দিয়ে লগইন করুন
         </Button>

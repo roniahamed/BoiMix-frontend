@@ -46,12 +46,15 @@ export function ProfileHeader({
   isOwnProfile?: boolean;
 }) {
   const [isFollowing, setIsFollowing] = useState(profile.isFollowing || false);
-  const [followersCount, setFollowersCount] = useState(profile.stats?.followers || 0);
+  const [followersCount, setFollowersCount] = useState(
+    profile.stats?.followers || 0,
+  );
   const [isUpdating, setIsUpdating] = useState(false);
   const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
     if (isAuthenticated && !isOwnProfile) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiRequest<any>({ url: `/profiles/${profile.username}/`, method: "GET" })
         .then((data) => {
           setIsFollowing(data.isFollowing || false);
@@ -73,20 +76,27 @@ export function ProfileHeader({
       toast.error("You need to be logged in to follow users.");
       return;
     }
-    
+
     setIsUpdating(true);
     try {
       if (isFollowing) {
-        await apiRequest({ url: `/profiles/${profile.username}/follow/`, method: "DELETE" });
+        await apiRequest({
+          url: `/profiles/${profile.username}/follow/`,
+          method: "DELETE",
+        });
         setIsFollowing(false);
         setFollowersCount((prev) => Math.max(0, prev - 1));
         toast.success(`Unfollowed ${profile.name}`);
       } else {
-        await apiRequest({ url: `/profiles/${profile.username}/follow/`, method: "POST" });
+        await apiRequest({
+          url: `/profiles/${profile.username}/follow/`,
+          method: "POST",
+        });
         setIsFollowing(true);
         setFollowersCount((prev) => prev + 1);
         toast.success(`Following ${profile.name}`);
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       toast.error(err.details || "Failed to update follow status.");
@@ -109,7 +119,7 @@ export function ProfileHeader({
             className="object-cover"
           />
         ) : (
-          <div className="absolute inset-0 bg-primary/10" />
+          <div className="bg-primary/10 absolute inset-0" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
@@ -138,7 +148,7 @@ export function ProfileHeader({
               <UserAvatar
                 name={profile.name}
                 src={profile.avatarUrl}
-                className="bg-background border-background text-foreground relative z-10 size-[76px] border-[3px] !rounded-full text-2xl shadow-sm dark:border-zinc-900"
+                className="bg-background border-background text-foreground relative z-10 size-[76px] !rounded-full border-[3px] text-2xl shadow-sm dark:border-zinc-900"
               />
             </div>
             <div className="flex flex-col pt-3">
@@ -184,12 +194,14 @@ export function ProfileHeader({
             {/* Action Buttons (Facebook Style) */}
             <div className="mt-4 flex w-full flex-row items-center gap-2">
               {!isOwnProfile && (
-                <Button 
+                <Button
                   onClick={handleFollowToggle}
                   disabled={isUpdating}
                   variant={isFollowing ? "outline" : "default"}
                   className={`h-9 flex-1 rounded-md font-semibold shadow-none ${
-                    isFollowing ? 'bg-muted text-foreground hover:bg-muted/80' : 'bg-[#0ea5e9] text-white hover:bg-[#0284c7]'
+                    isFollowing
+                      ? "bg-muted text-foreground hover:bg-muted/80"
+                      : "bg-[#0ea5e9] text-white hover:bg-[#0284c7]"
                   }`}
                 >
                   {isFollowing ? "Following" : "Follow"}
@@ -288,7 +300,7 @@ export function ProfileHeader({
               <UserAvatar
                 name={profile.name}
                 src={profile.avatarUrl}
-                className="bg-background relative z-10 size-24 !rounded-full overflow-hidden border-4 border-white text-2xl text-white shadow-sm md:size-32 md:text-3xl dark:border-zinc-900"
+                className="bg-background relative z-10 size-24 overflow-hidden !rounded-full border-4 border-white text-2xl text-white shadow-sm md:size-32 md:text-3xl dark:border-zinc-900"
               />
             </div>
 
@@ -346,21 +358,26 @@ export function ProfileHeader({
               {/* Row 4: Joined Date */}
               {profile.joinedAt && (
                 <p className="text-muted-foreground mt-1.5 text-[14px]">
-                  Joined {new Date(profile.joinedAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
+                  Joined{" "}
+                  {new Date(profile.joinedAt).toLocaleDateString("en-US", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
                 </p>
               )}
 
               {/* Row 5: Action Buttons grouped together */}
               <div className="mt-4 flex items-center gap-4">
                 {!isOwnProfile && (
-                  <Button 
+                  <Button
                     onClick={handleFollowToggle}
                     disabled={isUpdating}
                     variant={isFollowing ? "outline" : "default"}
                     className={`h-9 w-[110px] rounded-md text-[14px] font-semibold shadow-none transition-colors ${
-                      isFollowing 
-                        ? 'bg-card text-muted-foreground hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white border'
-                        : 'bg-[#0ea5e9] text-white hover:bg-[#0284c7]'
+                      isFollowing
+                        ? "bg-card text-muted-foreground border hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white"
+                        : "bg-[#0ea5e9] text-white hover:bg-[#0284c7]"
                     }`}
                   >
                     {isFollowing ? "Following" : "Follow"}

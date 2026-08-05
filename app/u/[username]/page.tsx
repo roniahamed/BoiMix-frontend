@@ -17,7 +17,7 @@ export default async function UserProfilePage({
   params: Promise<{ username: string }>;
 }) {
   const { username } = await params;
-  
+
   let profile = null;
   try {
     profile = await fetchPublicProfile(username);
@@ -25,7 +25,9 @@ export default async function UserProfilePage({
     console.error("Failed to fetch public profile:", error);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileLibraryBooks: any[] = []; // Phase 13 will add /api/users/{username}/library
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileReviews: any[] = []; // Phase 13 will add /api/users/{username}/reviews
 
   if (!profile) {
@@ -33,10 +35,7 @@ export default async function UserProfilePage({
   }
 
   return (
-    <ProfileShell
-      profile={profile}
-      active="overview"
-    >
+    <ProfileShell profile={profile} active="overview">
       <div className="space-y-6">
         {/* Interactive Books Viewer */}
         <ProfileBooksViewer

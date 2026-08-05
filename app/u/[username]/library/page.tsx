@@ -29,6 +29,7 @@ export default async function UserLibraryPage({
   }
 
   // Fetch library — falls back to empty if unauthenticated or error
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let profileLibraryBooks: any[] = [];
   try {
     profileLibraryBooks = await fetchUserLibrary();
@@ -39,10 +40,7 @@ export default async function UserLibraryPage({
   const isOwnProfile = false; // isOwnProfile determined client-side via auth store
 
   return (
-    <ProfileShell
-      profile={profile}
-      active="library"
-    >
+    <ProfileShell profile={profile} active="library">
       <ProfileBooksViewer
         books={profileLibraryBooks}
         isOwnProfile={isOwnProfile}

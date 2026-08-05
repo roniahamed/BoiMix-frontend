@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -32,7 +33,7 @@ export default function CompleteProfilePage() {
   useEffect(() => {
     if (user?.isOnboarded) {
       const searchParams = new URLSearchParams(
-        typeof window !== "undefined" ? window.location.search : ""
+        typeof window !== "undefined" ? window.location.search : "",
       );
       const redirectUrl = searchParams.get("redirect") || "/dashboard/overview";
       router.replace(redirectUrl);
@@ -45,6 +46,7 @@ export default function CompleteProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Location Search State
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
@@ -69,6 +71,7 @@ export default function CompleteProfilePage() {
 
   useEffect(() => {
     if (locationSearchText.length > 2) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingLocation(true);
       const timer = setTimeout(() => {
         searchLocation(locationSearchText)
@@ -117,13 +120,16 @@ export default function CompleteProfilePage() {
           // Temporarily use object URL until backend processes the image
           newAvatarUrl = URL.createObjectURL(avatarFile);
         }
-        setSession({
-          ...user,
-          name: res.data.name || res.data.full_name || user.name,
-          username: res.data.username || user.username,
-          avatarUrl: newAvatarUrl,
-          isOnboarded: true,
-        }, accessToken);
+        setSession(
+          {
+            ...user,
+            name: res.data.name || res.data.full_name || user.name,
+            username: res.data.username || user.username,
+            avatarUrl: newAvatarUrl,
+            isOnboarded: true,
+          },
+          accessToken,
+        );
       }
 
       let redirectQuery = "";
@@ -133,10 +139,13 @@ export default function CompleteProfilePage() {
         if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
       }
       router.push(`/auth/choose-language${redirectQuery}`);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Complete Profile Error:", error);
-      const msg = error?.response?.data?.detail || error?.message || "Failed to update profile.";
+      const msg =
+        error?.response?.data?.detail ||
+        error?.message ||
+        "Failed to update profile.";
       alert(msg);
     } finally {
       setIsLoading(false);
@@ -164,10 +173,15 @@ export default function CompleteProfilePage() {
           />
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="bg-muted hover:border-primary relative flex h-24 w-24 cursor-pointer overflow-hidden items-center justify-center rounded-full border-2 border-dashed border-gray-300 transition-colors"
+            className="bg-muted hover:border-primary relative flex h-24 w-24 cursor-pointer items-center justify-center overflow-hidden rounded-full border-2 border-dashed border-gray-300 transition-colors"
           >
             {avatarPreview ? (
-              <Image src={avatarPreview} alt="Avatar Preview" fill className="object-cover" />
+              <Image
+                src={avatarPreview}
+                alt="Avatar Preview"
+                fill
+                className="object-cover"
+              />
             ) : (
               <UploadCloud className="text-muted-foreground size-8" />
             )}
@@ -178,7 +192,7 @@ export default function CompleteProfilePage() {
         </div>
 
         {/* Location Search */}
-        <div className="space-y-2 relative">
+        <div className="relative space-y-2">
           <Label htmlFor="location">এলাকা</Label>
           <div className="relative">
             <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
@@ -197,24 +211,24 @@ export default function CompleteProfilePage() {
             <input type="hidden" {...register("location")} />
           </div>
           {isSearchingLocation && (
-            <div className="text-xs text-muted-foreground mt-1">খুঁজছি...</div>
+            <div className="text-muted-foreground mt-1 text-xs">খুঁজছি...</div>
           )}
           {errors.location && (
-            <p className="text-destructive text-sm mt-1">
+            <p className="text-destructive mt-1 text-sm">
               {errors.location.message}
             </p>
           )}
 
           {/* Suggestions Dropdown */}
           {showSuggestions && locationSuggestions.length > 0 && (
-            <ul className="absolute z-10 mt-1 w-full rounded-md border bg-card py-1 shadow-lg max-h-60 overflow-auto">
+            <ul className="bg-card absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border py-1 shadow-lg">
               {locationSuggestions.map((suggestion, idx) => (
                 <li
                   key={idx}
-                  className="flex cursor-pointer items-center gap-2 px-3 py-2 text-sm hover:bg-muted"
+                  className="hover:bg-muted flex cursor-pointer items-center gap-2 px-3 py-2 text-sm"
                   onClick={() => handleSelectLocation(suggestion.display_name)}
                 >
-                  <MapPin className="size-4 text-muted-foreground shrink-0" />
+                  <MapPin className="text-muted-foreground size-4 shrink-0" />
                   <span className="truncate">{suggestion.display_name}</span>
                 </li>
               ))}

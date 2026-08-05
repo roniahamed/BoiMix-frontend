@@ -9,6 +9,7 @@ export type AuthUser = {
   avatarUrl?: string;
   roles: string[];
   isOnboarded?: boolean;
+  hasPassword?: boolean;
 };
 
 type AuthState = {
@@ -16,7 +17,11 @@ type AuthState = {
   accessToken: string | null;
   refreshToken: string | null;
   isAuthenticated: boolean;
-  setSession: (user: AuthUser, accessToken?: string | null, refreshToken?: string | null) => void;
+  setSession: (
+    user: AuthUser,
+    accessToken?: string | null,
+    refreshToken?: string | null,
+  ) => void;
   updateTokens: (accessToken: string, refreshToken: string) => void;
   updateUser: (userUpdates: Partial<AuthUser>) => void;
   clearSession: () => void;
@@ -53,6 +58,6 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );

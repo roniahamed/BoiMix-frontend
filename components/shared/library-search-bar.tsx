@@ -50,17 +50,27 @@ export function LibrarySearchBar({
   });
 
   // Since backend already filters by query, we just filter by mode if needed
-  const suggestions = (searchedBooks as any[]).filter((book) => {
-    if (mode === "library") {
-      return book.availability_mode === "borrow" || book.tags?.includes("library");
-    } else if (mode === "exchanges") {
-      return book.availability_mode !== "borrow" || book.tags?.includes("exchange");
-    }
-    return true;
-  }).slice(0, 5).map(b => ({
-    ...b,
-    coverUrl: b.coverUrl || "https://m.media-amazon.com/images/I/41K-Lsc8w5L._SY445_SX342_.jpg"
-  }));
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const suggestions = (searchedBooks as any[])
+    .filter((book) => {
+      if (mode === "library") {
+        return (
+          book.availability_mode === "borrow" || book.tags?.includes("library")
+        );
+      } else if (mode === "exchanges") {
+        return (
+          book.availability_mode !== "borrow" || book.tags?.includes("exchange")
+        );
+      }
+      return true;
+    })
+    .slice(0, 5)
+    .map((b) => ({
+      ...b,
+      coverUrl:
+        b.coverUrl ||
+        "https://m.media-amazon.com/images/I/41K-Lsc8w5L._SY445_SX342_.jpg",
+    }));
 
   // Click outside to close
   useEffect(() => {

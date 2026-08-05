@@ -1,7 +1,17 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Camera, MapPin, Building, Globe, Map, User, Copy, Loader2, CheckCircle2Icon } from "lucide-react";
+import {
+  Camera,
+  MapPin,
+  Building,
+  Globe,
+  Map,
+  User,
+  Copy,
+  Loader2,
+  CheckCircle2Icon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -63,7 +73,9 @@ export default function SettingsPage() {
   >([]);
   const [showStreetSuggestions, setShowStreetSuggestions] = useState(false);
 
-  const [usernameStatus, setUsernameStatus] = useState<"idle" | "loading" | "available" | "taken" | "invalid">("idle");
+  const [usernameStatus, setUsernameStatus] = useState<
+    "idle" | "loading" | "available" | "taken" | "invalid"
+  >("idle");
   const [usernameMessage, setUsernameMessage] = useState("");
   const [originalUsername, setOriginalUsername] = useState("");
 
@@ -75,16 +87,18 @@ export default function SettingsPage() {
     designation: "",
     bio: "",
   });
-  
+
   const [preferences, setPreferences] = useState({
     email_notifications: true,
     push_notifications: true,
     marketing_emails: false,
-    language: "en"
+    language: "en",
   });
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState<string>("/placeholder-user.jpg");
+  const [avatarPreview, setAvatarPreview] = useState<string>(
+    "/placeholder-user.jpg",
+  );
 
   const [addressDetails, setAddressDetails] = useState({
     street: "",
@@ -98,6 +112,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiRequest<any>({ url: `/profiles/me/`, method: "GET" })
         .then((data) => {
           setProfile({
@@ -113,8 +128,14 @@ export default function SettingsPage() {
           if (data.locationDetails) {
             setAddressDetails((prev) => ({
               ...prev,
-              city: data.locationDetails.area || data.locationDetails.city || "Dhaka",
-              state: data.locationDetails.state || data.locationDetails.district || "",
+              city:
+                data.locationDetails.area ||
+                data.locationDetails.city ||
+                "Dhaka",
+              state:
+                data.locationDetails.state ||
+                data.locationDetails.district ||
+                "",
               street: data.locationDetails.street || "",
               zip: data.locationDetails.zip || "",
               country: data.locationDetails.country || "Bangladesh",
@@ -125,6 +146,7 @@ export default function SettingsPage() {
         })
         .catch(console.error);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiRequest<any>({ url: `/profiles/me/preferences/`, method: "GET" })
         .then((data) => {
           if (data) {
@@ -132,7 +154,7 @@ export default function SettingsPage() {
               email_notifications: data.email_notifications ?? true,
               push_notifications: data.push_notifications ?? true,
               marketing_emails: data.marketing_emails ?? false,
-              language: data.language || "en"
+              language: data.language || "en",
             });
           }
         })
@@ -152,35 +174,47 @@ export default function SettingsPage() {
       if (avatarFile) {
         formData.append("avatar", avatarFile);
       }
-      
-      if (addressDetails.street) formData.append("location_street", addressDetails.street);
-      if (addressDetails.city) formData.append("location_city", addressDetails.city);
-      if (addressDetails.state) formData.append("location_state", addressDetails.state);
-      if (addressDetails.zip) formData.append("location_postal_code", addressDetails.zip);
-      if (addressDetails.country) formData.append("location_country", addressDetails.country);
+
+      if (addressDetails.street)
+        formData.append("location_street", addressDetails.street);
+      if (addressDetails.city)
+        formData.append("location_city", addressDetails.city);
+      if (addressDetails.state)
+        formData.append("location_state", addressDetails.state);
+      if (addressDetails.zip)
+        formData.append("location_postal_code", addressDetails.zip);
+      if (addressDetails.country)
+        formData.append("location_country", addressDetails.country);
       if (addressDetails.lat && addressDetails.lng) {
-        formData.append("location_lat", parseFloat(addressDetails.lat).toFixed(6));
-        formData.append("location_lng", parseFloat(addressDetails.lng).toFixed(6));
+        formData.append(
+          "location_lat",
+          parseFloat(addressDetails.lat).toFixed(6),
+        );
+        formData.append(
+          "location_lng",
+          parseFloat(addressDetails.lng).toFixed(6),
+        );
       }
-      
+
       await apiRequest({
         url: "/profiles/me/",
         method: "PATCH",
         data: formData,
         headers: {
-          "Content-Type": "multipart/form-data"
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
-      
+
       // Update the auth store with the new details
       updateUser({
         name: profile.fullName,
         username: profile.username,
-        // Optional: update avatar URL if the backend returns it in the response, 
+        // Optional: update avatar URL if the backend returns it in the response,
         // but for now updating name and username is critical to prevent 404s.
       });
 
       toast.success("Profile saved successfully!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Failed to save profile", err);
       toast.error(err.message || "Failed to save profile.");
@@ -199,6 +233,7 @@ export default function SettingsPage() {
         data: preferences,
       });
       toast.success("Preferences saved successfully!");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Failed to save preferences", err);
       toast.error(err.message || "Failed to save preferences.");
@@ -212,9 +247,9 @@ export default function SettingsPage() {
       if (searchQuery.trim().length > 2) {
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const data = await apiRequest<{results: any[]}>({ 
-            url: `/locations/search/?q=${encodeURIComponent(searchQuery)}`, 
-            method: 'GET' 
+          const data = await apiRequest<{ results: any[] }>({
+            url: `/locations/search/?q=${encodeURIComponent(searchQuery)}`,
+            method: "GET",
           });
           setSearchResults(data.results || []);
         } catch (err) {
@@ -233,9 +268,9 @@ export default function SettingsPage() {
       if (addressDetails.street.trim().length > 2 && showStreetSuggestions) {
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const data = await apiRequest<{results: any[]}>({ 
-            url: `/locations/search/?q=${encodeURIComponent(addressDetails.street)}`, 
-            method: 'GET' 
+          const data = await apiRequest<{ results: any[] }>({
+            url: `/locations/search/?q=${encodeURIComponent(addressDetails.street)}`,
+            method: "GET",
           });
           setStreetResults(data.results || []);
         } catch (err) {
@@ -251,6 +286,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (profile.username === originalUsername || !profile.username) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUsernameStatus("idle");
       setUsernameMessage("");
       return;
@@ -259,9 +295,9 @@ export default function SettingsPage() {
     const timer = setTimeout(async () => {
       setUsernameStatus("loading");
       try {
-        const data = await apiRequest<{available: boolean, message: string}>({
+        const data = await apiRequest<{ available: boolean; message: string }>({
           url: `/profiles/check-username/?username=${encodeURIComponent(profile.username)}`,
-          method: "GET"
+          method: "GET",
         });
         if (data.available) {
           setUsernameStatus("available");
@@ -269,6 +305,7 @@ export default function SettingsPage() {
           setUsernameStatus("taken");
           setUsernameMessage(data.message || "Username is not available");
         }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setUsernameStatus("invalid");
         setUsernameMessage(err.message || "Invalid username");
@@ -295,11 +332,7 @@ export default function SettingsPage() {
   const handleStreetSelect = (result: any) => {
     setShowStreetSuggestions(false);
     setStreetResults([]);
-    handleLocationChange(
-      result.lat,
-      result.lng,
-      result.address,
-    );
+    handleLocationChange(result.lat, result.lng, result.address);
   };
 
   const handleLocationChange = async (
@@ -353,8 +386,7 @@ export default function SettingsPage() {
             address.neighbourhood ||
             address.village ||
             "",
-          city:
-            address.city || address.town || address.county || "",
+          city: address.city || address.town || address.county || "",
           state: address.state || "",
           zip: address.postcode
             ? String(address.postcode)
@@ -421,10 +453,15 @@ export default function SettingsPage() {
                       className="object-cover"
                     />
                     <AvatarFallback className="bg-primary/10 text-primary text-2xl font-medium">
-                      {profile.fullName?.charAt(0) || user?.name?.charAt(0) || "U"}
+                      {profile.fullName?.charAt(0) ||
+                        user?.name?.charAt(0) ||
+                        "U"}
                     </AvatarFallback>
                   </Avatar>
-                  <label htmlFor="avatar-upload" className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
+                  <label
+                    htmlFor="avatar-upload"
+                    className="absolute inset-0 flex cursor-pointer items-center justify-center rounded-full bg-black/40 opacity-0 transition-opacity group-hover:opacity-100"
+                  >
                     <Camera className="h-8 w-8 text-white" />
                   </label>
                   <input
@@ -448,7 +485,14 @@ export default function SettingsPage() {
                     size of 2MB.
                   </p>
                   <div className="flex items-center gap-3 pt-2">
-                    <Button variant="default" size="sm" className="shadow-sm" onClick={() => document.getElementById("avatar-upload")?.click()}>
+                    <Button
+                      variant="default"
+                      size="sm"
+                      className="shadow-sm"
+                      onClick={() =>
+                        document.getElementById("avatar-upload")?.click()
+                      }
+                    >
                       Upload New
                     </Button>
                     <Button
@@ -482,12 +526,17 @@ export default function SettingsPage() {
                     <Input
                       id="fullName"
                       value={profile.fullName}
-                      onChange={(e) => setProfile({...profile, fullName: e.target.value})}
+                      onChange={(e) =>
+                        setProfile({ ...profile, fullName: e.target.value })
+                      }
                       className="bg-muted/20"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="username" className="text-sm font-medium flex items-center justify-between">
+                    <Label
+                      htmlFor="username"
+                      className="flex items-center justify-between text-sm font-medium"
+                    >
                       <span>Username</span>
                       <button
                         type="button"
@@ -495,7 +544,7 @@ export default function SettingsPage() {
                           navigator.clipboard.writeText(profile.username);
                           toast.success("Username copied to clipboard!");
                         }}
-                        className="text-xs text-primary hover:underline flex items-center gap-1"
+                        className="text-primary flex items-center gap-1 text-xs hover:underline"
                       >
                         <Copy className="h-3 w-3" />
                         Copy
@@ -505,24 +554,40 @@ export default function SettingsPage() {
                       <Input
                         id="username"
                         value={profile.username}
-                        onChange={(e) => setProfile({...profile, username: e.target.value.toLowerCase()})}
-                        className={cn("bg-muted/20", usernameStatus === "taken" || usernameStatus === "invalid" ? "border-destructive focus-visible:ring-destructive" : "")}
+                        onChange={(e) =>
+                          setProfile({
+                            ...profile,
+                            username: e.target.value.toLowerCase(),
+                          })
+                        }
+                        className={cn(
+                          "bg-muted/20",
+                          usernameStatus === "taken" ||
+                            usernameStatus === "invalid"
+                            ? "border-destructive focus-visible:ring-destructive"
+                            : "",
+                        )}
                       />
                       {usernameStatus === "loading" && (
-                        <div className="absolute right-3 top-2.5">
-                          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                        <div className="absolute top-2.5 right-3">
+                          <Loader2 className="text-muted-foreground h-4 w-4 animate-spin" />
                         </div>
                       )}
                       {usernameStatus === "available" && (
-                        <div className="absolute right-3 top-2.5">
-                          <CheckCircle2Icon className="h-4 w-4 text-success" />
+                        <div className="absolute top-2.5 right-3">
+                          <CheckCircle2Icon className="text-success h-4 w-4" />
                         </div>
                       )}
                     </div>
-                    {usernameStatus === "taken" || usernameStatus === "invalid" ? (
-                      <p className="text-xs text-destructive">{usernameMessage}</p>
+                    {usernameStatus === "taken" ||
+                    usernameStatus === "invalid" ? (
+                      <p className="text-destructive text-xs">
+                        {usernameMessage}
+                      </p>
                     ) : usernameStatus === "available" ? (
-                      <p className="text-xs text-success">Username is available</p>
+                      <p className="text-success text-xs">
+                        Username is available
+                      </p>
                     ) : null}
                   </div>
                   <div className="space-y-2 md:col-span-2">
@@ -536,7 +601,9 @@ export default function SettingsPage() {
                       id="designation"
                       placeholder="e.g. Software Engineer, Teacher, Student"
                       value={profile.designation}
-                      onChange={(e) => setProfile({...profile, designation: e.target.value})}
+                      onChange={(e) =>
+                        setProfile({ ...profile, designation: e.target.value })
+                      }
                       className="bg-muted/20"
                     />
                   </div>
@@ -549,7 +616,9 @@ export default function SettingsPage() {
                   <Textarea
                     id="bio"
                     value={profile.bio}
-                    onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                    onChange={(e) =>
+                      setProfile({ ...profile, bio: e.target.value })
+                    }
                     rows={3}
                     className="bg-muted/20 resize-none"
                   />
@@ -760,7 +829,15 @@ export default function SettingsPage() {
               <p className="text-muted-foreground text-sm">
                 Don&apos;t forget to save your changes.
               </p>
-              <Button onClick={handleSaveProfile} disabled={isSaving || usernameStatus === "taken" || usernameStatus === "invalid"} className="shadow-sm">
+              <Button
+                onClick={handleSaveProfile}
+                disabled={
+                  isSaving ||
+                  usernameStatus === "taken" ||
+                  usernameStatus === "invalid"
+                }
+                className="shadow-sm"
+              >
                 {isSaving ? "Saving..." : "Save Profile"}
               </Button>
             </CardFooter>
@@ -785,9 +862,14 @@ export default function SettingsPage() {
                     Receive emails about your account activity and exchanges.
                   </p>
                 </div>
-                <Switch 
+                <Switch
                   checked={preferences.email_notifications}
-                  onCheckedChange={(checked) => setPreferences({ ...preferences, email_notifications: checked })}
+                  onCheckedChange={(checked) =>
+                    setPreferences({
+                      ...preferences,
+                      email_notifications: checked,
+                    })
+                  }
                 />
               </div>
 
@@ -800,9 +882,14 @@ export default function SettingsPage() {
                     Receive push notifications in your browser.
                   </p>
                 </div>
-                <Switch 
+                <Switch
                   checked={preferences.push_notifications}
-                  onCheckedChange={(checked) => setPreferences({ ...preferences, push_notifications: checked })}
+                  onCheckedChange={(checked) =>
+                    setPreferences({
+                      ...preferences,
+                      push_notifications: checked,
+                    })
+                  }
                 />
               </div>
 
@@ -815,14 +902,23 @@ export default function SettingsPage() {
                     Receive emails about new features, updates, and offers.
                   </p>
                 </div>
-                <Switch 
+                <Switch
                   checked={preferences.marketing_emails}
-                  onCheckedChange={(checked) => setPreferences({ ...preferences, marketing_emails: checked })}
+                  onCheckedChange={(checked) =>
+                    setPreferences({
+                      ...preferences,
+                      marketing_emails: checked,
+                    })
+                  }
                 />
               </div>
             </CardContent>
             <CardFooter className="bg-muted/30 flex items-center justify-end border-t px-6 py-4">
-              <Button onClick={handleSavePreferences} disabled={isSavingPrefs} className="shadow-sm">
+              <Button
+                onClick={handleSavePreferences}
+                disabled={isSavingPrefs}
+                className="shadow-sm"
+              >
                 {isSavingPrefs ? "Saving..." : "Save Preferences"}
               </Button>
             </CardFooter>

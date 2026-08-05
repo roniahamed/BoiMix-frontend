@@ -7,7 +7,11 @@ import { fetchFollowers } from "@/lib/api-client";
 import { Loader2 } from "lucide-react";
 
 export default function FollowersPage() {
-  const { data: followers = [], isLoading, error } = useQuery({
+  const {
+    data: followers = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["followers"],
     queryFn: fetchFollowers,
   });
@@ -23,29 +27,35 @@ export default function FollowersPage() {
 
       {isLoading ? (
         <div className="flex justify-center p-8">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <Loader2 className="text-primary h-8 w-8 animate-spin" />
         </div>
       ) : error ? (
-        <div className="p-8 text-center text-destructive">
+        <div className="text-destructive p-8 text-center">
           Failed to load followers.
         </div>
       ) : followers.length === 0 ? (
-        <div className="p-8 text-center text-muted-foreground">
+        <div className="text-muted-foreground p-8 text-center">
           You have no followers yet.
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {followers.map((user: any) => (
-            <UserCard 
-              key={user.username || user.id} 
-              user={{
-                id: user.id,
-                name: user.full_name || user.name || user.username,
-                username: user.username,
-                avatarUrl: user.avatarUrl || user.avatar_url || `https://ui-avatars.com/api/?name=${user.username}&background=random`,
-                location: user.location,
-                rating: user.rating,
-              } as UserProfile} 
+            <UserCard
+              key={user.username || user.id}
+              user={
+                {
+                  id: user.id,
+                  name: user.full_name || user.name || user.username,
+                  username: user.username,
+                  avatarUrl:
+                    user.avatarUrl ||
+                    user.avatar_url ||
+                    `https://ui-avatars.com/api/?name=${user.username}&background=random`,
+                  location: user.location,
+                  rating: user.rating,
+                } as UserProfile
+              }
             />
           ))}
         </div>
