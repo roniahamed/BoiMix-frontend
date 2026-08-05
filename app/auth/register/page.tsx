@@ -129,8 +129,8 @@ export default function RegisterPage() {
     } catch (error: unknown) {
       console.error("Register Error:", error);
       const msg =
-        error?.response?.data?.error?.message ||
-        error?.message ||
+        (error as any)?.response?.data?.error?.message ||
+        (error as any)?.message ||
         "Registration failed.";
       alert(msg);
     } finally {
@@ -162,7 +162,7 @@ export default function RegisterPage() {
       const response = await apiClient.post<{
         access_token: string;
         refresh_token?: string;
-        user: unknown;
+        user: any;
       }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
@@ -206,8 +206,8 @@ export default function RegisterPage() {
     } catch (error: unknown) {
       console.error("Google Login Error:", error);
       const msg =
-        error?.response?.data?.error?.message ||
-        error?.message ||
+        (error as any)?.response?.data?.error?.message ||
+        (error as any)?.message ||
         "Google registration failed.";
       alert(msg);
     } finally {
@@ -238,7 +238,7 @@ export default function RegisterPage() {
       const response = await apiClient.post<{
         access_token: string;
         refresh_token?: string;
-        user: unknown;
+        user: any;
       }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
@@ -282,8 +282,8 @@ export default function RegisterPage() {
     } catch (error: unknown) {
       console.error("Apple Login Error:", error);
       const msg =
-        error?.response?.data?.error?.message ||
-        error?.message ||
+        (error as any)?.response?.data?.error?.message ||
+        (error as any)?.message ||
         "Apple registration failed.";
       alert(msg);
     } finally {

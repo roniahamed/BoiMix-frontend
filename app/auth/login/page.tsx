@@ -73,7 +73,7 @@ export default function LoginPage() {
   });
 
    
-  const handleAuthSuccess = (response: unknown) => {
+  const handleAuthSuccess = (response: any) => {
     setApiAccessToken(response.data.access_token);
     setSession(
       {
@@ -131,12 +131,12 @@ export default function LoginPage() {
        
     } catch (error: unknown) {
       console.error("Login Error:", error);
-      if (error?.details?.terms_accepted) {
+      if ((error as any)?.details?.terms_accepted) {
         toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
         router.push("/auth/register");
       } else {
         toast.error(
-          error?.message || "Failed to login. Check your credentials.",
+          (error as any)?.message || "Failed to login. Check your credentials.",
         );
       }
     } finally {
@@ -154,7 +154,7 @@ export default function LoginPage() {
        
       const response = await apiClient.post<{
         access_token: string;
-        user: unknown;
+        user: any;
       }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
@@ -164,11 +164,11 @@ export default function LoginPage() {
        
     } catch (error: unknown) {
       console.error("Google Login Error:", error);
-      if (error?.details?.terms_accepted) {
+      if ((error as any)?.details?.terms_accepted) {
         toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
         router.push("/auth/register");
       } else {
-        toast.error(error?.message || "Failed to login with Google.");
+        toast.error((error as any)?.message || "Failed to login with Google.");
       }
     } finally {
       setIsLoading(false);
@@ -185,7 +185,7 @@ export default function LoginPage() {
        
       const response = await apiClient.post<{
         access_token: string;
-        user: unknown;
+        user: any;
       }>("/auth/firebase-login", {
         id_token: idToken,
         full_name: userCredential.user.displayName,
@@ -195,11 +195,11 @@ export default function LoginPage() {
        
     } catch (error: unknown) {
       console.error("Apple Login Error:", error);
-      if (error?.details?.terms_accepted) {
+      if ((error as any)?.details?.terms_accepted) {
         toast.error("আপনাকে আগে নিবন্ধন (Register) করতে হবে।");
         router.push("/auth/register");
       } else {
-        toast.error(error?.message || "Failed to login with Apple.");
+        toast.error((error as any)?.message || "Failed to login with Apple.");
       }
     } finally {
       setIsLoading(false);
