@@ -23,10 +23,16 @@ export default function AuthLayout({
   useEffect(() => {
     // Only redirect if they load an auth page while ALREADY authenticated
     if (isAuthenticated && (pathname === "/auth/login" || pathname === "/auth/register" || pathname === "/auth/forgot-password")) {
-      router.replace("/dashboard/overview");
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirect = searchParams.get("redirect");
+      if (redirect && redirect.startsWith("/")) {
+        router.replace(redirect);
+      } else {
+        router.replace("/dashboard/overview");
+      }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isAuthenticated, pathname, router]);
 
   if (!isMounted) return null;
 

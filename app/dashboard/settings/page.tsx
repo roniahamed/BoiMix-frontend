@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Camera, MapPin, Building, Globe, Map, User } from "lucide-react";
+import { Camera, MapPin, Building, Globe, Map, User, Copy, Loader2, CheckCircle2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -37,7 +38,7 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function SettingsPage() {
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, updateUser } = useAuthStore();
   const [mapPosition, setMapPosition] = useState<{
     lat: number;
     lng: number;
@@ -61,6 +62,10 @@ export default function SettingsPage() {
     }[]
   >([]);
   const [showStreetSuggestions, setShowStreetSuggestions] = useState(false);
+
+  const [usernameStatus, setUsernameStatus] = useState<"idle" | "loading" | "available" | "taken" | "invalid">("idle");
+  const [usernameMessage, setUsernameMessage] = useState("");
+  const [originalUsername, setOriginalUsername] = useState("");
 
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingPrefs, setIsSavingPrefs] = useState(false);
@@ -92,8 +97,8 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
-    if (isAuthenticated && user?.username) {
-      apiRequest<any>({ url: `/profiles/${user.username}/`, method: "GET" })
+    if (isAuthenticated) {
+      apiRequest<any>({ url: `/profiles/me/`, method: "GET" })
         .then((data) => {
           setProfile({
             fullName: data.name || "",
@@ -101,14 +106,20 @@ export default function SettingsPage() {
             designation: data.role || "",
             bio: data.bio || "",
           });
+          setOriginalUsername(data.username || "");
           if (data.avatarUrl) {
             setAvatarPreview(data.avatarUrl);
           }
           if (data.locationDetails) {
             setAddressDetails((prev) => ({
               ...prev,
-              city: data.locationDetails.area || "Dhaka",
-              state: data.locationDetails.district || "",
+              city: data.locationDetails.area || data.locationDetails.city || "Dhaka",
+              state: data.locationDetails.state || data.locationDetails.district || "",
+              street: data.locationDetails.street || "",
+              zip: data.locationDetails.zip || "",
+              country: data.locationDetails.country || "Bangladesh",
+              lat: data.locationDetails.lat || "",
+              lng: data.locationDetails.lng || "",
             }));
           }
         })
@@ -135,19 +146,21 @@ export default function SettingsPage() {
     try {
       const formData = new FormData();
       formData.append("full_name", profile.fullName);
+      formData.append("username", profile.username);
       formData.append("bio", profile.bio);
       formData.append("designation", profile.designation);
       if (avatarFile) {
         formData.append("avatar", avatarFile);
       }
       
-      const locParts = [];
-      if (addressDetails.street) locParts.push(addressDetails.street);
-      if (addressDetails.city) locParts.push(addressDetails.city);
-      if (addressDetails.state) locParts.push(addressDetails.state);
-      if (addressDetails.country) locParts.push(addressDetails.country);
-      if (locParts.length > 0) {
-        formData.append("location", locParts.join(", "));
+      if (addressDetails.street) formData.append("location_street", addressDetails.street);
+      if (addressDetails.city) formData.append("location_city", addressDetails.city);
+      if (addressDetails.state) formData.append("location_state", addressDetails.state);
+      if (addressDetails.zip) formData.append("location_postal_code", addressDetails.zip);
+      if (addressDetails.country) formData.append("location_country", addressDetails.country);
+      if (addressDetails.lat && addressDetails.lng) {
+        formData.append("location_lat", parseFloat(addressDetails.lat).toFixed(6));
+        formData.append("location_lng", parseFloat(addressDetails.lng).toFixed(6));
       }
       
       await apiRequest({
@@ -158,6 +171,15 @@ export default function SettingsPage() {
           "Content-Type": "multipart/form-data"
         }
       });
+      
+      // Update the auth store with the new details
+      updateUser({
+        name: profile.fullName,
+        username: profile.username,
+        // Optional: update avatar URL if the backend returns it in the response, 
+        // but for now updating name and username is critical to prevent 404s.
+      });
+
       toast.success("Profile saved successfully!");
     } catch (err: any) {
       console.error("Failed to save profile", err);
@@ -227,6 +249,35 @@ export default function SettingsPage() {
     return () => clearTimeout(timer);
   }, [addressDetails.street, showStreetSuggestions]);
 
+  useEffect(() => {
+    if (profile.username === originalUsername || !profile.username) {
+      setUsernameStatus("idle");
+      setUsernameMessage("");
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setUsernameStatus("loading");
+      try {
+        const data = await apiRequest<{available: boolean, message: string}>({
+          url: `/profiles/check-username/?username=${encodeURIComponent(profile.username)}`,
+          method: "GET"
+        });
+        if (data.available) {
+          setUsernameStatus("available");
+        } else {
+          setUsernameStatus("taken");
+          setUsernameMessage(data.message || "Username is not available");
+        }
+      } catch (err: any) {
+        setUsernameStatus("invalid");
+        setUsernameMessage(err.message || "Invalid username");
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [profile.username, originalUsername]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
   };
@@ -292,24 +343,25 @@ export default function SettingsPage() {
         method: "GET",
       });
 
-      if (data) {
+      if (data && data.address) {
+        const address = data.address;
         setAddressDetails((prev) => ({
           ...prev,
           street:
-            data.road ||
-            data.suburb ||
-            data.neighbourhood ||
-            data.village ||
+            address.road ||
+            address.suburb ||
+            address.neighbourhood ||
+            address.village ||
             "",
           city:
-            data.city || data.town || data.county || "",
-          state: data.state || "",
-          zip: data.postcode
-            ? String(data.postcode)
-            : data.postal_code
-              ? String(data.postal_code)
+            address.city || address.town || address.county || "",
+          state: address.state || "",
+          zip: address.postcode
+            ? String(address.postcode)
+            : address.postal_code
+              ? String(address.postal_code)
               : "",
-          country: data.country || "",
+          country: address.country || "",
           lat: lat.toString(),
           lng: lng.toString(),
         }));
@@ -435,15 +487,43 @@ export default function SettingsPage() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="username" className="text-sm font-medium">
-                      Username
+                    <Label htmlFor="username" className="text-sm font-medium flex items-center justify-between">
+                      <span>Username</span>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard.writeText(profile.username);
+                          toast.success("Username copied to clipboard!");
+                        }}
+                        className="text-xs text-primary hover:underline flex items-center gap-1"
+                      >
+                        <Copy className="h-3 w-3" />
+                        Copy
+                      </button>
                     </Label>
-                    <Input
-                      id="username"
-                      value={profile.username}
-                      disabled
-                      className="bg-muted/20 cursor-not-allowed opacity-70"
-                    />
+                    <div className="relative">
+                      <Input
+                        id="username"
+                        value={profile.username}
+                        onChange={(e) => setProfile({...profile, username: e.target.value.toLowerCase()})}
+                        className={cn("bg-muted/20", usernameStatus === "taken" || usernameStatus === "invalid" ? "border-destructive focus-visible:ring-destructive" : "")}
+                      />
+                      {usernameStatus === "loading" && (
+                        <div className="absolute right-3 top-2.5">
+                          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                        </div>
+                      )}
+                      {usernameStatus === "available" && (
+                        <div className="absolute right-3 top-2.5">
+                          <CheckCircle2Icon className="h-4 w-4 text-success" />
+                        </div>
+                      )}
+                    </div>
+                    {usernameStatus === "taken" || usernameStatus === "invalid" ? (
+                      <p className="text-xs text-destructive">{usernameMessage}</p>
+                    ) : usernameStatus === "available" ? (
+                      <p className="text-xs text-success">Username is available</p>
+                    ) : null}
                   </div>
                   <div className="space-y-2 md:col-span-2">
                     <Label
@@ -680,7 +760,7 @@ export default function SettingsPage() {
               <p className="text-muted-foreground text-sm">
                 Don&apos;t forget to save your changes.
               </p>
-              <Button onClick={handleSaveProfile} disabled={isSaving} className="shadow-sm">
+              <Button onClick={handleSaveProfile} disabled={isSaving || usernameStatus === "taken" || usernameStatus === "invalid"} className="shadow-sm">
                 {isSaving ? "Saving..." : "Save Profile"}
               </Button>
             </CardFooter>

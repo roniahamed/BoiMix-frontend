@@ -18,6 +18,7 @@ type AuthState = {
   isAuthenticated: boolean;
   setSession: (user: AuthUser, accessToken?: string | null, refreshToken?: string | null) => void;
   updateTokens: (accessToken: string, refreshToken: string) => void;
+  updateUser: (userUpdates: Partial<AuthUser>) => void;
   clearSession: () => void;
 };
 
@@ -37,6 +38,10 @@ export const useAuthStore = create<AuthState>()(
         }),
       updateTokens: (accessToken, refreshToken) =>
         set({ accessToken, refreshToken }),
+      updateUser: (userUpdates) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...userUpdates } : null,
+        })),
       clearSession: () =>
         set({
           user: null,
