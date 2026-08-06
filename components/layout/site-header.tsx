@@ -34,6 +34,8 @@ import {
   MessageSquare,
   Library,
   User as UserIconOutline,
+  Repeat2,
+  Wallet,
 } from "lucide-react";
 
 function UserMenuButton() {
@@ -102,9 +104,21 @@ function UserMenuButton() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/dashboard/exchanges">
+            <Repeat2 className="mr-2 size-4" />
+            <span>Exchanges</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
           <Link href="/dashboard/messages">
             <MessageSquare className="mr-2 size-4" />
             <span>Messages</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/dashboard/wallet">
+            <Wallet className="mr-2 size-4" />
+            <span>Wallet</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
