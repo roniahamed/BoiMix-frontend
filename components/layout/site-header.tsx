@@ -39,6 +39,10 @@ import {
   Repeat2,
   Wallet,
   ChevronRight,
+  BookDown,
+  BookUp,
+  ShoppingCart,
+  Package,
 } from "lucide-react";
 
 function UserMenuButton() {
@@ -80,6 +84,12 @@ function UserMenuButton() {
             />
             <AvatarFallback>{user?.name?.charAt(0) || "U"}</AvatarFallback>
           </Avatar>
+          {(unreadMessages > 0 || pendingExchanges > 0) && (
+            <>
+              <span className="bg-destructive absolute top-0 right-0 h-3 w-3 animate-ping rounded-full opacity-75" />
+              <span className="bg-destructive border-background absolute top-0 right-0 h-3 w-3 rounded-full border-2" />
+            </>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>
@@ -122,6 +132,9 @@ function UserMenuButton() {
             <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-border/40 my-1" />
+
+        {/* Group 2: Library & Exchange */}
         <DropdownMenuItem
           asChild
           className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
@@ -133,6 +146,36 @@ function UserMenuButton() {
             <div className="flex items-center">
               <Library className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
               <span className="font-medium">My Books</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/borrowed"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <BookDown className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Borrowed Books</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/lent"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <BookUp className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Lent Books</span>
             </div>
             <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
           </Link>
@@ -158,6 +201,59 @@ function UserMenuButton() {
             )}
           </Link>
         </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="bg-border/40 my-1" />
+
+        {/* Group 3: Commerce */}
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/sales"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <ShoppingCart className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">My Sales</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/orders"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <Package className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">My Orders</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/wallet"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <Wallet className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Wallet</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuSeparator className="bg-border/40 my-1" />
+
+        {/* Group 4: Comm & Settings */}
         <DropdownMenuItem
           asChild
           className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
@@ -184,21 +280,6 @@ function UserMenuButton() {
           className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
         >
           <Link
-            href="/dashboard/wallet"
-            className="flex w-full items-center justify-between"
-          >
-            <div className="flex items-center">
-              <Wallet className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
-              <span className="font-medium">Wallet</span>
-            </div>
-            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          asChild
-          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
-        >
-          <Link
             href="/dashboard/settings"
             className="flex w-full items-center justify-between"
           >
@@ -209,6 +290,7 @@ function UserMenuButton() {
             <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
           </Link>
         </DropdownMenuItem>
+
         <DropdownMenuSeparator className="bg-border/40 my-1" />
         <DropdownMenuItem
           className="group cursor-pointer rounded-md text-red-600 focus:bg-red-50 focus:text-red-700 dark:text-red-400 dark:focus:bg-red-500/10 dark:focus:text-red-300"
