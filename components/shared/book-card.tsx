@@ -379,9 +379,9 @@ export function BookCard({
                       ? "Like New"
                       : book.condition}
                   </span>
-                  {!hidePrice && book.price !== undefined && (
+                  {!hidePrice && book.price != null && (
                     <div className="flex shrink-0 items-center gap-1.5">
-                      {book.originalPrice !== undefined &&
+                      {book.originalPrice != null &&
                         book.originalPrice > book.price && (
                           <span className="text-muted-foreground text-[13px] line-through md:text-[12px]">
                             ৳{book.originalPrice.toLocaleString("en-BD")}
