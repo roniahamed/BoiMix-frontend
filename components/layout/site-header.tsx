@@ -27,7 +27,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/auth-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { LogOut, LayoutDashboard } from "lucide-react";
+import {
+  LogOut,
+  LayoutDashboard,
+  Settings,
+  MessageSquare,
+  Library,
+  User as UserIconOutline,
+} from "lucide-react";
 
 function UserMenuButton() {
   const { isAuthenticated, user, clearSession } = useAuthStore();
@@ -80,6 +87,30 @@ function UserMenuButton() {
           <Link href="/dashboard/overview">
             <LayoutDashboard className="mr-2 size-4" />
             <span>Dashboard</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href={`/u/${user?.username}`}>
+            <UserIconOutline className="mr-2 size-4" />
+            <span>My Profile</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/dashboard/library">
+            <Library className="mr-2 size-4" />
+            <span>My Books</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/dashboard/messages">
+            <MessageSquare className="mr-2 size-4" />
+            <span>Messages</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/dashboard/settings">
+            <Settings className="mr-2 size-4" />
+            <span>Settings</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
