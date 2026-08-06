@@ -33,7 +33,7 @@ export function SidebarNavigation({
 }: SidebarNavigationProps) {
   const pathname = usePathname();
   const user = useAuthStore((state) => state.user);
-  
+
   const [openGroup, setOpenGroup] = useState<string | null>(() => {
     if (!groups) return null;
     const activeGroup = groups.find((g) =>
@@ -55,7 +55,7 @@ export function SidebarNavigation({
   const renderNavItem = (item: NavItem) => {
     const Icon = item.icon;
     const finalHref = item.href.replace("[username]", user?.username || "me");
-    
+
     const isActive =
       pathname === finalHref ||
       (finalHref !== "/dashboard/overview" &&
@@ -181,8 +181,8 @@ export function SidebarNavigation({
                       onClick={() => toggleGroup(group.title)}
                       className="hover:bg-muted/50 flex w-full items-center justify-between px-3 py-2.5 transition-colors"
                     >
-                      <div className="flex items-center gap-2">
-                        <span className="text-foreground text-xs font-bold tracking-wider uppercase">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <span className="text-foreground truncate text-xs font-bold tracking-wider uppercase">
                           {group.title}
                         </span>
                         {totalNotifications > 0 && (
@@ -237,7 +237,10 @@ export function SidebarNavigation({
               <div className="relative shrink-0">
                 <Avatar className="border-border h-9 w-9 border">
                   <AvatarImage
-                    src={user?.avatarUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=0D8ABC&color=fff`}
+                    src={
+                      user?.avatarUrl ||
+                      `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.name || "User")}&background=0D8ABC&color=fff`
+                    }
                     alt={user?.name || "User"}
                   />
                   <AvatarFallback className="text-xs font-bold">

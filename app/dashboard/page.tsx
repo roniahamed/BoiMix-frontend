@@ -24,10 +24,12 @@ import {
   AddBookButton,
   AddBookDialog,
 } from "@/components/shared/add-book-button";
+import { useAuthStore } from "@/stores/auth-store";
 
 export default function DashboardMenuPage() {
   const router = useRouter();
   const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const user = useAuthStore((state) => state.user);
 
   // On desktop (lg+), redirect to /dashboard/overview since sidebar handles navigation
   useEffect(() => {
@@ -190,10 +192,14 @@ export default function DashboardMenuPage() {
                   <div className="divide-border/40 divide-y">
                     {group.items.map((item) => {
                       const Icon = item.icon;
+                      const finalHref = item.href.replace(
+                        "[username]",
+                        user?.username || "me",
+                      );
                       const navLink = (
                         <Link
                           key={item.href}
-                          href={item.href}
+                          href={finalHref}
                           className="hover:bg-muted/50 active:bg-muted flex items-center justify-between px-4 py-3.5 transition-colors"
                         >
                           <div className="flex items-center gap-3">
