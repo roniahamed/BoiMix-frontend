@@ -26,6 +26,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/auth-store";
+import { useMessageStore } from "@/lib/store/use-message-store";
+import { useExchangeStore } from "@/lib/store/use-exchange-store";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   LogOut,
@@ -36,10 +38,15 @@ import {
   User as UserIconOutline,
   Repeat2,
   Wallet,
+  ChevronRight,
 } from "lucide-react";
 
 function UserMenuButton() {
   const { isAuthenticated, user, clearSession } = useAuthStore();
+  const unreadMessages = useMessageStore((s) => s.unreadCount);
+  const pendingExchanges = useExchangeStore(
+    (s) => s.exchanges.filter((e) => e.status === "pending_proposal").length,
+  );
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
@@ -84,59 +91,138 @@ function UserMenuButton() {
             </p>
           </div>
         </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard/overview">
-            <LayoutDashboard className="mr-2 size-4" />
-            <span>Dashboard</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href={`/u/${user?.username}`}>
-            <UserIconOutline className="mr-2 size-4" />
-            <span>My Profile</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard/library">
-            <Library className="mr-2 size-4" />
-            <span>My Books</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard/exchanges">
-            <Repeat2 className="mr-2 size-4" />
-            <span>Exchanges</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard/messages">
-            <MessageSquare className="mr-2 size-4" />
-            <span>Messages</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard/wallet">
-            <Wallet className="mr-2 size-4" />
-            <span>Wallet</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild className="cursor-pointer">
-          <Link href="/dashboard/settings">
-            <Settings className="mr-2 size-4" />
-            <span>Settings</span>
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
+        <DropdownMenuSeparator className="bg-border/40 my-1" />
         <DropdownMenuItem
-          className="text-destructive focus:text-destructive cursor-pointer"
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/overview"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <LayoutDashboard className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Dashboard</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href={`/u/${user?.username}`}
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <UserIconOutline className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">My Profile</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/library"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <Library className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">My Books</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/exchanges"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <Repeat2 className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Exchanges</span>
+            </div>
+            {pendingExchanges > 0 ? (
+              <span className="flex h-5 items-center justify-center rounded-full bg-orange-100 px-2 text-[10px] font-bold text-orange-600 dark:bg-orange-500/20 dark:text-orange-400">
+                {pendingExchanges} New
+              </span>
+            ) : (
+              <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+            )}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/messages"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <MessageSquare className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Messages</span>
+            </div>
+            {unreadMessages > 0 ? (
+              <span className="bg-primary text-primary-foreground flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold shadow-sm">
+                {unreadMessages}
+              </span>
+            ) : (
+              <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+            )}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/wallet"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <Wallet className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Wallet</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          asChild
+          className="group focus:bg-primary/5 focus:text-primary cursor-pointer rounded-md transition-colors"
+        >
+          <Link
+            href="/dashboard/settings"
+            className="flex w-full items-center justify-between"
+          >
+            <div className="flex items-center">
+              <Settings className="text-muted-foreground group-hover:text-primary mr-2.5 size-4 transition-colors" />
+              <span className="font-medium">Settings</span>
+            </div>
+            <ChevronRight className="text-muted-foreground/50 size-3.5 opacity-0 transition-all group-hover:-translate-x-1 group-hover:opacity-100" />
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator className="bg-border/40 my-1" />
+        <DropdownMenuItem
+          className="group cursor-pointer rounded-md text-red-600 focus:bg-red-50 focus:text-red-700 dark:text-red-400 dark:focus:bg-red-500/10 dark:focus:text-red-300"
           onClick={() => {
             clearSession();
             window.location.reload();
           }}
         >
-          <LogOut className="mr-2 size-4" />
-          <span>Log out</span>
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center">
+              <LogOut className="mr-2.5 size-4 opacity-70 group-hover:opacity-100" />
+              <span className="font-medium">Log out</span>
+            </div>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
