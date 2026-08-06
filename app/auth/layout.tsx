@@ -13,6 +13,7 @@ export default function AuthLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
+  const user = useAuthStore((state) => state.user);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -29,6 +30,11 @@ export default function AuthLayout({
         pathname === "/auth/register" ||
         pathname === "/auth/forgot-password")
     ) {
+      if (user && !user.isOnboarded) {
+        router.replace("/auth/complete-profile");
+        return;
+      }
+
       const searchParams = new URLSearchParams(window.location.search);
       const redirect = searchParams.get("redirect");
       if (redirect && redirect.startsWith("/")) {
@@ -37,7 +43,7 @@ export default function AuthLayout({
         router.replace("/dashboard/overview");
       }
     }
-  }, [isAuthenticated, pathname, router]);
+  }, [isAuthenticated, pathname, router, user]);
 
   if (!isMounted) return null;
 

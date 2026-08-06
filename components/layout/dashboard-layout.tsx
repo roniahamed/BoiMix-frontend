@@ -21,16 +21,22 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const router = useRouter();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [mounted, setMounted] = useState(false);
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
-    if (!isAuthenticated) {
+    useAuthStore.persist.onFinishHydration(() => setHasHydrated(true));
+    setHasHydrated(useAuthStore.persist.hasHydrated());
+  }, []);
+
+  useEffect(() => {
+    if (mounted && hasHydrated && !isAuthenticated) {
       router.push("/auth/login?redirect=" + encodeURIComponent(pathname));
     }
-  }, [isAuthenticated, router, pathname]);
+  }, [mounted, hasHydrated, isAuthenticated, router, pathname]);
 
-  if (!mounted || !isAuthenticated) {
+  if (!mounted || !hasHydrated || !isAuthenticated) {
     return null; // or a loading spinner
   }
 
