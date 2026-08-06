@@ -107,10 +107,10 @@ export default function CompleteProfilePage() {
       if (data.bio) formData.append("bio", data.bio);
       if (avatarFile) formData.append("avatar", avatarFile);
 
-      const res = await apiClient.patch("/profiles/me/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const res = await apiClient({
+        url: "/profiles/me/",
+        method: "PATCH",
+        data: formData,
       });
 
       // Update local state if needed (e.g. setting avatarUrl)

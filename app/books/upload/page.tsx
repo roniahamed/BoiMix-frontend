@@ -251,16 +251,21 @@ export default function BookUploadPage() {
   const handleIsbnAutoFill = async () => {
     const currentIsbn = getValues("isbn");
     if (!currentIsbn) return;
-    
+
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const match = await apiRequest<any>({ url: `/books/isbn/${currentIsbn}/`, method: "GET" });
+      const match = await apiRequest<any>({
+        url: `/books/isbn/${currentIsbn}/`,
+        method: "GET",
+      });
       if (match) {
         setValue("title", match.title || "", { shouldValidate: true });
         setValue("author", match.author || "", { shouldValidate: true });
         setValue("publisher", match.publisher || "", { shouldValidate: true });
         setValue("pageCount", match.pageCount || "", { shouldValidate: true });
-        setValue("description", match.description || "", { shouldValidate: true });
+        setValue("description", match.description || "", {
+          shouldValidate: true,
+        });
         if (match.genre) {
           setValue("genre", match.genre, { shouldValidate: true });
         }
@@ -270,7 +275,9 @@ export default function BookUploadPage() {
     } catch (err) {
       console.error("Failed to fetch ISBN data", err);
       // Fallback to quick fill for testing if API fails
-      const match = QUICK_FILL_BOOKS[currentIsbn as keyof typeof QUICK_FILL_BOOKS] || QUICK_FILL_BOOKS["atomic-habits"];
+      const match =
+        QUICK_FILL_BOOKS[currentIsbn as keyof typeof QUICK_FILL_BOOKS] ||
+        QUICK_FILL_BOOKS["atomic-habits"];
       setValue("title", match.title, { shouldValidate: true });
       setValue("author", match.author, { shouldValidate: true });
       setValue("publisher", match.publisher, { shouldValidate: true });
@@ -285,7 +292,9 @@ export default function BookUploadPage() {
         setValue("isbn", match.isbn, { shouldValidate: true });
       }
 
-      setAutofillMessage(`✨ Auto-filled book details for "${match.title}" (Mock)!`);
+      setAutofillMessage(
+        `✨ Auto-filled book details for "${match.title}" (Mock)!`,
+      );
       setTimeout(() => setAutofillMessage(null), 5000);
     }
   };
@@ -391,11 +400,8 @@ export default function BookUploadPage() {
         url: "/books/",
         method: "POST",
         data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        }
       });
-      
+
       router.push("/books");
     } catch (err) {
       console.error("Failed to upload book", err);
@@ -1062,7 +1068,11 @@ export default function BookUploadPage() {
                                               {sug.display_name.split(",")[0]}
                                             </div>
                                             <div className="text-muted-foreground text-xs">
-                                              {sug.display_name.split(",").slice(1).join(",").trim()}
+                                              {sug.display_name
+                                                .split(",")
+                                                .slice(1)
+                                                .join(",")
+                                                .trim()}
                                             </div>
                                           </div>
                                         ))

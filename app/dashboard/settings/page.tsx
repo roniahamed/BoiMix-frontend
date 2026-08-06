@@ -200,9 +200,6 @@ export default function SettingsPage() {
         url: "/profiles/me/",
         method: "PATCH",
         data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
       });
 
       // Update the auth store with the new details

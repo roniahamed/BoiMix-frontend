@@ -25,6 +25,8 @@ import * as z from "zod";
 import { apiRequest } from "@/lib/api/client";
 import { useAuthStore } from "@/stores/auth-store";
 import React from "react";
+import { useRouter } from "next/navigation";
+import { useOptimisticProfileStore } from "@/stores/optimistic-profile-store";
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters."),
@@ -62,6 +64,9 @@ export function EditProfileDialog({
   children,
 }: EditProfileDialogProps) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const { setOptimisticAvatar, setOptimisticCover } =
+    useOptimisticProfileStore();
   const [isSaving, setIsSaving] = useState(false);
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -141,13 +146,10 @@ export function EditProfileDialog({
         formData.append("reading_interests", JSON.stringify(readingInterests));
       }
 
-      await apiRequest<unknown>({
+      await apiRequest({
         url: "/profiles/me/",
         method: "PATCH",
         data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
       });
 
       // Update local auth store so UI reacts
@@ -155,11 +157,14 @@ export function EditProfileDialog({
         name: data.name,
       });
 
+      if (avatarPreview) setOptimisticAvatar(avatarPreview);
+      if (coverPreview) setOptimisticCover(coverPreview);
+
       toast.success("Profile updated successfully!");
       setOpen(false);
 
-      // Optionally refresh the page to get all new details
-      window.location.reload();
+      // Refresh the router to re-fetch the server components with fresh data
+      router.refresh();
     } catch (error) {
       console.error("Failed to update profile", error);
       toast.error("Failed to update profile. Please try again.");

@@ -7,9 +7,6 @@ let accessToken: string | null = null;
 
 export const apiClient = axios.create({
   baseURL: env.apiBaseUrl,
-  headers: {
-    "Content-Type": "application/json",
-  },
   timeout: 15_000,
 });
 
@@ -20,6 +17,7 @@ apiClient.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });
 

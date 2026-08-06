@@ -23,6 +23,7 @@ import { PencilIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 import { apiRequest } from "@/lib/api/client";
 import { useAuthStore } from "@/stores";
+import { useOptimisticProfileStore } from "@/stores/optimistic-profile-store";
 
 const CustomShareArrow = ({ className }: { className?: string }) => (
   <svg
@@ -51,6 +52,13 @@ export function ProfileHeader({
   );
   const [isUpdating, setIsUpdating] = useState(false);
   const { isAuthenticated } = useAuthStore();
+  const { avatarUrl: optimisticAvatar, coverUrl: optimisticCover } =
+    useOptimisticProfileStore();
+
+  const displayAvatar =
+    isOwnProfile && optimisticAvatar ? optimisticAvatar : profile.avatarUrl;
+  const displayCover =
+    isOwnProfile && optimisticCover ? optimisticCover : profile.coverUrl;
 
   useEffect(() => {
     if (isAuthenticated && !isOwnProfile) {
@@ -109,9 +117,9 @@ export function ProfileHeader({
     <section>
       {/* Cover Image */}
       <div className="bg-muted relative h-36 md:h-48 lg:h-56">
-        {profile.coverUrl ? (
+        {displayCover ? (
           <Image
-            src={profile.coverUrl}
+            src={displayCover}
             alt={`${profile.name} profile cover`}
             fill
             priority
@@ -147,7 +155,7 @@ export function ProfileHeader({
             <div className="relative -mt-8 shrink-0">
               <UserAvatar
                 name={profile.name}
-                src={profile.avatarUrl}
+                src={displayAvatar}
                 className="bg-background border-background text-foreground relative z-10 size-[76px] !rounded-full border-[3px] text-2xl shadow-sm dark:border-zinc-900"
               />
             </div>
@@ -299,7 +307,7 @@ export function ProfileHeader({
             <div className="relative -mt-12 shrink-0 md:-mt-16">
               <UserAvatar
                 name={profile.name}
-                src={profile.avatarUrl}
+                src={displayAvatar}
                 className="bg-background relative z-10 size-24 overflow-hidden !rounded-full border-4 border-white text-2xl text-white shadow-sm md:size-32 md:text-3xl dark:border-zinc-900"
               />
             </div>

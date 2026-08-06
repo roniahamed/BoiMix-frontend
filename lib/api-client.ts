@@ -1,4 +1,5 @@
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
 
 function getAuthHeaders(): HeadersInit {
   if (typeof window === "undefined") return {};
@@ -9,7 +10,11 @@ function getAuthHeaders(): HeadersInit {
 async function apiFetch(path: string, options?: RequestInit) {
   return fetch(`${BASE_URL}${path}`, {
     ...options,
-    headers: { "Content-Type": "application/json", ...getAuthHeaders(), ...options?.headers },
+    headers: {
+      "Content-Type": "application/json",
+      ...getAuthHeaders(),
+      ...options?.headers,
+    },
   });
 }
 
@@ -26,7 +31,10 @@ export async function fetchBookDetails(slug: string) {
   return res.json();
 }
 
-export async function fetchSearchBooks(query: string = "", filters?: Record<string, string | number>) {
+export async function fetchSearchBooks(
+  query: string = "",
+  filters?: Record<string, string | number>,
+) {
   const queryParams = new URLSearchParams();
   if (query) queryParams.append("q", query);
   if (filters) {
@@ -38,26 +46,32 @@ export async function fetchSearchBooks(query: string = "", filters?: Record<stri
   }
   const queryString = queryParams.toString();
   const url = queryString ? `/search/books/?${queryString}` : `/search/books/`;
-  
+
   const res = await apiFetch(url);
   const data = await res.json();
   return data.results || data;
 }
 
 export async function fetchSearchSuggestions(query: string) {
-  const res = await apiFetch(`/search/suggestions/?q=${encodeURIComponent(query)}`);
+  const res = await apiFetch(
+    `/search/suggestions/?q=${encodeURIComponent(query)}`,
+  );
   const data = await res.json();
   return data.suggestions || [];
 }
 
 export async function fetchNearbyBooks(lat: number, lng: number, radius = 5.0) {
-  const res = await apiFetch(`/locations/nearby/?lat=${lat}&lng=${lng}&radius_km=${radius}`);
+  const res = await apiFetch(
+    `/locations/nearby/?lat=${lat}&lng=${lng}&radius_km=${radius}`,
+  );
   const data = await res.json();
   return data.results || data;
 }
 
 export async function searchLocation(query: string) {
-  const res = await apiFetch(`/locations/search/?q=${encodeURIComponent(query)}`);
+  const res = await apiFetch(
+    `/locations/search/?q=${encodeURIComponent(query)}`,
+  );
   if (!res.ok) return [];
   const data = await res.json();
   return data.results || data;
@@ -70,7 +84,7 @@ export async function reverseGeocode(lat: number, lng: number) {
 }
 
 export async function fetchPublicProfile(username: string) {
-  const res = await apiFetch(`/profiles/${username}/`);
+  const res = await apiFetch(`/profiles/${username}/`, { cache: "no-store" });
   if (!res.ok) throw new Error(`Profile not found: ${res.statusText}`);
   return res.json();
 }
