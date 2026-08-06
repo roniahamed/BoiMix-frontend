@@ -10,6 +10,7 @@ type ScrollContainerProps = {
   className?: string;
   autoScroll?: boolean;
   arrowClassName?: string;
+  snapMode?: "always" | "normal";
 };
 
 export function ScrollContainer({
@@ -17,6 +18,7 @@ export function ScrollContainer({
   className,
   autoScroll = false,
   arrowClassName,
+  snapMode = "always",
 }: ScrollContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [showLeft, setShowLeft] = useState(false);
@@ -117,7 +119,8 @@ export function ScrollContainer({
         ref={containerRef}
         className={cn(
           "-mx-4 flex scrollbar-none gap-4 overflow-x-auto scroll-smooth px-4 py-1 pb-3 md:gap-6",
-          "snap-x snap-mandatory [&>*]:snap-start [&>*]:snap-always",
+          "snap-x snap-mandatory [&>*]:snap-start",
+          snapMode === "always" ? "[&>*]:snap-always" : "",
           className,
         )}
         style={{

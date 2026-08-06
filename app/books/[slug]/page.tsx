@@ -44,11 +44,11 @@ export default async function BookDetailsPage({
   const slug = resolvedParams.slug;
 
   const bookDetailsData = await fetchBookDetails(slug).catch(() => null);
-  
+
   if (!bookDetailsData) {
     return <div className="p-8 text-center">Book not found.</div>;
   }
-  
+
   const {
     book: API_BOOK,
     owner: API_OWNER,
@@ -61,22 +61,31 @@ export default async function BookDetailsPage({
     { src: "/placeholder-book.png", alt: "Inside page" },
     { src: "/placeholder-book.png", alt: "Back cover" },
   ];
-  
+
   // Build gallery images: prefer API images, then cover URL from book listing, else fallbacks
-  const apiImages = API_BOOK.images && API_BOOK.images.length > 0 ? API_BOOK.images : null;
+  const apiImages =
+    API_BOOK.images && API_BOOK.images.length > 0 ? API_BOOK.images : null;
   const coverUrl = API_BOOK.coverUrl || null;
-  
-  const galleryImages = apiImages
-    ?? (coverUrl ? [
-        { src: coverUrl.replace("w=400", "w=800"), alt: `${API_BOOK.title} — Cover` },
-        ...fallbackImages.slice(1),
-      ] : fallbackImages);
+
+  const galleryImages =
+    apiImages ??
+    (coverUrl
+      ? [
+          {
+            src: coverUrl.replace("w=400", "w=800"),
+            alt: `${API_BOOK.title} — Cover`,
+          },
+          ...fallbackImages.slice(1),
+        ]
+      : fallbackImages);
 
   const currentBook = {
     ...API_BOOK,
     // Normalize price fields
     price: parseFloat(API_BOOK.price) || 0,
-    originalPrice: API_BOOK.original_price ? parseFloat(API_BOOK.original_price) : null,
+    originalPrice: API_BOOK.original_price
+      ? parseFloat(API_BOOK.original_price)
+      : null,
     images: galleryImages,
     // Availability comes directly from API
     availability: API_BOOK.availability,
@@ -85,7 +94,9 @@ export default async function BookDetailsPage({
     reviewCount: API_BOOK.reviewCount ?? 0,
     location: API_BOOK.locationAddress || "Dhaka",
     distance: API_BOOK.distance ?? null,
-    exchangePrice: API_BOOK.exchange_price ? parseFloat(API_BOOK.exchange_price) : (API_BOOK.estimatedExchangeValue ?? null),
+    exchangePrice: API_BOOK.exchange_price
+      ? parseFloat(API_BOOK.exchange_price)
+      : (API_BOOK.estimatedExchangeValue ?? null),
     exchangePreferences: API_BOOK.exchangePreferences ?? [],
     borrowFee: API_BOOK.borrow_fee ? parseFloat(API_BOOK.borrow_fee) : null,
     deposit: API_BOOK.deposit ? parseFloat(API_BOOK.deposit) : null,
@@ -431,7 +442,10 @@ export default async function BookDetailsPage({
               <div className="flex items-start gap-4">
                 <div className="relative size-12 shrink-0 overflow-hidden rounded-full border bg-white">
                   <Image
-                    src={API_OWNER.avatarUrl || `https://ui-avatars.com/api/?name=${API_OWNER.name}`}
+                    src={
+                      API_OWNER.avatarUrl ||
+                      `https://ui-avatars.com/api/?name=${API_OWNER.name}`
+                    }
                     alt={API_OWNER.name}
                     fill
                     className="object-cover"
@@ -542,7 +556,9 @@ export default async function BookDetailsPage({
             </div>
             <div className="grid grid-cols-3">
               <div className="text-muted-foreground p-3 font-medium">ISBN</div>
-              <div className="col-span-2 p-3 font-medium">{API_BOOK.isbn || "-"}</div>
+              <div className="col-span-2 p-3 font-medium">
+                {API_BOOK.isbn || "-"}
+              </div>
             </div>
           </div>
         </div>
@@ -553,36 +569,15 @@ export default async function BookDetailsPage({
       </div>
 
       {/* Similar Books Section */}
-      {bookDetailsData.recommended && bookDetailsData.recommended.length > 0 && (
-        <div className="mt-16">
-          <h2 className="type-heading mb-6 text-2xl">
-            একই ধরনের আরও বই (Similar Books)
-          </h2>
-          <ScrollContainer>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {bookDetailsData.recommended.map((book: any) => (
-              <div
-                key={book.id}
-                className="w-[140px] shrink-0 snap-start sm:w-[160px]"
-              >
-                <BookCard book={book} />
-              </div>
-            ))}
-          </ScrollContainer>
-        </div>
-      )}
-
-      {/* Recently Viewed Books Section */}
-      {bookDetailsData.recommended && bookDetailsData.recommended.length > 0 && (
-        <div className="mt-12">
-          <h2 className="type-heading mb-6 text-2xl">
-            সম্প্রতি দেখা বই (Recently Viewed)
-          </h2>
-          <ScrollContainer>
-            {bookDetailsData.recommended
-              .slice()
-              .reverse()
-              .map((book: BookCardBook) => (
+      {bookDetailsData.recommended &&
+        bookDetailsData.recommended.length > 0 && (
+          <div className="mt-16">
+            <h2 className="type-heading mb-6 text-2xl">
+              একই ধরনের আরও বই (Similar Books)
+            </h2>
+            <ScrollContainer snapMode="normal">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {bookDetailsData.recommended.map((book: any) => (
                 <div
                   key={book.id}
                   className="w-[140px] shrink-0 snap-start sm:w-[160px]"
@@ -590,9 +585,32 @@ export default async function BookDetailsPage({
                   <BookCard book={book} />
                 </div>
               ))}
-          </ScrollContainer>
-        </div>
-      )}
+            </ScrollContainer>
+          </div>
+        )}
+
+      {/* Recently Viewed Books Section */}
+      {bookDetailsData.recommended &&
+        bookDetailsData.recommended.length > 0 && (
+          <div className="mt-12">
+            <h2 className="type-heading mb-6 text-2xl">
+              সম্প্রতি দেখা বই (Recently Viewed)
+            </h2>
+            <ScrollContainer snapMode="normal">
+              {bookDetailsData.recommended
+                .slice()
+                .reverse()
+                .map((book: BookCardBook) => (
+                  <div
+                    key={book.id}
+                    className="w-[140px] shrink-0 snap-start sm:w-[160px]"
+                  >
+                    <BookCard book={book} />
+                  </div>
+                ))}
+            </ScrollContainer>
+          </div>
+        )}
 
       <BookDetailsMobileActions
         book={{

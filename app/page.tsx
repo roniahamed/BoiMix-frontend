@@ -20,7 +20,11 @@ import { ScrollContainer } from "@/components/shared/scroll-container";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type { BookCardBook } from "@/types/book";
-import { fetchBooks, fetchSearchBooks, fetchCategories } from "@/lib/api-client";
+import {
+  fetchBooks,
+  fetchSearchBooks,
+  fetchCategories,
+} from "@/lib/api-client";
 
 interface CategoryItem {
   href: string;
@@ -150,7 +154,7 @@ function BookSection({
           ))}
         </div>
         <div className="hidden md:mt-4 md:block">
-          <ScrollContainer>
+          <ScrollContainer snapMode="normal">
             {books.map((book) => (
               <BookCard
                 key={`desktop-${title}-${book.id}`}
@@ -166,7 +170,9 @@ function BookSection({
 }
 
 async function CentralLibrarySection() {
-  const books: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "borrow" }) || []).slice(0, 12);
+  const books: BookCardBook[] = (
+    (await fetchSearchBooks("", { availability_mode: "borrow" })) || []
+  ).slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
@@ -192,7 +198,9 @@ async function CentralLibrarySection() {
 }
 
 async function MarketplaceSection() {
-  const books: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "sell" }) || []).slice(0, 12);
+  const books: BookCardBook[] = (
+    (await fetchSearchBooks("", { availability_mode: "sell" })) || []
+  ).slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
@@ -218,7 +226,9 @@ async function MarketplaceSection() {
 }
 
 async function ExchangeBooksSection() {
-  const books: BookCardBook[] = (await fetchSearchBooks("", { availability_mode: "exchange" }) || []).slice(0, 12);
+  const books: BookCardBook[] = (
+    (await fetchSearchBooks("", { availability_mode: "exchange" })) || []
+  ).slice(0, 12);
 
   return (
     <section className="py-2 md:py-3">
@@ -262,7 +272,7 @@ function HorizontalBookRow({
         ))}
       </div>
       <div className="hidden md:mt-4 md:block">
-        <ScrollContainer>
+        <ScrollContainer snapMode="normal">
           {books.map((book) => (
             <BookCard
               key={`desktop-${rowKey}-${book.id}`}
@@ -584,7 +594,11 @@ async function PersonalizationSection() {
                     >
                       <div className="bg-muted relative mx-auto aspect-[3/4] w-10 overflow-hidden rounded-xs shadow-xs transition-transform group-hover:scale-105">
                         <Image
-                          src={book.coverUrl?.trim() ? book.coverUrl : "/placeholder-book.png"}
+                          src={
+                            book.coverUrl?.trim()
+                              ? book.coverUrl
+                              : "/placeholder-book.png"
+                          }
                           alt={book.title}
                           fill
                           sizes="40px"
@@ -715,7 +729,7 @@ async function AuthorSpotlightSection() {
                 ))}
               </div>
               <div className="hidden md:mt-4 md:block">
-                <ScrollContainer>
+                <ScrollContainer snapMode="normal">
                   {humayunBooks.map((book) => (
                     <BookCard
                       key={`desktop-spotlight-${book.id}`}
