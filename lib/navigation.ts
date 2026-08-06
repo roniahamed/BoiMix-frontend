@@ -212,11 +212,6 @@ export const dashboardNavGroups: NavGroup[] = [
       },
 
       {
-        title: "Profile",
-        href: "/u/[username]",
-        icon: UserIcon,
-      },
-      {
         title: "Settings",
         href: "/dashboard/settings",
         icon: SettingsIcon,
