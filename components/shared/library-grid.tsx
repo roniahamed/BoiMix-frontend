@@ -12,6 +12,9 @@ import {
   CheckSquare,
   Square,
 } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/api/client";
+import { toast } from "sonner";
 
 export type Book = {
   id: string;
@@ -55,8 +58,10 @@ export function LibraryGrid({ books }: { books: Book[] }) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isBulkActionLoading, setIsBulkActionLoading] = useState(false);
   const [selectedBooks, setSelectedBooks] = useState<Set<string>>(new Set());
 
+  const queryClient = useQueryClient();
   const loaderRef = useRef<HTMLDivElement>(null);
 
   // We do NOT use useEffect to reset page to avoid cascading renders.
@@ -86,6 +91,49 @@ export function LibraryGrid({ books }: { books: Book[] }) {
       setSelectedBooks(new Set());
     } else {
       setSelectedBooks(new Set(visible.map((b) => b.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (!selectedBooks.size) return;
+    if (!confirm("Are you sure you want to delete the selected books?")) return;
+    setIsBulkActionLoading(true);
+    try {
+      await Promise.all(
+        Array.from(selectedBooks).map((id) =>
+          apiRequest({ url: `/books/${id}/`, method: "DELETE" }),
+        ),
+      );
+      toast.success("Books deleted successfully");
+      setSelectedBooks(new Set());
+      queryClient.invalidateQueries({ queryKey: ["userLibrary"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete books");
+    } finally {
+      setIsBulkActionLoading(false);
+    }
+  };
+
+  const handleBulkArchive = async () => {
+    if (!selectedBooks.size) return;
+    setIsBulkActionLoading(true);
+    try {
+      await Promise.all(
+        Array.from(selectedBooks).map((id) =>
+          apiRequest({
+            url: `/books/${id}/`,
+            method: "PATCH",
+            data: { quantity: 0 },
+          }),
+        ),
+      );
+      toast.success("Books archived successfully");
+      setSelectedBooks(new Set());
+      queryClient.invalidateQueries({ queryKey: ["userLibrary"] });
+    } catch (err: any) {
+      toast.error(err.message || "Failed to archive books");
+    } finally {
+      setIsBulkActionLoading(false);
     }
   };
 
@@ -202,7 +250,11 @@ export function LibraryGrid({ books }: { books: Book[] }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <button className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200">
+            <button
+              onClick={handleBulkArchive}
+              disabled={isBulkActionLoading}
+              className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 disabled:opacity-50 dark:bg-slate-800 dark:text-slate-200"
+            >
               <Archive className="h-3.5 w-3.5" /> Archive
             </button>
             <button className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200">
@@ -211,7 +263,11 @@ export function LibraryGrid({ books }: { books: Book[] }) {
             <button className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:text-slate-200">
               Enable Exchange
             </button>
-            <button className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 shadow-sm transition-colors hover:bg-red-100 dark:bg-red-500/20 dark:text-red-400">
+            <button
+              onClick={handleBulkDelete}
+              disabled={isBulkActionLoading}
+              className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 shadow-sm transition-colors hover:bg-red-100 disabled:opacity-50 dark:bg-red-500/20 dark:text-red-400"
+            >
               <Trash2 className="h-3.5 w-3.5" /> Delete
             </button>
           </div>

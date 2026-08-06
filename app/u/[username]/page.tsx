@@ -4,7 +4,7 @@ import { ProfileShell } from "@/components/profile/profile-shell";
 import Image from "next/image";
 import Link from "next/link";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
-import { fetchPublicProfile } from "@/lib/api-client";
+import { fetchPublicProfile, fetchPublicUserLibrary } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Reader Profile - BoiMix",
@@ -26,7 +26,12 @@ export default async function UserProfilePage({
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const profileLibraryBooks: any[] = []; // Phase 13 will add /api/users/{username}/library
+  let profileLibraryBooks: any[] = [];
+  try {
+    profileLibraryBooks = await fetchPublicUserLibrary(username);
+  } catch (error) {
+    console.error("Failed to fetch user library:", error);
+  }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileReviews: any[] = []; // Phase 13 will add /api/users/{username}/reviews
 

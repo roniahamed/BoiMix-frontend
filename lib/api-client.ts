@@ -1,34 +1,63 @@
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8080/api/v1";
+import { apiRequest } from "@/lib/api/client";
 
-function getAuthHeaders(): HeadersInit {
-  if (typeof window === "undefined") return {};
-  const token = localStorage.getItem("access_token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
+export async function fetchBooks(
+  type?: string, 
+  filters?: Record<string, string | number | string[]>, 
+  page: number = 1,
+  searchQuery: string = "",
+  pageSize: number = 20
+) {
+  const queryParams = new URLSearchParams();
+  if (type) queryParams.append("type", type);
+  
+  if (page > 1) queryParams.append("page", String(page));
+  if (pageSize) queryParams.append("page_size", String(pageSize));
+  if (searchQuery) queryParams.append("search", searchQuery);
+  
+  if (filters) {
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== undefined && value !== null && value !== "") {
+        if (Array.isArray(value)) {
+          queryParams.append(key, value.join(","));
+        } else {
+          queryParams.append(key, String(value));
+        }
+      }
+    });
+  }
+  
+  const queryString = queryParams.toString();
+  const url = queryString ? `/books/?${queryString}` : `/books/`;
+  
+  try {
+    const data = await apiRequest<any>({ url, method: "GET" });
+    return data; // Return full paginated response {count, next, previous, results}
+  } catch (err) {
+    return { count: 0, results: [] };
+  }
 }
 
-async function apiFetch(path: string, options?: RequestInit) {
-  return fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...getAuthHeaders(),
-      ...options?.headers,
-    },
-  });
+export async function fetchBookFilters() {
+  try {
+    const data = await apiRequest<any>({ url: `/books/filters/`, method: "GET" });
+    return data;
+  } catch (err) {
+    return null;
+  }
 }
 
-export async function fetchBooks(type?: string) {
-  const url = type ? `/books/?type=${type}` : `/books/`;
-  const res = await apiFetch(url);
-  const data = await res.json();
-  return data.results || data;
+export async function fetchBookStatistics() {
+  try {
+    const data = await apiRequest<any>({ url: `/books/statistics/`, method: "GET" });
+    return data;
+  } catch (err) {
+    return null;
+  }
 }
 
 export async function fetchBookDetails(slug: string) {
-  const res = await apiFetch(`/books/${slug}/`);
-  if (!res.ok) throw new Error(`Failed to fetch book: ${res.statusText}`);
-  return res.json();
+  const data = await apiRequest<any>({ url: `/books/${slug}/`, method: "GET" });
+  return data;
 }
 
 export async function fetchSearchBooks(
@@ -47,81 +76,123 @@ export async function fetchSearchBooks(
   const queryString = queryParams.toString();
   const url = queryString ? `/search/books/?${queryString}` : `/search/books/`;
 
-  const res = await apiFetch(url);
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({ url, method: "GET" });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function fetchSearchSuggestions(query: string) {
-  const res = await apiFetch(
-    `/search/suggestions/?q=${encodeURIComponent(query)}`,
-  );
-  const data = await res.json();
-  return data.suggestions || [];
+  try {
+    const data = await apiRequest<any>({
+      url: `/search/suggestions/?q=${encodeURIComponent(query)}`,
+      method: "GET",
+    });
+    return data.suggestions || [];
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function fetchNearbyBooks(lat: number, lng: number, radius = 5.0) {
-  const res = await apiFetch(
-    `/locations/nearby/?lat=${lat}&lng=${lng}&radius_km=${radius}`,
-  );
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({
+      url: `/locations/nearby/?lat=${lat}&lng=${lng}&radius_km=${radius}`,
+      method: "GET",
+    });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function searchLocation(query: string) {
-  const res = await apiFetch(
-    `/locations/search/?q=${encodeURIComponent(query)}`,
-  );
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({
+      url: `/locations/search/?q=${encodeURIComponent(query)}`,
+      method: "GET",
+    });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function reverseGeocode(lat: number, lng: number) {
-  const res = await apiFetch(`/locations/reverse/?lat=${lat}&lng=${lng}`);
-  if (!res.ok) return null;
-  return res.json();
+  try {
+    const data = await apiRequest<any>({
+      url: `/locations/reverse/?lat=${lat}&lng=${lng}`,
+      method: "GET",
+    });
+    return data;
+  } catch (err) {
+    return null;
+  }
 }
 
 export async function fetchPublicProfile(username: string) {
-  const res = await apiFetch(`/profiles/${username}/`, { cache: "no-store" });
-  if (!res.ok) throw new Error(`Profile not found: ${res.statusText}`);
-  return res.json();
+  const data = await apiRequest<any>({ url: `/profiles/${username}/`, method: "GET" });
+  return data;
 }
 
 export async function fetchUserLibrary() {
-  const res = await apiFetch("/books/me/library/");
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({ url: "/books/me/library/", method: "GET" });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function fetchPublicUserLibrary(username: string) {
+  try {
+    const data = await apiRequest<any>({ url: `/books/?owner=${username}`, method: "GET" });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function fetchFollowers() {
-  const res = await apiFetch("/profiles/me/followers/");
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({ url: "/profiles/me/followers/", method: "GET" });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function fetchFollowing() {
-  const res = await apiFetch("/profiles/me/following/");
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({ url: "/profiles/me/following/", method: "GET" });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function fetchTransactions() {
-  const res = await apiFetch("/wallets/transactions/");
-  const data = await res.json();
-  return data.results || data;
+  try {
+    const data = await apiRequest<any>({ url: "/wallets/transactions/", method: "GET" });
+    return data.results || data;
+  } catch (err) {
+    return [];
+  }
 }
 
 export async function fetchCategories() {
-  const res = await apiFetch("/books/categories/");
-  if (!res.ok) return [];
-  const data = await res.json();
-  const items = data.results || data;
-  return items.map((c: { slug: string; name: string }) => ({
-    href: `/books/category/${c.slug}`,
-    title: c.name,
-    image: `/categories/${c.slug}.png`,
-    icon: "BookOpenIcon",
-  }));
+  try {
+    const data = await apiRequest<any>({ url: "/books/categories/", method: "GET" });
+    const items = data.results || data;
+    return items.map((c: { slug: string; name: string }) => ({
+      href: `/books/category/${c.slug}`,
+      title: c.name,
+      image: `/categories/${c.slug}.png`,
+      icon: "BookOpenIcon",
+    }));
+  } catch (err) {
+    return [];
+  }
 }

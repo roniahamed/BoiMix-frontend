@@ -138,7 +138,8 @@ const EVENT_TYPE_LABEL: Record<string, string> = {
 };
 
 export default async function ExploreFestivalPage() {
-  const allBooks: BookCardBook[] = await fetchBooks();
+  const response = await fetchBooks();
+  const allBooks: BookCardBook[] = response?.results || response || [];
 
   const festivalBooks = allBooks.slice(0, 12);
   const featuredBooks = festivalBooks.slice(0, 6);

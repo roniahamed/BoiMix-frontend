@@ -57,7 +57,8 @@ interface TestimonialItem {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const featuredBooks: BookCardBook[] = await fetchBooks();
+  const response = await fetchBooks();
+  const featuredBooks: BookCardBook[] = response?.results || response || [];
   const newBooks: BookCardBook[] = [...featuredBooks].reverse();
   const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
   const forYouBooks: BookCardBook[] = [...featuredBooks].slice(5, 17);
@@ -556,7 +557,8 @@ function SectionHeader({ title, href }: { title: string; href: string }) {
 }
 
 async function PersonalizationSection() {
-  const featuredBooks: BookCardBook[] = await fetchBooks();
+  const response = await fetchBooks();
+  const featuredBooks: BookCardBook[] = response?.results || response || [];
   const recentlyViewed = featuredBooks.slice(0, 3);
   return (
     <section className="py-2 md:py-3">
@@ -643,7 +645,8 @@ async function PersonalizationSection() {
 }
 
 async function AuthorSpotlightSection() {
-  const humayunBooks: BookCardBook[] = await fetchBooks();
+  const response = await fetchBooks();
+  const humayunBooks: BookCardBook[] = response?.results || response || [];
 
   return (
     <section className="py-2 md:py-3">

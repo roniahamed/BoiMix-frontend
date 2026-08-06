@@ -45,7 +45,8 @@ export default function ExchangeOfferPage({
   useEffect(() => {
     async function loadBook() {
       try {
-        const books = await fetchBooks();
+        const response = await fetchBooks();
+        const books = response?.results || response || [];
         const found =
           books.find((b: BookCardBook) => b.id === bookId) || books[0];
         setRequestedBook(found);

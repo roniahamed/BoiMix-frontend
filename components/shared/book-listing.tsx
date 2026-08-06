@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBooks, fetchNearbyBooks } from "@/lib/api-client";
+import { fetchBooks, fetchNearbyBooks, fetchBookFilters, fetchBookStatistics, fetchSearchSuggestions } from "@/lib/api-client";
 import {
   SlidersHorizontal,
   Search,
@@ -84,133 +84,91 @@ export function BookListing({
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [sortBy, setSortBy] = useState(initialSortBy);
 
-  const { data: baseBooks = [], isLoading } = useQuery({
-    queryKey: ["books", sortBy === "distance" ? "nearby" : "all", userLocation],
+  const { data: filtersData } = useQuery({
+    queryKey: ["book-filters"],
+    queryFn: fetchBookFilters,
+  });
+
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>(initialFilters);
+  const [priceRange, setPriceRange] = useState<{ min: string; max: string; } | null>(null);
+  const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 20;
+
+  const { data: statsData } = useQuery({
+    queryKey: ["book-statistics"],
+    queryFn: fetchBookStatistics,
+  });
+
+  const { data: suggestionsData = [] } = useQuery({
+    queryKey: ["search-suggestions", searchQuery],
+    queryFn: () => fetchSearchSuggestions(searchQuery),
+    enabled: searchQuery.trim().length > 1,
+  });
+
+  const { data: booksResponse, isLoading } = useQuery({
+    queryKey: ["books", sortBy === "distance" ? "nearby" : "all", userLocation, selectedFilters, currentPage, searchQuery],
     queryFn: () => {
       if (sortBy === "distance" && userLocation) {
-        return fetchNearbyBooks(userLocation.lat, userLocation.lng);
+        return fetchNearbyBooks(userLocation.lat, userLocation.lng).then(res => ({ results: res, count: res.length }));
       }
-      return fetchBooks();
+      return fetchBooks(undefined, selectedFilters, currentPage, searchQuery, itemsPerPage);
     },
   });
 
-  const MOCK_BOOKS = useMemo(() => {
-    return baseBooks.map((b: BookCardBook, i: number) => ({
-      ...b,
-      category: ["Fiction", "Academic", "Business", "Literature", "History"][
-        i % 5
-      ],
-      publisher: ["Prothoma", "Batighor", "Oitijjho", "Adarsha", "Anyaprokash"][
-        i % 5
-      ],
-      language: ["Bengali", "English"][i % 2],
-      location:
-        b.location ||
-        ["Dhanmondi", "Banani", "Mirpur", "Uttara", "Gulshan", "Chittagong"][
-          i % 6
-        ],
-    })) as ExtendedBook[];
-  }, [baseBooks]);
+  const baseBooks = booksResponse?.results || [];
+  const totalBooksCount = booksResponse?.count || 0;
 
   const FILTER_GROUPS = useMemo(() => {
-    const uniqueAuthors = Array.from(
-      new Set(MOCK_BOOKS.map((b) => b.author)),
-    ).sort();
-    const uniquePublishers = Array.from(
-      new Set(MOCK_BOOKS.map((b) => b.publisher)),
-    ).sort();
-    const uniqueCategories = Array.from(
-      new Set(MOCK_BOOKS.map((b) => b.category)),
-    ).sort();
-    const uniqueLanguages = Array.from(
-      new Set(MOCK_BOOKS.map((b) => b.language)),
-    ).sort();
-
+    if (!filtersData) return [];
+    
     return [
       {
         id: "availability",
         type: "checkbox" as const,
         title: "Book Type",
-        options: [
-          { label: "For Sale", value: "sell" },
-          { label: "For Borrow", value: "borrow" },
-          { label: "For Exchange", value: "exchange" },
-        ],
+        options: filtersData.availability || [],
       },
       {
         id: "category",
         type: "checkbox" as const,
         title: "Category",
-        options: uniqueCategories.map((c) => ({
-          label: c,
-          value: c.toLowerCase(),
-        })),
+        options: filtersData.categories || [],
       },
       {
         id: "location",
         type: "checkbox" as const,
         title: "Location / Area",
-        options: [
-          { label: "Dhanmondi", value: "dhanmondi" },
-          { label: "Banani", value: "banani" },
-          { label: "Mirpur", value: "mirpur" },
-          { label: "Uttara", value: "uttara" },
-          { label: "Gulshan", value: "gulshan" },
-          { label: "Chittagong", value: "chittagong" },
-        ],
+        options: filtersData.locations || [],
       },
       {
         id: "author",
         type: "checkbox" as const,
         title: "Author",
-        options: uniqueAuthors.map((a) => ({
-          label: a,
-          value: a.toLowerCase(),
-        })),
+        options: filtersData.authors || [],
       },
       {
         id: "publisher",
         type: "checkbox" as const,
         title: "Publisher",
-        options: uniquePublishers.map((p) => ({
-          label: p,
-          value: p.toLowerCase(),
-        })),
+        options: filtersData.publishers || [],
       },
       {
         id: "language",
         type: "checkbox" as const,
         title: "Language",
-        options: uniqueLanguages.map((l) => ({
-          label: l,
-          value: l.toLowerCase(),
-        })),
+        options: filtersData.languages || [],
       },
       {
         id: "condition",
         type: "checkbox" as const,
         title: "Condition",
-        options: [
-          { label: "New", value: "new" },
-          { label: "Like New", value: "excellent" },
-          { label: "Good", value: "good" },
-          { label: "Acceptable", value: "fair" },
-        ],
+        options: filtersData.conditions || [],
       },
     ];
-  }, [MOCK_BOOKS]);
+  }, [filtersData]);
 
-  const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
 
-  const [selectedFilters, setSelectedFilters] =
-    useState<Record<string, string[]>>(initialFilters);
-  const [priceRange, setPriceRange] = useState<{
-    min: string;
-    max: string;
-  } | null>(null);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -244,14 +202,8 @@ export function BookListing({
 
   const suggestions = useMemo(() => {
     if (searchQuery.trim().length <= 1) return [];
-    const lowerQ = searchQuery.toLowerCase();
-    return MOCK_BOOKS.filter(
-      (book) =>
-        book.title.toLowerCase().includes(lowerQ) ||
-        book.author.toLowerCase().includes(lowerQ) ||
-        (book.tags as string[])?.some((t) => t.toLowerCase().includes(lowerQ)),
-    ).slice(0, 5);
-  }, [searchQuery, MOCK_BOOKS]);
+    return baseBooks.slice(0, 5);
+  }, [searchQuery, baseBooks]);
 
   const handleFilterChange = useCallback(
     (groupId: string, value: string, checked: boolean) => {
@@ -315,75 +267,9 @@ export function BookListing({
   }, [defaultSearchQuery]);
 
   const filteredBooks = useMemo(() => {
-    return MOCK_BOOKS.filter((book) => {
-      // 1. Text Search
-      if (searchQuery) {
-        const lowerQ = searchQuery.toLowerCase();
-        if (
-          !book.title.toLowerCase().includes(lowerQ) &&
-          !book.author.toLowerCase().includes(lowerQ)
-        ) {
-          return false;
-        }
-      }
-
-      // 2. Sidebar Filters
-      for (const [groupId, values] of Object.entries(selectedFilters)) {
-        if (!values || values.length === 0) continue;
-
-        if (groupId === "listingType" || groupId === "availability") {
-          const hasMatch = values.some(
-            (val) =>
-              (book.tags as string[])?.includes(val) ||
-              book.availability === val,
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "category") {
-          const hasMatch = values.some(
-            (val) =>
-              (book as ExtendedBook).category.toLowerCase() ===
-              val.toLowerCase(),
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "location") {
-          const bookLoc = ((book.location || "") as string).toLowerCase();
-          const hasMatch = values.some((val) =>
-            bookLoc.includes(val.toLowerCase()),
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "author") {
-          const hasMatch = values.some(
-            (val) => book.author.toLowerCase() === val.toLowerCase(),
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "publisher") {
-          const hasMatch = values.some(
-            (val) =>
-              (book as ExtendedBook).publisher.toLowerCase() ===
-              val.toLowerCase(),
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "language") {
-          const hasMatch = values.some(
-            (val) =>
-              (book as ExtendedBook).language.toLowerCase() ===
-              val.toLowerCase(),
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "condition") {
-          const hasMatch = values.some(
-            (val) => (book.condition || "").toLowerCase() === val.toLowerCase(),
-          );
-          if (!hasMatch) return false;
-        } else if (groupId === "rating") {
-          const hasMatch = values.some(
-            (val) => Math.floor(book.rating || 0) === Number(val),
-          );
-          if (!hasMatch) return false;
-        }
-      }
-
-      // 3. Price Filter
+    return baseBooks.filter((book: any) => {
+      // Backend does all text and category filtering.
+      // We only keep price filter here if it's applied on the client side.
       if (priceRange) {
         const p = book.price || 0;
         if (priceRange.min && p < Number(priceRange.min)) return false;
@@ -391,46 +277,25 @@ export function BookListing({
       }
 
       return true;
-    }).sort((a, b) => {
+    }).sort((a: any, b: any) => {
       if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
       if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
       if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
       return 0;
     });
-  }, [MOCK_BOOKS, searchQuery, selectedFilters, priceRange, sortBy]);
+  }, [baseBooks, priceRange, sortBy]);
 
   const totalPages = useMemo(
-    () => Math.ceil(filteredBooks.length / itemsPerPage),
-    [filteredBooks.length, itemsPerPage],
+    () => Math.ceil(totalBooksCount / itemsPerPage),
+    [totalBooksCount, itemsPerPage],
   );
 
-  const paginatedBooks = useMemo(
-    () =>
-      filteredBooks.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage,
-      ),
-    [filteredBooks, currentPage, itemsPerPage],
-  );
+  const paginatedBooks = filteredBooks;
 
   // Background Pre-fetching for Next Page Images & Covers
   useEffect(() => {
-    const nextPageBooks = filteredBooks.slice(
-      currentPage * itemsPerPage,
-      (currentPage + 1) * itemsPerPage,
-    );
-
-    if (nextPageBooks.length > 0 && typeof window !== "undefined") {
-      const timer = setTimeout(() => {
-        nextPageBooks.forEach((book) => {
-          if (book.coverUrl) {
-            const img = new window.Image();
-            img.src = book.coverUrl;
-          }
-        });
-      }, 400);
-      return () => clearTimeout(timer);
-    }
+    // With server side pagination, this pre-fetch is less useful because we don't have next page data in memory.
+    // Kept empty to avoid errors.
   }, [currentPage, filteredBooks, itemsPerPage]);
 
   const getPageNumbers = useCallback(() => {
@@ -565,7 +430,7 @@ export function BookListing({
           <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
             <BookOpen className="text-primary size-4 shrink-0" />
             <div className="text-xs">
-              <p className="text-foreground font-bold">1,420+ Books</p>
+              <p className="text-foreground font-bold">{statsData?.total_books ? `${statsData.total_books}+` : '1,420+'} Books</p>
               <p className="text-muted-foreground text-[11px]">Available Now</p>
             </div>
           </div>
@@ -573,7 +438,7 @@ export function BookListing({
           <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
             <HeartHandshake className="size-4 shrink-0 text-amber-500" />
             <div className="text-xs">
-              <p className="text-foreground font-bold">98% Handover Rate</p>
+              <p className="text-foreground font-bold">{statsData?.handover_rate || 98}% Handover Rate</p>
               <p className="text-muted-foreground text-[11px]">Peer Verified</p>
             </div>
           </div>
@@ -581,7 +446,7 @@ export function BookListing({
           <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
             <TrendingUp className="size-4 shrink-0 text-emerald-500" />
             <div className="text-xs">
-              <p className="text-foreground font-bold">140+ New Arrivals</p>
+              <p className="text-foreground font-bold">{statsData?.new_arrivals ? `${statsData.new_arrivals}+` : '140+'} New Arrivals</p>
               <p className="text-muted-foreground text-[11px]">
                 Added This Week
               </p>
@@ -727,7 +592,7 @@ export function BookListing({
             <div className="flex shrink-0 flex-col gap-4 sm:flex-row sm:items-center sm:justify-between lg:mb-6">
               <p className="text-muted-foreground text-sm">
                 <span className="text-foreground font-semibold">
-                  {filteredBooks.length}
+                  {totalBooksCount}
                 </span>{" "}
                 টি বই পাওয়া গেছে
               </p>

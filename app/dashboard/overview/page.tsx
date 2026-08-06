@@ -12,7 +12,8 @@ import { OverviewContinueReading } from "@/components/dashboard/overview/overvie
 export const dynamic = "force-dynamic";
 
 export default async function OverviewPage() {
-  const allBooks: BookCardBook[] = await fetchBooks();
+  const response = await fetchBooks();
+  const allBooks: BookCardBook[] = response?.results || response || [];
   const recommendedBooks = allBooks.slice(0, 4);
 
 
