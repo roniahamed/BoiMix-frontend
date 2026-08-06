@@ -185,6 +185,8 @@ export function SidebarNavigation({
                         <span className="text-foreground truncate text-xs font-bold tracking-wider uppercase">
                           {group.title}
                         </span>
+                      </div>
+                      <div className="flex items-center gap-2">
                         {totalNotifications > 0 && (
                           <div className="bg-brand-pink/15 text-brand-pink flex items-center gap-1 rounded-full px-1.5 py-0.5">
                             <Bell className="h-2.5 w-2.5" />
@@ -193,13 +195,13 @@ export function SidebarNavigation({
                             </span>
                           </div>
                         )}
-                      </div>
-                      <div className="text-muted-foreground flex items-center justify-center">
-                        {isOpen ? (
-                          <Minus className="h-3.5 w-3.5" />
-                        ) : (
-                          <Plus className="h-3.5 w-3.5" />
-                        )}
+                        <div className="text-muted-foreground flex items-center justify-center">
+                          {isOpen ? (
+                            <Minus className="h-3.5 w-3.5" />
+                          ) : (
+                            <Plus className="h-3.5 w-3.5" />
+                          )}
+                        </div>
                       </div>
                     </button>
                     <div
