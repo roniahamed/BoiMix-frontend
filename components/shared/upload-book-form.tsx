@@ -18,7 +18,9 @@ import {
 import Image from "next/image";
 
 import { TagInput } from "@/components/ui/tag-input";
+import { apiRequest } from "@/lib/api/client";
 import { searchLocation, reverseGeocode } from "@/lib/api-client";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +35,6 @@ import {
 } from "@/components/ui/select";
 import { CreatableCombobox } from "@/components/ui/creatable-combobox";
 import { ImageUploader } from "@/components/shared/image-uploader";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
   ssr: false,
@@ -371,21 +372,52 @@ export function UploadBookForm({
   }, [locationAddressWatch, locationType]);
 
   const onSubmit = async (data: UploadFormValues) => {
+    console.log("onSubmit executing in UploadBookForm", data);
     setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log({
-      ...data,
-      frontCover,
-      backCover,
-      insidePages,
-      tocImage,
-      indexImage,
-    });
-    setIsLoading(false);
-    if (onSuccess) {
-      onSuccess();
+    try {
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          formData.append(key, value.toString());
+        }
+      });
+      if (frontCover) formData.append("frontCover", frontCover);
+      if (backCover) formData.append("backCover", backCover);
+      if (insidePages) formData.append("insidePages", insidePages);
+      if (tocImage) formData.append("tocImage", tocImage);
+      if (indexImage) formData.append("indexImage", indexImage);
+
+      await apiRequest({
+        url: "/books/",
+        method: "POST",
+        data: formData,
+      });
+
+      toast.success("Book published successfully!");
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push("/books");
+      }
+    } catch (err: any) {
+      console.error("Failed to upload book", err);
+      toast.error(err?.message || "Failed to upload book. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onError = (errors: any) => {
+    console.error("Form validation errors:", errors);
+    const errorMessages = Object.values(errors)
+      .map((err: any) => err?.message)
+      .filter(Boolean)
+      .join("\n");
+
+    if (errorMessages) {
+      toast.error(`Validation failed:\n${errorMessages}`);
     } else {
-      router.push("/books");
+      toast.error("Please fill all required fields correctly.");
     }
   };
 
@@ -406,7 +438,7 @@ export function UploadBookForm({
 
         <form
           id={formId}
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit, onError)}
           className="space-y-6 pb-8"
         >
           <div className="bg-card space-y-8 rounded-2xl border p-2 shadow-sm sm:p-4 md:p-6">
@@ -642,30 +674,29 @@ export function UploadBookForm({
                   control={control}
                   name="availabilityMode"
                   render={({ field }) => (
-                    <RadioGroup
-                      onValueChange={field.onChange}
-                      value={field.value || ""}
-                      className="flex w-full flex-row gap-4"
-                    >
-                      <label
-                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "sell" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                    <div className="flex w-full flex-row gap-4">
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("sell")}
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "sell" ? "border-primary bg-primary/5 text-primary font-bold" : "hover:bg-muted"}`}
                       >
-                        <RadioGroupItem value="sell" className="sr-only" />
                         <span className="font-medium">Sell</span>
-                      </label>
-                      <label
-                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "borrow" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("borrow")}
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "borrow" ? "border-primary bg-primary/5 text-primary font-bold" : "hover:bg-muted"}`}
                       >
-                        <RadioGroupItem value="borrow" className="sr-only" />
                         <span className="font-medium">Borrow</span>
-                      </label>
-                      <label
-                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "exchange" ? "border-primary bg-primary/5 text-primary" : "hover:bg-muted"}`}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => field.onChange("exchange")}
+                        className={`flex flex-1 cursor-pointer items-center justify-center rounded-lg border p-4 transition-colors ${field.value === "exchange" ? "border-primary bg-primary/5 text-primary font-bold" : "hover:bg-muted"}`}
                       >
-                        <RadioGroupItem value="exchange" className="sr-only" />
                         <span className="font-medium">Exchange</span>
-                      </label>
-                    </RadioGroup>
+                      </button>
+                    </div>
                   )}
                 />
 
@@ -900,44 +931,31 @@ export function UploadBookForm({
                 control={control}
                 name="condition"
                 render={({ field }) => (
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    value={field.value || "Excellent"}
-                    className="grid gap-3 sm:grid-cols-2 md:grid-cols-5"
-                  >
+                  <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-5">
                     {conditions.map((c) => {
+                      const isSelected = field.value === c.value;
                       return (
-                        <div
+                        <button
                           key={c.value}
+                          type="button"
                           onClick={() => field.onChange(c.value)}
-                          className={`group relative flex cursor-pointer items-start gap-3 rounded-2xl border p-3.5 transition-all duration-200 ${
-                            field.value === c.value
+                          className={`flex items-start gap-3 rounded-2xl border p-3.5 text-left transition-all duration-200 ${
+                            isSelected
                               ? "border-primary bg-primary/5 ring-primary/20 shadow-sm ring-1"
                               : "hover:border-primary/40 hover:bg-muted/50 border-border/80"
                           }`}
                         >
-                          <RadioGroupItem
-                            value={c.value}
-                            id={`condition-${c.value}`}
-                            className="mt-1"
-                          />
-                          <Label
-                            htmlFor={`condition-${c.value}`}
-                            className="flex flex-1 cursor-pointer flex-col gap-1"
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="text-foreground text-sm font-bold">
-                                {c.label}
-                              </span>
-                            </div>
-                            <span className="text-muted-foreground text-xs leading-relaxed">
-                              {c.desc}
-                            </span>
-                          </Label>
-                        </div>
+                          <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${isSelected ? "border-primary bg-primary" : "border-input bg-background"}`}>
+                            {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                          </div>
+                          <div className="flex flex-1 flex-col gap-1">
+                            <span className="text-foreground text-sm font-bold">{c.label}</span>
+                            <span className="text-muted-foreground text-xs leading-relaxed">{c.desc}</span>
+                          </div>
+                        </button>
                       );
                     })}
-                  </RadioGroup>
+                  </div>
                 )}
               />
             </div>
@@ -951,46 +969,36 @@ export function UploadBookForm({
                     control={control}
                     name="locationType"
                     render={({ field }) => (
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        value={field.value || "default"}
-                        className="flex flex-col gap-3"
-                      >
-                        <div
-                          className={`relative flex items-center gap-3 rounded-xl border p-3 ${field.value === "default" ? "border-primary bg-primary/5" : ""}`}
+                      <div className="flex flex-col gap-3">
+                        <button
+                          type="button"
+                          onClick={() => field.onChange("default")}
+                          className={`relative flex items-center gap-3 rounded-xl border p-3 text-left transition-all ${field.value === "default" ? "border-primary bg-primary/5" : "hover:bg-muted/50"}`}
                         >
-                          <RadioGroupItem value="default" id="loc-default" />
-                          <Label
-                            htmlFor="loc-default"
-                            className="flex flex-1 cursor-pointer flex-row items-center gap-2"
+                          <div className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${field.value === "default" ? "border-primary bg-primary" : "border-input bg-background"}`}>
+                            {field.value === "default" && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                          </div>
+                          <span className={`block text-sm font-semibold ${field.value === "default" ? "text-primary" : ""}`}>
+                            Use Profile Default Location
+                          </span>
+                        </button>
+
+                        <div
+                          className={`relative flex flex-col gap-2 rounded-xl border p-3 transition-all ${field.value === "custom" ? "border-primary bg-primary/5" : "hover:bg-muted/50"}`}
+                        >
+                          <button
+                            type="button"
+                            onClick={() => field.onChange("custom")}
+                            className="flex items-center gap-3 text-left w-full"
                           >
-                            <span
-                              className={`block text-sm font-semibold ${field.value === "default" ? "text-primary" : ""}`}
-                            >
-                              Use Profile Default Location
+                            <div className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${field.value === "custom" ? "border-primary bg-primary" : "border-input bg-background"}`}>
+                              {field.value === "custom" && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                            </div>
+                            <span className={`block text-sm font-semibold ${field.value === "custom" ? "text-primary" : ""}`}>
+                              Use Different Location
                             </span>
-                          </Label>
-                        </div>
-                        <div
-                          className={`relative flex items-start gap-3 rounded-xl border p-3 ${field.value === "custom" ? "border-primary bg-primary/5" : ""}`}
-                        >
-                          <RadioGroupItem
-                            value="custom"
-                            id="loc-custom"
-                            className="mt-1"
-                          />
-                          <div className="w-full">
-                            <Label
-                              htmlFor="loc-custom"
-                              className="mb-2 block cursor-pointer"
-                            >
-                              <span
-                                className={`block text-sm font-semibold ${field.value === "custom" ? "text-primary" : ""}`}
-                              >
-                                Use Different Location
-                              </span>
-                            </Label>
-                            {field.value === "custom" && (
+                          </button>
+                          {field.value === "custom" && (
                               <div className="relative">
                                 <Input
                                   placeholder="Enter new address..."
@@ -1061,13 +1069,12 @@ export function UploadBookForm({
                                             No locations found
                                           </div>
                                         )}
-                                    </div>
-                                  )}
-                              </div>
-                            )}
-                          </div>
+                                  </div>
+                                )}
+                            </div>
+                          )}
                         </div>
-                      </RadioGroup>
+                      </div>
                     )}
                   />
                 </div>

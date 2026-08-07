@@ -9,9 +9,10 @@ import {
   BookOpenIcon,
 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchSearchSuggestions } from "@/lib/api-client";
+import { fetchSearchSuggestions, fetchTrendingSearches, fetchBooks } from "@/lib/api-client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,13 +24,7 @@ type SearchBarProps = {
   autoFocus?: boolean;
 };
 
-const initialTrending = [
-  "হুমায়ূন আহমেদ",
-  "Programming Basics",
-  "Ayman Sadiq",
-  "Feluda",
-  "Academic Book Exchange",
-];
+// removed initialTrending since we use API now
 
 const initialRecents = ["Rivers of Dhaka", "English Grammar"];
 
@@ -51,6 +46,16 @@ export function SearchBar({
     queryKey: ["books-search", query],
     queryFn: () => fetchSearchSuggestions(query),
     enabled: query.length > 1,
+  });
+
+  const { data: trendingSearches = [] } = useQuery({
+    queryKey: ["trending-searches"],
+    queryFn: fetchTrendingSearches,
+  });
+
+  const { data: recommendedBooks = { results: [] } } = useQuery({
+    queryKey: ["recommended-books-search"],
+    queryFn: () => fetchBooks(undefined, undefined, 1, "", 5),
   });
 
   // Focus input when autoFocus prop changes to true
@@ -229,7 +234,7 @@ export function SearchBar({
                     Trending Searches
                   </span>
                   <ul className="space-y-1">
-                    {initialTrending.map((item) => (
+                    {trendingSearches.map((item: string) => (
                       <li key={item}>
                         <button
                           type="button"
@@ -251,9 +256,9 @@ export function SearchBar({
                   Recommended For You
                 </span>
                 <div className="space-y-3">
-                  {suggestions.length > 0
+                  {recommendedBooks?.results?.length > 0
                     ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      suggestions.map((book: any) => (
+                      recommendedBooks.results.slice(0, 5).map((book: any) => (
                         <Link
                           key={book.slug}
                           href={`/books/${book.slug}`}
@@ -261,7 +266,11 @@ export function SearchBar({
                           className="hover:bg-muted/50 flex items-center gap-2.5 rounded-lg p-1.5 transition-colors"
                         >
                           <div className="bg-muted relative h-10 w-7.5 shrink-0 overflow-hidden rounded-sm shadow-xs">
-                            <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
+                            {book.coverUrl ? (
+                              <Image src={book.coverUrl} alt={book.title} fill className="object-cover" sizes="30px" />
+                            ) : (
+                              <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
+                            )}
                           </div>
                           <div className="min-w-0 flex-1">
                             <p className="text-foreground truncate text-xs leading-tight font-bold">
@@ -272,7 +281,7 @@ export function SearchBar({
                             </p>
                           </div>
                           <span className="bg-muted text-muted-foreground border-border rounded-full border px-2 py-0.5 text-[0.6rem] font-bold capitalize">
-                            {book.type}
+                            {book.type || "Book"}
                           </span>
                         </Link>
                       ))
@@ -297,7 +306,11 @@ export function SearchBar({
                       className="hover:bg-muted/50 flex items-center gap-3 rounded-lg p-2 transition-colors"
                     >
                       <div className="bg-muted relative h-11 w-8 shrink-0 overflow-hidden rounded-sm shadow-xs">
-                        <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
+                        {book.coverUrl ? (
+                          <Image src={book.coverUrl} alt={book.title} fill className="object-cover" sizes="32px" />
+                        ) : (
+                          <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
+                        )}
                       </div>
                       <div className="min-w-0 flex-1">
                         <p className="text-foreground truncate text-xs font-bold">

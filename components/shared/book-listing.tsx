@@ -386,7 +386,7 @@ export function BookListing({
                   <Sparkles className="text-primary size-3" />
                   Suggested Books
                 </div>
-                {suggestions.map((book) => (
+                {suggestions.map((book: any) => (
                   <button
                     key={book.id}
                     type="button"
@@ -659,7 +659,7 @@ export function BookListing({
                     <YouTubeBookSkeleton key={i} />
                   ))
                 ) : paginatedBooks.length > 0 ? (
-                  paginatedBooks.map((book, idx) => (
+                  paginatedBooks.map((book: any, idx: number) => (
                     <BookCard key={book.id} book={book} priority={idx < 4} />
                   ))
                 ) : (

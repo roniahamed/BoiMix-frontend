@@ -87,10 +87,22 @@ export async function fetchSearchBooks(
 export async function fetchSearchSuggestions(query: string) {
   try {
     const data = await apiRequest<any>({
-      url: `/search/suggestions/?q=${encodeURIComponent(query)}`,
+      url: `/books/?search=${encodeURIComponent(query)}&page_size=5`,
       method: "GET",
     });
-    return data.suggestions || [];
+    return data.results || [];
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function fetchTrendingSearches() {
+  try {
+    const data = await apiRequest<any>({
+      url: `/search/trending/`,
+      method: "GET",
+    });
+    return data.trending || [];
   } catch (err) {
     return [];
   }
