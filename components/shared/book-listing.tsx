@@ -133,7 +133,7 @@ export function BookListing({
           (res) => ({ results: res, count: res.length }),
         );
       }
-      const apiFilters = { ...selectedFilters };
+      const apiFilters: Record<string, any> = { ...selectedFilters };
       if (sortBy === "price-low") apiFilters.ordering = "price";
       if (sortBy === "price-high") apiFilters.ordering = "-price";
       if (sortBy === "rating")

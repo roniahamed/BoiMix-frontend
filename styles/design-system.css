@@ -79,7 +79,7 @@
   --spacing-section-sm: clamp(2rem, 4vw, 3rem);
   --spacing-gutter: clamp(1rem, 3vw, 1.5rem);
   --container-boimix: 1200px;
-  --container-boimix-wide: 1400px;
+  --container-boimix-wide: 1340px;
 }
 
 :root {

@@ -174,16 +174,16 @@ export function RightSidebarWidget() {
       )}
 
       {/* Sidebar Strip */}
-      <div className="bg-card border-border fixed top-2/3 right-0 z-50 hidden -translate-y-1/2 flex-col overflow-hidden rounded-l-[5px] border border-r-0 shadow-[0_0_15px_rgba(0,0,0,0.15)] md:flex">
+      <div className="bg-card border-border fixed top-2/3 right-0 z-50 hidden w-[80px] -translate-y-1/2 flex-col overflow-hidden rounded-l-[5px] border border-r-0 shadow-[0_0_15px_rgba(0,0,0,0.15)] md:flex">
         {/* Add Book */}
         <AddBookDialog>
           <Link
             href="/books/upload"
-            className="hover:bg-muted group flex flex-col items-center gap-1.5 border-b px-4 py-4 transition-colors"
+            className="hover:bg-muted group flex w-full flex-col items-center gap-1.5 border-b px-2 py-4 transition-colors"
             aria-label="Add a book"
           >
             <BookPlusIcon className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
-            <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
+            <span className="text-muted-foreground group-hover:text-primary w-full text-center text-[11px] leading-tight font-medium transition-colors">
               Add Book
             </span>
           </Link>
@@ -192,7 +192,7 @@ export function RightSidebarWidget() {
         {/* Messages */}
         <button
           onClick={() => setMsgOpen((p) => !p)}
-          className="hover:bg-muted group relative flex flex-col items-center gap-1.5 border-b px-4 py-4 transition-colors"
+          className="hover:bg-muted group relative flex w-full flex-col items-center gap-1.5 border-b px-2 py-4 transition-colors"
           aria-label="Messages"
           aria-expanded={msgOpen}
         >
@@ -218,7 +218,7 @@ export function RightSidebarWidget() {
           </div>
           <span
             className={cn(
-              "w-14 text-center text-[11px] leading-tight font-medium transition-colors",
+              "w-full text-center text-[11px] leading-tight font-medium transition-colors",
               msgOpen
                 ? "text-primary"
                 : "text-muted-foreground group-hover:text-primary",
@@ -231,11 +231,11 @@ export function RightSidebarWidget() {
         {/* Help */}
         <Link
           href="/faq"
-          className="hover:bg-muted group relative flex flex-col items-center gap-1.5 border-b px-4 py-4 transition-colors"
+          className="hover:bg-muted group relative flex w-full flex-col items-center gap-1.5 border-b px-2 py-4 transition-colors"
           aria-label="Help"
         >
           <HelpCircle className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
-          <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
+          <span className="text-muted-foreground group-hover:text-primary w-full text-center text-[11px] leading-tight font-medium transition-colors">
             Help
           </span>
         </Link>
@@ -244,11 +244,11 @@ export function RightSidebarWidget() {
         {showBackToTop && (
           <button
             onClick={scrollToTop}
-            className="hover:bg-muted group flex flex-col items-center gap-1.5 px-4 py-4 transition-colors"
+            className="hover:bg-muted group flex w-full flex-col items-center gap-1.5 px-2 py-4 transition-colors"
             aria-label="Back to top"
           >
             <ArrowUpIcon className="text-muted-foreground group-hover:text-primary h-6 w-6 transition-colors" />
-            <span className="text-muted-foreground group-hover:text-primary w-14 text-center text-[11px] leading-tight font-medium transition-colors">
+            <span className="text-muted-foreground group-hover:text-primary w-full text-center text-[11px] leading-tight font-medium transition-colors">
               Back to top
             </span>
           </button>
