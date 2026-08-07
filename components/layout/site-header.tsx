@@ -12,7 +12,6 @@ import { MobileNavbar } from "@/components/layout/mobile-navbar";
 import { QuickNavBar } from "@/components/layout/quick-nav-bar";
 import { SearchBar } from "@/components/layout/search-bar";
 import { CartButton } from "@/components/shared/cart-button";
-import { MessageIconButton } from "@/components/shared/message-icon-button";
 import { WishlistButton } from "@/components/shared/wishlist-button";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -379,7 +378,6 @@ export function SiteHeader() {
         <div className="ml-auto flex items-center gap-1">
           <WishlistButton className="hidden md:inline-flex" />
           <CartButton className="hidden md:inline-flex" />
-          <MessageIconButton className="hidden sm:inline-flex" />
           <div className="hidden sm:inline-flex">
             <NotificationPopover />
           </div>
