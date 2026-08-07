@@ -342,24 +342,39 @@ export function UploadBookForm({
                 data.availability.exchange.toString(),
               );
           }
-          if (data.coverUrl) setFrontCoverUrl(data.coverUrl);
           if (data.images && data.images.length > 0) {
+            const frontCoverImg = data.images.find(
+              (img: any) =>
+                img.type === "frontCover" || img.type === "frontCoverUrl",
+            );
+            if (frontCoverImg) setFrontCoverUrl(frontCoverImg.src);
+            else if (data.coverUrl) setFrontCoverUrl(data.coverUrl);
+
             const backCover = data.images.find(
-              (img: any) => img.type === "backCover",
+              (img: any) =>
+                img.type === "backCover" || img.type === "backCoverUrl",
             );
             if (backCover) setBackCoverUrl(backCover.src);
+
             const insidePages = data.images.find(
-              (img: any) => img.type === "insidePages",
+              (img: any) =>
+                img.type === "insidePages" || img.type === "insidePagesUrl",
             );
             if (insidePages) setInsidePagesUrl(insidePages.src);
+
             const tocImage = data.images.find(
-              (img: any) => img.type === "tocImage",
+              (img: any) =>
+                img.type === "tocImage" || img.type === "tocImageUrl",
             );
             if (tocImage) setTocImageUrl(tocImage.src);
+
             const indexImage = data.images.find(
-              (img: any) => img.type === "indexImage",
+              (img: any) =>
+                img.type === "indexImage" || img.type === "indexImageUrl",
             );
             if (indexImage) setIndexImageUrl(indexImage.src);
+          } else if (data.coverUrl) {
+            setFrontCoverUrl(data.coverUrl);
           }
 
           setAutofillMessage(
@@ -635,7 +650,6 @@ export function UploadBookForm({
         url,
         method,
         data: formData,
-        headers: { "Content-Type": "multipart/form-data" },
       });
 
       toast.success(
@@ -1665,30 +1679,25 @@ export function UploadBookForm({
             </div>
 
             {showActions && (
-              <div
-                className="fixed right-0 bottom-[var(--bottom-offset)] left-0 z-40 border-t md:relative md:bottom-0 md:z-auto md:border-none md:bg-transparent md:p-0 md:shadow-none"
-                style={
-                  {
-                    "--bottom-offset":
-                      "calc(52px + env(safe-area-inset-bottom))",
-                  } as React.CSSProperties
-                }
-              >
-                <div className="bg-card md:boimix-container flex w-full flex-row md:justify-end md:gap-4 md:bg-transparent">
-                  <Button
-                    type="submit"
-                    className="h-14 flex-1 rounded-none md:h-10 md:w-auto md:flex-none md:rounded-md"
-                    disabled={isLoading}
-                  >
-                    {isLoading ? (
-                      "Publishing..."
+              <div className="mt-8 flex justify-end pb-10 md:pb-0">
+                <Button
+                  type="submit"
+                  className="h-14 w-full rounded-xl text-base font-medium md:h-12 md:w-auto md:px-10"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    editId ? (
+                      "Updating..."
                     ) : (
-                      <>
-                        <Send className="mr-2 h-4 w-4" /> Publish Book
-                      </>
-                    )}
-                  </Button>
-                </div>
+                      "Publishing..."
+                    )
+                  ) : (
+                    <>
+                      <Send className="mr-2 h-5 w-5" />{" "}
+                      {editId ? "Update Book" : "Publish Book"}
+                    </>
+                  )}
+                </Button>
               </div>
             )}
           </form>
