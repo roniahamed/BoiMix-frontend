@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, Plus } from "lucide-react";
+import { Check, Plus, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
@@ -88,10 +88,23 @@ export function CreatableCombobox({
         />
       </PopoverAnchor>
       <PopoverContent
-        className="w-[var(--radix-popover-trigger-width)] p-0"
+        className="flex w-[var(--radix-popover-trigger-width)] flex-col p-0"
         align="start"
         onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus stealing from input
       >
+        <div className="bg-muted/10 flex items-center justify-end border-b p-1">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setOpen(false);
+            }}
+            className="text-muted-foreground hover:bg-muted hover:text-foreground flex h-6 w-6 items-center justify-center rounded-md"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
         <div
           className="max-h-60 overflow-y-auto p-1"
           onWheel={(e) => e.stopPropagation()}
