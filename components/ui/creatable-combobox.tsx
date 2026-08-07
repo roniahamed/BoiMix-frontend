@@ -16,6 +16,7 @@ export interface CreatableComboboxProps {
   options: string[];
   value: string;
   onChange: (value: string) => void;
+  onSearchChange?: (search: string) => void;
   placeholder?: string;
   emptyText?: string;
   className?: string;
@@ -25,6 +26,7 @@ export function CreatableCombobox({
   options,
   value,
   onChange,
+  onSearchChange,
   placeholder = "Select option...",
   emptyText = "No results found.",
   className,
@@ -32,12 +34,19 @@ export function CreatableCombobox({
   const [open, setOpen] = React.useState(false);
   const [search, setSearch] = React.useState("");
 
+  React.useEffect(() => {
+    if (onSearchChange) {
+      onSearchChange(search);
+    }
+  }, [search, onSearchChange]);
+
   const filteredOptions = React.useMemo(() => {
+    if (onSearchChange) return options; // Let parent handle filtering if onSearchChange is provided
     if (!search) return options;
     return options.filter((option) =>
       option.toLowerCase().includes(search.toLowerCase()),
     );
-  }, [options, search]);
+  }, [options, search, onSearchChange]);
 
   const exactMatch = options.some(
     (option) => option.toLowerCase() === search.toLowerCase(),

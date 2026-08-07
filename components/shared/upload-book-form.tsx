@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useForm, useWatch, Controller } from "react-hook-form";
@@ -256,38 +256,16 @@ export function UploadBookForm({
   const [isLoading, setIsLoading] = useState(false);
   const [autofillMessage, setAutofillMessage] = useState<string | null>(null);
 
-  const handleIsbnAutoFill = () => {
-    const currentIsbn = getValues("isbn");
-    if (!currentIsbn) {
-      setAutofillMessage("⚠️ Please enter an ISBN first.");
-      setTimeout(() => setAutofillMessage(null), 3000);
-      return;
-    }
-
-    const match = Object.values(QUICK_FILL_BOOKS).find(
-      (b) => b.isbn === currentIsbn,
-    );
-
-    if (!match) {
-      setAutofillMessage("❌ No matching book found for this ISBN.");
-      setTimeout(() => setAutofillMessage(null), 3000);
-      return;
-    }
-
-    setValue("title", match.title, { shouldValidate: true });
-    setValue("author", match.author, { shouldValidate: true });
-    setValue("publisher", match.publisher, { shouldValidate: true });
-    setValue("genre", match.genre, { shouldValidate: true });
-    setValue("edition", match.edition, { shouldValidate: true });
-    setValue("pageCount", match.pageCount, { shouldValidate: true });
-    setValue("description", match.description, { shouldValidate: true });
-    setValue("originalPrice", match.originalPrice, { shouldValidate: true });
-    setValue("sellPrice", match.sellPrice, { shouldValidate: true });
-    setValue("condition", match.condition, { shouldValidate: true });
-
-    setAutofillMessage(`✨ Auto-filled book details for "${match.title}"!`);
-    setTimeout(() => setAutofillMessage(null), 5000);
-  };
+  const [titleOptions, setTitleOptions] = useState<string[]>(TITLE_OPTIONS);
+  const [authorOptions, setAuthorOptions] = useState<string[]>(AUTHOR_OPTIONS);
+  const [publisherOptions, setPublisherOptions] =
+    useState<string[]>(PUBLISHER_OPTIONS);
+  const [genreOptions, setGenreOptions] = useState<string[]>(GENRE_OPTIONS);
+  const [languageOptions, setLanguageOptions] = useState<string[]>([
+    "English",
+    "Bengali",
+  ]);
+  const [isbnOptions, setIsbnOptions] = useState<string[]>([]);
 
   // Image states
   const [frontCover, setFrontCover] = useState<File | null>(null);
@@ -302,6 +280,7 @@ export function UploadBookForm({
     control,
     setValue,
     getValues,
+    setError,
     formState: { errors },
   } = useForm<UploadFormValues>({
     resolver: zodResolver(uploadSchema),
@@ -310,6 +289,153 @@ export function UploadBookForm({
       condition: "Excellent",
     },
   });
+
+  const fetchSuggestions = useCallback(
+    (q: string, type: string, setter: (opts: string[]) => void) => {
+      if (!q || !q.trim()) return;
+      apiRequest<any>({
+        url: `/search/suggestions/?q=${encodeURIComponent(q.trim())}&type=${type}`,
+        method: "GET",
+      })
+        .then((data) => {
+          if (data.suggestions) {
+            setter(data.suggestions);
+          }
+        })
+        .catch((err) => {
+          if (err?.status !== 429) {
+            console.error(err);
+          }
+        });
+    },
+    [],
+  );
+
+  const handleTitleSelect = useCallback(
+    (newTitle: string) => {
+      if (!newTitle || !newTitle.trim()) return;
+
+      apiRequest<any>({
+        url: `/books/details-by-title/?title=${encodeURIComponent(newTitle.trim())}`,
+        method: "GET",
+      })
+        .then((data) => {
+          if (data.author)
+            setValue("author", data.author, { shouldValidate: true });
+          if (data.publisher)
+            setValue("publisher", data.publisher, { shouldValidate: true });
+          if (data.genre)
+            setValue("genre", data.genre, { shouldValidate: true });
+          if (data.isbn) setValue("isbn", data.isbn, { shouldValidate: true });
+          if (data.pages)
+            setValue("pageCount", data.pages.toString(), {
+              shouldValidate: true,
+            });
+          if (data.description)
+            setValue("description", data.description, { shouldValidate: true });
+
+          setAutofillMessage(
+            `✨ Auto-filled book details for "${data.title || newTitle}"!`,
+          );
+          setTimeout(() => setAutofillMessage(null), 5000);
+        })
+        .catch(() => {});
+    },
+    [setValue],
+  );
+
+  const handleIsbnSelect = useCallback(
+    (newIsbn: string) => {
+      if (!newIsbn || !newIsbn.trim()) return;
+
+      setIsLoading(true);
+      apiRequest<any>({
+        url: `/books/isbn/${encodeURIComponent(newIsbn.trim())}/`,
+        method: "GET",
+      })
+        .then((data) => {
+          if (data.title)
+            setValue("title", data.title, { shouldValidate: true });
+          if (data.author)
+            setValue("author", data.author, { shouldValidate: true });
+          if (data.publisher)
+            setValue("publisher", data.publisher, { shouldValidate: true });
+          if (data.genre)
+            setValue("genre", data.genre, { shouldValidate: true });
+          if (data.pages)
+            setValue("pageCount", data.pages.toString(), {
+              shouldValidate: true,
+            });
+          if (data.description)
+            setValue("description", data.description, { shouldValidate: true });
+
+          setAutofillMessage(`✨ Auto-filled details for ISBN "${newIsbn}"!`);
+          setTimeout(() => setAutofillMessage(null), 5000);
+        })
+        .catch(() => {
+          setAutofillMessage("❌ No details found for this ISBN.");
+          setTimeout(() => setAutofillMessage(null), 3000);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    },
+    [setValue],
+  );
+
+  useEffect(() => {
+    apiRequest<any>({ url: "/books/filters/", method: "GET" })
+      .then((data) => {
+        if (data.authors?.length)
+          setAuthorOptions(data.authors.map((a: any) => a.label));
+        if (data.publishers?.length)
+          setPublisherOptions(data.publishers.map((p: any) => p.label));
+        if (data.categories?.length)
+          setGenreOptions(data.categories.map((c: any) => c.label));
+        if (data.languages?.length)
+          setLanguageOptions(data.languages.map((l: any) => l.label));
+      })
+      .catch(console.error);
+
+    apiRequest<any>({ url: "/search/trending/", method: "GET" })
+      .then((data) => {
+        if (data.trending?.length) setTitleOptions(data.trending);
+      })
+      .catch(console.error);
+  }, []);
+
+  const handleIsbnAutoFill = async () => {
+    const currentIsbn = getValues("isbn");
+    if (!currentIsbn) {
+      setAutofillMessage("⚠️ Please enter an ISBN first.");
+      setTimeout(() => setAutofillMessage(null), 3000);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const data = await apiRequest<any>({
+        url: `/books/isbn/${currentIsbn}/`,
+        method: "GET",
+      });
+
+      setValue("title", data.title || "", { shouldValidate: true });
+      setValue("author", data.author || "", { shouldValidate: true });
+      setValue("publisher", data.publisher || "", { shouldValidate: true });
+      setValue("pageCount", data.pages ? data.pages.toString() : "", {
+        shouldValidate: true,
+      });
+      setValue("description", data.description || "", { shouldValidate: true });
+
+      setAutofillMessage(`✨ Auto-filled book details for "${data.title}"!`);
+      setTimeout(() => setAutofillMessage(null), 5000);
+    } catch (err) {
+      setAutofillMessage("❌ No matching book found for this ISBN.");
+      setTimeout(() => setAutofillMessage(null), 3000);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   interface LocationSuggestion {
     display_name: string;
@@ -400,7 +526,15 @@ export function UploadBookForm({
       }
     } catch (err: any) {
       console.error("Failed to upload book", err);
-      toast.error(err?.message || "Failed to upload book. Please try again.");
+      let errorMsg = err?.message || "Failed to upload book. Please try again.";
+      if (err?.details?.locationType) {
+        errorMsg = Array.isArray(err.details.locationType)
+          ? err.details.locationType[0]
+          : err.details.locationType;
+        setError("locationType", { type: "manual", message: errorMsg });
+      } else {
+        toast.error(errorMsg);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -504,20 +638,36 @@ export function UploadBookForm({
                 <div className="grid gap-5 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label>ISBN</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="e.g. 9781847941831"
-                        {...register("isbn")}
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={handleIsbnAutoFill}
-                        className="text-primary border-primary shrink-0 gap-2"
-                      >
-                        <Wand2 className="h-4 w-4" /> Auto Fill
-                      </Button>
-                    </div>
+                    <Controller
+                      control={control}
+                      name="isbn"
+                      render={({ field }) => (
+                        <div className="flex gap-2">
+                          <div className="flex-1">
+                            <CreatableCombobox
+                              options={isbnOptions}
+                              value={field.value || ""}
+                              onChange={(val) => {
+                                field.onChange(val);
+                                handleIsbnSelect(val);
+                              }}
+                              onSearchChange={(search) =>
+                                fetchSuggestions(search, "isbn", setIsbnOptions)
+                              }
+                              placeholder="e.g. 9781847941831"
+                            />
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={handleIsbnAutoFill}
+                            className="text-primary border-primary shrink-0 gap-2"
+                          >
+                            <Wand2 className="h-4 w-4" /> Auto Fill
+                          </Button>
+                        </div>
+                      )}
+                    />
                   </div>
                 </div>
 
@@ -529,9 +679,15 @@ export function UploadBookForm({
                       name="title"
                       render={({ field }) => (
                         <CreatableCombobox
-                          options={TITLE_OPTIONS}
+                          options={titleOptions}
                           value={field.value || ""}
-                          onChange={field.onChange}
+                          onChange={(val) => {
+                            field.onChange(val);
+                            handleTitleSelect(val);
+                          }}
+                          onSearchChange={(search) =>
+                            fetchSuggestions(search, "title", setTitleOptions)
+                          }
                           placeholder="e.g. Atomic Habits"
                           className={errors.title ? "border-destructive" : ""}
                         />
@@ -550,9 +706,12 @@ export function UploadBookForm({
                       name="author"
                       render={({ field }) => (
                         <CreatableCombobox
-                          options={AUTHOR_OPTIONS}
+                          options={authorOptions}
                           value={field.value || ""}
                           onChange={field.onChange}
+                          onSearchChange={(search) =>
+                            fetchSuggestions(search, "author", setAuthorOptions)
+                          }
                           placeholder="e.g. James Clear"
                           className={errors.author ? "border-destructive" : ""}
                         />
@@ -574,9 +733,16 @@ export function UploadBookForm({
                       name="publisher"
                       render={({ field }) => (
                         <CreatableCombobox
-                          options={PUBLISHER_OPTIONS}
+                          options={publisherOptions}
                           value={field.value || ""}
                           onChange={field.onChange}
+                          onSearchChange={(search) =>
+                            fetchSuggestions(
+                              search,
+                              "publisher",
+                              setPublisherOptions,
+                            )
+                          }
                           placeholder="e.g. Penguin Random House"
                         />
                       )}
@@ -589,9 +755,12 @@ export function UploadBookForm({
                       name="genre"
                       render={({ field }) => (
                         <CreatableCombobox
-                          options={GENRE_OPTIONS}
+                          options={genreOptions}
                           value={field.value || ""}
                           onChange={field.onChange}
+                          onSearchChange={(search) =>
+                            fetchSuggestions(search, "genre", setGenreOptions)
+                          }
                           placeholder="Select Genre"
                         />
                       )}
@@ -603,18 +772,12 @@ export function UploadBookForm({
                       control={control}
                       name="language"
                       render={({ field }) => (
-                        <Select
-                          onValueChange={field.onChange}
-                          value={field.value || undefined}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Language" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="English">English</SelectItem>
-                            <SelectItem value="Bengali">Bengali</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <CreatableCombobox
+                          options={languageOptions}
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder="Select Language"
+                        />
                       )}
                     />
                   </div>
@@ -1100,6 +1263,11 @@ export function UploadBookForm({
                       </div>
                     )}
                   />
+                  {errors.locationType && (
+                    <p className="text-destructive mt-1 text-sm font-medium">
+                      {errors.locationType.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="bg-muted/20 relative h-[200px] w-full overflow-hidden rounded-xl border md:h-auto">

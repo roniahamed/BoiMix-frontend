@@ -57,9 +57,9 @@ export default async function BookDetailsPage({
   } = bookDetailsData;
 
   const fallbackImages = [
-    { src: "/placeholder-book.png", alt: "Cover" },
-    { src: "/placeholder-book.png", alt: "Inside page" },
-    { src: "/placeholder-book.png", alt: "Back cover" },
+    { src: "/book-covers/programming-basics.svg", alt: "Cover" },
+    { src: "/book-covers/programming-basics.svg", alt: "Inside page" },
+    { src: "/book-covers/programming-basics.svg", alt: "Back cover" },
   ];
 
   // Build gallery images: prefer API images, then cover URL from book listing, else fallbacks

@@ -599,7 +599,7 @@ async function PersonalizationSection() {
                           src={
                             book.coverUrl?.trim()
                               ? book.coverUrl
-                              : "/placeholder-book.png"
+                              : "/book-covers/programming-basics.svg"
                           }
                           alt={book.title}
                           fill
