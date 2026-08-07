@@ -20,6 +20,7 @@ type BookBuyActionsProps = {
     sellerName: string;
     sellerId: string;
     tags: string[];
+    availabilityMode?: string;
   };
 };
 
@@ -84,7 +85,7 @@ export function BookBuyActions({ book }: BookBuyActionsProps) {
     router.push(`/cart/checkout?items=${book.id}`);
   };
 
-  if (!book.tags.includes("sell")) {
+  if (book.availabilityMode !== "sell") {
     return null;
   }
 

@@ -16,7 +16,8 @@ export type BookCardBook = {
   title: string;
   author: string;
   coverUrl: string;
-  tags: BookAvailabilityMode[];
+  tags: string[];
+  availabilityMode?: BookAvailabilityMode;
   rating: number;
   reviewCount: number;
   price?: number;

@@ -54,13 +54,9 @@ export function LibrarySearchBar({
   const suggestions = (searchedBooks as any[])
     .filter((book) => {
       if (mode === "library") {
-        return (
-          book.availability_mode === "borrow" || book.tags?.includes("library")
-        );
+        return book.availability_mode === "borrow";
       } else if (mode === "exchanges") {
-        return (
-          book.availability_mode !== "borrow" || book.tags?.includes("exchange")
-        );
+        return book.availability_mode !== "borrow";
       }
       return true;
     })

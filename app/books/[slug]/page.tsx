@@ -258,15 +258,17 @@ export default async function BookDetailsPage({
                     </span>
                   </div>
                 </div>
-                <p className="text-muted-foreground text-sm font-medium">
-                  Condition:{" "}
-                  <a
-                    href={`/explore?condition=${currentBook.condition}`}
-                    className="text-primary capitalize hover:underline"
-                  >
-                    {currentBook.condition}
-                  </a>
-                </p>
+                {currentBook.availabilityMode !== "borrow" && (
+                  <p className="text-muted-foreground text-sm font-medium">
+                    Condition:{" "}
+                    <a
+                      href={`/explore?condition=${currentBook.condition}`}
+                      className="text-primary capitalize hover:underline"
+                    >
+                      {currentBook.condition}
+                    </a>
+                  </p>
+                )}
 
                 <div className="text-muted-foreground mt-1 flex items-center gap-1.5 text-sm font-medium">
                   <MapPin className="size-4 shrink-0" />
@@ -400,6 +402,7 @@ export default async function BookDetailsPage({
                       sellerName: API_OWNER.name,
                       sellerId: API_OWNER.id,
                       tags: currentBook.tags,
+                      availabilityMode: currentBook.availabilityMode,
                     }}
                   />
                   {currentBook.tags.includes("exchange") && (
@@ -421,6 +424,7 @@ export default async function BookDetailsPage({
                       borrowFee: currentBook.borrowFee,
                       maxBorrowDays: currentBook.maxBorrowDays,
                       tags: currentBook.tags,
+                      availabilityMode: currentBook.availabilityMode,
                     }}
                   />
                 </div>

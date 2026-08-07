@@ -19,6 +19,7 @@ type BookBorrowActionsProps = {
     borrowFee?: number;
     maxBorrowDays?: number;
     tags: string[];
+    availabilityMode?: string;
   };
 };
 
@@ -88,7 +89,7 @@ export function BookBorrowActions({ book }: BookBorrowActionsProps) {
     router.push("/borrow/checkout?direct=true");
   };
 
-  if (!book.tags.includes("borrow")) {
+  if (book.availabilityMode !== "borrow") {
     return null;
   }
 

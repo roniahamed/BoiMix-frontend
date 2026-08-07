@@ -29,8 +29,22 @@ export async function fetchBooks(
   const queryString = queryParams.toString();
   const url = queryString ? `/books/?${queryString}` : `/books/`;
 
+  const headers: Record<string, string> = {};
+  if (typeof window === "undefined") {
+    try {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      const token = cookieStore.get("auth_token")?.value;
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    } catch (e) {
+      // Ignore errors if running in a context where cookies() is not available
+    }
+  }
+
   try {
-    const data = await apiRequest<any>({ url, method: "GET" });
+    const data = await apiRequest<any>({ url, method: "GET", headers });
     return data; // Return full paginated response {count, next, previous, results}
   } catch (err) {
     return { count: 0, results: [] };
@@ -62,7 +76,23 @@ export async function fetchBookStatistics() {
 }
 
 export async function fetchBookDetails(slug: string) {
-  const data = await apiRequest<any>({ url: `/books/${slug}/`, method: "GET" });
+  const headers: Record<string, string> = {};
+  if (typeof window === "undefined") {
+    try {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      const token = cookieStore.get("auth_token")?.value;
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    } catch (e) {}
+  }
+
+  const data = await apiRequest<any>({
+    url: `/books/${slug}/`,
+    method: "GET",
+    headers,
+  });
   return data;
 }
 
@@ -82,8 +112,20 @@ export async function fetchSearchBooks(
   const queryString = queryParams.toString();
   const url = queryString ? `/search/books/?${queryString}` : `/search/books/`;
 
+  const headers: Record<string, string> = {};
+  if (typeof window === "undefined") {
+    try {
+      const { cookies } = await import("next/headers");
+      const cookieStore = await cookies();
+      const token = cookieStore.get("auth_token")?.value;
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+    } catch (e) {}
+  }
+
   try {
-    const data = await apiRequest<any>({ url, method: "GET" });
+    const data = await apiRequest<any>({ url, method: "GET", headers });
     return data.results || data;
   } catch (err) {
     return [];

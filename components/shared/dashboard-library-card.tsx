@@ -10,9 +10,14 @@ import {
   Archive,
   Eye,
   CheckCircle2,
+  Handshake,
+  ShoppingBag,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Book } from "@/components/shared/library-grid";
+import { apiRequest } from "@/lib/api/client";
+import { useQueryClient } from "@tanstack/react-query";
+import { Badge } from "@/components/ui/badge";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -61,10 +66,47 @@ export function DashboardLibraryCard({
   isSelected,
   onToggleSelect,
 }: DashboardLibraryCardProps) {
-  const handleDelete = () => {
-    toast.success("Listing Deleted", {
-      description: `${book.title} has been removed from your inventory.`,
-    });
+  const queryClient = useQueryClient();
+
+  const handleStatusChange = async (newQuantity: number, status?: string) => {
+    try {
+      await apiRequest({
+        url: `/books/${book.id}/`,
+        method: "PATCH",
+        data: {
+          quantity: newQuantity,
+          ...(status ? { inventoryStatus: status } : {}),
+        },
+      });
+      toast.success("Status Updated", {
+        description: `${book.title} status has been updated.`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["userLibrary"] });
+      queryClient.invalidateQueries({ queryKey: ["userLibraryStats"] });
+    } catch (err) {
+      toast.error("Failed to update status.");
+    }
+  };
+
+  const handleArchive = async () => {
+    await handleStatusChange(0, "archived");
+  };
+
+  const handleDelete = async () => {
+    if (!confirm(`Are you sure you want to delete ${book.title}?`)) return;
+    try {
+      await apiRequest({
+        url: `/books/${book.id}/`,
+        method: "DELETE",
+      });
+      toast.success("Listing Deleted", {
+        description: `${book.title} has been removed from your inventory.`,
+      });
+      queryClient.invalidateQueries({ queryKey: ["userLibrary"] });
+      queryClient.invalidateQueries({ queryKey: ["userLibraryStats"] });
+    } catch (err) {
+      toast.error("Failed to delete listing.");
+    }
   };
 
   const statusKey = book.inventoryStatus || "available";
@@ -115,27 +157,65 @@ export function DashboardLibraryCard({
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link
-                href={`/books/upload?edit=${book.id}`}
+                href={`/dashboard/upload?edit=${book.id}`}
                 className="cursor-pointer"
               >
                 <Edit className="mr-2 size-4" /> Edit Details
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <CheckCircle2 className="mr-2 size-4" /> Change Status
-            </DropdownMenuItem>
+
+            {statusKey === "available" ? (
+              <>
+                <DropdownMenuItem
+                  onClick={() => handleStatusChange(0, "exchanged")}
+                  className="cursor-pointer"
+                >
+                  <Handshake className="mr-2 h-4 w-4" />
+                  Mark as Exchanged
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleStatusChange(0, "sold")}
+                  className="cursor-pointer"
+                >
+                  <ShoppingBag className="mr-2 h-4 w-4" />
+                  Mark as Sold
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <DropdownMenuItem
+                onClick={() => handleStatusChange(1, "available")}
+                className="cursor-pointer"
+              >
+                <CheckCircle2 className="mr-2 h-4 w-4 text-green-600" />
+                Mark as Available
+              </DropdownMenuItem>
+            )}
+
             <DropdownMenuItem asChild>
-              <Link href={`/books/${book.id}`} className="cursor-pointer">
+              <Link
+                href={`/books/${book.slug || book.id}`}
+                className="cursor-pointer"
+              >
                 <Eye className="mr-2 size-4" /> Manage Listing
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
-              <Copy className="mr-2 size-4" /> Duplicate
+            <DropdownMenuItem asChild>
+              <Link
+                href={`/dashboard/upload?duplicate=${book.id}`}
+                className="cursor-pointer"
+              >
+                <Copy className="mr-2 size-4" /> Duplicate
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">
-              <Archive className="mr-2 size-4" /> Archive
-            </DropdownMenuItem>
+            {statusKey === "available" && (
+              <DropdownMenuItem
+                onClick={handleArchive}
+                className="cursor-pointer"
+              >
+                <Archive className="mr-2 size-4" /> Archive
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               onClick={handleDelete}
               className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
@@ -155,7 +235,7 @@ export function DashboardLibraryCard({
       </div>
 
       {/* ── Book Cover ── */}
-      <Link href={`/books/${book.id}`} className="block">
+      <Link href={`/books/${book.slug || book.id}`} className="block">
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900">
           <Image
             src={book.coverUrl || "/book-covers/borrowed-light.svg"}
@@ -171,7 +251,7 @@ export function DashboardLibraryCard({
 
       {/* ── Content & Management Info ── */}
       <div className="flex flex-1 flex-col gap-2 p-3.5">
-        <Link href={`/books/${book.id}`} className="block">
+        <Link href={`/books/${book.slug || book.id}`} className="block">
           <h3 className="text-foreground group-hover:text-primary line-clamp-1 text-sm leading-tight font-bold transition-colors">
             {book.title}
           </h3>
@@ -198,21 +278,17 @@ export function DashboardLibraryCard({
               </div>
             </div>
           ) : (
-            <div className="flex flex-wrap gap-1.5 text-[11px] font-medium">
-              {book.tags.filter((t) =>
-                ["borrow", "exchange", "sell"].includes(t),
-              ).length > 0 ? (
+            <div className="flex flex-wrap gap-2 text-xs">
+              {book.tags && book.tags.length > 0 ? (
                 book.tags
-                  .filter((t) => ["borrow", "exchange", "sell"].includes(t))
-                  .map((tag) => (
+                  .filter((t: string) => t !== "request")
+                  .map((tag: string) => (
                     <div
                       key={tag}
                       className="flex items-center gap-1 rounded-md bg-emerald-500/10 px-2 py-1 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400"
                     >
                       <CheckCircle2 className="h-3 w-3" />
-                      <span className="capitalize">
-                        {tag === "sell" ? "Sale" : tag}
-                      </span>
+                      <span className="capitalize">{tag}</span>
                     </div>
                   ))
               ) : (
@@ -220,6 +296,33 @@ export function DashboardLibraryCard({
               )}
             </div>
           )}
+
+          <div className="mt-2 flex flex-wrap gap-2 text-xs">
+            {statusKey === "sold" && (
+              <Badge
+                variant="secondary"
+                className="bg-destructive/10 text-destructive border-transparent"
+              >
+                Sold
+              </Badge>
+            )}
+            {statusKey === "exchanged" && (
+              <Badge
+                variant="secondary"
+                className="bg-destructive/10 text-destructive border-transparent"
+              >
+                Exchanged
+              </Badge>
+            )}
+            {statusKey === "archived" && (
+              <Badge
+                variant="secondary"
+                className="bg-muted-foreground/10 text-muted-foreground border-transparent"
+              >
+                Archived
+              </Badge>
+            )}
+          </div>
         </div>
 
         <div className="mt-auto flex flex-col gap-1 pt-2">
@@ -231,14 +334,23 @@ export function DashboardLibraryCard({
           </div>
           <div className="flex justify-between text-[10px]">
             <span className="text-muted-foreground">Location</span>
-            <span className="font-semibold text-slate-700 dark:text-slate-300">
-              {book.shelfLocation || "Unassigned"}
+            <span
+              className="max-w-[120px] truncate text-right font-semibold text-slate-700 dark:text-slate-300"
+              title={book.location || book.shelfLocation || "Unassigned"}
+            >
+              {book.location || book.shelfLocation || "Unassigned"}
             </span>
           </div>
           <div className="flex justify-between text-[10px]">
             <span className="text-muted-foreground">Added</span>
             <span className="font-semibold text-slate-700 dark:text-slate-300">
-              {book.addedAt || "N/A"}
+              {book.addedAt
+                ? new Date(book.addedAt).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })
+                : "N/A"}
             </span>
           </div>
           <div className="flex justify-between text-[10px]">

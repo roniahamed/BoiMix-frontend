@@ -111,9 +111,9 @@ export function BookCard({
   const { toggleItem: toggleWishlist, isInWishlist } = useWishlistStore();
   const inWishlist = mounted ? isInWishlist(book.id) : false;
 
-  const hasSell = book.tags.includes("sell");
-  const hasExchange = book.tags.includes("exchange");
-  const hasBorrow = book.tags.includes("borrow");
+  const hasSell = book.availabilityMode === "sell";
+  const hasExchange = book.availabilityMode === "exchange";
+  const hasBorrow = book.availabilityMode === "borrow";
 
   const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent linking to the book
@@ -252,14 +252,14 @@ export function BookCard({
           )}
 
           {/* Ribbon Tag - Top Right */}
-          {book.tags.length > 0 && (
+          {book.availabilityMode && (
             <div
               className={cn(
                 "absolute top-[10px] -right-[38px] z-20 w-[120px] rotate-45 py-0.5 text-center text-[9.5px] font-extrabold tracking-widest uppercase shadow-sm",
-                tagClasses[book.tags[0]] || "bg-gray-500 text-white",
+                tagClasses[book.availabilityMode] || "bg-gray-500 text-white",
               )}
             >
-              {tagLabels[book.tags[0]]}
+              {tagLabels[book.availabilityMode] || book.availabilityMode}
             </div>
           )}
 
@@ -360,24 +360,26 @@ export function BookCard({
                   )}
                 </div>
                 <div className="flex items-center justify-between gap-2">
-                  <span
-                    className={cn(
-                      "inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-[11px] font-bold capitalize",
-                      book.condition === "new" &&
-                        "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-                      book.condition === "excellent" &&
-                        "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-                      (book.condition === "good" ||
-                        book.condition === "fair") &&
-                        "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-                      book.condition === "poor" &&
-                        "bg-rose-500/10 text-rose-600 dark:text-rose-400",
-                    )}
-                  >
-                    {book.condition === "excellent"
-                      ? "Like New"
-                      : book.condition}
-                  </span>
+                  {book.availabilityMode !== "borrow" && (
+                    <span
+                      className={cn(
+                        "inline-flex shrink-0 items-center rounded-md px-2 py-0.5 text-[11px] font-bold capitalize",
+                        book.condition === "new" &&
+                          "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+                        book.condition === "excellent" &&
+                          "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+                        (book.condition === "good" ||
+                          book.condition === "fair") &&
+                          "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+                        book.condition === "poor" &&
+                          "bg-rose-500/10 text-rose-600 dark:text-rose-400",
+                      )}
+                    >
+                      {book.condition === "excellent"
+                        ? "Like New"
+                        : book.condition}
+                    </span>
+                  )}
                   {!hidePrice && book.price != null && (
                     <div className="flex shrink-0 items-center gap-1.5">
                       {book.originalPrice != null &&

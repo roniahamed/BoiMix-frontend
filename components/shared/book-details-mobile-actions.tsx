@@ -23,6 +23,7 @@ type BookDetailsMobileActionsProps = {
     tags: string[];
     borrowFee?: number;
     maxBorrowDays?: number;
+    availabilityMode?: string;
   };
 };
 
@@ -212,7 +213,7 @@ export function BookDetailsMobileActions({
         aria-label="Book actions"
       >
         <div className="boimix-container flex h-12 w-full items-center gap-3">
-          {book.tags.includes("sell") && (
+          {book.availabilityMode === "sell" && (
             <>
               <Button
                 className="h-11 flex-1 gap-2 bg-[#f57224] px-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]"
@@ -235,7 +236,7 @@ export function BookDetailsMobileActions({
               </Button>
             </>
           )}
-          {book.tags.includes("exchange") && (
+          {book.availabilityMode === "exchange" && (
             <Button
               className="h-11 flex-1 gap-2 bg-[#f57224] text-base font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]"
               onClick={() => router.push(`/exchange/offer/${book.id}`)}
@@ -244,7 +245,7 @@ export function BookDetailsMobileActions({
               <span>Exchange</span>
             </Button>
           )}
-          {book.tags.includes("borrow") && (
+          {book.availabilityMode === "borrow" && (
             <>
               <Button
                 className="h-11 flex-1 gap-2 bg-[#f57224] px-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#d65e1c] active:scale-[0.98]"

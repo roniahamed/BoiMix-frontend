@@ -11,10 +11,21 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
-    setApiAccessToken(useAuthStore.getState().accessToken);
+    const syncCookie = (token: string | null) => {
+      if (token) {
+        document.cookie = `auth_token=${token}; path=/; max-age=86400; SameSite=Lax`;
+      } else {
+        document.cookie = `auth_token=; path=/; max-age=0`;
+      }
+    };
+
+    const initialToken = useAuthStore.getState().accessToken;
+    setApiAccessToken(initialToken);
+    syncCookie(initialToken);
 
     const unsubscribe = useAuthStore.subscribe((state) => {
       setApiAccessToken(state.accessToken);
+      syncCookie(state.accessToken);
     });
 
     const handleStorageChange = (e: StorageEvent) => {

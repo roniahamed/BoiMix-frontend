@@ -34,12 +34,21 @@ export type Book = {
   coverUrl: string;
   sellerName?: string;
   tags: string[];
-  inventoryStatus?: "available" | "borrowed" | "draft" | "archived" | "sold";
+  inventoryStatus?:
+    | "available"
+    | "borrowed"
+    | "draft"
+    | "archived"
+    | "sold"
+    | "exchanged";
   isbn?: string;
+  slug?: string;
   addedAt?: string;
   shelfLocation?: string;
+  location?: string;
   borrower?: string;
   dueDate?: string;
+  availabilityMode?: "sell" | "borrow" | "exchange";
 };
 
 // We don't need to pass books anymore as it's fetched internally.
