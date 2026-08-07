@@ -45,48 +45,76 @@ const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
   ),
 });
 
-const uploadSchema = z.object({
-  isbn: z.string().optional(),
-  title: z.string().min(2, "বইয়ের নাম দিন (ন্যূনতম ২ অক্ষর)"),
-  author: z.string().min(2, "লেখকের নাম দিন"),
-  publisher: z.string().optional(),
-  genre: z.string().optional(),
-  language: z.string().optional(),
-  edition: z.string().optional(),
-  pageCount: z.string().optional(),
-  description: z.string().optional(),
+const uploadSchema = z
+  .object({
+    isbn: z.string().optional(),
+    title: z.string().min(2, "বইয়ের নাম দিন (ন্যূনতম ২ অক্ষর)"),
+    author: z.string().min(2, "লেখকের নাম দিন"),
+    publisher: z.string().optional(),
+    genre: z.string().optional(),
+    language: z.string().optional(),
+    edition: z.string().optional(),
+    pageCount: z.string().optional(),
+    description: z.string().optional(),
 
-  // Availability
-  availabilityMode: z.enum(["sell", "borrow", "exchange"], {
-    error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, এক্সচেঞ্জ অথবা ধার)",
-  }),
-  originalPrice: z.string().optional(),
-  sellPrice: z.string().optional(),
-  sellQuantity: z.string().optional(),
+    // Availability
+    availabilityMode: z.enum(["sell", "borrow", "exchange"], {
+      error: "অন্তত একটি অপশন নির্বাচন করুন (বিক্রি, এক্সচেঞ্জ অথবা ধার)",
+    }),
+    originalPrice: z.string().optional(),
+    sellPrice: z.string().optional(),
+    sellQuantity: z.string().optional(),
 
-  borrowQuantity: z.string().optional(),
-  borrowDuration: z.string().optional(),
-  deposit: z.string().optional(),
-  borrowFee: z.string().optional(),
+    borrowQuantity: z.string().optional(),
+    borrowDuration: z.string().optional(),
+    deposit: z.string().optional(),
+    borrowFee: z.string().optional(),
 
-  exchangeQuantity: z.string().optional(),
-  exchangePreference: z.string().optional(),
-  estimatedExchangeValue: z.string().optional(),
+    exchangeQuantity: z.string().optional(),
+    exchangePreference: z.string().optional(),
+    estimatedExchangeValue: z.string().optional(),
 
-  // Condition
-  condition: z.string().min(1, "বইয়ের অবস্থা নির্বাচন করুন"),
+    // Condition
+    condition: z.string().min(1, "বইয়ের অবস্থা নির্বাচন করুন"),
 
-  // Location
-  locationType: z.enum(["default", "custom"]),
-  locationAddress: z.string().optional(),
-  locationLat: z.number().optional(),
-  locationLng: z.number().optional(),
+    // Location
+    locationType: z.enum(["default", "custom"]),
+    locationAddress: z.string().optional(),
+    locationLat: z.number().optional(),
+    locationLng: z.number().optional(),
 
-  // Additional info
-  tags: z.string().optional(),
-  editionDetails: z.string().optional(),
-  conditionNote: z.string().optional(),
-});
+    // Additional info
+    tags: z.string().optional(),
+    editionDetails: z.string().optional(),
+    conditionNote: z.string().optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.availabilityMode === "sell") {
+      if (!data.sellPrice || data.sellPrice.trim() === "") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "বিক্রির জন্য ডিসকাউন্ট প্রাইস দিতে হবে",
+          path: ["sellPrice"],
+        });
+      }
+    } else if (data.availabilityMode === "borrow") {
+      if (!data.borrowDuration || data.borrowDuration.trim() === "") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "সর্বোচ্চ ধার নেওয়ার দিন দিতে হবে",
+          path: ["borrowDuration"],
+        });
+      }
+    } else if (data.availabilityMode === "exchange") {
+      if (!data.exchangePreference || data.exchangePreference.trim() === "") {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "এক্সচেঞ্জ প্রেফারেন্স দিতে হবে",
+          path: ["exchangePreference"],
+        });
+      }
+    }
+  });
 
 type UploadFormValues = z.infer<typeof uploadSchema>;
 

@@ -89,7 +89,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <AuthProvider>
                 <TooltipProvider>
                   {children}
-                  <Toaster />
+                  <Toaster position="top-center" />
                 </TooltipProvider>
               </AuthProvider>
             </QueryProvider>
