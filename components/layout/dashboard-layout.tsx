@@ -97,10 +97,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           {/* Inner content constrained to max-w-6xl (1152px) so cards don't stretch infinitely */}
           <div
             className={cn(
-              "mx-auto w-full",
               pathname.startsWith("/dashboard/messages")
-                ? "h-full max-w-[1400px] p-0 lg:p-6 lg:pb-8"
-                : "max-w-6xl p-4 md:p-6 lg:p-8",
+                ? "mx-auto h-full w-full max-w-[1400px] p-0 lg:p-6 lg:pb-8"
+                : pathname.startsWith("/dashboard/upload")
+                  ? "w-full p-4 md:p-6 lg:p-8"
+                  : "mx-auto w-full max-w-6xl p-4 md:p-6 lg:p-8",
             )}
           >
             {children}

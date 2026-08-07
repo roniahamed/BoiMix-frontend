@@ -203,46 +203,6 @@ const QUICK_FILL_BOOKS: Record<
   },
 };
 
-const TITLE_OPTIONS = [
-  "Atomic Habits",
-  "Rivers of Dhaka",
-  "Borrowed Light",
-  "Pather Panchali",
-  "Shesher Kobita",
-];
-const AUTHOR_OPTIONS = [
-  "James Clear",
-  "Nadia Rahman",
-  "Rabindranath Tagore",
-  "Humayun Ahmed",
-  "Kazi Nazrul Islam",
-];
-const PUBLISHER_OPTIONS = [
-  "Penguin Random House",
-  "Prothoma",
-  "Batighor",
-  "Oitijjho",
-  "Adarsha",
-];
-const GENRE_OPTIONS = [
-  "Self Help",
-  "Productivity",
-  "Fiction",
-  "Non-Fiction",
-  "Science Fiction",
-  "Biography",
-  "Business",
-  "Poetry",
-];
-const EDITION_OPTIONS = [
-  "1st Edition",
-  "2nd Edition",
-  "Revised Edition",
-  "Special Edition",
-  "Paperback",
-  "Hardcover",
-];
-
 export function UploadBookForm({
   formId,
   showActions = true,
@@ -256,11 +216,10 @@ export function UploadBookForm({
   const [isLoading, setIsLoading] = useState(false);
   const [autofillMessage, setAutofillMessage] = useState<string | null>(null);
 
-  const [titleOptions, setTitleOptions] = useState<string[]>(TITLE_OPTIONS);
-  const [authorOptions, setAuthorOptions] = useState<string[]>(AUTHOR_OPTIONS);
-  const [publisherOptions, setPublisherOptions] =
-    useState<string[]>(PUBLISHER_OPTIONS);
-  const [genreOptions, setGenreOptions] = useState<string[]>(GENRE_OPTIONS);
+  const [titleOptions, setTitleOptions] = useState<string[]>([]);
+  const [authorOptions, setAuthorOptions] = useState<string[]>([]);
+  const [publisherOptions, setPublisherOptions] = useState<string[]>([]);
+  const [genreOptions, setGenreOptions] = useState<string[]>([]);
   const [languageOptions, setLanguageOptions] = useState<string[]>([
     "English",
     "Bengali",
@@ -269,6 +228,7 @@ export function UploadBookForm({
 
   // Image states
   const [frontCover, setFrontCover] = useState<File | null>(null);
+  const [frontCoverUrl, setFrontCoverUrl] = useState<string | null>(null);
   const [backCover, setBackCover] = useState<File | null>(null);
   const [insidePages, setInsidePages] = useState<File | null>(null);
   const [tocImage, setTocImage] = useState<File | null>(null);
@@ -292,9 +252,9 @@ export function UploadBookForm({
 
   const fetchSuggestions = useCallback(
     (q: string, type: string, setter: (opts: string[]) => void) => {
-      if (!q || !q.trim()) return;
+      const queryParam = q ? encodeURIComponent(q.trim()) : "";
       apiRequest<any>({
-        url: `/search/suggestions/?q=${encodeURIComponent(q.trim())}&type=${type}`,
+        url: `/search/suggestions/?q=${queryParam}&type=${type}`,
         method: "GET",
       })
         .then((data) => {
@@ -333,6 +293,7 @@ export function UploadBookForm({
             });
           if (data.description)
             setValue("description", data.description, { shouldValidate: true });
+          if (data.coverUrl) setFrontCoverUrl(data.coverUrl);
 
           setAutofillMessage(
             `✨ Auto-filled book details for "${data.title || newTitle}"!`,
@@ -368,6 +329,7 @@ export function UploadBookForm({
             });
           if (data.description)
             setValue("description", data.description, { shouldValidate: true });
+          if (data.coverUrl) setFrontCoverUrl(data.coverUrl);
 
           setAutofillMessage(`✨ Auto-filled details for ISBN "${newIsbn}"!`);
           setTimeout(() => setAutofillMessage(null), 5000);
@@ -386,23 +348,18 @@ export function UploadBookForm({
   useEffect(() => {
     apiRequest<any>({ url: "/books/filters/", method: "GET" })
       .then((data) => {
-        if (data.authors?.length)
-          setAuthorOptions(data.authors.map((a: any) => a.label));
-        if (data.publishers?.length)
-          setPublisherOptions(data.publishers.map((p: any) => p.label));
-        if (data.categories?.length)
-          setGenreOptions(data.categories.map((c: any) => c.label));
-        if (data.languages?.length)
-          setLanguageOptions(data.languages.map((l: any) => l.label));
+        setAuthorOptions(data.authors?.map((a: any) => a.label) || []);
+        setPublisherOptions(data.publishers?.map((p: any) => p.label) || []);
+        setGenreOptions(data.categories?.map((c: any) => c.label) || []);
+        setLanguageOptions(
+          data.languages?.map((l: any) => l.label) || ["English", "Bengali"],
+        );
       })
       .catch(console.error);
 
-    apiRequest<any>({ url: "/search/trending/", method: "GET" })
-      .then((data) => {
-        if (data.trending?.length) setTitleOptions(data.trending);
-      })
-      .catch(console.error);
-  }, []);
+    fetchSuggestions("", "title", setTitleOptions);
+    fetchSuggestions("", "isbn", setIsbnOptions);
+  }, [fetchSuggestions]);
 
   const handleIsbnAutoFill = async () => {
     const currentIsbn = getValues("isbn");
@@ -422,10 +379,12 @@ export function UploadBookForm({
       setValue("title", data.title || "", { shouldValidate: true });
       setValue("author", data.author || "", { shouldValidate: true });
       setValue("publisher", data.publisher || "", { shouldValidate: true });
+      setValue("genre", data.genre || "", { shouldValidate: true });
       setValue("pageCount", data.pages ? data.pages.toString() : "", {
         shouldValidate: true,
       });
       setValue("description", data.description || "", { shouldValidate: true });
+      if (data.coverUrl) setFrontCoverUrl(data.coverUrl);
 
       setAutofillMessage(`✨ Auto-filled book details for "${data.title}"!`);
       setTimeout(() => setAutofillMessage(null), 5000);
@@ -507,6 +466,8 @@ export function UploadBookForm({
         }
       });
       if (frontCover) formData.append("frontCover", frontCover);
+      else if (frontCoverUrl) formData.append("frontCoverUrl", frontCoverUrl);
+
       if (backCover) formData.append("backCover", backCover);
       if (insidePages) formData.append("insidePages", insidePages);
       if (tocImage) formData.append("tocImage", tocImage);
@@ -584,9 +545,13 @@ export function UploadBookForm({
               <div className="mb-3 grid grid-cols-2 gap-4 md:grid-cols-5">
                 <ImageUploader
                   file={frontCover}
-                  onChange={setFrontCover}
+                  previewUrl={frontCoverUrl || undefined}
+                  onChange={(file) => {
+                    setFrontCover(file);
+                    if (file) setFrontCoverUrl(null); // Clear URL if they upload a file
+                  }}
                   title="Front Cover"
-                  required
+                  required={!frontCoverUrl}
                   className="aspect-[3/4] md:aspect-auto"
                 />
                 <ImageUploader
@@ -791,7 +756,14 @@ export function UploadBookForm({
                       name="edition"
                       render={({ field }) => (
                         <CreatableCombobox
-                          options={EDITION_OPTIONS}
+                          options={[
+                            "1st Edition",
+                            "2nd Edition",
+                            "Revised Edition",
+                            "Special Edition",
+                            "Paperback",
+                            "Hardcover",
+                          ]}
                           value={field.value || ""}
                           onChange={field.onChange}
                           placeholder="e.g. 1st Edition"
@@ -1379,10 +1351,10 @@ export function UploadBookForm({
                   <div className="flex-1 space-y-3">
                     <div>
                       <h4 className="text-primary text-lg font-bold">
-                        {titleWatch || "Atomic Habits"}
+                        {titleWatch || "Book Title"}
                       </h4>
                       <p className="text-muted-foreground text-sm">
-                        {authorWatch || "James Clear"}
+                        {authorWatch || "Author Name"}
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-2">

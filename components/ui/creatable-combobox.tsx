@@ -73,7 +73,10 @@ export function CreatableCombobox({
           placeholder={placeholder}
           value={inputValue}
           onChange={handleInputChange}
-          onFocus={() => setOpen(true)}
+          onFocus={() => {
+            if (!open) setOpen(true);
+            if (onSearchChange) onSearchChange(inputValue);
+          }}
           className={cn("w-full", className)}
           onKeyDown={(e) => {
             if (e.key === "Enter" && inputValue) {
@@ -89,7 +92,11 @@ export function CreatableCombobox({
         align="start"
         onOpenAutoFocus={(e) => e.preventDefault()} // Prevent focus stealing from input
       >
-        <div className="max-h-60 overflow-y-auto p-1">
+        <div
+          className="max-h-60 overflow-y-auto p-1"
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+        >
           {filteredOptions.length === 0 && !inputValue && (
             <p className="text-muted-foreground p-2 text-center text-sm">
               {emptyText}
