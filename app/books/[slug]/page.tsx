@@ -43,7 +43,16 @@ export default async function BookDetailsPage({
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
 
-  const bookDetailsData = await fetchBookDetails(slug).catch(() => null);
+  let token: string | undefined = undefined;
+  try {
+    const { cookies } = await import("next/headers");
+    const cookieStore = await cookies();
+    token = cookieStore.get("auth_token")?.value;
+  } catch (e) {
+    // Ignore
+  }
+
+  const bookDetailsData = await fetchBookDetails(slug, token).catch(() => null);
 
   if (!bookDetailsData) {
     return <div className="p-8 text-center">Book not found.</div>;

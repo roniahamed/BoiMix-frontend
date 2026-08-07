@@ -6,6 +6,7 @@ export async function fetchBooks(
   page: number = 1,
   searchQuery: string = "",
   pageSize: number = 20,
+  serverToken?: string,
 ) {
   const queryParams = new URLSearchParams();
   if (type) queryParams.append("type", type);
@@ -30,7 +31,9 @@ export async function fetchBooks(
   const url = queryString ? `/books/?${queryString}` : `/books/`;
 
   const headers: Record<string, string> = {};
-  if (typeof window === "undefined") {
+  if (serverToken) {
+    headers["Authorization"] = `Bearer ${serverToken}`;
+  } else if (typeof window === "undefined") {
     try {
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();
@@ -39,7 +42,7 @@ export async function fetchBooks(
         headers["Authorization"] = `Bearer ${token}`;
       }
     } catch (e) {
-      // Ignore errors if running in a context where cookies() is not available
+      // Ignore
     }
   }
 
@@ -75,9 +78,11 @@ export async function fetchBookStatistics() {
   }
 }
 
-export async function fetchBookDetails(slug: string) {
+export async function fetchBookDetails(slug: string, serverToken?: string) {
   const headers: Record<string, string> = {};
-  if (typeof window === "undefined") {
+  if (serverToken) {
+    headers["Authorization"] = `Bearer ${serverToken}`;
+  } else if (typeof window === "undefined") {
     try {
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();
@@ -99,6 +104,7 @@ export async function fetchBookDetails(slug: string) {
 export async function fetchSearchBooks(
   query: string = "",
   filters?: Record<string, string | number>,
+  serverToken?: string,
 ) {
   const queryParams = new URLSearchParams();
   if (query) queryParams.append("q", query);
@@ -113,7 +119,9 @@ export async function fetchSearchBooks(
   const url = queryString ? `/search/books/?${queryString}` : `/search/books/`;
 
   const headers: Record<string, string> = {};
-  if (typeof window === "undefined") {
+  if (serverToken) {
+    headers["Authorization"] = `Bearer ${serverToken}`;
+  } else if (typeof window === "undefined") {
     try {
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();

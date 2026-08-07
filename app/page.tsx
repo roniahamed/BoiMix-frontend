@@ -12,6 +12,8 @@ import {
   UsersRoundIcon,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
 
 import { HeroCarousel } from "@/components/home/hero-carousel";
 import { MainLayout } from "@/components/layout/main-layout";
@@ -57,7 +59,16 @@ interface TestimonialItem {
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const response = await fetchBooks();
+  let token: string | undefined = undefined;
+  try {
+    const cookieStore = await cookies();
+    token = cookieStore.get("auth_token")?.value;
+    console.log("[DEBUG] app/page.tsx token:", token ? "FOUND" : "NOT FOUND");
+  } catch (e) {
+    console.error("[DEBUG] app/page.tsx Error:", e);
+  }
+
+  const response = await fetchBooks(undefined, undefined, 1, "", 20, token);
   const featuredBooks: BookCardBook[] = response?.results || response || [];
   const newBooks: BookCardBook[] = [...featuredBooks].reverse();
   const nearbyBooks: BookCardBook[] = [...featuredBooks].slice(2, 14);
@@ -171,8 +182,14 @@ function BookSection({
 }
 
 async function CentralLibrarySection() {
+  let token: string | undefined = undefined;
+  try {
+    const cookieStore = await cookies();
+    token = cookieStore.get("auth_token")?.value;
+  } catch (e) {}
+
   const books: BookCardBook[] = (
-    (await fetchSearchBooks("", { availability_mode: "borrow" })) || []
+    (await fetchSearchBooks("", { availability_mode: "borrow" }, token)) || []
   ).slice(0, 12);
 
   return (
@@ -199,8 +216,14 @@ async function CentralLibrarySection() {
 }
 
 async function MarketplaceSection() {
+  let token: string | undefined = undefined;
+  try {
+    const cookieStore = await cookies();
+    token = cookieStore.get("auth_token")?.value;
+  } catch (e) {}
+
   const books: BookCardBook[] = (
-    (await fetchSearchBooks("", { availability_mode: "sell" })) || []
+    (await fetchSearchBooks("", { availability_mode: "sell" }, token)) || []
   ).slice(0, 12);
 
   return (
@@ -227,8 +250,14 @@ async function MarketplaceSection() {
 }
 
 async function ExchangeBooksSection() {
+  let token: string | undefined = undefined;
+  try {
+    const cookieStore = await cookies();
+    token = cookieStore.get("auth_token")?.value;
+  } catch (e) {}
+
   const books: BookCardBook[] = (
-    (await fetchSearchBooks("", { availability_mode: "exchange" })) || []
+    (await fetchSearchBooks("", { availability_mode: "exchange" }, token)) || []
   ).slice(0, 12);
 
   return (
