@@ -276,6 +276,9 @@ export function UploadBookForm({
           if (data.publisher) setValue("publisher", data.publisher);
           if (data.genre) setValue("genre", data.genre);
           if (data.language) setValue("language", data.language);
+          if (data.edition) setValue("edition", data.edition);
+          if (data.pages != null) setValue("pageCount", data.pages.toString());
+          if (data.description) setValue("description", data.description);
           if (data.isbn) setValue("isbn", data.isbn);
           // tags mapped to comma separated
           if (data.tags) setValue("tags", data.tags.join(", "));
