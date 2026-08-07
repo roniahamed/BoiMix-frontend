@@ -12,8 +12,16 @@ import {
   CheckSquare,
   Square,
 } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/api/client";
+import { fetchUserLibrary } from "@/lib/api-client";
 import { toast } from "sonner";
 
 export type Book = {
@@ -34,46 +42,90 @@ export type Book = {
   dueDate?: string;
 };
 
-type FilterType =
-  | "All"
-  | "Available"
-  | "Borrow"
-  | "Exchange"
-  | "Sell"
-  | "Archived";
+// We don't need to pass books anymore as it's fetched internally.
+export function LibraryGrid() {
+  type FilterType =
+    | "All"
+    | "Available"
+    | "Borrow"
+    | "Exchange"
+    | "Sell"
+    | "Archived";
 
-const PAGE_SIZE = 10;
-
-const FILTER_CONFIG: { label: FilterType; activeClass: string }[] = [
-  { label: "All", activeClass: "bg-[#0397d3] text-white shadow-sm" },
-  { label: "Available", activeClass: "bg-emerald-500 text-white shadow-sm" },
-  { label: "Borrow", activeClass: "bg-purple-600 text-white shadow-sm" },
-  { label: "Exchange", activeClass: "bg-[#0397d3] text-white shadow-sm" },
-  { label: "Sell", activeClass: "bg-orange-500 text-white shadow-sm" },
-  { label: "Archived", activeClass: "bg-slate-600 text-white shadow-sm" },
-];
-
-export function LibraryGrid({ books }: { books: Book[] }) {
+  const FILTER_CONFIG: { label: FilterType; activeClass: string }[] = [
+    { label: "All", activeClass: "bg-[#0397d3] text-white shadow-sm" },
+    { label: "Available", activeClass: "bg-emerald-500 text-white shadow-sm" },
+    { label: "Borrow", activeClass: "bg-purple-600 text-white shadow-sm" },
+    { label: "Exchange", activeClass: "bg-[#0397d3] text-white shadow-sm" },
+    { label: "Sell", activeClass: "bg-orange-500 text-white shadow-sm" },
+    { label: "Archived", activeClass: "bg-slate-600 text-white shadow-sm" },
+  ];
   const [activeFilter, setActiveFilter] = useState<FilterType>("All");
   const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [conditionFilter, setConditionFilter] = useState("all");
+  const [genreFilter, setGenreFilter] = useState("all");
+  const [sortBy, setSortBy] = useState("recently_added");
+
   const [isBulkActionLoading, setIsBulkActionLoading] = useState(false);
   const [selectedBooks, setSelectedBooks] = useState<Set<string>>(new Set());
 
   const queryClient = useQueryClient();
   const loaderRef = useRef<HTMLDivElement>(null);
 
-  // We do NOT use useEffect to reset page to avoid cascading renders.
-  // Instead, handle search/filter state directly when user interacts.
+  // Use debounce for search
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(handler);
+  }, [search]);
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading: isGridLoading,
+  } = useInfiniteQuery({
+    queryKey: [
+      "userLibrary",
+      activeFilter,
+      debouncedSearch,
+      conditionFilter,
+      genreFilter,
+      sortBy,
+    ],
+    queryFn: ({ pageParam = 1 }) =>
+      fetchUserLibrary({
+        page: pageParam,
+        search: debouncedSearch,
+        status: activeFilter,
+        condition: conditionFilter,
+        genre: genreFilter,
+        sort: sortBy,
+      }),
+    getNextPageParam: (lastPage, allPages) =>
+      lastPage?.next ? allPages.length + 1 : undefined,
+    initialPageParam: 1,
+  });
+
+  const visible = data?.pages.flatMap((page) => page.results || []) || [];
+
   const handleFilterChange = (label: FilterType) => {
     setActiveFilter(label);
-    setPage(1);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    setPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setActiveFilter("All");
+    setSearch("");
+    setConditionFilter("all");
+    setGenreFilter("all");
+    setSortBy("recently_added");
   };
 
   const toggleSelectBook = (id: string) => {
@@ -137,51 +189,21 @@ export function LibraryGrid({ books }: { books: Book[] }) {
     }
   };
 
-  const filtered = books.filter((b) => {
-    const matchSearch =
-      search === "" ||
-      b.title.toLowerCase().includes(search.toLowerCase()) ||
-      b.author.toLowerCase().includes(search.toLowerCase()) ||
-      (b.isbn && b.isbn.includes(search));
-
-    let matchFilter = true;
-    if (activeFilter !== "All") {
-      const status = b.inventoryStatus || "available";
-      if (activeFilter === "Available") matchFilter = status === "available";
-      if (activeFilter === "Archived") matchFilter = status === "archived";
-      if (activeFilter === "Borrow") matchFilter = b.tags?.includes("borrow");
-      if (activeFilter === "Exchange")
-        matchFilter = b.tags?.includes("exchange");
-      if (activeFilter === "Sell") matchFilter = b.tags?.includes("sell");
-    }
-
-    return matchSearch && matchFilter;
-  });
-
-  const visible = filtered.slice(0, page * PAGE_SIZE);
-  const hasMore = visible.length < filtered.length;
-
-  const loadMore = useCallback(() => {
-    if (isLoading || !hasMore) return;
-    setIsLoading(true);
-    setTimeout(() => {
-      setPage((p) => p + 1);
-      setIsLoading(false);
-    }, 600);
-  }, [isLoading, hasMore]);
-
+  // Infinite Scroll Observer
   useEffect(() => {
     const el = loaderRef.current;
     if (!el) return;
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting) loadMore();
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
       },
       { rootMargin: "200px" },
     );
     observer.observe(el);
     return () => observer.disconnect();
-  }, [loadMore]);
+  }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   return (
     <div className="space-y-4">
@@ -218,18 +240,60 @@ export function LibraryGrid({ books }: { books: Book[] }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button className="bg-card border-border/60 text-foreground flex flex-1 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 sm:flex-none sm:justify-center dark:hover:bg-slate-800">
-            Status <ChevronDown className="h-4 w-4 text-slate-400" />
-          </button>
-          <button className="bg-card border-border/60 text-foreground flex flex-1 items-center justify-between gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 sm:flex-none sm:justify-center dark:hover:bg-slate-800">
-            Genre <ChevronDown className="h-4 w-4 text-slate-400" />
-          </button>
-          <button className="bg-card border-border/60 text-foreground flex w-full items-center justify-between gap-2 rounded-xl border px-3 py-2 text-sm shadow-sm transition-all hover:bg-slate-50 sm:w-auto sm:flex-none sm:justify-center dark:hover:bg-slate-800">
-            <span>
-              Sort: <span className="font-medium">Recently Added</span>
-            </span>
-            <ChevronDown className="h-4 w-4 text-slate-400" />
-          </button>
+          <Select value={conditionFilter} onValueChange={setConditionFilter}>
+            <SelectTrigger className="bg-card border-border/60 text-foreground w-[130px] rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800">
+              <SelectValue placeholder="Condition" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Conditions</SelectItem>
+              <SelectItem value="new">New</SelectItem>
+              <SelectItem value="excellent">Excellent</SelectItem>
+              <SelectItem value="good">Good</SelectItem>
+              <SelectItem value="fair">Fair</SelectItem>
+              <SelectItem value="poor">Poor</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={genreFilter} onValueChange={setGenreFilter}>
+            <SelectTrigger className="bg-card border-border/60 text-foreground w-[130px] rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800">
+              <SelectValue placeholder="Genre" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Genres</SelectItem>
+              {/* Since genres are dynamic, we could fetch them, but for now we'll provide standard ones or rely on a new endpoint if needed. */}
+              <SelectItem value="fiction">Fiction</SelectItem>
+              <SelectItem value="non-fiction">Non-Fiction</SelectItem>
+              <SelectItem value="sci-fi">Sci-Fi</SelectItem>
+              <SelectItem value="thriller">Thriller</SelectItem>
+              <SelectItem value="romance">Romance</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="bg-card border-border/60 text-foreground w-[180px] rounded-xl shadow-sm hover:bg-slate-50 dark:hover:bg-slate-800">
+              <SelectValue placeholder="Sort By" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="recently_added">Recently Added</SelectItem>
+              <SelectItem value="title_asc">Title (A-Z)</SelectItem>
+              <SelectItem value="title_desc">Title (Z-A)</SelectItem>
+              <SelectItem value="price_asc">Price (Low to High)</SelectItem>
+              <SelectItem value="price_desc">Price (High to Low)</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {(activeFilter !== "All" ||
+            search !== "" ||
+            conditionFilter !== "all" ||
+            genreFilter !== "all" ||
+            sortBy !== "recently_added") && (
+            <button
+              onClick={handleResetFilters}
+              className="px-2 text-xs font-bold text-red-500 transition-colors hover:text-red-600"
+            >
+              Reset Filters
+            </button>
+          )}
         </div>
       </div>
 
@@ -278,8 +342,10 @@ export function LibraryGrid({ books }: { books: Book[] }) {
       {search || activeFilter !== "All" ? (
         <p className="text-muted-foreground text-xs">
           Showing{" "}
-          <span className="text-foreground font-bold">{filtered.length}</span>{" "}
-          book{filtered.length !== 1 ? "s" : ""}
+          <span className="text-foreground font-bold">
+            {data?.pages[0]?.count || 0}
+          </span>{" "}
+          book{data?.pages[0]?.count !== 1 ? "s" : ""}
           {search && (
             <>
               {" "}
@@ -291,8 +357,12 @@ export function LibraryGrid({ books }: { books: Book[] }) {
         </p>
       ) : null}
 
-      {/* ── GRID ── */}
-      {filtered.length === 0 ? (
+      {/* ── GRID OF BOOKS ── */}
+      {isGridLoading ? (
+        <div className="flex h-64 items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-[#0397d3]" />
+        </div>
+      ) : visible.length === 0 ? (
         <div className="flex flex-col items-center gap-3 py-20 text-center">
           <div className="bg-muted flex h-16 w-16 items-center justify-center rounded-2xl">
             <BookX className="text-muted-foreground h-8 w-8" />
@@ -317,22 +387,24 @@ export function LibraryGrid({ books }: { books: Book[] }) {
             ))}
           </div>
 
-          {/* Infinite scroll trigger */}
-          <div ref={loaderRef} className="flex justify-center py-6">
-            {isLoading && (
-              <div className="flex items-center gap-2">
-                <Loader2 className="text-primary h-5 w-5 animate-spin" />
-                <span className="text-muted-foreground text-sm font-medium">
-                  Loading more books...
-                </span>
-              </div>
-            )}
-            {!hasMore && filtered.length > PAGE_SIZE && (
+          {/* ── INFINITE SCROLL LOADER ── */}
+          {hasNextPage && (
+            <div
+              ref={loaderRef}
+              className="col-span-full mt-8 flex justify-center pb-12"
+            >
+              <Loader2 className="h-8 w-8 animate-spin text-[#0397d3]" />
+            </div>
+          )}
+
+          {!hasNextPage && visible.length > 0 && (
+            <div className="flex justify-center py-6">
               <p className="text-muted-foreground text-xs">
-                You&apos;ve seen all {filtered.length} books 🎉
+                You&apos;ve seen all {data?.pages[0]?.count || visible.length}{" "}
+                books
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </>
       )}
     </div>

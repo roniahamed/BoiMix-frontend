@@ -158,15 +158,36 @@ export async function fetchPublicProfile(username: string) {
   return data;
 }
 
-export async function fetchUserLibrary() {
+export async function fetchUserLibrary(params?: {
+  page?: number;
+  search?: string;
+  status?: string;
+  condition?: string;
+  genre?: string;
+  sort?: string;
+}) {
   try {
+    const queryParams = new URLSearchParams();
+    if (params?.page) queryParams.append("page", params.page.toString());
+    if (params?.search) queryParams.append("search", params.search);
+    if (params?.status && params.status !== "All")
+      queryParams.append("status", params.status);
+    if (params?.condition && params.condition !== "all")
+      queryParams.append("condition", params.condition);
+    if (params?.genre && params.genre !== "all")
+      queryParams.append("genre", params.genre);
+    if (params?.sort) queryParams.append("ordering", params.sort);
+
+    const queryString = queryParams.toString();
+    const url = `/books/me/library/${queryString ? `?${queryString}` : ""}`;
+
     const data = await apiRequest<any>({
-      url: "/books/me/library/",
+      url: url,
       method: "GET",
     });
-    return data.results || data;
+    return data; // Return full paginated response { count, next, previous, results }
   } catch (err) {
-    return [];
+    return { count: 0, results: [] };
   }
 }
 

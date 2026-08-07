@@ -16,14 +16,18 @@ import { AddBookButton } from "@/components/shared/add-book-button";
 import { Book } from "@/components/shared/library-grid";
 
 export default function LibraryPage() {
-  const { data: profileLibraryBooks = [] } = useQuery({
-    queryKey: ["userLibrary"],
-    queryFn: fetchUserLibrary,
+  const { data: libraryData = { count: 0, results: [] } } = useQuery({
+    queryKey: ["userLibraryStats"],
+    queryFn: () => fetchUserLibrary({}),
   });
 
-  const totalBooks = profileLibraryBooks.length;
+  const profileLibraryBooks = Array.isArray(libraryData)
+    ? libraryData
+    : libraryData.results || [];
+  const totalBooks = libraryData.count || profileLibraryBooks.length;
+
   // Compute statuses based on our new inventoryStatus field
-  // "available" | "borrowed" | "draft" | "archived" | "sold"
+  // Note: These will only be accurate for the first page of results now.
   const availableCount = profileLibraryBooks.filter(
     (b: Book) => b.inventoryStatus === "available",
   ).length;
@@ -197,7 +201,7 @@ export default function LibraryPage() {
       </div>
 
       {/* ══════ BOOK GRID ══════ */}
-      <LibraryGrid books={profileLibraryBooks} />
+      <LibraryGrid />
     </div>
   );
 }
