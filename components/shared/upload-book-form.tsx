@@ -1335,12 +1335,15 @@ export function UploadBookForm({
                 {/* Mock Card Preview */}
                 <div className="bg-card/50 flex items-start gap-4 rounded-xl border p-4">
                   <div className="bg-muted relative h-32 w-24 shrink-0 overflow-hidden rounded border">
-                    {frontCover ? (
-                      <Image
-                        src={URL.createObjectURL(frontCover)}
+                    {frontCover || frontCoverUrl ? (
+                      <img
+                        src={
+                          frontCover
+                            ? URL.createObjectURL(frontCover)
+                            : frontCoverUrl!
+                        }
                         alt="Preview"
-                        fill
-                        className="object-cover"
+                        className="h-full w-full object-cover"
                       />
                     ) : (
                       <div className="text-muted-foreground flex h-full w-full items-center justify-center p-2 text-center text-xs">
