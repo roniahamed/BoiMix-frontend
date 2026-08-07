@@ -112,7 +112,6 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiRequest<any>({ url: `/profiles/me/`, method: "GET" })
         .then((data) => {
           setProfile({
@@ -146,7 +145,6 @@ export default function SettingsPage() {
         })
         .catch(console.error);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiRequest<any>({ url: `/profiles/me/preferences/`, method: "GET" })
         .then((data) => {
           if (data) {
@@ -211,7 +209,6 @@ export default function SettingsPage() {
       });
 
       toast.success("Profile saved successfully!");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Failed to save profile", err);
       toast.error(err.message || "Failed to save profile.");
@@ -230,7 +227,6 @@ export default function SettingsPage() {
         data: preferences,
       });
       toast.success("Preferences saved successfully!");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Failed to save preferences", err);
       toast.error(err.message || "Failed to save preferences.");
@@ -243,7 +239,6 @@ export default function SettingsPage() {
     const timer = setTimeout(async () => {
       if (searchQuery.trim().length > 2) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data = await apiRequest<{ results: any[] }>({
             url: `/locations/search/?q=${encodeURIComponent(searchQuery)}`,
             method: "GET",
@@ -264,7 +259,6 @@ export default function SettingsPage() {
     const timer = setTimeout(async () => {
       if (addressDetails.street.trim().length > 2 && showStreetSuggestions) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const data = await apiRequest<{ results: any[] }>({
             url: `/locations/search/?q=${encodeURIComponent(addressDetails.street)}`,
             method: "GET",
@@ -283,7 +277,6 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (profile.username === originalUsername || !profile.username) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUsernameStatus("idle");
       setUsernameMessage("");
       return;
@@ -302,7 +295,6 @@ export default function SettingsPage() {
           setUsernameStatus("taken");
           setUsernameMessage(data.message || "Username is not available");
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setUsernameStatus("invalid");
         setUsernameMessage(err.message || "Invalid username");
@@ -316,7 +308,6 @@ export default function SettingsPage() {
     e.preventDefault();
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelectResult = async (result: any) => {
     const lat = result.lat;
     const lng = result.lng;
@@ -325,7 +316,6 @@ export default function SettingsPage() {
     handleLocationChange(lat, lng, result.address);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleStreetSelect = (result: any) => {
     setShowStreetSuggestions(false);
     setStreetResults([]);
@@ -367,7 +357,6 @@ export default function SettingsPage() {
     }
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const data = await apiRequest<any>({
         url: `/locations/reverse/?lat=${lat}&lng=${lng}`,
         method: "GET",

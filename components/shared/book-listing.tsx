@@ -3,7 +3,13 @@
 import Image from "next/image";
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBooks, fetchNearbyBooks, fetchBookFilters, fetchBookStatistics, fetchSearchSuggestions } from "@/lib/api-client";
+import {
+  fetchBooks,
+  fetchNearbyBooks,
+  fetchBookFilters,
+  fetchBookStatistics,
+  fetchSearchSuggestions,
+} from "@/lib/api-client";
 import {
   SlidersHorizontal,
   Search,
@@ -79,9 +85,10 @@ export function BookListing({
   initialFilters = {},
   initialSortBy = "newest",
 }: BookListingProps) {
-
-
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const [sortBy, setSortBy] = useState(initialSortBy);
 
   const { data: filtersData } = useQuery({
@@ -89,8 +96,12 @@ export function BookListing({
     queryFn: fetchBookFilters,
   });
 
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>(initialFilters);
-  const [priceRange, setPriceRange] = useState<{ min: string; max: string; } | null>(null);
+  const [selectedFilters, setSelectedFilters] =
+    useState<Record<string, string[]>>(initialFilters);
+  const [priceRange, setPriceRange] = useState<{
+    min: string;
+    max: string;
+  } | null>(null);
   const [searchQuery, setSearchQuery] = useState(defaultSearchQuery);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 20;
@@ -107,21 +118,45 @@ export function BookListing({
   });
 
   const { data: booksResponse, isLoading } = useQuery({
-    queryKey: ["books", sortBy === "distance" ? "nearby" : "all", userLocation, selectedFilters, currentPage, searchQuery],
+    queryKey: [
+      "books",
+      sortBy === "distance" ? "nearby" : "all",
+      userLocation,
+      selectedFilters,
+      currentPage,
+      searchQuery,
+      sortBy,
+    ],
     queryFn: () => {
       if (sortBy === "distance" && userLocation) {
-        return fetchNearbyBooks(userLocation.lat, userLocation.lng).then(res => ({ results: res, count: res.length }));
+        return fetchNearbyBooks(userLocation.lat, userLocation.lng).then(
+          (res) => ({ results: res, count: res.length }),
+        );
       }
-      return fetchBooks(undefined, selectedFilters, currentPage, searchQuery, itemsPerPage);
+      const apiFilters = { ...selectedFilters };
+      if (sortBy === "price-low") apiFilters.ordering = "price";
+      if (sortBy === "price-high") apiFilters.ordering = "-price";
+      if (sortBy === "rating")
+        apiFilters.ordering = "-owner__profile__public_rating";
+
+      return fetchBooks(
+        undefined,
+        apiFilters,
+        currentPage,
+        searchQuery,
+        itemsPerPage,
+      );
     },
   });
 
   const baseBooks = booksResponse?.results || [];
   const totalBooksCount = booksResponse?.count || 0;
 
+  // (skipping some code up to filteredBooks for the replacement block below)
+
   const FILTER_GROUPS = useMemo(() => {
     if (!filtersData) return [];
-    
+
     return [
       {
         id: "availability",
@@ -168,17 +203,22 @@ export function BookListing({
     ];
   }, [filtersData]);
 
-
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (sortBy === "distance" && !userLocation && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-      }, () => {
-        // Handle error or default to Dhaka coordinates
-        setUserLocation({ lat: 23.8103, lng: 90.4125 });
-      });
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserLocation({
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+          });
+        },
+        () => {
+          // Handle error or default to Dhaka coordinates
+          setUserLocation({ lat: 23.8103, lng: 90.4125 });
+        },
+      );
     }
   }, [sortBy, userLocation]);
 
@@ -261,7 +301,6 @@ export function BookListing({
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSearchQuery(defaultSearchQuery);
     setCurrentPage(1);
   }, [defaultSearchQuery]);
@@ -277,13 +316,8 @@ export function BookListing({
       }
 
       return true;
-    }).sort((a: any, b: any) => {
-      if (sortBy === "price-low") return (a.price || 0) - (b.price || 0);
-      if (sortBy === "price-high") return (b.price || 0) - (a.price || 0);
-      if (sortBy === "rating") return (b.rating || 0) - (a.rating || 0);
-      return 0;
     });
-  }, [baseBooks, priceRange, sortBy]);
+  }, [baseBooks, priceRange]);
 
   const totalPages = useMemo(
     () => Math.ceil(totalBooksCount / itemsPerPage),
@@ -430,7 +464,12 @@ export function BookListing({
           <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
             <BookOpen className="text-primary size-4 shrink-0" />
             <div className="text-xs">
-              <p className="text-foreground font-bold">{statsData?.total_books ? `${statsData.total_books}+` : '1,420+'} Books</p>
+              <p className="text-foreground font-bold">
+                {statsData?.total_books
+                  ? `${statsData.total_books}+`
+                  : "1,420+"}{" "}
+                Books
+              </p>
               <p className="text-muted-foreground text-[11px]">Available Now</p>
             </div>
           </div>
@@ -438,7 +477,9 @@ export function BookListing({
           <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
             <HeartHandshake className="size-4 shrink-0 text-amber-500" />
             <div className="text-xs">
-              <p className="text-foreground font-bold">{statsData?.handover_rate || 98}% Handover Rate</p>
+              <p className="text-foreground font-bold">
+                {statsData?.handover_rate || 98}% Handover Rate
+              </p>
               <p className="text-muted-foreground text-[11px]">Peer Verified</p>
             </div>
           </div>
@@ -446,7 +487,12 @@ export function BookListing({
           <div className="bg-background/80 flex items-center gap-2 rounded-xl border px-3 py-2 shadow-2xs">
             <TrendingUp className="size-4 shrink-0 text-emerald-500" />
             <div className="text-xs">
-              <p className="text-foreground font-bold">{statsData?.new_arrivals ? `${statsData.new_arrivals}+` : '140+'} New Arrivals</p>
+              <p className="text-foreground font-bold">
+                {statsData?.new_arrivals
+                  ? `${statsData.new_arrivals}+`
+                  : "140+"}{" "}
+                New Arrivals
+              </p>
               <p className="text-muted-foreground text-[11px]">
                 Added This Week
               </p>

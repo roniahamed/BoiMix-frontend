@@ -7,7 +7,6 @@ export type ApiError = {
   details?: unknown;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 type ApiErrorPayload = {
   message?: string;
   error?: string;
@@ -17,7 +16,6 @@ type ApiErrorPayload = {
 
 export function normalizeApiError(error: unknown): ApiError {
   if (error instanceof AxiosError) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const payload = error.response?.data as any;
 
     let message = "Something went wrong.";

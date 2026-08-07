@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { ProfileNotFound } from "@/components/profile/profile-not-found";
 import { ProfileShell } from "@/components/profile/profile-shell";
 import { ProfileBooksViewer } from "@/components/profile/profile-books-viewer";
-import { fetchPublicProfile, fetchUserLibrary } from "@/lib/api-client";
+import { fetchPublicProfile, fetchPublicUserLibrary } from "@/lib/api-client";
 
 export const metadata: Metadata = {
   title: "Reader Library - BoiMix",
@@ -12,10 +12,21 @@ export const metadata: Metadata = {
 
 export default async function UserLibraryPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ username: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { username } = await params;
+  const resolvedSearchParams = await searchParams;
+  const filter =
+    typeof resolvedSearchParams?.filter === "string"
+      ? resolvedSearchParams.filter
+      : undefined;
+  const sort =
+    typeof resolvedSearchParams?.sort === "string"
+      ? resolvedSearchParams.sort
+      : undefined;
 
   let profile = null;
   try {
@@ -28,13 +39,13 @@ export default async function UserLibraryPage({
     return <ProfileNotFound />;
   }
 
-  // Fetch library — falls back to empty if unauthenticated or error
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // Fetch library with server-side filtering
+
   let profileLibraryBooks: any[] = [];
   try {
-    profileLibraryBooks = await fetchUserLibrary();
+    profileLibraryBooks = await fetchPublicUserLibrary(username, filter, sort);
   } catch {
-    // Library is only available to own authenticated profile
+    console.error("Failed to fetch public user library");
   }
 
   const isOwnProfile = false; // isOwnProfile determined client-side via auth store

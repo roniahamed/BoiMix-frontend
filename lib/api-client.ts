@@ -1,19 +1,19 @@
 import { apiRequest } from "@/lib/api/client";
 
 export async function fetchBooks(
-  type?: string, 
-  filters?: Record<string, string | number | string[]>, 
+  type?: string,
+  filters?: Record<string, string | number | string[]>,
   page: number = 1,
   searchQuery: string = "",
-  pageSize: number = 20
+  pageSize: number = 20,
 ) {
   const queryParams = new URLSearchParams();
   if (type) queryParams.append("type", type);
-  
+
   if (page > 1) queryParams.append("page", String(page));
   if (pageSize) queryParams.append("page_size", String(pageSize));
   if (searchQuery) queryParams.append("search", searchQuery);
-  
+
   if (filters) {
     Object.entries(filters).forEach(([key, value]) => {
       if (value !== undefined && value !== null && value !== "") {
@@ -25,10 +25,10 @@ export async function fetchBooks(
       }
     });
   }
-  
+
   const queryString = queryParams.toString();
   const url = queryString ? `/books/?${queryString}` : `/books/`;
-  
+
   try {
     const data = await apiRequest<any>({ url, method: "GET" });
     return data; // Return full paginated response {count, next, previous, results}
@@ -39,7 +39,10 @@ export async function fetchBooks(
 
 export async function fetchBookFilters() {
   try {
-    const data = await apiRequest<any>({ url: `/books/filters/`, method: "GET" });
+    const data = await apiRequest<any>({
+      url: `/books/filters/`,
+      method: "GET",
+    });
     return data;
   } catch (err) {
     return null;
@@ -48,7 +51,10 @@ export async function fetchBookFilters() {
 
 export async function fetchBookStatistics() {
   try {
-    const data = await apiRequest<any>({ url: `/books/statistics/`, method: "GET" });
+    const data = await apiRequest<any>({
+      url: `/books/statistics/`,
+      method: "GET",
+    });
     return data;
   } catch (err) {
     return null;
@@ -145,22 +151,57 @@ export async function reverseGeocode(lat: number, lng: number) {
 }
 
 export async function fetchPublicProfile(username: string) {
-  const data = await apiRequest<any>({ url: `/profiles/${username}/`, method: "GET" });
+  const data = await apiRequest<any>({
+    url: `/profiles/${username}/`,
+    method: "GET",
+  });
   return data;
 }
 
 export async function fetchUserLibrary() {
   try {
-    const data = await apiRequest<any>({ url: "/books/me/library/", method: "GET" });
+    const data = await apiRequest<any>({
+      url: "/books/me/library/",
+      method: "GET",
+    });
     return data.results || data;
   } catch (err) {
     return [];
   }
 }
 
-export async function fetchPublicUserLibrary(username: string) {
+export async function fetchPublicUserLibrary(
+  username: string,
+  filter?: string,
+  sort?: string,
+) {
   try {
-    const data = await apiRequest<any>({ url: `/books/?owner=${username}`, method: "GET" });
+    let url = `/books/?owner=${username}`;
+    if (filter && filter.toLowerCase() !== "all") {
+      const tagMap: Record<string, string> = {
+        selling: "sell",
+        exchanging: "exchange",
+        borrowing: "borrow",
+      };
+      const mode = tagMap[filter.toLowerCase()];
+      if (mode) {
+        url += `&availability=${mode}`;
+      }
+    }
+    if (sort) {
+      const sortMap: Record<string, string> = {
+        newest: "-created_at",
+        oldest: "created_at",
+        "price-low": "price",
+        "price-high": "-price",
+        "rating-high": "-owner__profile__public_rating",
+      };
+      const ordering = sortMap[sort];
+      if (ordering) {
+        url += `&ordering=${ordering}`;
+      }
+    }
+    const data = await apiRequest<any>({ url, method: "GET" });
     return data.results || data;
   } catch (err) {
     return [];
@@ -169,7 +210,10 @@ export async function fetchPublicUserLibrary(username: string) {
 
 export async function fetchFollowers() {
   try {
-    const data = await apiRequest<any>({ url: "/profiles/me/followers/", method: "GET" });
+    const data = await apiRequest<any>({
+      url: "/profiles/me/followers/",
+      method: "GET",
+    });
     return data.results || data;
   } catch (err) {
     return [];
@@ -178,7 +222,10 @@ export async function fetchFollowers() {
 
 export async function fetchFollowing() {
   try {
-    const data = await apiRequest<any>({ url: "/profiles/me/following/", method: "GET" });
+    const data = await apiRequest<any>({
+      url: "/profiles/me/following/",
+      method: "GET",
+    });
     return data.results || data;
   } catch (err) {
     return [];
@@ -187,7 +234,10 @@ export async function fetchFollowing() {
 
 export async function fetchTransactions() {
   try {
-    const data = await apiRequest<any>({ url: "/wallets/transactions/", method: "GET" });
+    const data = await apiRequest<any>({
+      url: "/wallets/transactions/",
+      method: "GET",
+    });
     return data.results || data;
   } catch (err) {
     return [];
@@ -196,7 +246,10 @@ export async function fetchTransactions() {
 
 export async function fetchCategories() {
   try {
-    const data = await apiRequest<any>({ url: "/books/categories/", method: "GET" });
+    const data = await apiRequest<any>({
+      url: "/books/categories/",
+      method: "GET",
+    });
     const items = data.results || data;
     return items.map((c: { slug: string; name: string }) => ({
       href: `/books/category/${c.slug}`,
@@ -206,5 +259,30 @@ export async function fetchCategories() {
     }));
   } catch (err) {
     return [];
+  }
+}
+
+export async function fetchRecentSearches() {
+  try {
+    const data = await apiRequest<any>({
+      url: "/search/recent/",
+      method: "GET",
+    });
+    return data || [];
+  } catch (err) {
+    return [];
+  }
+}
+
+export async function saveRecentSearch(query: string) {
+  try {
+    const data = await apiRequest<any>({
+      url: "/search/recent/",
+      method: "POST",
+      data: { query },
+    });
+    return data;
+  } catch (err) {
+    return null;
   }
 }

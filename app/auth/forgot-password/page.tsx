@@ -35,11 +35,12 @@ export default function ForgotPasswordPage() {
     try {
       const { auth } = await import("@/lib/firebase");
       const { sendPasswordResetEmail } = await import("firebase/auth");
-      
+
       await sendPasswordResetEmail(auth, data.email);
-      alert("পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে। ದয়া করে ইনবক্স চেক করুন।");
+      alert(
+        "পাসওয়ার্ড রিসেট লিংক আপনার ইমেইলে পাঠানো হয়েছে। ದয়া করে ইনবক্স চেক করুন।",
+      );
       router.push("/auth/login");
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Forgot Password Error:", error);
       alert(error?.message || "Failed to send reset email.");

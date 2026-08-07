@@ -4,7 +4,6 @@ import Image from "next/image";
 import categoriesData from "@/lib/data/categories.json";
 
 export default async function CategoryIndexPage() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const categories: any[] = categoriesData;
   return (
     <div className="boimix-container py-8 md:py-12">

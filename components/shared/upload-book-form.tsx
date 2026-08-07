@@ -351,7 +351,6 @@ export function UploadBookForm({
       locationAddressWatch &&
       locationAddressWatch.length > 2
     ) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingLocation(true);
 
       setShowSuggestions(true);
@@ -945,12 +944,20 @@ export function UploadBookForm({
                               : "hover:border-primary/40 hover:bg-muted/50 border-border/80"
                           }`}
                         >
-                          <div className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${isSelected ? "border-primary bg-primary" : "border-input bg-background"}`}>
-                            {isSelected && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                          <div
+                            className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${isSelected ? "border-primary bg-primary" : "border-input bg-background"}`}
+                          >
+                            {isSelected && (
+                              <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                            )}
                           </div>
                           <div className="flex flex-1 flex-col gap-1">
-                            <span className="text-foreground text-sm font-bold">{c.label}</span>
-                            <span className="text-muted-foreground text-xs leading-relaxed">{c.desc}</span>
+                            <span className="text-foreground text-sm font-bold">
+                              {c.label}
+                            </span>
+                            <span className="text-muted-foreground text-xs leading-relaxed">
+                              {c.desc}
+                            </span>
                           </div>
                         </button>
                       );
@@ -975,10 +982,16 @@ export function UploadBookForm({
                           onClick={() => field.onChange("default")}
                           className={`relative flex items-center gap-3 rounded-xl border p-3 text-left transition-all ${field.value === "default" ? "border-primary bg-primary/5" : "hover:bg-muted/50"}`}
                         >
-                          <div className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${field.value === "default" ? "border-primary bg-primary" : "border-input bg-background"}`}>
-                            {field.value === "default" && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                          <div
+                            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${field.value === "default" ? "border-primary bg-primary" : "border-input bg-background"}`}
+                          >
+                            {field.value === "default" && (
+                              <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                            )}
                           </div>
-                          <span className={`block text-sm font-semibold ${field.value === "default" ? "text-primary" : ""}`}>
+                          <span
+                            className={`block text-sm font-semibold ${field.value === "default" ? "text-primary" : ""}`}
+                          >
                             Use Profile Default Location
                           </span>
                         </button>
@@ -989,86 +1002,96 @@ export function UploadBookForm({
                           <button
                             type="button"
                             onClick={() => field.onChange("custom")}
-                            className="flex items-center gap-3 text-left w-full"
+                            className="flex w-full items-center gap-3 text-left"
                           >
-                            <div className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${field.value === "custom" ? "border-primary bg-primary" : "border-input bg-background"}`}>
-                              {field.value === "custom" && <div className="h-1.5 w-1.5 rounded-full bg-white" />}
+                            <div
+                              className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${field.value === "custom" ? "border-primary bg-primary" : "border-input bg-background"}`}
+                            >
+                              {field.value === "custom" && (
+                                <div className="h-1.5 w-1.5 rounded-full bg-white" />
+                              )}
                             </div>
-                            <span className={`block text-sm font-semibold ${field.value === "custom" ? "text-primary" : ""}`}>
+                            <span
+                              className={`block text-sm font-semibold ${field.value === "custom" ? "text-primary" : ""}`}
+                            >
                               Use Different Location
                             </span>
                           </button>
                           {field.value === "custom" && (
-                              <div className="relative">
-                                <Input
-                                  placeholder="Enter new address..."
-                                  {...register("locationAddress")}
-                                  className="bg-background mt-2"
-                                  onFocus={() => {
-                                    if (locationSuggestions.length > 0)
-                                      setShowSuggestions(true);
-                                  }}
-                                  onBlur={() => {
-                                    setTimeout(
-                                      () => setShowSuggestions(false),
-                                      200,
-                                    );
-                                  }}
-                                />
-                                {showSuggestions &&
-                                  (locationSuggestions.length > 0 ||
-                                    isSearchingLocation) && (
-                                    <div className="bg-popover absolute z-[1000] mt-1 max-h-[250px] w-full overflow-y-auto rounded-md border shadow-md">
-                                      <div className="bg-popover/90 sticky top-0 z-10 flex justify-end border-b p-1 backdrop-blur-sm">
-                                        <Button
-                                          variant="ghost"
-                                          size="icon"
-                                          className="h-6 w-6"
+                            <div className="relative">
+                              <Input
+                                placeholder="Enter new address..."
+                                {...register("locationAddress")}
+                                className="bg-background mt-2"
+                                onFocus={() => {
+                                  if (locationSuggestions.length > 0)
+                                    setShowSuggestions(true);
+                                }}
+                                onBlur={() => {
+                                  setTimeout(
+                                    () => setShowSuggestions(false),
+                                    200,
+                                  );
+                                }}
+                              />
+                              {showSuggestions &&
+                                (locationSuggestions.length > 0 ||
+                                  isSearchingLocation) && (
+                                  <div className="bg-popover absolute z-[1000] mt-1 max-h-[250px] w-full overflow-y-auto rounded-md border shadow-md">
+                                    <div className="bg-popover/90 sticky top-0 z-10 flex justify-end border-b p-1 backdrop-blur-sm">
+                                      <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        className="h-6 w-6"
+                                        onMouseDown={(e) => {
+                                          e.preventDefault();
+                                          setShowSuggestions(false);
+                                        }}
+                                      >
+                                        <X className="h-4 w-4" />
+                                      </Button>
+                                    </div>
+                                    {isSearchingLocation ? (
+                                      <div className="text-muted-foreground flex items-center justify-center py-6 text-sm">
+                                        <div className="border-primary mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
+                                        Searching for locations...
+                                      </div>
+                                    ) : (
+                                      locationSuggestions.map((sug, i) => (
+                                        <div
+                                          key={i}
+                                          className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
                                           onMouseDown={(e) => {
                                             e.preventDefault();
+                                            setValue(
+                                              "locationAddress",
+                                              sug.display_name,
+                                              { shouldValidate: true },
+                                            );
+                                            setValue("locationLat", sug.lat);
+                                            setValue("locationLng", sug.lng);
                                             setShowSuggestions(false);
                                           }}
                                         >
-                                          <X className="h-4 w-4" />
-                                        </Button>
-                                      </div>
-                                      {isSearchingLocation ? (
-                                        <div className="text-muted-foreground flex items-center justify-center py-6 text-sm">
-                                          <div className="border-primary mr-2 h-4 w-4 animate-spin rounded-full border-2 border-t-transparent" />
-                                          Searching for locations...
+                                          <div className="font-medium">
+                                            {sug.display_name.split(",")[0]}
+                                          </div>
+                                          <div className="text-muted-foreground text-xs">
+                                            {sug.display_name
+                                              .split(",")
+                                              .slice(1)
+                                              .join(",")
+                                              .trim()}
+                                          </div>
                                         </div>
-                                      ) : (
-                                        locationSuggestions.map((sug, i) => (
-                                          <div
-                                            key={i}
-                                            className="hover:bg-muted cursor-pointer px-4 py-2 text-sm"
-                                            onMouseDown={(e) => {
-                                              e.preventDefault();
-                                              setValue(
-                                                "locationAddress",
-                                                sug.display_name,
-                                                { shouldValidate: true },
-                                              );
-                                              setValue("locationLat", sug.lat);
-                                              setValue("locationLng", sug.lng);
-                                              setShowSuggestions(false);
-                                            }}
-                                          >
-                                            <div className="font-medium">
-                                              {sug.display_name.split(",")[0]}
-                                            </div>
-                                            <div className="text-muted-foreground text-xs">
-                                              {sug.display_name.split(",").slice(1).join(",").trim()}
-                                            </div>
-                                          </div>
-                                        ))
+                                      ))
+                                    )}
+                                    {!isSearchingLocation &&
+                                      locationSuggestions.length === 0 && (
+                                        <div className="text-muted-foreground py-4 text-center text-sm">
+                                          No locations found
+                                        </div>
                                       )}
-                                      {!isSearchingLocation &&
-                                        locationSuggestions.length === 0 && (
-                                          <div className="text-muted-foreground py-4 text-center text-sm">
-                                            No locations found
-                                          </div>
-                                        )}
                                   </div>
                                 )}
                             </div>
@@ -1104,7 +1127,9 @@ export function UploadBookForm({
                                 addr.state,
                                 addr.country,
                               ].filter(Boolean);
-                              const address = Array.from(new Set(parts)).join(", ");
+                              const address = Array.from(new Set(parts)).join(
+                                ", ",
+                              );
                               if (address) {
                                 setValue("locationAddress", address, {
                                   shouldValidate: true,

@@ -470,7 +470,7 @@ export default async function BookDetailsPage({
                   </div>
                   {!!API_OWNER.badges?.length && (
                     <div className="mt-2 flex flex-wrap gap-2">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {}
                       {API_OWNER.badges.map((badge: any) => (
                         <UserBadge key={badge.label} {...badge} />
                       ))}
@@ -576,7 +576,7 @@ export default async function BookDetailsPage({
               একই ধরনের আরও বই (Similar Books)
             </h2>
             <ScrollContainer snapMode="normal">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {}
               {bookDetailsData.recommended.map((book: any) => (
                 <div
                   key={book.id}

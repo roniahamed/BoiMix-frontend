@@ -62,7 +62,6 @@ export function ProfileHeader({
 
   useEffect(() => {
     if (isAuthenticated && !isOwnProfile) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       apiRequest<any>({ url: `/profiles/${profile.username}/`, method: "GET" })
         .then((data) => {
           setIsFollowing(data.isFollowing || false);
@@ -104,7 +103,6 @@ export function ProfileHeader({
         setFollowersCount((prev) => prev + 1);
         toast.success(`Following ${profile.name}`);
       }
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       toast.error(err.details || "Failed to update follow status.");

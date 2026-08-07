@@ -37,9 +37,14 @@ export default async function CentralLibrarySearchPage({
   const collection = resolvedParams?.collection || "";
   const category = resolvedParams?.category || "";
 
+  let ordering = undefined;
+  if (sort === "new" || sort === "newest") ordering = "-created_at";
+  else if (sort === "popular") ordering = "-rating"; // Or something similar if popular is defined
+
   // Use search API for everything
   let libraryBooks: BookCardBook[] = await fetchSearchBooks(q, {
     availability_mode: "borrow",
+    ...(ordering && { ordering }),
   });
 
   // Apply tag filter (tag)
@@ -68,16 +73,6 @@ export default async function CentralLibrarySearchPage({
         book.tags?.some((t) => t.toLowerCase() === lowercaseCat) ||
         book.title.toLowerCase().includes(lowercaseCat),
     );
-  }
-
-  // Apply sorting
-  if (sort === "new" || sort === "newest") {
-    libraryBooks = [...libraryBooks].reverse();
-  } else if (sort === "popular") {
-    libraryBooks = [...libraryBooks].sort((a, b) => {
-      if (b.rating !== a.rating) return b.rating - a.rating;
-      return (b.reviewCount || 0) - (a.reviewCount || 0);
-    });
   }
 
   // Helper to generate filter URLs

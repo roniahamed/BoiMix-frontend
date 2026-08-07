@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BookCard } from "@/components/shared/book-card";
@@ -31,7 +31,8 @@ function BooksViewerContent({
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useAuthStore();
-  const actualIsOwnProfile = isOwnProfile || (username && user?.username === username);
+  const actualIsOwnProfile =
+    isOwnProfile || (username && user?.username === username);
 
   const filters = [
     "All",
@@ -44,8 +45,7 @@ function BooksViewerContent({
 
   const rawFilter = searchParams.get("filter") || "All";
   const activeFilter = filters.includes(rawFilter) ? rawFilter : "All";
-
-  const [sortOption, setSortOption] = useState("newest");
+  const sortOption = searchParams.get("sort") || "newest";
 
   const handleFilterClick = (filter: string) => {
     if (libraryUrl) {
@@ -53,51 +53,24 @@ function BooksViewerContent({
       router.push(`${libraryUrl}?filter=${filter}`, { scroll: false });
     } else {
       // Update URL without reload to trigger filter change
-      router.replace(`?filter=${filter}`, { scroll: false });
+      router.replace(`?filter=${filter}&sort=${sortOption}`, { scroll: false });
     }
   };
 
-  // 1. Filter
-  const filteredBooks = books.filter((book) => {
-    if (activeFilter === "All") return true;
-    const lowerFilter = activeFilter.toLowerCase();
-    const tagMap: Record<string, string> = {
-      selling: "sell",
-      exchanging: "exchange",
-      borrowing: "borrow",
-      wishlist: "wishlist",
-      collection: "collection",
-    };
-    const targetTag = tagMap[lowerFilter] || lowerFilter;
-    return book.tags?.includes(targetTag as BookAvailabilityMode);
-  });
+  const handleSortChange = (newSort: string) => {
+    if (libraryUrl) {
+      router.push(`${libraryUrl}?filter=${activeFilter}&sort=${newSort}`, {
+        scroll: false,
+      });
+    } else {
+      router.replace(`?filter=${activeFilter}&sort=${newSort}`, {
+        scroll: false,
+      });
+    }
+  };
 
-  // 2. Sort
-  const sortedBooks = [...filteredBooks].sort((a, b) => {
-    if (sortOption === "newest") {
-      // Assuming original array is newest first
-      return 0;
-    }
-    if (sortOption === "oldest") {
-      return -1; // Reverse original order
-    }
-    if (sortOption === "price-low") {
-      const priceA = a.price ?? 0;
-      const priceB = b.price ?? 0;
-      return priceA - priceB;
-    }
-    if (sortOption === "price-high") {
-      const priceA = a.price ?? 0;
-      const priceB = b.price ?? 0;
-      return priceB - priceA;
-    }
-    if (sortOption === "rating-high") {
-      const ratingA = a.rating ?? 0;
-      const ratingB = b.rating ?? 0;
-      return ratingB - ratingA;
-    }
-    return 0;
-  });
+  // 1. Filter and Sort (handled via server API now)
+  const sortedBooks = books;
 
   return (
     <div className="space-y-4">
@@ -120,7 +93,7 @@ function BooksViewerContent({
         </div>
 
         <div className="flex items-center gap-3">
-          <Select value={sortOption} onValueChange={setSortOption}>
+          <Select value={sortOption} onValueChange={handleSortChange}>
             <SelectTrigger className="w-[180px] rounded-[5px] bg-transparent px-4 text-sm font-semibold">
               <SelectValue placeholder="Sort by" />
             </SelectTrigger>

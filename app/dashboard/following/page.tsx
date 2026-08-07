@@ -11,7 +11,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function FollowingUserCard({ user }: { user: any }) {
   const [isUnfollowing, setIsUnfollowing] = useState(false);
   const queryClient = useQueryClient();
@@ -25,7 +24,6 @@ function FollowingUserCard({ user }: { user: any }) {
       });
       toast.success(`Unfollowed ${user.full_name || user.username}`);
       queryClient.invalidateQueries({ queryKey: ["following"] });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error(err);
       toast.error(err.message || "Failed to unfollow");
@@ -91,7 +89,7 @@ export default function FollowingPage() {
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          {}
           {following.map((user: any) => (
             <FollowingUserCard key={user.username || user.id} user={user} />
           ))}

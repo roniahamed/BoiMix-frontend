@@ -154,7 +154,6 @@ function SetPasswordForm({ onSuccess }: { onSuccess: () => void }) {
         "Password set successfully! You can now log in with email & password.",
       );
       onSuccess();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const detail =
         err?.new_password?.[0] ||
@@ -234,7 +233,6 @@ function ChangePasswordForm() {
       });
       toast.success("Password changed successfully!");
       reset();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const detail =
         err?.current_password ||
@@ -330,7 +328,6 @@ export default function SecurityPage() {
       clearSession();
       toast.success("Account deletion scheduled. You've been logged out.");
       router.push("/");
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       const msg =
         err?.password ||

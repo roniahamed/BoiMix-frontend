@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -46,7 +46,7 @@ export default function CompleteProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Location Search State
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const [locationSuggestions, setLocationSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [isSearchingLocation, setIsSearchingLocation] = useState(false);
@@ -71,7 +71,6 @@ export default function CompleteProfilePage() {
 
   useEffect(() => {
     if (locationSearchText.length > 2) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingLocation(true);
       const timer = setTimeout(() => {
         searchLocation(locationSearchText)
@@ -139,7 +138,6 @@ export default function CompleteProfilePage() {
         if (r) redirectQuery = `?redirect=${encodeURIComponent(r)}`;
       }
       router.push(`/auth/choose-language${redirectQuery}`);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Complete Profile Error:", error);
       const msg =

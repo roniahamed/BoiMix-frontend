@@ -25,14 +25,13 @@ export default async function UserProfilePage({
     console.error("Failed to fetch public profile:", error);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let profileLibraryBooks: any[] = [];
   try {
     profileLibraryBooks = await fetchPublicUserLibrary(username);
   } catch (error) {
     console.error("Failed to fetch user library:", error);
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const profileReviews: any[] = []; // Phase 13 will add /api/users/{username}/reviews
 
   if (!profile) {
@@ -124,7 +123,7 @@ export default async function UserProfilePage({
 
             {/* Individual Reviews (Columns 2 and 3) */}
             <div className="relative grid flex-1 grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {}
               {profileReviews.slice(0, 2).map((review: any) => (
                 <div key={review.id} className="relative flex flex-col">
                   <div className="mb-2 flex items-center gap-3">

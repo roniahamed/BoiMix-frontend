@@ -50,7 +50,7 @@ export function LibrarySearchBar({
   });
 
   // Since backend already filters by query, we just filter by mode if needed
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const suggestions = (searchedBooks as any[])
     .filter((book) => {
       if (mode === "library") {

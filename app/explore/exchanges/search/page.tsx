@@ -40,8 +40,14 @@ export default async function ExchangesSearchPage({
   const category = resolvedParams?.category || "";
   const sort = resolvedParams?.sort || "";
 
+  let ordering = undefined;
+  if (sort === "newest") ordering = "-created_at";
+  else if (sort === "popular") ordering = "-rating";
+  else if (sort === "az") ordering = "title";
+
   let exchangeBooks: BookCardBook[] = await fetchSearchBooks(q, {
-    availability_mode: "exchange"
+    availability_mode: "exchange",
+    ...(ordering && { ordering }),
   });
 
   // Apply category filter
@@ -51,20 +57,6 @@ export default async function ExchangesSearchPage({
       (book) =>
         book.tags?.some((t) => t.toLowerCase() === lowercaseCat) ||
         book.title.toLowerCase().includes(lowercaseCat),
-    );
-  }
-
-  // Apply sorting
-  if (sort === "newest") {
-    exchangeBooks = [...exchangeBooks].reverse();
-  } else if (sort === "popular") {
-    exchangeBooks = [...exchangeBooks].sort((a, b) => {
-      if (b.rating !== a.rating) return b.rating - a.rating;
-      return (b.reviewCount || 0) - (a.reviewCount || 0);
-    });
-  } else if (sort === "az") {
-    exchangeBooks = [...exchangeBooks].sort((a, b) =>
-      a.title.localeCompare(b.title),
     );
   }
 

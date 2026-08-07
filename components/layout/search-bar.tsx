@@ -12,7 +12,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { fetchSearchSuggestions, fetchTrendingSearches, fetchBooks } from "@/lib/api-client";
+import {
+  fetchSearchSuggestions,
+  fetchTrendingSearches,
+  fetchBooks,
+  fetchRecentSearches,
+  saveRecentSearch,
+} from "@/lib/api-client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +32,7 @@ type SearchBarProps = {
 
 // removed initialTrending since we use API now
 
-const initialRecents = ["Rivers of Dhaka", "English Grammar"];
+// removed initialRecents since we use API now
 
 export function SearchBar({
   className,
@@ -37,7 +43,7 @@ export function SearchBar({
   const initialQuery = searchParams?.get("q") || "";
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState(initialQuery);
-  const [recents, setRecents] = useState<string[]>(initialRecents);
+  const [localRecents, setLocalRecents] = useState<string[]>([]);
   const containerRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -58,6 +64,18 @@ export function SearchBar({
     queryFn: () => fetchBooks(undefined, undefined, 1, "", 5),
   });
 
+  const { data: apiRecents = [] } = useQuery({
+    queryKey: ["recent-searches"],
+    queryFn: fetchRecentSearches,
+  });
+
+  // Sync API recents to local state
+  useEffect(() => {
+    if (apiRecents.length > 0) {
+      setLocalRecents(apiRecents.map((item: any) => item.query));
+    }
+  }, [apiRecents]);
+
   // Focus input when autoFocus prop changes to true
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -73,7 +91,7 @@ export function SearchBar({
   // Sync query if URL changes
   useEffect(() => {
     const q = searchParams?.get("q") || "";
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+
     setQuery(q);
   }, [searchParams]);
 
@@ -98,9 +116,13 @@ export function SearchBar({
     if (!query.trim()) return;
 
     // Save to recents
-    if (!recents.includes(query.trim())) {
-      setRecents((prev) => [query.trim(), ...prev.slice(0, 4)]);
+    if (!localRecents.includes(query.trim())) {
+      setLocalRecents((prev) => [query.trim(), ...prev.slice(0, 4)]);
     }
+
+    // Save to API (fire and forget)
+    saveRecentSearch(query.trim());
+
     setIsOpen(false);
     router.push(`/books/search?q=${encodeURIComponent(query.trim())}`);
   };
@@ -114,7 +136,7 @@ export function SearchBar({
   const handleClearRecents = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
-    setRecents([]);
+    setLocalRecents([]);
   };
 
   const handleRemoveRecentItem = (
@@ -123,7 +145,7 @@ export function SearchBar({
   ) => {
     e.stopPropagation();
     e.preventDefault();
-    setRecents((prev) => prev.filter((_, idx) => idx !== indexToRemove));
+    setLocalRecents((prev) => prev.filter((_, idx) => idx !== indexToRemove));
   };
 
   const displaySuggestions = suggestions.slice(0, 5);
@@ -186,7 +208,7 @@ export function SearchBar({
               {/* Left Column: Recent and Trending */}
               <div className="space-y-4">
                 {/* Recent Searches */}
-                {recents.length > 0 && (
+                {localRecents.length > 0 && (
                   <div>
                     <div className="mb-2 flex items-center justify-between">
                       <span className="text-muted-foreground flex items-center gap-1.5 text-[0.7rem] font-bold tracking-wider uppercase">
@@ -202,7 +224,7 @@ export function SearchBar({
                       </button>
                     </div>
                     <ul className="space-y-1">
-                      {recents.map((item, idx) => (
+                      {localRecents.map((item, idx) => (
                         <li
                           key={`${item}-${idx}`}
                           className="hover:bg-muted/65 group flex items-center justify-between rounded-md px-2 py-1 text-xs transition-colors"
@@ -257,8 +279,7 @@ export function SearchBar({
                 </span>
                 <div className="space-y-3">
                   {recommendedBooks?.results?.length > 0
-                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                      recommendedBooks.results.slice(0, 5).map((book: any) => (
+                    ? recommendedBooks.results.slice(0, 5).map((book: any) => (
                         <Link
                           key={book.slug}
                           href={`/books/${book.slug}`}
@@ -267,7 +288,13 @@ export function SearchBar({
                         >
                           <div className="bg-muted relative h-10 w-7.5 shrink-0 overflow-hidden rounded-sm shadow-xs">
                             {book.coverUrl ? (
-                              <Image src={book.coverUrl} alt={book.title} fill className="object-cover" sizes="30px" />
+                              <Image
+                                src={book.coverUrl}
+                                alt={book.title}
+                                fill
+                                className="object-cover"
+                                sizes="30px"
+                              />
                             ) : (
                               <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
                             )}
@@ -297,7 +324,7 @@ export function SearchBar({
               </span>
               {displaySuggestions.length > 0 ? (
                 <div className="flex flex-col">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {}
                   {displaySuggestions.map((book: any) => (
                     <Link
                       key={book.slug}
@@ -307,7 +334,13 @@ export function SearchBar({
                     >
                       <div className="bg-muted relative h-11 w-8 shrink-0 overflow-hidden rounded-sm shadow-xs">
                         {book.coverUrl ? (
-                          <Image src={book.coverUrl} alt={book.title} fill className="object-cover" sizes="32px" />
+                          <Image
+                            src={book.coverUrl}
+                            alt={book.title}
+                            fill
+                            className="object-cover"
+                            sizes="32px"
+                          />
                         ) : (
                           <div className="from-primary/10 to-info/10 absolute inset-0 bg-gradient-to-br" />
                         )}

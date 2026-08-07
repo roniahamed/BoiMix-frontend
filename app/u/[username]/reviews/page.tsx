@@ -33,9 +33,8 @@ export default async function UserReviewsPage({
     console.error("Failed to fetch public profile:", error);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const profileReviews: any[] = []; // TODO: Phase 4/8 Integration
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const isOwnProfile = false;
 
   if (!profile) {
@@ -139,7 +138,7 @@ export default async function UserReviewsPage({
 
           {/* Infinite Scroll Container Without Outer Border */}
           <div className="scrollbar-thumb-muted-foreground/20 h-[calc(100vh-220px)] scrollbar-thin scrollbar-track-transparent overflow-y-auto pr-4">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {}
             {profileReviews.map((review: any) => (
               <ReviewCard
                 key={review.id}

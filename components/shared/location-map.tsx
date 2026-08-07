@@ -32,7 +32,6 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMounted(true);
     return () => {
       if (mapInstanceRef.current) {
@@ -80,7 +79,7 @@ export default function LocationMap({ lat, lng, onChange }: LocationMapProps) {
         onChangeRef.current(clickedLat, clickedLng);
       }
     });
-  }, [isMounted]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isMounted]);
 
   // Update marker position and map center when lat/lng props change from outside
   useEffect(() => {

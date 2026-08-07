@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import { CameraIcon, MapPin, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,7 +35,6 @@ const profileSchema = z.object({
 });
 type ProfileFormValues = z.infer<typeof profileSchema>;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LocationMap = dynamic(() => import("@/components/shared/location-map"), {
   ssr: false,
   loading: () => (
@@ -49,10 +48,9 @@ interface EditProfileDialogProps {
   profile: UserProfile;
   children: React.ReactNode;
 }
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+
 import { searchLocation, reverseGeocode } from "@/lib/api-client";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface LocationSuggestion {
   display_name: string;
   lat: number;
@@ -93,11 +91,9 @@ export function EditProfileDialog({
 
   useEffect(() => {
     if (interestInput && interestInput.length > 0) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsSearchingInterests(true);
       setShowInterestSuggestions(true);
       const timer = setTimeout(() => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         apiRequest<any[]>({
           url: `/profiles/reading-interests/?q=${encodeURIComponent(interestInput)}`,
           method: "GET",
