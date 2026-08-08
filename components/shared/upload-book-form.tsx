@@ -299,48 +299,128 @@ export function UploadBookForm({
       })
         .then((responseData) => {
           const data = responseData.book || responseData;
-          if (data.title) setValue("title", data.title);
-          if (data.author) setValue("author", data.author);
-          if (data.publisher) setValue("publisher", data.publisher);
-          if (data.genre) setValue("genre", data.genre);
-          if (data.language) setValue("language", data.language);
-          if (data.edition) setValue("edition", data.edition);
-          if (data.pages != null) setValue("pageCount", data.pages.toString());
-          if (data.description) setValue("description", data.description);
-          if (data.isbn) setValue("isbn", data.isbn);
+          if (data.title)
+            setValue("title", data.title, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.author)
+            setValue("author", data.author, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.publisher)
+            setValue("publisher", data.publisher, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.genre)
+            setValue("genre", data.genre, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.language)
+            setValue("language", data.language, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.edition)
+            setValue("edition", data.edition, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.pages != null)
+            setValue("pageCount", data.pages.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.description)
+            setValue("description", data.description, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.isbn)
+            setValue("isbn", data.isbn, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           // tags mapped to comma separated
-          if (data.tags) setValue("tags", data.tags.join(", "));
-          if (data.condition) setValue("condition", data.condition);
-          if (data.conditionNote) setValue("conditionNote", data.conditionNote);
+          if (data.tags)
+            setValue("tags", data.tags.join(", "), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.condition)
+            setValue("condition", data.condition, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.conditionNote)
+            setValue("conditionNote", data.conditionNote, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.editionDetails)
-            setValue("editionDetails", data.editionDetails);
+            setValue("editionDetails", data.editionDetails, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
 
-          if (data.price != null) setValue("sellPrice", data.price.toString());
+          if (data.price != null)
+            setValue("sellPrice", data.price.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.original_price != null)
-            setValue("originalPrice", data.original_price.toString());
+            setValue("originalPrice", data.original_price.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.exchange_price != null)
-            setValue("estimatedExchangeValue", data.exchange_price.toString());
+            setValue("estimatedExchangeValue", data.exchange_price.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.estimatedExchangeValue != null)
             setValue(
               "estimatedExchangeValue",
               data.estimatedExchangeValue.toString(),
+              { shouldValidate: true, shouldDirty: true },
             );
 
           if (data.borrow_fee != null)
-            setValue("borrowFee", data.borrow_fee.toString());
+            setValue("borrowFee", data.borrow_fee.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.deposit != null)
-            setValue("deposit", data.deposit.toString());
+            setValue("deposit", data.deposit.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.max_borrow_days != null)
-            setValue("borrowDuration", data.max_borrow_days.toString());
+            setValue("borrowDuration", data.max_borrow_days.toString(), {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
 
           if (data.exchangePreferences && data.exchangePreferences.length > 0) {
-            setValue("exchangePreference", data.exchangePreferences[0]);
+            setValue("exchangePreference", data.exchangePreferences[0], {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           }
 
           if (data.locationType)
-            setValue("locationType", data.locationType as any);
+            setValue("locationType", data.locationType as any, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           if (data.locationAddress) {
-            setValue("locationAddress", data.locationAddress);
+            setValue("locationAddress", data.locationAddress, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
             setTimeout(() => {
               const el = document.getElementById(
                 "location-address-input",
@@ -348,29 +428,56 @@ export function UploadBookForm({
               if (el) el.scrollLeft = 0;
             }, 100);
           }
-          if (data.locationLat) setValue("locationLat", data.locationLat);
-          if (data.locationLng) setValue("locationLng", data.locationLng);
+          if (data.locationLat)
+            setValue("locationLat", data.locationLat, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
+          if (data.locationLng)
+            setValue("locationLng", data.locationLng, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
 
           // Use availability object to determine mode and quantities
           if (data.availabilityMode) {
-            setValue("availabilityMode", data.availabilityMode as any);
+            setValue("availabilityMode", data.availabilityMode as any, {
+              shouldValidate: true,
+              shouldDirty: true,
+            });
           } else if (data.availability) {
             if (data.availability.sell > 0)
-              setValue("availabilityMode", "sell");
+              setValue("availabilityMode", "sell", {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
             else if (data.availability.borrow > 0)
-              setValue("availabilityMode", "borrow");
+              setValue("availabilityMode", "borrow", {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
             else if (data.availability.exchange > 0)
-              setValue("availabilityMode", "exchange");
+              setValue("availabilityMode", "exchange", {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
           }
           if (data.availability) {
             if (data.availability.sell > 0)
-              setValue("sellQuantity", data.availability.sell.toString());
+              setValue("sellQuantity", data.availability.sell.toString(), {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
             if (data.availability.borrow > 0)
-              setValue("borrowQuantity", data.availability.borrow.toString());
+              setValue("borrowQuantity", data.availability.borrow.toString(), {
+                shouldValidate: true,
+                shouldDirty: true,
+              });
             if (data.availability.exchange > 0)
               setValue(
                 "exchangeQuantity",
                 data.availability.exchange.toString(),
+                { shouldValidate: true, shouldDirty: true },
               );
           }
           if (data.images && data.images.length > 0) {
