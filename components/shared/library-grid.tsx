@@ -23,6 +23,16 @@ import { useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/api/client";
 import { fetchUserLibrary } from "@/lib/api-client";
 import { toast } from "sonner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export type Book = {
   id: string;
@@ -77,6 +87,7 @@ export function LibraryGrid() {
 
   const [isBulkActionLoading, setIsBulkActionLoading] = useState(false);
   const [selectedBooks, setSelectedBooks] = useState<Set<string>>(new Set());
+  const [isBulkDeleteDialogOpen, setIsBulkDeleteDialogOpen] = useState(false);
 
   const queryClient = useQueryClient();
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -157,7 +168,6 @@ export function LibraryGrid() {
 
   const handleBulkDelete = async () => {
     if (!selectedBooks.size) return;
-    if (!confirm("Are you sure you want to delete the selected books?")) return;
     setIsBulkActionLoading(true);
     try {
       await Promise.all(
@@ -172,6 +182,7 @@ export function LibraryGrid() {
       toast.error(err.message || "Failed to delete books");
     } finally {
       setIsBulkActionLoading(false);
+      setIsBulkDeleteDialogOpen(false);
     }
   };
 
@@ -337,7 +348,7 @@ export function LibraryGrid() {
               Enable Exchange
             </button>
             <button
-              onClick={handleBulkDelete}
+              onClick={() => setIsBulkDeleteDialogOpen(true)}
               disabled={isBulkActionLoading}
               className="flex items-center gap-1.5 rounded-lg bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 shadow-sm transition-colors hover:bg-red-100 disabled:opacity-50 dark:bg-red-500/20 dark:text-red-400"
             >
@@ -416,6 +427,33 @@ export function LibraryGrid() {
           )}
         </>
       )}
+
+      <AlertDialog
+        open={isBulkDeleteDialogOpen}
+        onOpenChange={setIsBulkDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Selected Books?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete the {selectedBooks.size} selected
+              books? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleBulkDelete();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

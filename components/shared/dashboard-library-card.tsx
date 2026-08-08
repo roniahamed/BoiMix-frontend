@@ -18,6 +18,17 @@ import { Book } from "@/components/shared/library-grid";
 import { apiRequest } from "@/lib/api/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -67,6 +78,7 @@ export function DashboardLibraryCard({
   onToggleSelect,
 }: DashboardLibraryCardProps) {
   const queryClient = useQueryClient();
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
   const handleStatusChange = async (newQuantity: number, status?: string) => {
     try {
@@ -93,7 +105,6 @@ export function DashboardLibraryCard({
   };
 
   const handleDelete = async () => {
-    if (!confirm(`Are you sure you want to delete ${book.title}?`)) return;
     try {
       await apiRequest({
         url: `/books/${book.id}/`,
@@ -106,6 +117,8 @@ export function DashboardLibraryCard({
       queryClient.invalidateQueries({ queryKey: ["userLibraryStats"] });
     } catch (err) {
       toast.error("Failed to delete listing.");
+    } finally {
+      setIsDeleteDialogOpen(false);
     }
   };
 
@@ -217,7 +230,7 @@ export function DashboardLibraryCard({
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
-              onClick={handleDelete}
+              onClick={() => setIsDeleteDialogOpen(true)}
               className="text-destructive focus:bg-destructive/10 focus:text-destructive cursor-pointer"
             >
               <Trash2 className="mr-2 size-4" /> Delete
@@ -361,6 +374,33 @@ export function DashboardLibraryCard({
           </div>
         </div>
       </div>
+
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete{" "}
+              <strong>{book.title}</strong> from your inventory.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
