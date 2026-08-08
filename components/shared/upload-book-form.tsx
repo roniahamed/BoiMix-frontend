@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -242,6 +243,8 @@ export function UploadBookForm({
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+
   const editId = searchParams.get("edit");
   const duplicateId = searchParams.get("duplicate");
 
@@ -795,9 +798,14 @@ export function UploadBookForm({
           ? "Listing updated successfully!"
           : "Book published successfully!",
       );
+
+      // Invalidate the library cache to immediately show the new data
+      queryClient.invalidateQueries({ queryKey: ["userLibrary"] });
+
       if (onSuccess) {
         onSuccess();
       } else {
+        router.refresh();
         router.push("/dashboard/library");
       }
     } catch (err: any) {

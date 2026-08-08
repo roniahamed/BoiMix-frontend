@@ -22,7 +22,10 @@ export default function UploadBookPage() {
       </div>
       <UploadBookForm
         showActions={true}
-        onSuccess={() => router.push("/dashboard/library")}
+        onSuccess={() => {
+          router.refresh();
+          router.push("/dashboard/library");
+        }}
       />
     </div>
   );
